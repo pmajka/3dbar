@@ -1,0 +1,209 @@
+Brain	Basic cell groups and regions	B0FFFF
+CH	Cerebrum	B0F0FF
+CTX	Cerebral cortex	B0FFB8
+CTXpl	Cortical plate	70FF70
+OLF	Olfactory areas	90FF90
+MOB	Main olfactory bulb	A0FFAB
+AOB	Accessory olfactory bulb	A0FFB0
+AON	Anterior olfactory nucleus	90FFB8
+TT	Taenia tecta	A0FFA0
+PIR	Piriform area	A0FFA7
+NLOT	Nucleus of the lateral olfactory tract	A0FFAA
+PAA	Piriform-amygdalar area	A0FFA9
+COA	Cortical amygdalar area	A0FFB1
+TR	Postpiriform transition area	A0FFA6
+HPF	Hippocampal formation	90FFB0
+HIP	Hippocampal region	79FF80
+CA	Ammon's Horn	7AFF7A
+DG	Dentate gyrus	72FA72
+RHP	Retrohippocampal region	90FFB0
+SUB	Subiculum	80FF97
+CNU	Cerebral nuclei	B0D8FF
+STR	Striatum	A0C8E8
+STRd	Striatum dorsal region	A0D8E8
+CP	Caudoputamen 	A0D8F8
+STRv	Striatum ventral region	A0E8E8
+ACB	Nucleus accumbens 	A0E8E0
+FS	Fundus of striatum	A0E4E0
+OT	Olfactory tubercle 	A0E0E0
+LSX	Lateral septal complex	A0EFE8
+LS	Lateral septal nucleus 	99EFE8
+SF	Septofimbrial nucleus 	93EFE8
+sAMY	Striatum-like amygdalar nuclei	A0D0E8
+CEA	Central amygdalar nucleus 	ABD0F8
+AAA	Anterior amygdalar area	BAD0F8
+MEA	Medial amygdalar nucleus 	B0D0F8
+PAL	Pallidum	A0C8B0
+PALd	Pallidum_ dorsal region	A0D8B0
+PALv	Pallidum_ ventral region	A0D0B0
+MA	Magnocellular nucleus	A2D0B0
+SI	Substantia innominata	98D0B0
+PALc	Pallidum_ caudal region	A0BEB0
+BAC	Bed nucleus of the anterior commissure 	A0BE98
+BST	Bed nuclei of the stria terminalis 	A0BEA0
+PALm	Pallidum_ medial region	A0E0B0
+BS	Brain stem	906080
+IB	Interbrain	FF5F5F
+TH	Thalamus	FF7080
+DORpm	Thalamus_ polymodal association cortex related	FF88B0
+ATN	Anterior group of the dorsal thalamus	FF8888
+AD	Anterodorsal nucleus	FF8887
+AM	Anteromedial nucleus	FF8886
+AV	Anteroventral nucleus of thalamus 	FF8885
+IAD	Interanterodorsal nucleus of the thalamus	FF909F
+IAM	Interanteromedial nucleus of the thalamus	FF8881
+LD	Lateral dorsal nucleus of thalamus	FF8880
+RT	Reticular nucleus of the thalamus	FF8080
+LAT	Lateral group of the dorsal thalamus	FF8282
+LP	Lateral posterior nucleus of the thalamus	FF8782
+SGN	Suprageniculate nucleus	FF8382
+GENv	Geniculate group_ ventral thalamus	FF8785
+IGL	Intergeniculate leaflet of the lateral geniculate complex	FF8786
+LGv	Ventral part of the lateral geniculate complex	FF8787
+ILM	Intralaminar nuclei of the dorsal thalamus	FF8884
+CL	Central lateral nucleus of the thalamus	FF8784
+CM	Central medial nucleus of the thalamus	FF8684
+PCN	Paracentral nucleus	FF8484
+PF	Parafascicular nucleus	FF8284
+EPI	Epithalamus	FF8890
+LH	Lateral habenula	FF8790
+MH	Medial habenula	FF8690
+MED	Medial group of the dorsal thalamus	FF90B0
+IMD	Intermediodorsal nucleus of the thalamus	FF90A4
+MD	Mediodorsal nucleus of thalamus	FF90A3
+PR	Perireunensis nucleus	FF90A0
+DORsm	Thalamus_ sensory-motor cortex related	FF80B0
+GENd	Geniculate group_ dorsal thalamus	FF70A0
+LGd	Dorsal part of the lateral geniculate complex	FF70A1
+MG	Medial geniculate complex	FF70A2
+PP	Peripeduncular nucleus	FF70A3
+VENT	Ventral group of the dorsal thalamus	FF6CA0
+VM	Ventral medial nucleus of the thalamus	FF6CA2
+VP	Ventral posterior complex of the thalamus	FF6C90
+HY	Hypothalamus	FF5050
+PVZ	Periventricular zone	FF4C50
+ARH	Arcuate hypothalamic nucleus	FF4C4F
+PVH	Paraventricular hypothalamic nucleus	FF4C4D
+PVR	Periventricular region	FF4D50
+ADP	Anterodorsal preoptic nucleus	FF4D51
+AVP	Anteroventral preoptic nucleus 	FF4D53
+AVPV	Anteroventral periventricular nucleus	FF4D54
+DMH	Dorsomedial nucleus of the hypothalamus	FF4D55
+MEPO	Median preoptic nucleus	FF4D56
+PD	Posterodorsal preoptic nucleus	FF4D59
+PS	Parastrial nucleus	FF4D5A
+SCH	Suprachiasmatic nucleus	FF4D5E
+MEZ	Hypothalamic medial zone	FF4E50
+AHN	Anterior hypothalamic nucleus	FF4E51
+MBO	Mammillary body	FF4E52
+LM	Lateral mammillary nucleus	FF4E53
+MM	Medial mammillary nucleus	FF4E54
+SUM	Supramammillary nucleus	FF4E55
+MPN	Medial preoptic nucleus	FF4E57
+PH	Posterior hypothalamic nucleus	FF4F53
+PMd	Dorsal premammillary nucleus	FF4E58
+PMv	Ventral premammillary nucleus	FF4E59
+VMH	Ventromedial hypothalamic nucleus	FF4E5B
+LZ	Hypothalamic lateral zone	FF4F50
+STN	Subthalamic nucleus	FF4F55
+TU	Tuberal nucleus	FF4F56
+ZI	Zona incerta	FF4F57
+MB	Midbrain	FFB0FF
+MBsen	Midbrain_ sensory related	FFB0FE
+IC	Inferior colliculus	FF98FF
+MEV	Midbrain trigeminal nucleus	FF98FE
+NB	Nucleus of the brachium of the inferior colliculus	FF98FD
+PBG	Parabigeminal nucleus	FF98FC
+SAG	Nucleus sagulum	FF98FB
+SCs	Superior colliculus_ sensory related	FF98FA
+MBmot	Midbrain_ motor related	FF84FF
+SCm	Superior colliculus_ motor related	FFB2F8
+SNr	Substantia nigra_ reticular part	FFB2F7
+VTA	Ventral tegmental area	FFB2F6
+RR	Midbrain reticular nucleus_ retrorubral area	FFB2F9
+PAG	Periaqueductal gray	FF90FF
+INC	Interstitial nucleus of Cajal	FF91FF
+PRT	Pretectal region	FFB0FA
+APN	Anterior pretectal nucleus 	FFB0F9
+MPT	Medial pretectal area	FFB0F8
+NOT	Nucleus of the optic tract	FFB0F7
+NPC	Nucleus of the posterior commissure	FFB0F6
+OP	Olivary pretectal nucleus	FFB0F5
+MRNmg	Midbrain reticular nucleus_ magnocellular part_ general	FFB1FD
+VTN	Ventral tegmental nucleus	FFB1FA
+AT	Anterior tegmental nucleus 	FFB1FC
+CUN	Cuneiform nucleus	FFB2FE
+RN	Red Nucleus	FF86F9
+III	Oculomotor nucleus	FFA8FF
+EW	Edinger-Westphal nucleus	FFB2FD
+IV	Trochlear nucleus	FFB2FF
+MBsta	Midbrain_ behavioral state related	FFB0FD
+SNc	Substantia nigra_ compact part	FF9EF8
+PPN	Pedunculopontine nucleus	FF9EFF
+RAmb	Midbrain raphe nuclei	FF9EFE
+CLI	Central linear nucleus raphe	FF9EFD
+DR	Dorsal nucleus raphe	FF9EFC
+IPN	Interpeduncular nucleus	FF9EF7
+HB	Hindbrain	FF9BA8
+P	Pons	FF9B88
+P-sen	Pons_ sensory related	FFAA62
+NLL	Nucleus of the lateral lemniscus	FFAA61
+PB	Parabrachial nucleus	FFAA60
+PSV	Principal sensory nucleus of the trigeminal	FFAA5F
+SOC	Superior olivary complex	FFAA5E
+P-mot	Pons_ motor related	FFAE5C
+B	Barrington's nucleus 	FFAE50
+DTN	Dorsal tegmental nucleus	FFAE57
+PCG	Pontine central gray	FFAE78
+PG	Pontine gray	FFAE70
+SG	Supragenual nucleus	FFAE54
+SUT	Supratrigeminal nucleus	FFAE52
+TRN	Tegmental reticular nucleus	FFAE51
+V	Motor nucleus of trigeminal	FFAE68
+VI	Abducens nucleus	FFD4E1
+VII	Facial motor nucleus	FFD4EA
+P-sat	Pons_ behavioral state related	FFAC78
+CS	Superior central nucleus raphe	FFAC77
+LC	Locus ceruleus	FFAC76
+NI	Nucleus incertus	FFAC74
+RPO	Nucleus raphe pontis	FFAC73
+SLC	Subceruleus nucleus	FFAC72
+SLD	Sublaterodorsal nucleus	FFAC71
+MY	Medulla	FFA0B0
+MY-sen	Medulla_ sensory related	FFB0B0
+AP	Area postrema	FFB0B2
+CN	Cochlear nuclei 	FFB0B1
+DCN	Dorsal column nuclei	FFB1B0
+CU	Cuneate nucleus	FFB1B1
+GR	Gracile nucleus	FFB1B2
+ECU	External cuneate nucleus	FFB0B3
+NTS	Nucleus of the solitary tract	FFB2B0
+SPVC	Spinal nucleus of the trigeminal_ caudal part	FFB0B7
+SPVI	Spinal nucleus of the trigeminal_ interpolar part	FFB0B8
+SPVO	Spinal nucleus of the trigeminal_ oral part	FFB0B6
+MY-mot	Medulla_ motor related	FFD4DB
+AMB	Nucleus ambiguus	FFD4D8
+DMX	Dorsal motor nucleus of the vagus nerve	FFD4B8
+IO	Inferior olivary complex	FFD4BD
+ISN	Inferior salivatory nucleus	FFD4BE
+LIN	Linear nucleus of the medulla	FFD4BF
+LRN	Lateral reticular nucleus	FFD4C1
+MARN	Magnocellular reticular nucleus	FFD4C2
+PAS	Parasolitary nucleus	FFD4C5
+PGRN	Paragigantocellular reticular nucleus	FFD4C6
+PPY	Parapyramidal nucleus	FFD4C8
+VNC	Vestibular nuclei	FFD4C9
+LAV	Lateral vestibular nucleus	FFD6C9
+MV	Medial vestibular nucleus	FFD8C9
+XII	Hypoglossal nucleus	FFD4C0
+x	Nucleus x	FFD4CA
+y	Nucleus y	FFD4CB
+MY-sat	Medulla_ behavioral state related	FFB0C0
+RM	Nucleus raphe magnus	FFB0C1
+RO	Nucleus raphe obscurus	FFB0C2
+CB	Cerebellum	F0FFA0
+CBN	Cerebellar nuclei	F0F090
+DN	Dentate nucleus	F0F290
+FN	Fastigial nucleus	F0F490
+IP	Interposed nucleus	F0F190
+CBX	Cerebellar cortex	F0F080

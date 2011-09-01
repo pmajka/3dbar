@@ -1,0 +1,1600 @@
+# This file stores child -  parent relations between structures.
+# Every line that starts with # acts like a comment and will be ignored
+# during parsing. Blank lines will be skipped also.
+
+# Relations below are stored in "Child<tab>Parent" format,
+# where Child and Parent are abbreviation of full names of the structures
+# (short names, no spaces, etc.) 
+# Each line defines only one relation and must have only one <tab> char.
+# Every child structure must have only one parrent and must have direct
+# or indirect connection to Brain structure.
+# Second, and further parents will be skipped which may give unexpected results.
+
+# Final hierarchy is stored in index.xml in <hierarchy> element
+
+# Do zrobienia:
+# 1 .OlfCx slajdy 95 - 115: gdzie kończy się kora słuchowa?
+#    Na zakończeniach robi się taki zawijas. Pytanie jest, w którym miejscu się
+#    kończy ten zawijas (oznaczony jako OlfCx-1 i czy wolole należy do tej części kory
+# 2. 
+#
+
+OV	LV
+E-OV	LV
+LV	ventricles
+E	ventricles
+MRe	3V
+D3V	3V
+P3V	3V
+DR3V	3V
+3V	ventricles
+LR4V	4V
+ReIC	4V
+4V	ventricles
+Aq	ventricles
+ventricles	Brain
+
+### Olofactory cortex
+
+
+CxA-1	CxA
+CxA-2	CxA
+CxA-3	CxA
+CxA	OlfCx
+
+LOT-1	LOT
+LOT-2	LOT
+LOT-3	LOT
+LOT	Amy
+
+#lo	OlfCx# Nie wiem, czy to przypisanie jest prawidłowe
+AA	Amy
+ACo	Amy
+
+APir	OlfCx
+
+
+RAPir-1	RAPir
+RAPir-2	RAPir
+RAPir-3	RAPir
+RAPir	Amy
+
+OlfCx-1	OlfCx #First layer of OlfCx that cannot be assigned to any particular structure
+OlfCx	Cx
+
+aci	ac
+aca	ac
+acp	ac
+ac	Tel
+f	fornix
+df	fornix
+
+cg	subcortical-white-matter
+dcw	dcw-ec-cc-gcc-fmi-fmj
+ec	dcw-ec-cc-gcc-fmi-fmj
+cc	dcw-ec-cc-gcc-fmi-fmj
+gcc	cc
+fmi	cc
+fmj	cc
+scc	cc
+dcw-ec-cc-gcc-fmi-fmj	subcortical-white-matter
+st	subcortical-white-matter
+fi	subcortical-white-matter
+fr	subcortical-white-matter
+SM	subcortical-white-matter
+
+#
+subcortical-white-matter	FB
+
+hippocampal-white-matter	subcortical-white-matter
+vhc	hippocampal-white-matter
+alv	hippocampal-white-matter
+dhc	hippocampal-white-matter
+fornix	hippocampal-white-matter
+
+#hippocampal formation HippFormation
+HippFormation	Tel
+
+# HippFormation: 1.hippocampal region < Hipp 
+Hipp	HippFormation
+
+# dental gyrus
+DG	Hipp
+PoDG	DG
+GrDG	DG
+MoDG	DG
+
+# cornu ammonis 
+CA	Hipp
+CA3	CA
+CA2	CA
+CA1	CA
+Py	CA
+Or	CA
+Rad	CA
+SLu	CA
+LMol	CA
+
+FC	Hipp# fasciola cinereum
+
+#HippFormation: 2. Retrohippocampal Region
+RetroHippRegion	HippFormation
+
+
+Subiculum	RetroHippRegion
+DS	Subiculum
+VS	Subiculum
+MoS	Subiculum# Molecular leyer
+
+STr	RetroHippRegion#Subiculum transitional area
+PrS	RetroHippRegion
+PaS	RetroHippRegion
+Post	RetroHippRegion
+
+EntCx	RetroHippRegion
+
+DIEnt	EntCx
+VIEnt	EntCx
+DLEnt	EntCx
+CEnt	EntCx
+MEnt	EntCx
+
+MEntR	Unknown
+
+##### somatosensory IsoCx
+S1Tr	S1
+S1BF	S1
+S1ULp	S1
+S1DZ	S1
+S1HL	S1
+S1Sh	S1
+S1FL	S1
+S1J	S1
+S1DZO	S1
+S1	IsoCx
+
+AID	AI
+AIP	AI
+AIV	AI
+AI	IsoCx
+CEnt	IsoCx
+Cg1	IsoCx
+Cg2	IsoCx
+DIEnt	IsoCx
+DI	IsoCx
+DLEnt	IsoCx
+DLO	IsoCx
+DP	IsoCx
+Ect	IsoCx
+IL	IsoCx
+LO	IsoCx
+LPtA	IsoCx
+M1	IsoCx
+M2	IsoCx
+MEnt	IsoCx
+MO	IsoCx
+MPtA	IsoCx
+PRh	IsoCx
+PrL	IsoCx
+PtPC	IsoCx
+PtPD	IsoCx
+PtPR	IsoCx
+RSD	IsoCx
+GI	IsoCx
+
+RSGa	RSG
+RSGb	RSG
+RSGc	RSG
+RSG	IsoCx
+
+S2	IsoCx
+TeA	IsoCx
+V1M	V1
+V1B	V1
+V2L	V2
+V2ML	V2
+V2MM	V2
+V1	IsoCx
+V2	IsoCx
+VO	IsoCx
+
+IsoCx	Cx
+Cx	Tel
+
+
+
+
+#thalamic white matter:
+str	Th#superior thalamic radiation
+eml	Th#external medullary lamina of th
+iml	Unknown#internal medullary lamina of th
+sm	Th#stria medullaris of the thalamus
+mlx	ml
+ml	HB#medial lemniscus
+tth	Unknown
+
+#posterior thalamic nuclear group
+PoT	Po
+Po	Th
+
+VPM	Th
+VPL	Th
+Rt	Th
+AngT	Th
+
+PoMn	Th
+
+#parafascicular thalamic nucleus
+PF	Th
+PIL	Th
+VLi	Th
+SPFPC	SPF
+SPF	Th
+
+PVA	Th
+PVP	Th
+PV	Th
+ATh	Th
+AD	Th
+PT	Th
+IMA	Th
+
+VA	VA-VL
+VL	VA-VL
+VA-VL	Th
+VM	Th
+
+#lateral posterior thalamic nucleus
+LPMC	LP
+LPMR	LP
+LPLC	LP
+LPLR	LP
+LP	Th
+
+LDDM	LD
+LDVL	LD
+LD	Th
+
+MDC	MD
+MDL	MD
+MDM	MD
+MD	Th
+
+AVVL	AV
+AVDM	AV
+AV	Th
+
+CL	Intralaminar-Th-nu
+PC	Intralaminar-Th-nu
+CM	Intralaminar-Th-nu
+OPC	Intralaminar-Th-nu
+Intralaminar-Th-nu	Th
+
+AMV	AM
+AM	Th
+
+IAM	Th
+IAD	Th
+
+SubD	Sub# Submedius nu
+SubV	Sub
+Sub	Th
+
+VRe	Re
+Re	Th
+Rh	Th
+Xi	Th
+PaXi	Th
+
+IMD	Th
+
+#ventral posterior nucleus of the thalamus, parvicellular part
+VPPC	Th
+DLG	Th
+
+PG	Th
+PGPC	Th
+PGMC	Th
+Th	Di
+
+# dorsal part of lateral geniculate
+VG	VLG
+VG-1	VLG
+VG-2	VLG
+VG-3	VLG
+VLG	Th
+#ventral part of LG
+#ILG	Th
+IGL	Th
+
+Sc	Th
+#medial geniculate
+SG	MG
+MGD	MG
+MGM	MG
+MGV	MG
+MZMG	MG
+MG	Th
+#or Brain
+#or Metathalamus
+#Metathalamus	Brain
+
+#ZIR	ZI
+#ZID	ZI
+#ZIV	ZI
+#ZIC	ZI
+#ZI	Subthalamus
+#STh	Subthalamus
+#Subthalamus	Brain
+
+#
+
+
+# sensory brainstem nuclei (the body)
+# lower body, legs
+Z	Unknown
+gr	Medulla-oblongolata
+Gr	Medulla-oblongolata
+
+cu	Unknown
+
+
+s5	HB# sensory root of trigeminal nerve
+
+
+sp5	HB#spinal trigeminal tract
+
+
+
+# motor trigeminal brainstem nuclei
+5MHy	5N# mylohyoid part
+5Ma	5N# masseter part
+5ADi	5N# anterior digastric part
+5Te	5N# temporalis part
+5TT	5N# tensor tympani part
+5Pt	5N# ?
+P5	5N# peritrigeminal zone
+5N	pons# motor trigeminal nucleus
+
+pons	HB
+
+m5	HB# motor root of trigeminal nerve
+
+
+5Tr	HB# trigeminal transition zone
+E5	Unknown# ectotrigeminal nucleus
+
+bic	MB
+### pyramidal tract - cs-tract :  ic -> cp -> lfp -> py -> pyx
+lfp	cs-tract
+cp	cs-tract
+pyx	py
+py	cs-tract
+ic	cs-tract
+cs-tract	Tracts
+
+### nulceus of the solitary tract 
+sol	Sol
+
+
+5Sol	HB #trigeminal-solitary transition zone
+
+AuD	Au2
+AuV	Au2
+Au2	Au
+Au1	Au
+Au	IsoCx
+
+STIA	STI
+STIL	STI
+STI	ST
+STD	ST
+
+STLD	STL
+STLI	STL
+STLJ	STL
+STLP	STL
+STLV	STL
+STL	ST
+
+STMA	STM
+STMAL	STM
+STMAM	STM
+STMP	STM
+STMPI	STM
+STMPL	STM
+STMPM	STM
+STMV	STM
+STM	ST
+
+STSL	STS
+STSM	STS
+STS	ST
+
+ST	Tel
+
+
+# lateral paragigantocellular nucleus
+LPGiE	LPGi
+LPGiA	LPGi
+LPGi	Medulla-oblongolata
+
+
+CGA	CG
+CGB	CG
+CGG	CG
+CGO	CG
+CGPn	CG
+CG	HB
+
+DM	Hy
+DMC	DM
+DMD	DM
+
+dtgx	Dtg
+EA	Amy
+EAC	EA
+EAM	EA
+
+
+
+
+
+
+#MiA	Mi
+#Mi	Brain
+
+
+SubG	Th
+SubI	ZI
+SubP	Sol
+
+Ahi	Unknown
+ANS	Unknown
+
+
+##########################
+# Do sprawdzenia
+
+# Septum: according to: http://brancusi.usc.edu/bkms/brain/show-braing2.php?aidi=10119
+HDB	Sep # nucleuseptohippocampal nucleuss of the horizontal limb of the diagonal band
+Ld	Sep # lambdoid septal zone
+
+LSI-1	LSI
+LSI-2	LSI
+LSI-3	LSI
+LSI-4	LSI
+LSI	LS # LSI lateral septal nucleus intermediate part
+LSV	LS # lateral septal nucleus ventral part
+LSD	LS # lateral septal nucleus dorsal part
+
+TS	Sep # Trigeminala septal nucleus
+LS	Sep # lateral septal nucleus
+MS	Sep # medial septal nucleus
+SFi	Sep # septofimbrial nucleus
+SHi	Sep # septohippocampal nucleus
+VDB	Sep # nucleus of the vertical limb of the diagonal band
+
+Sep	Tel
+FB	Brain
+
+
+Tel	FB
+Di	FB
+
+##########################
+#Dalej do sprawdzenia
+#Basal ganglia http://brancusi.usc.edu/bkms/brain/show-braing2.php?aidi=10091
+
+B	BG
+BAOT	Amy
+
+IPACL	IPAC
+IPACM	IPAC
+IPAC	BG
+
+SIB	SI
+SI	P
+GP	P
+VP	P
+P	BG
+
+CPu	StrD
+
+AcbC	Acb
+Acbne	Acb
+AcbR	Acb
+AcbSh	Acb
+LAcbSh	Acb
+Acb	StrV
+
+ICj	Tu
+ICjM	Tu
+TuDC	TU
+# TuPl	Tu
+# TuPo	Tu
+Tu-1	Tu
+Tu-2	Tu
+Tu-3	Tu
+Tu	StrV
+
+StrD	Str
+StrV	Str
+Str	BG
+BG	Tel
+
+###########################
+# Amygdala http://brancusi.usc.edu/bkms/brain/show-braing2.php?aidi=10130
+# 
+AAD	AA
+AAV	AA
+AA	Amy
+ACo	Amy
+
+AHiAL	AHi
+AHiPL	AHi
+AHiAM	AHi
+AHiPM	AHi
+AHi	Amy
+
+
+
+Apir	Amy
+Astr	Amy
+BAC	Amy
+
+BLA	BL
+BLP	BL
+BLV	BL
+BL	Amy
+
+BMA	BM
+BMP	BM
+BM	Amy
+
+#BSTI	Amy
+#BSTIA	Amy
+
+#BSTLD	BSTL
+#BSTLJ	BSTL
+#BSTLP	BSTL
+#BSTLV	BSTL
+#BSTL	Amy
+
+#BSTMP	BSTM
+#BSTMPL	BSTM
+#BSTMPM	BSTM
+#BSTMV	BSTM
+#BSTM	Amy
+
+#BSTS	Amy
+#BSTV	Amy
+
+CeC	Ce
+CeCv	Unknown
+CeL	Ce
+CeM	Ce
+Ce	Amy
+
+CST	FB
+
+IM	I
+I	Amy
+
+LaDL	La
+LaVL	La
+LaVM	La
+La	Amy
+
+LOT	Amy
+
+MeAD	MeA
+MeAV	MeA
+MeA	Me
+MePD	Me
+Me	Amy
+
+PLCo-1	PLCo
+PLCo-2	PLCo
+PLCo-3	PLCo
+PLCo	Amy # Poprzednio:PLCo	OlfCx
+PMCo	Amy # PMCo	OlfCx 
+
+#SLEAC	SLEA
+#SLEAM	SLEA
+#SLEA	Amy
+Amy	Di
+
+###########################
+# Olfactory system
+# http://brancusi.usc.edu/bkms/brain/show-braing2.php?aidi=10047
+
+GlA	AOB
+GrA	AOB
+MiA	AOB
+EPlA	AOB
+AOB	Olf
+
+AOD	AO
+AOE	AO
+AOL	AO
+AOM	AO
+AOP	AO
+AOV	AO
+AOVP	AO
+AO	Olf
+
+IG	Olf #konflikt IG	Hipp# indusium griseum
+
+E-OV	MOB #konflikt
+EPl	MOB
+Gl	MOB
+GrO	MOB
+IPl	MOB
+Mi	MOB
+ON	MOB
+MOB	Olf
+
+Pir-1a	Pir
+Pir-1b	Pir
+Pir-1	Pir
+Pir-2	Pir
+Pir-3	Pir
+Pir	OlfCx # Pir>......OlfCx
+
+DTT-4	DTT
+DTT-2	DTT
+DTT-3	DTT
+DTT-1	DTT
+DTT	TT
+
+VTT-1	VTT
+VTT-2	VTT
+VTT-3	VTT
+VTT	TT
+
+TT	Olf
+
+aot	vn
+lo	vn
+vn	Olf
+
+Olf	Tel
+###########################
+
+Hy	Di
+LZ	Hy
+
+VLPO	LZ
+
+MCLH	LH
+LH	LZ
+
+LPO	LZ
+MCPO	LZ
+
+Te	MTu
+MTu	LZ
+
+SO	LZ
+VTM	LZ
+
+F	ZI
+ZIR	ZI
+ZID	ZI
+ZIV	ZI
+ZIC	ZI
+ZI	LZ
+
+##
+STh	Hy
+SHy	Hy
+
+##
+MZ	Hy
+	
+AH	MZ
+AHA	AH
+AHC	AH
+AHP	AH
+Stg	AH
+
+
+DMH	MZ
+	
+DMC	DMH
+DMD	DMH
+DMV	DMH
+
+LM	MZ
+ML	MZ
+
+MPA	MZ
+	
+ADP	MPA
+AVPO	MPA
+
+	
+MPOC	MPO
+MPOL	MPO
+MPOM	MPO
+MPO	MPA
+
+
+
+PDP	MPA
+PS	MPA
+
+PH	MZ
+PMD	MZ
+PMV	MZ
+RCh	MZ
+
+SuM	MZ
+SuML	SuM
+SuMM	SuM
+
+VMH	MZ
+VMHA	VMH
+VMHC	VMH
+VMHDM	VMH
+VMHVL	VMH
+VMHSh	VMH
+###
+
+PVZ	Hy
+	
+Pa	PVZ
+	
+PaAM	Pa
+PaAP	Pa
+PaDC	Pa
+PaLM	Pa
+PaMP	Pa
+PaMM	Pa
+PaPo	Pa
+PaV	Pa
+
+Arc	PVZ
+ArcD	Arc
+ArcL	Arc
+ArcLP	Arc
+ArcM	Arc
+ArcMP	Arc
+
+AVPe	PVZ
+DTM	PVZ
+Pe	PVZ
+
+
+SChDL	SCh
+SChVM	SCh
+SCh	PVZ
+
+VMPO	PVZ
+
+
+PSTh	Di	#parasubthalamic nucleus
+###########################
+###########################
+#
+# MidBrain
+MB	Brain
+
+EMi	MB
+InCo	MB
+I3	MB
+LVe	MB
+MPT	MB
+Min	MB
+PaR	MB
+
+APTD	APT
+APTV	APT
+APT	MB
+
+
+ctg	MB
+DpMe	MB
+ELm	MB
+EW	MB
+
+IC	MB
+ECIC-1	ECIC
+ECIC-2	ECIC
+ECIC-3	ECIC
+ECIC	IC
+DCIC	IC
+CIC	IC
+BIC	IC
+
+InCG	MB
+InCSh	InC
+InC	MB
+
+IP	MB
+IPA	IP
+IPC	IP
+IPDM	IP
+IPI	IP
+IPL	IP
+IPR	IP
+
+Me5	MB#mesencephalic trigeminal nucleus
+
+PAG	MB
+Dk	PAG
+PlPAG	PAG
+DLPAG	PAG
+DMPAG	PAG
+LPAG	PAG
+VLPAG	PAG
+PIPAG	PAGP
+p1PAG	PAG
+
+
+PBG	MB
+PCTg	Tg
+PDTg	Tg               
+RR	Th
+RRF	MB
+RRF-A8	MB
+
+#superior colliculus SC
+Zo	SC
+SuG	SC
+Op	SC
+InG	SC
+DpWh	SC
+InWh	SC
+DpG	SC
+SC	MB
+
+SNCD	SNC
+SNCV	SNC
+SNC	SN
+SNM	SN
+SNCM	SN
+SNL	SN
+SNRDM	SNR
+SNRVL	SNR
+SNR	SN
+SN	MB
+
+Su3	MB
+Su3C	MB
+VTA	MB
+
+
+
+##################
+# Cb
+HB	Brain
+Cb	HB
+
+Med	Cb
+10Cb	Cb
+
+6Cb	Cb
+6a	6Cb
+6b	6Cb
+7Cb	Cb
+8Cb	Cb
+
+Ant	Cb
+1Cb	Ant
+45Cb	Ant
+
+cbc	Cb
+Cop	Cb
+Fl	Cb
+Inf	Cb
+
+Int	Cb
+IntA	Int
+IntDL	Int
+IntDM	Int
+IntP	Int
+IntPPC	IntP
+
+Lat	Cb
+LatPC	Lat
+
+mcp	Cb
+PFl	Cb
+pfs	Cb
+PN	Cb
+
+scp	Cb
+scpd	scp
+xscp	scp
+
+SimA	Sim
+SimB	Sim
+Sim	Cb
+
+Uvu	Cb
+VeCb	Cb
+
+2-3Cb	Cb
+2bCb	2Cb
+2Cb	Cb
+3-4Cb	Cb
+3Cb	Cb
+4-5Cb	Cb
+4Cb	Cb
+5Cb	Cb
+6aCb	6Cb
+6bCb	6Cb
+6cCb	6Cb
+9a,bCb	9Cb
+9Cb	Cb
+9cCb	9Cb
+
+############################
+## HB:
+
+FVe	HB
+#Ge5	HB
+#Gr	HB
+In	HB
+InM	Medulla-oblongolata
+
+LDTg	Tg
+LDTgV	LDTg
+
+LC	HB
+MRVL	HB
+MnA	HB
+MdD	HB
+MdV	HB
+PSol	HB#parasolitary nucleus
+Pa5	HB#paratrigeminal nucleus
+PC5	HB
+PCRt	HB
+PR	HB
+
+R	HB
+RLH	R
+RMC	R
+#gr	HB
+10N	HB
+12N	HB
+
+5Gn	HB
+
+
+7N	pons
+7DL	7N
+7DI	7N
+7DM	7N
+7L	7N
+7VI	7N
+7VM	7N
+7SH	7N
+
+8Gn	HB
+#A1-C1	HB
+Acs5	HB
+Acs6-7	HB
+Acs7	HB
+
+AmbC	Amb
+AmbL	Amb
+AmbSC	Amb
+Amb	HB
+
+AP	HB
+B4	HB
+Bar	HB
+Bo	HB
+C1	HB
+C2	HB
+C3	HB
+
+
+CGA	HB
+CGB	HB
+CGPn	HB
+CPO	HB
+
+Cu	HB
+CuR	Cu
+ECu	Cu
+
+CVL	HB
+Dk	HB
+
+
+
+DPGi	HB
+DPO	HB
+
+DTg	HB
+DTgC	DTg
+DTgP	DTg
+
+
+ERS	HB
+EVe	HB
+
+Gi	HB
+GiA	Gi
+GiV	Gi
+
+LSO	HB
+LVPO	HB
+MA3	HB
+
+Mo5	HB
+Mo5DL	Mo5
+Mo5VM	Mo5
+
+MSO	HB
+
+MVe	HB
+MVeMC	MVe
+MVePC	MVe
+O	HB
+
+PB	HB
+KF	PB
+
+#lateral parabrachial nucleus
+LPBE	LPB
+LPBS	LPB
+LPBI	LPB
+LPBV	LPB
+LPBCr	LPB
+LPBD	LPB
+LPBC	LPB
+LPB	PB
+
+MPB	PB
+MPBE	MPB
+
+PBP	PB
+PBW	PB
+
+PMn	HB
+PM	HB
+
+# sensory trigeminal brainstem nuclei
+Pr5DM	Pr5
+Pr5VL	Pr5
+Pr5	HB
+
+
+Pre-Cb	HB
+	
+IO	Pre-Cb
+IOD	IO
+IOM	IO
+IOA	IOM
+IOB	IOM
+IOBe	IOM
+IOC	IOM
+IOK	IOM
+IOPr	IO
+IODM	IOPr
+IODMC	IOPr
+IOVL	IO
+
+LRt	Pre-Cb
+Li	LRt
+LRtPC	LRt
+LRtS5	LRt
+
+Pn	Pre-Cb
+DLPn	Pn
+DMPn	Pn
+MPn	Pn
+
+PnC	Pn
+PnO	Pn
+PnR	Pn
+PnV	PnR
+DPPn	Pn
+
+PPTg	Pn
+VPPn	Pn
+
+####
+RA	HB
+
+B9	RA
+CLi	RA
+
+DR	RA
+DRC	DR
+DRD	DR
+DRI	DR
+DRL	DR
+DRV	DR
+
+MnR	RA
+PMnR	RA
+RC	RA
+RIP	RA
+RLi	RA
+RMg	RA
+ROb	RA
+RPa	RA
+
+RPO	HB
+
+RtTgL	RtTg
+RtTgP	RtTg
+RtTg	HB
+
+SGl	HB
+
+SolRL	Sol
+SolL	Sol
+SolM	Sol
+SolC	Sol
+SolV	Sol
+SolIM	Sol
+SolG	Sol
+SolI	Sol
+SolCe	Sol
+SolDM	Sol
+SolDL	Sol
+SolVL	Sol
+Sol	HB
+
+##??Ge5	Sp5C
+Sp5C	Sp5
+Sp5I	Sp5
+
+Sp5O	Sp5
+Sp5OVL	Sp5O
+
+DMSp5	Sp5
+DMSp5V	DMSp5
+
+Sp5	HB
+
+
+Sph	HB
+SPO	HB
+SpVe	HB
+Su5	HB# suptratrigeminal nu
+
+SubCA	HB
+SubCD	HB
+SubCV	HB
+
+#SubCA	SubC?
+#SubCD	SubC?
+#SubCV	SubC?
+#SubC	Brain?
+
+SuVe	HB
+Tz	HB
+
+VC	HB
+VCP	VC
+
+VCA	VC
+VCAGr	VCA
+
+X	HB
+Y	HB
+
+
+#################
+
+11N	Medulla-oblongolata
+12GH	Medulla-oblongolata
+
+Medulla-oblongolata	HB
+
+################
+# 2n - optic nerve
+2n	nerves
+aopt	2n
+bsc	2n
+csc	2n
+ox	2n
+3n	nerves
+4n	nerves
+6n	nerves
+7ni	7n
+7n	nerves
+8cn	8n
+8vn	8n
+8n	nerves
+9n	nerves
+10n	nerves
+12n	nerves
+nerves	Brain
+
+3PC	3N
+3N	MB
+
+4Sh	4N
+4N	MB
+
+6RB	6N
+6N	pons
+
+
+other	Brain
+noradrenaline-cells	other
+dopamine-cells	other
+A1-C1	noradrenaline-cells
+A1	noradrenaline-cells
+A2	noradrenaline-cells
+A5	noradrenaline-cells
+A7	noradrenaline-cells
+A8	dopamine-cells
+A11	dopamine-cells
+A13	dopamine-cells
+A14	dopamine-cells
+
+
+aa	Unknown
+
+A	Unknown
+
+chp	ventricles#TODO: napewno tu?
+
+arteries	other
+a	arteries
+acer	arteries
+asp	arteries
+azac	arteries
+azp	arteries
+bas	arteries
+cctd	arteries
+dlg	arteries
+dpal	arteries
+ectd	arteries
+gpal	arteries
+iala	arteries
+ictd	arteries
+infa	arteries
+iopha	arteries
+iorb	arteries
+lga	arteries
+lofr	arteries
+masa	arteries
+mcer	arteries
+mm	arteries
+mofr	arteries
+mxa	arteries
+
+Al	Unknown
+AL	Unknown
+
+asc7	Unknown
+ASt	Str
+ATg	Tg
+AVPe	Unknown
+
+b	Unknown
+
+
+C	Unknown#TODO: artefakt
+
+CAT	HB
+CB	StrV
+cbw	Cb
+CC	ventricles
+
+
+CI	Medulla-oblongolata
+cic	MB
+Cir	Hy
+Cl	BG
+cll	MB
+CnF	pons
+CnFD	CnF
+CnFI	CnF
+CnFV	CnF
+Com	MB
+costr	Unknown
+CPO	pons
+Crus1	Cb
+Crus2	Cb
+cst	FB
+Ct	Medulla-oblongolata
+CVL	Medulla-oblongolata
+CxA1	Amy#TODO CxA1 => CxA-1
+DA	Hy
+das	pons
+DCDp	DC
+DCFu	DC
+DCGr	DC
+DCl	Cl
+DCMo	DC
+DC	pons
+
+dcs	Medulla-oblongolata
+DEn	Pir
+DLL	MB
+dlo	lo
+
+
+
+DMTg	Tg
+DMV	Unknown
+
+DPGi	Unknown
+
+
+
+
+dsc	Tracts
+dsc-oc	dcs
+DT	MB
+
+
+DTM	Unknown
+DTr	Unknown
+
+
+e	Unknown
+ECIC3	Unknown
+EF	HB
+eMC	Unknown
+EP	GP
+ePC	Unknown
+EpP	Unknown
+ESO	Unknown
+Eth	Th
+Fr3	IsoCx
+FrA	IsoCx
+Fu	ST
+FV	Unknown
+g7	Unknown
+Gem	Hy
+GP	Unknown
+GrCb	Unknown
+GrC	Unknown
+hbc	Hb
+hif	HippFormation
+I8	Unknown
+ia	Unknown
+IB	Unknown
+icf	Cb
+icp	Cb
+icpx	icp
+ID	Unknown
+IEn	OlfCx
+IF	Unknown
+II	Unknown
+ILL	Medulla-oblongolata
+IMG	Unknown
+imvc	Unknown
+
+
+InfS	Unknown
+
+
+
+IP	Unknown
+IPDL	MB
+IPF	MB
+IRtA	IRt
+IRt	Medulla-oblongolata
+is	Unknown
+IS	HB
+IVF	Unknown
+JPLH	Unknown
+JxO	Unknown
+La	Unknown
+LA	Hy
+LaDL	Unknown
+LaVL	Unknown
+LaVM	Unknown
+L	Unknown
+LHb	Hb
+LHbL	LHb
+LHbM	LHb
+Hb	MB
+Li	Unknown
+ll	Medulla-oblongolata
+LM	Unknown
+LOT1	Unknown
+
+
+
+LT	HB
+LTe	Unknown
+Lth	Unknown
+m	Unknown
+mch	Unknown
+MCPC	MB
+
+
+ME	Hy
+MedDL	Cb
+MedL	Cb
+MEE	Unknown
+MEI	Unknown
+MePV	Me
+mfba	mfb
+mfbb	mfb
+mfb	Tracts
+MHb	Hb
+
+
+MiTg	Tg
+ML	Unknown
+mlf	Medulla-oblongolata
+MM	MZ
+MnM	MZ
+MnPO	Unknown
+MoCb	Unknown
+
+MPA	Unknown
+
+
+mp	Hy
+MPL	HB
+
+
+Tracts	Brain
+
+mt	Tracts
+MT	HB
+mtg	Tracts
+MV	Unknown
+MVPO	HB
+Mx	Medulla-oblongolata
+ns	tracts
+Nv	BG
+Obex	Unknown
+ocb	Unknown
+oc	Unknown
+och	Unknown
+olfa	Unknown
+opt	Tracts
+OPT	MB
+OT	MB
+p1	Unknown
+P7	HB
+Pa4	HB
+Pa6	HB
+PaC	Unknown
+pc	MB
+pcer	arteries
+PCGS	HB
+PCom	MB
+PCRtA	Medulla-oblongolata
+pcuf	Cb
+PDPO	Unknown
+PDR	HB
+PeF	LZ
+PeFLH	LH
+PHA	Hy
+PHD	PHA
+Pi	Di
+PIF	Unknown
+PiSt	Unknown
+Pk	Unknown
+PL	Unknown
+PLd	Unknown
+plf	Cb
+PLH	LH
+PLi	MB
+PLV	HB
+pm	Tracts
+
+pms	Unknown
+
+POH	Unknown
+PP	MB
+ppf	Cb
+PPT	SC
+PPy	HB
+PrBo	Unknown
+Pr	HB
+PrC	MB
+PrCnF	MB
+PrEW	MB
+prf	Cb
+PrMC	Unknown
+PS	Unknown
+psf	Cb
+PTe	Unknown
+PTg	Tg
+RAmb	HB
+Rbd	Unknown
+r	Unknown
+RCh	Unknown
+RChL	Unknown
+REth	Th
+RI	Unknown
+RL	Unknown
+rLL	Unknown
+Ro	HB
+RPC	R
+RPF	MB
+RRe	Unknown
+rs	Tracts
+RtSt	Unknown
+
+
+RVL	HB
+RVRG	HB
+S1T	Unknown
+Sag	Tg
+scc	Unknown
+
+
+SCO	Unknown
+sf	Cb
+SFO	MB
+SGe	HB
+
+
+SMT	Hy
+SMV	Medulla-oblongolata
+
+
+SOR	Unknown
+sox	Tracts
+SPa	Hy
+Sp	Unknown
+SPTg	Tg
+SpV	Unknown
+StA	Unknown
+STD	Unknown
+Stg	Unknown
+StHy	Hy
+
+SubB	HB
+
+
+
+
+aot	Unknown
+apmf	Cb
+
+
+sumx	Unknown
+SuS	HB
+SuV	Unknown
+T	Unknown
+tfp	pons
+TG	Unknown
+Tr	Unknown
+ts	Medulla-oblongolata
+Tu1	Unknown
+TuLH	LH
+tz	pons
+un	Cb
+Unlabeled	Brain
+unx	Unknown
+v	Unknown
+V	Unknown
+#vBrain	Brain
+p1Rt	MB
+
+VCCap	HB
+VCl	Unknown
+VCPO	Unknown
+Ve	Unknown
+LSS	Str
+veme	Tracts
+VEn	Pir
+vert	arteries
+vesp	Tracts
+vlh	Tracts
+VLH	Hy
+VLL	Medulla-oblongolata
+
+VOLT	Unknown
+vsc	HB
+#vsIsoCx	Unknown
+VTAR	Tg
+VTg	HB
+vtgx	Tg
+Tg	HB
+xicp	Unknown
+me5	Tracts #mesencephalic trigeminal tract
+
+Unknown	Brain

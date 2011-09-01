@@ -1,0 +1,1444 @@
+10Cb	10th cerebellar lobule (nodule)	333399
+10Gn	vagus nerve ganglion	777777
+10N	dorsal motor nucleus of vagus	CC0000
+10n	vagus nerve	777777
+11N	accessory nerve nucleus	1DACD6
+11n	root of accessory nerve	777777
+12C	hypoglossal canal	777777
+12GH	hypoglossal nucleus, geniohyoid part	000000
+12N	hypoglossal nucleus	DE3163
+12n	root of hypoglossal nerve	777777
+1b	layer 1b of cortex	778899
+1Cb	1st cerebellar lobule (lingula)	734F96
+1Cx	layer 1 of developing cortex	777777
+1	layer 1 of cortex	777777
+1n	olfactory nerve or its rootlets	777777
+21	-------	FFFF00
+2-3Cb	2nd and 3rd cerebellar lobules	0047AB
+2bCb	2b cerebellar lobule	663854
+2Cb	2nd cerebellar lobule	F19CBB
+2	layer 2 of cortex	777777
+2n	optic nerve	777777
+32	-------	40826D
+321	-------	C08081
+3-4	-------	F49AC2
+3-4Cb	3rd and 4th cerebellar lobules	FFFDD0
+3Cb	3rd cerebellar lobule	DDA0DD
+3ECIC	-------	ABCDEF
+3	layer 3 of cortex	777777
+3n	oculomotor nerve	BC987E
+3N	oculomotor nucleus	A2A2D0
+3PC	oculomotor nucleus, parvicellular part	483C32
+3V	3rd ventricle	FAF0BE
+45Cb	-------	777777
+4-5Cb	4th and 5th cerebellar lobules	FBCCE7
+4Cb	4th cerebellar lobule	B7410E
+4	layer 4 of cortex	777777
+4n	trochlear nerve	AF4035
+4N	trochlear nucleus	A40000
+4Sh	trochlear nucleus shell region	996666
+4V	4th ventricle	00B7EB
+5ADi	motor trigeminal nucleus, anterior digastric part	96DED1
+5a	layer 5a of cortex	777777
+5b	layer 5b of cortex	FFEF00
+5Cb	5th cerebellar lobule	00FF6F
+5Gn-5n	trigeminal ganglion and trigeminal nerve	777777
+5Gn	trigeminal ganglion (Gasseri)	777777
+5	layer 5 of cortex	777777
+5Ma	motor trigeminal nucleus, masseter part	087830
+5man	trigeminal nerve, mandibular division	777777
+5MHy	motor trigeminal nucleus, mylohyoid part	DDBEC3
+5mx	trigeminal nerve, maxillary division	777777
+5N	motor trigeminal nucleus	7F00FF
+5n	trigeminal nerve	777777
+5oph	trigeminal nerve, ophthalmic division	777777
+5Pt	-------	8B8589
+5Sol	trigeminal-solitary transition zone	CC8899
+5T	-------	C80815
+5Te	motor trigeminal nucleus, temporalis part	777777
+5Tr	trigeminal transition zone	777777
+5TT	motor trigeminal nucleus, tensor tympani part	FF4F00
+5VM	motor trigeminal nucleus, ventromedial part	777777
+6aCb	6a cerebellar lobule	F4F0EC
+6a	layer 6a of cortex	777777
+6bCb	6b cerebellar lobule	CA2C92
+6b	layer 6b of cortex	777777
+6Cb	6th cerebellar lobule	614051
+6cCb	6c cerebellar lobule	A1CAF1
+6	layer 6 of cortex	777777
+6N	abducens nucleus	CB410B
+6n	root of abducens nerve	777777
+6RB	abducens nucleus, retractor bulbi part	21ABCD
+7Cb	7th cerebellar lobule	F19CBB
+7DI	facial nucleus, dorsal intermediate subnucleus	8A795D
+7DL	facial nucleus, dorsolateral subnucleus	882D17
+7DM	facial nucleus, dorsomedial subnucleus	C0C0C0
+7Gn	a	777777
+7gp	facial nerve, greater petrosal branch	777777
+7L	facial nucleus, lateral subnucleus	997A8D
+7n	facial nerve	008080
+7N	facial nucleus	777777
+7ni	nervus intermedius component of the facial nerve	EEDC82
+7SH	facial motor nucleus, stylohyoid part	A52A2A
+7VI	facial nucleus, ventral intermediate subnucleus	FFCC33
+7VM	facial nucleus, ventromedial subnucleus	D2B48C
+8Cb	8th cerebellar lobule	00FF00
+8cn	cochlear root of the vestibulocochlear nerve	F88379
+8Gn	vestibulocochlear ganglion	777777
+8n	vestibulocochlear nerve	777777
+8vn	vestibular root of the vestibulocochlear nerve	E6E200
+9-10-11n	glossopharyngeal, vagus, and accessory nerves	777777
+9-10n	glossopharyngeal and vagus nerves	777777
+9a,bCb	9th cerebellar lobule, a and b	967117
+9aCb	9th cerebellar lobule, a	777777
+9bCb	9th cerebellar lobule, b	777777
+9Cb	9th cerebellar lobule	AA98A9
+9cCb	9th cerebellar lobule, c	836953
+9n	glossopharyngeal nerve	FF0038
+A	-------	5218FA
+A11	A11dopamine cells	8878C3
+A13	A13 dopamine cells	9BDDFF
+A14	A14 dopamine cells	777777
+A1	A1 noradrenaline cells	777777
+A1-C1	A1 noradrenaline cells/C1 adrenaline cells	E4717A
+A2	A2 noradrenaline cells	FF4040
+A4	A4 noradrenaline cells	777777
+A5	A5 noradrenaline cells	FC6C85
+A7	A7 noradrenaline cells	FBEC5D
+A8	A8 dopamine cells	777777
+aa	-------	4997D0
+AA	anterior amygdaloid area	FFBCD9
+AAD	-------	777777
+a	artery	777777
+AAV	-------	777777
+aca	anterior commissure, anterior part	0095B6
+AC	anterior commissural nucleus	777777
+ac	anterior commissure	777777
+Acb	accumbens nucleus	777777
+AcbC	accumbens nucleus, core	AF4035
+Acbne	accumbens nucleus neuroepithelium	777777
+AcbR	accumbens nucleus, rostral pole	777777
+AcbSh	accumbens nucleus, shell	FF8C00
+acer	anterior cerebral artery	CD5C5C
+aci	anterior commissure, intrabulbar part	CB4154
+ACo	anterior cortical amygdaloid nucleus	ED872D
+acp	anterior commissure, posterior part	08E8DE
+Acs5	-------	777777
+Acs6-7	accessory abducens/facial nucleus	777777
+Acs7	-------	777777
+AD	anterodorsal thalamic nucleus	DC143C
+ADig	anterior belly of the digastric muscle	777777
+ADP	-------	777777
+af	amygdaloid fissure	777777
+AHA	anterior hypothalamic area, anterior part	A1CAF1
+AH	anterior hypothalamic area	777777
+AHC	anterior hypothalamic area, central part	89CFF0
+Ahi	-------	777777
+AHiAL	amygdalohippocampal area, anterolateral part	3B444B
+AHiAM	-------	777777
+AHi	amygdalohippocampal area	777777
+AHiPL	amygdalohippocampal area, posterolateral	B94E48
+AHiPM	amygdalohippocampal area, posteromedial part	FAD6A5
+AHP	anterior hypothalamic area, posterior part	98777B
+AI	agranular insular cortex	777777
+AID	agranular insular cortex, dorsal part	F28500
+AIP	agranular insular cortex, posterior part	FADA5E
+AIV	agranular insular cortex, ventral part	4682B4
+Al	alar nucleus	FF8C00
+Alar	alar ligament of dens	777777
+ALD	apical ligament of dens	777777
+AL	nucleus of the ansa lenticularis	777777
+alv	alveus of the hippocampus	FFBF00
+AM	anteromedial thalamic nucleus	00008B
+Amb	ambiguus nucleus	777777
+AmbC	ambiguus nucleus, compact part	A3C1AD
+AmbL	ambiguus nucleus, loose part	A9203E
+AmbSC	ambiguus nucleus, subcompact part	F3E5AB
+Amg	amygdala	777777
+AMV	anteromedial thalamic nucleus, ventral part	FE6F5E
+Amy	-------	777777
+AngT	angular thalamic nucleus	848482
+ANS	accessory neurosecretory nuclei	004040
+Ant	-------	777777
+AntCh	anterior chamber of the eye	777777
+AO	anterior olfactory nucleus	777777
+AOB	accessory olfactory bulb	777777
+AOD	anterior olfactory nucleus, dorsal part	8F00FF
+AOE	anterior olfactory nucleus, external part	3F00FF
+AOL	anterior olfactory nucleus, lateral part	B53389
+AOM	anterior olfactory nucleus, medial part	801818
+AOP	anterior olfactory nucleus, posterior part	6C541E
+aopt	-------	777777
+AOrb	alar orbital bone	777777
+aot	accessory olfactory tract	C154C1
+AOV	anterior olfactory nucleus, ventral part	4D5D53
+AOVP	anterior olfactory nucleus, ventroposterior part	3CB371
+apal	ascending palatine artery	777777
+AP	area postrema	777777
+Apex	apex of cochlea	777777
+APF	anterior perifornical nucleus	777777
+Apir	-------	777777
+APir	amygdalopiriform transition area	E9D66B
+APit	anterior lobe of the pituitary	777777
+apmf	ansoparamedian fissure	E9692C
+APT	anterior pretectal nucleus	6D351A
+APTD	anterior pretectal nucleus, dorsal part	8FCFD1
+APTV	anterior pretectal nucleus, ventral part	E25098
+Aq	aqueduct	779ECB
+Arc	arcuate hypothalamic nucleus	848482
+ArcD	arcuate hypothalamic nucleus, dorsal part	FFC1CC
+ArcL	arcuate hypothalamic nucleus, lateral part	480607
+ArcLP	arcuate hypothalamic nucleus, lateroposterior part	273BE2
+ArcM	arcuate hypothalamic nucleus, medial part	FF1DCE
+ArcMP	arcuate hypothalamic nucleus, medial posterior part	FFEBCD
+AReCa	anterior rectus capitis muscle	777777
+arteries	-------	777777
+Ary	arytenoid cartilage	777777
+asc7	ascending fibers of the facial nerve	E30B5D
+ASCC	anterior semicircular canal	777777
+asp	anterior spinal artery	D73B3E
+ASph	alisphenoid bone	777777
+ASt	amygdalostriatal transition area	FAEBD7
+Astr	-------	777777
+AtAx	atlantoaxial joint	777777
+ATg	anterior tegmental nucleus	FADA5E
+ATh	anterior thalamic region	777777
+ATh	anterior thalamic region	777777
+Atlas	atlas	777777
+AtOc	atlantooccipital joint	777777
+Aty	arytenoid cartilage	777777
+Au	-------	777777
+Au1	primary auditory cortex	FBEC5D
+Au2	-------	777777
+Aud	auditory tube	777777
+AudC	auditory tube cartilage	777777
+AuD	secondary auditory cortex, dorsal area	777777
+AuV	secondary auditory cortex, ventral area	0047AB
+AV	anteroventral thalamic nucleus	C2B280
+AVDM	anterovent thalamic nucleus, dorsomedial part	777777
+AVPe	anteroventral periventricular nucleus	777777
+AVPO	-------	777777
+AVVL	anteroventral thalamic nucleus, ventrolateral part	777777
+Axis	axis (C2 vertebra)	777777
+azac	azygous anterior cerebral artery	826644
+azp	azygous pericallosal artery	B31B1B
+b	-------	ECEBBD
+B4	-------	777777
+B9	B9 serotonin cells	00FFFF
+BAC	bed nucleus of the anterior commissure	03C03C
+BAOT	bed nucleus of the accessory olfactory tract	CC5500
+Bar	Barrington's nucleus	F400A1
+bas	basilar artery	FDFD96
+B	basal nucleus (Meynert)	777777
+BCo	basal nucleus, core	777777
+BG	-------	777777
+BHy	body of hyoid bone	777777
+bic	brachium of the inferior colliculus	FE59C2
+BIC	nucleus of the brachium of the inferior colliculus	FFDB58
+BLA	basolateral amygdaloid nucleus, anterior part	702963
+BL	basolateral amygdaloid nucleus	777777
+BLP	basolateral amygdaloid nucleus, posterior part	F0DC82
+BLV	basolateral amygdaloid nucleus, ventral part	FFC1CC
+BMA	basomedial amygdaloid nucleus, anterior part	FCF75E
+BM	basomedial amygdaloid nucleus	777777
+BMP	basomedial amygdaloid nucleus, posterior part	00416A
+Bo	Botzinger complex	FFA089
+BOcc	basioccipital bone	777777
+Brain	-------	777777
+bsc	brachium of the superior colliculus	DA70D6
+BSph	basisphenoid bone	777777
+BStap	base of stapes	777777
+BTel	basal telencephalon	777777
+BTelne	basal telencephalon, neuroepithelial zone	777777
+C	-------	FE4EDA
+C1-A1	C1 adrenaline cells and A1 noradrenaline cells	645452
+C1	C1 adrenaline cells	777777
+C1-CVL	C1 cells and caudoventrolateral reticular nucleus	777777
+C1-RVL	rostral ventrolateral reticular nucleus	777777
+C2	C2 adrenaline cells	E18E96
+C3	C3 adrenaline cells	BB6528
+CA	-------	777777
+CA1	field CA1 of the hippocampus	EDC9AF
+CA2	field CA2 of the hippocampus	C19A6B
+CA3	field CA3 of the hippocampus	1560BD
+CAT	nucleus of the central acoustic tract	556B2F
+cav	cavernous sinus	777777
+cbc	-------	414833
+CB	cell bridges of the ventral striatum	777777
+Cb	cerebellum	777777
+cbw	cerebellar white matter	FFB7C5
+cbx	cerebellar commissure	777777
+CC	central canal	967117
+cc	corpus callosum	777777
+CCrus	common crus of the semicircular canals	777777
+cctd	common carotid artery	777777
+CD	cochlear duct	777777
+CeAu	cervicoauricular muscle	777777
+CeC	central amygdaloid nucleus, capsular part	ADD8E6
+Ce	central amygdaloid nucleus	777777
+CeCv	central cervical nucleus of the spinal cord	B5A642
+CeL	central amygdaloid nucleus, lateral division	F08080
+CeM	central amygdaloid nucleus, medial division	E66771
+CEnt	caudomedial entothinal cortex	A4C639
+Cg1	cingulate cortex, area 1	03C03C
+Cg2	cingulate cortex, area 2	1A2421
+CGA	central gray, alpha part	5F9EA0
+CGB	central gray, beta part	006B3C
+CG	central gray	777777
+Cg	cingulate cortex	777777
+cg	cingulum	777777
+CGG	central gray, gamma part	E30022
+CGn	cochlear (spiral) ganglion	777777
+CGO	central gray, nucleus O	536872
+CGPn	central gray of the pons	E9D66B
+chp	choroid plexus	E4D00A
+CI	caudal interstitial nucleus of the medial longitudinal fasciculus	DFFF00
+CIC	central nucleus of the inferior colliculus	B666D2
+cic	commissure of the inferior colliculus	777777
+Cir	circular nucleus	FDEE00
+Clav	clavicle	777777
+CL	centrolateral thalamic nucleus	777777
+Cl	claustrum	777777
+CLi	caudal linear nucleus of the raphe	FF8243
+cll	commissure of the lateral lemniscus	CCFF00
+CM	central medial thalamic nucleus	FF91A4
+CnF	cuneiform nucleus	777777
+CnFD	cuneiform nucleus, dorsal part	C23B22
+CnFI	cuneiform nucleus, intermediate part	779ECB
+CnFV	cuneiform nucleus, ventral part	003366
+Com	commissural nucleus of the inferior colliculus	3CD070
+Cond	condylar process of mandible	777777
+Cop	copula of the pyramis	3FFF00
+Cor	coronoid process of the mandible	777777
+Cornea	cornea	777777
+Corti	organ of Corti	777777
+costr	-------	E1AD21
+cp	cerebral peduncle	905D5D
+CPO	caudal periolivary nucleus	E32636
+CPu	caudate putamen (striatum)	FBCEB1
+CPune	caudate putamen, neuroepithelial zone	777777
+cpx	carotid plexus	777777
+CrP	cribriform plate of the ethmoid	777777
+Crus1	crus 1 of the ansiform lobule	9F8170
+Crus2	crus 2 of the ansiform lobule	3D2B1F
+csc	commissure of the superior colliculus	918151
+cst	commissural stria terminalis	9400D3
+CST	nucleus of the commissural stria terminalis	FEFE22
+Ct	conterminal nucleus	00BFFF
+CtdB	carotid body	777777
+Ctd	carotid canal	777777
+ctg	-------	777777
+cty	chorda tympani nerve	777777
+cu	cuneate fasciculus	AB4E52
+Cu	cuneate nucleus	FFFAFA
+CuR	cuneate nucleus, rotundus part	702963
+CV2	second cervical vertebra	777777
+CV	cervical vertebra	777777
+CVL-C1	caudoventrolateral reticular nucleus and C1 cells	777777
+CVL	caudoventrolateral reticular nucleus	777777
+Cx1	developing cortex, layer 1	777777
+CxA-1	-------	777777
+CxA1	cortex-amygdala transition zone, layer 1	777777
+CxA-2	-------	777777
+CxA2	cortex-amygdala transition zone, layer 2	777777
+CxA-3	-------	777777
+CxA	cortex-amygdala transition zone	777777
+Cx	cerebral cortex	777777
+Cxne	neuroepithelial zone of developing cortex	777777
+CxP	cortical plate	777777
+D3V	dorsal 3rd ventricle	014421
+DA	dorsal hypothalamic area	C9DC87
+das	dorsal acoustic stria	43B3AE
+DAx	dens of the axis	777777
+DC	dorsal cochlear nucleus	777777
+DCDp	dorsal cochlear nucleus, deep core	FF33CC
+DCFu	dorsal cochlear nucleus, fusiform layer	6B3FA0
+DCGr	dorsal cochlear nucleus, granular layer	C90016
+DCIC	dorsal cortex of the inferior colliculus	002366
+DCl	dorsal part of claustrum	682860
+DCMo	dorsal cochlear nucleus, molecular layer	AFEEEE
+dcs	dorsal corticospinal tract	8A2BE2
+dcw	deep cerebral white matter	007BA7
+dcw-ec-cc-gcc-fmi-fmj	-------	777777
+D	dorsal nucleus of the spinal cord	777777
+DEn	dorsal endopiriform nucleus	BCD4E6
+df	dorsal fornix	50C878
+DG	dentate gyrus	0067A5
+dhc	dorsal hippocampal commissure	F4C2C2
+DH	dorsal horn of spinal cord	777777
+DI	dysgranular insular cortex	1C352D
+DIEnt	dorsal intermediate entorhinal cortex	DD00FF
+Dk	nucleus of Darkschewitsch	AE0C00
+DLEnt	dorsolateral entorhinal cortex	E4D96F
+dlg	deep lingual artery and vein	777777
+DLG	dorsal lateral geniculate nucleus	A50B5E
+DLL	dorsal nucleus of the lateral lemniscus	F0E68C
+dlo	dorsal lateral olfactory tract	8E4585
+DLO	dorsolateral orbital cortex	D3003F
+DLPAG	dorsolateral periaqueductal gray	F0FFF0
+DLPn	-------	777777
+DMC	dorsomedial hypothalamic nucleus, compact part	32127A
+DMD	dorsomedial hypothalamic nucleus, dorsal part	D3D3D3
+DM	dorsomedial hypothalamic nucleus	777777
+DMH	-------	777777
+DMPAG	dorsomedial periaqueductal gray	DCD0FF
+DMPn	-------	777777
+DMSp5	dorsomedial spinal trigeminal nucleus	87CEEB
+DMSp5V	-------	777777
+DMTg	dorsomedial tegmental area	FF9933
+DMV	dorsomedial hypothalamic nucleus, ventral part	701C1C
+dopamine-cells	-------	777777
+dpal	descending palatine artery	777777
+DP	dorsal peduncular cortex	777777
+DpG	deep gray layer of the superior colliculus	008000
+DPGi	dorsal paragigantocellular nucleus	F0DC82
+DpMe	-------	777777
+DPO	dorsal periolivary region	966FD6
+DPPn	dorsal peduncular pontine nucleus	5B92E5
+DpWh	deep white layer of the superior colliculus	FEFDFF
+DR3V	dorsal recess of third ventricle	777777
+DRC	dorsal raphe nucleus, caudal part	EE82EE
+DRD	dorsal raphe nucleus, dorsal part	922724
+DR	dorsal raphe nucleus	777777
+DRGn	dorsal root ganglion	777777
+DRI	dorsal raphe, interfascicular part	8F00FF
+DRL	dorsal raphe nucleus, lateral part	CCCCFF
+DRV	dorsal raphe nucleus, ventral part	B39EB5
+dsc	dorsal spinocerebellar tract	009000
+dsc-oc	dorsal spinocerebellar tract and olivocerebellar tract	A76BCF
+DS	dorsal subiculum	777777
+DT	dorsal terminal nucleus of the accessory optic tract	004953
+DTgC	dorsal tegmental nucleus, central part	9370DB
+DTg	dorsal tegmental nucleus	777777
+DTgP	dorsal tegmental nucleus, pericentral part	191970
+dtgx	dorsal tegmental decussation	F0EAD6
+DTM	dorsal tuberomammillary nucleus	318CE7
+DTr	dorsal transition zone	777777
+DTT-1	-------	777777
+DTT1	dorsal tenia tecta layer 1	777777
+DTT-2	-------	777777
+DTT-3	-------	777777
+DTT-4	-------	777777
+DTT	dorsal tenia tecta	777777
+e	-------	BDB76B
+E5	ectotrigeminal nucleus	CD9575
+EAC	sublenticular extended amygdala, central part	996666
+EAM	sublenticular extended amygdala, medial part	00FF6F
+EA	sublenticular extended amygdala	777777
+ec	external capsule	DF73FF
+ECIC-1	-------	777777
+ECIC1	external cortex of the inferior colliculus, layer 1	777777
+ECIC-2	-------	777777
+ECIC-3	-------	777777
+ECIC3	-------	777777
+ECIC	external cortex of the inferior colliculus	777777
+ectd	external carotid artery	777777
+Ect	ectorhinal cortex	777777
+ECu	external cuneate nucleus	E0FFFF
+E	ependyma and subependymal layer	777777
+EF	epifascicular nucleus	29AB87
+EGL	external granular layer of developing cerebellum	777777
+ejugv	external jugular vein	777777
+ELm	epilemniscal nucleus	FFDAB9
+ELS	endolymphatic sac	777777
+eMC	-------	E30022
+EMi	-------	777777
+eml	external medullary lamina	FFE5B4
+emv	emissary vein	777777
+EnO	enamel organ	777777
+EntCx	-------	777777
+Ent	entorhinal cortex	777777
+Entne	entorhinal cortex, neuroepithelial zone	777777
+E-OV	ependymal and subendymal layer/olfactory ventricle	DE5D83
+ePC	-------	FC89AC
+EP	entopeduncular nucleus	777777
+EpiG	epiglottis	777777
+EPlA	external plexiform layer of the accessory olfactory bulb	6699CC
+EPl	external plexiform layer of the olfactory bulb	777777
+EpP	epipeduncular nucleus	E4D00A
+ERS	epirubrospinal nucleus	E34234
+ESO	episupraoptic nucleus	986960
+EthB	ethmoid bone	777777
+Eth	ethmoid thalamic nucleus	777777
+EVe	nucleus of origin of efferents of the vestibular nerve	66FF00
+EW	Edinger-Westphal nucleus	CF1020
+ExOrb	exorbital gland	777777
+Eye	eye	777777
+Eyelid	eyelid	777777
+farfocle	-------	777777
+Fat	loculated brown fat	777777
+FB	-------	777777
+FC	fasciola cinereum	ACE1AF
+FF	fields of Forel	777777
+f	fornix	777777
+fi	fimbria of the hippocampus	004B49
+Fl	flocculus	9BDDFF
+FMag	foramen magnum	777777
+fmi	forceps minor of the corpus callosum	E68FAC
+fmj	forceps major of the corpus callosum	B38B6D
+F	nucleus of the fields of Forel	777777
+fornix	-------	777777
+Fr3	frontal cortex, area 3	FF0090
+FrA	frontal assocn cortex	FFB6C1
+fr	fasciculus retroflexus	777777
+Fro	frontal bone	777777
+Fro-Par	frontal and parietal bones	777777
+Fu	bed nucleus of stria terminalis, fusiform part	CD5C5C
+FV	-------	EB4C42
+FVe	F cell group of the vestibular complex	777777
+g7	genu of the facial nerve	7FFFD0
+gcc	genu of the corpus callosum	003399
+Ge5	gelatinous layer of the caudal spinal trigeminal nucleus	FFBA00
+GeGl	genioglossus muscle	777777
+GeHy	geniohyoid muscle	777777
+Gem	gemini hypothalamic nucleus	00563F
+GHHy	greater horn of hyoid bone	777777
+GiA	gigantocellular reticular nucleus, alpha part	0000FF
+Gi	gigantocellular reticular nucleus	777777
+GI	granular insular cortex	777777
+GiV	gigantocellular reticular nucleus, ventral part	9966CC
+GlA	glomerular layer of the accessory olfactory bulb	ED872D
+Gl	glomerular layer of the olfactory bulb	777777
+Gonial	gonial process	777777
+gpal	greater palatine artery	777777
+GPF	greater palatine foramen	777777
+GP	globus pallidus	777777
+gpn	greater palatine nerve	777777
+gpv	greater palatine vein	777777
+GrA	granule cell layer of the accessory olfactory bulb	FF55A3
+GrCb	granule cell layer of the cerebellum	8A2BE2
+GrC	granule cell layer of cochlear nuclei	777777
+GrDG	granular layer of the dentate gyrus	9F2B68
+gr	gracile fasciculus	777777
+Gr	gracile nucleus	777777
+GrO	granular cell layer of the olfactory bulb	FB607F
+HardG	Harderian gland	777777
+HB	-------	777777
+hbc	habenular commissure	78866B
+Hb	habenular nuclei	777777
+HDB	nucleus of the horizontal limb of the diagonal band	726631
+Hem	hemisphere of cerebellum	777777
+hif	hippocampal fissure	FFB347
+Hi	hippocampal region	777777
+Hil	hilus of the dentate gyrus	777777
+Hipp	-------	777777
+HippFormation	-------	777777
+hippocampal-white-matter	-------	777777
+HMall	handle of malleus	777777
+HPtg	hamulus of the pterygoid bone	777777
+HSCCA	horizontal semicircular canal ampulla	777777
+HSCC	horizontal semicircular canal	777777
+HStap	handle of stapes	777777
+Hy	-------	777777
+HyGl	hyoglossus muscle	777777
+Hyoid	hyoid bone	777777
+I3	-------	777777
+I8	interstitial nucleus of the vestibulocochlear nerve	D0F0C0
+I9Gn	inferior ganglion of the glossopharyngeal nerve	777777
+IAD	interanterodorsal thalamic nucleus	AEC6CF
+ia	internal arcuate fibers	777777
+iala	inferior alveolar artery	777777
+ial	inferior alveolar neurovascular bundle	777777
+ialn	inferior alveolar nerve	777777
+IAM	interanteromedial thalamic nucleus	78184A
+IAud	internal auditory meatus	777777
+IB	interstitial nucleus of the medulla	FFB300
+icf	intercrural fissure	21ABCD
+IC	inferior colliculus	777777
+ic	internal capsule	777777
+ICj	islands of Calleja	013220
+ICjM	islands of Calleja, major island	D1E231
+ICM	inferior constrictor muscle of the pharynx	777777
+icp	inferior cerebellar peduncle (restiform body)	F5F5DC
+icpx	inferior cerebellar peduncle decussation	E48400
+ictd	internal carotid artery	F8F4FF
+ICx	intermediate cortical layer	777777
+ID	intradecussational nucleus of the superior cerebellar peduncle	FF9999
+IEn	intermediate endopiriform nucleus	003399
+IF	interfascicular nucleus	C8A2C8
+IG	indusium griseum	4166F5
+IGL	intergeniculate leaf	BD33A4
+II	intermediate interstitial nucleus of the medial longitudinal fasciculus	FFF0F5
+I	intercalated nuclei of the amygdala	777777
+ijugv	internal jugular vein	777777
+ILG	-------	777777
+IL	infralimbic cortex	777777
+ILL	intermediate nucleus of the lateral lemniscus	FF007F
+IMA	intramedullary thalamic area	BFFF00
+IMD	intermediodorsal thalamic nucleus	FAF0E6
+IMG	amygdaloid intramedullary gray	534B4F
+IM	intercalated amygdaloid nucleus, main part	777777
+IML	intermediolateral cell column of the spinal cord	777777
+iml	internal medullary lamina	777777
+imvc	intermedioventral thalamic commissure	FF6E4A
+InCG	-------	777777
+Inc	incus	777777
+InC	interstitial nucleus of Cajal	777777
+InCo	-------	777777
+InCSh	interstitial nucleus of Cajal. shell region	85BB65
+infa	infraorbital artery	777777
+Inf	infundibulum	777777
+InfM	inferior meatus	777777
+InfS	infundibular stem	D70040
+InG	intermediate gray layer of the superior colliculus	DC143C
+In	intercalated nucleus of the medulla	777777
+InM	intermedius nucleus of the medulla	93CCEA
+InPl	inner plexiform layer of the retina	777777
+Ins	insular cortex	777777
+IntA	interposed cerebellar nucleus, anterior part	FF8C69
+IntDL	interposed cerebellar nucleus, dorsolateral hump	C9A0DC
+IntDM	interposed cerebellar nucleus, dorsomedial crest	E62020
+Int	interposed cerebellar nucleus	777777
+IntP	interposed cerebellar nucleus, posterior part	CBA135
+IntPPC	interposed cerebellar nucleus, posterior parvicellular part	2F4F4F
+Intralaminar-Th-nu	-------	777777
+InWh	intermediate white layer of the superior colliculus	CE2029
+IOA	inferior olive, subnucleus A of medial nucleus	FFFF00
+IObCa	inferior oblique capitis muscle	777777
+IOBe	inferior olive, beta subnucleus	9F2B68
+IOb	inferior oblique muscle	777777
+IOB	inferior olive, subnucleus B of medial nucleus	777777
+IOC	inferior olive, subnucleus C of medial nucleus	FC8EAC
+IOD	inferior olive, dorsal nucleus	FC0FC0
+IODMC	-------	777777
+IODM	inferior olive, dorsomedial cell group	777777
+IO	inferior olivary nucleus	777777
+IOK	inferior olive, cap of Kooy of the medial nucleus	F5F5F5
+IOM	inferior olive, medial nucleus	592720
+iopha	inferior ophthalmic artery	777777
+IOPr	inferior olive, principal nucleus	E7FEFF
+IOrbF	infraorbital foramen	777777
+iorb	infraorbital artery	777777
+IOrC	infraorbital canal	777777
+IOVL	inferior olive, ventrolateral protrusion	F4BBFF
+IPAC	interstitial nucleus of the posterior limb of the anterior commissure	EB4C42
+IPACL	interstitial nucleus of the posterior limb of the anterior commissure, lateral part	01796F
+IPACM	interstitial nucleus of the posterior limb of the anterior commissure, medial part	673147
+IPA	interpeduncular nucleus, apical subnucleus	777777
+IPC	interpeduncular nucleus, caudal subnucleus	FFD700
+IPDL	interpeduncular nucleus, dorsolateral subnucleus	C71585
+IPDM	interpeduncular nucleus, dorsomedial subnucleus	50C878
+IPF	interpeduncular fossa	FFDF00
+IPI	interpeduncular nucleus, intermediate subnucleus	808080
+IP	interpeduncular nucleus	777777
+IPit	intermediate lobe of the pituitary	777777
+IPl	internal plexiform layer of the olfactory bulb	86608E
+IPL	interpeduncular nucleus, lateral subnucleus	00FF00
+IPR	interpeduncular nucleus, rostral subnucleus	007FFF
+IRec	inferior rectus muscle	777777
+IRe	infundibular recess	777777
+Iris	iris	777777
+IRtA	intermediate reticular nucleus, alpha part	674C47
+IRt	intermediate reticular nucleus	777777
+is	-------	00FF7F
+IS	inferior salivatory nucleus	746CC0
+IsoCx	-------	777777
+isRt	isthmic reticular formation	777777
+IVF	interventricular foramen	FF4040
+JPLH	juxtaparaventricular part of lateral hypothalamus	1A2421
+JugF	jugular foramen	777777
+JxO	juxtaolivary nucleus	00693E
+KF	Kolliker-Fuse nucleus	CB99C9# orig. Kölliker-Fuse nucleus
+L	-------	0072BB
+LAcbSh	lateral accumbens shell	915F6D
+LacG	lacrimal gland	777777
+LaDL	lateral amygdaloid nucleus, dorsolateral part	91A3B0
+LA	lateroanterior hypothalamic nucleus	777777
+La	lat amygdaloid nucleus	777777
+Lar	larynx	777777
+LarPh	laryngopharynx	777777
+LatC	lateral cervical nucleus of the spinal cord	777777
+Lat	lateral (dentate) cerebellar nucleus	777777
+LatPC	lateral cerebellar nucleus, parvicellular part	F0FFFF
+LaVL	lateral amygdaloid nucleus, ventrolateral part	78866B
+LaVM	lateral amygdaloid nucleus, ventromedial part	C19A6B
+lc	lateral column of the spinal cord	777777
+LC	locus coeruleus	872657
+LDDM	laterodorsal thalamic nucleus, dorsomedial part	89CFF0
+Ld	lambdoid septal zone	777777
+LD	laterodorsal thalamic nucleus	777777
+LDTg	laterodorsal tegmental nucleus	F1A7FE
+LDTgV	laterodorsal tegmental nucleus, ventral part	960018
+LDVL	laterodorsal thalamic nucleus, ventrolateral part	003366
+Lens	lens	777777
+LEnt	lateral entorhinal cortex	777777
+lfp	longitudinal fasciculus of the pons	ACE1AF
+lga	lingual artery	777777
+LgCa	longus capitis muscle	777777
+lgn	lingual nerve	777777
+LgsCa	longissimus capitis muscle	777777
+lgv	lingual vein	777777
+LHb	lateral habenular nucleus	F4C2C2
+LHbL	lateral habenular nucleus, lateral part	D19FE8
+LHbM	lateral habenular nucleus, medial part	F4BBFF
+LH	lateral hypothalamic area	777777
+Li	linear nucleus of the medulla	FAFEFD
+ll	lateral lemniscus	0892D0
+LM	lateral mammillary nucleus	3C1414
+LMol	lacunosum moleculare layer of the hippocampus	0000CD
+lofr	lateral orbitofrontal artery	23297A
+lo	lateral olfactory tract	777777
+LO	lateral orbital cortex	777777
+LOT-1	-------	777777
+LOT1	nucleus of the lateral olfactory tract, layer 1	777777
+LOT-2	-------	777777
+LOT2	nucleus of the lateral olfactory tract, layer 2	777777
+LOT-3	-------	777777
+LOT	nucleus of the lateral olfactory tract	777777
+LPAG	lateral periaqueductal gray	AB274F
+LPal	levator palati muscle	777777
+LPBC	lateral parabrachial nucleus, central part	D2691E
+LPBCr	lateral parabrachial nucleus, crescent part	004225
+LPBD	lateral parabrachial nucleus, dorsal part	36454F
+LPBE	lateral parabrachial nucleus, external part	B57EDC
+LPBI	lateral parabrachial nucleus, internal part	26619C
+LPB	lateral parabrachial nucleus	777777
+LPBM	lateral parabrachial nucleus, medial part	777777
+LPBS	lateral parabrachial nucleus, superior part	C3B091
+LPBV	lateral parabrachial nucleus, ventral part	BDDA57
+LPGiA	lateral paragigantocellular nucleus, alpha part	654321
+LPGiE	lateral paragigantocellular nucleus, external part	F0E130
+LPGi	lateral paragigantocellular nucleus	777777
+LP	lateral posterior thalamic nucleus	777777
+LPLC	lateral posterior thalamic nucleus, laterocaudal part	5A4FCF
+LPLR	lateral posterior thalamic nucleus, laterorostral part	B2EC5D
+LPMC	lateral posterior thalamic nucleus, mediocaudal part	708090
+LPMR	lateral posterior thalamic nucleus, mediorostral part	FFF5EE
+LPO	lateral preoptic area	F64A8A
+LPS	levator palpebrae superioris muscle	777777
+LPtA	lateral parietal association cortex	013220
+LPtg	lateral pterygoid muscle	777777
+LR4V	lateral recess of the 4th ventricle	CA1F7B
+LReCa	lateral rectus capitis muscle	777777
+LRec	lateral rectus muscle	777777
+LRt	lateral reticular nucleus	592720
+LRtPC	lateral reticular nucleus, parvicellular part	FF5C5C
+LRtS5	lateral reticular nucleus, subtrigeminal part	DA1D81
+LScM	levator scapulae muscle	777777
+LSD	lateral septal nucleus, dorsal part	0095B6
+LSI-1	-------	777777
+LSI-2	-------	777777
+LSI-3	-------	777777
+LSI-4	-------	777777
+LSI	lateral septal nucleus, intermediate part	777777
+LS	lateral septal nucleus	777777
+LSO	lateral superior olive	CB4154
+LSp	lateral spinal nucleus	777777
+LSS	lateral stripe of the striatum	D19FE8
+LSV	lateral septal nucleus, ventral part	FF007F
+LTe	-------	DAA520
+LTer	lemina terminalis	777777
+Lth	lithoid nucleus	D40000
+LT	lateral terminal nucleus of the accessory optic tract	777777
+LVe	lateral vestibular nucleus	AE2029
+LV	lateral ventricle	777777
+LVPO	lateroventral periolivary nucleus	FDEE00
+LZ	-------	777777
+m	-------	30D5C8
+M1	primary motor cortex	0247FE
+M2	secondary motor cortex	00DDDD
+m5	motor root of the trigeminal nerve	8A3324
+MA3	medial accessory oculomotor nucleus	5D8AA8
+Mall	malleus	777777
+Man	mandible	777777
+masa	masseteric artery	777777
+MasM	masseter muscle	777777
+masn	masseteric nerve	777777
+masv	masseteric vein	777777
+MB	Midbrain	777777
+mcer	middle cerebral artery	FADFAD
+mch	medial corticohypothalamic tract	FF3800
+MCLH	magnocellular nucleus of the lateral hypothalamus	414A4C
+Mc	Meckel's cartilage	777777
+MCM	middle constrictor muscle of the pharynx	777777
+MCPC	magnocellular nucleus of the posterior commissure	4B0082
+mcp	middle cerebellar peduncle	777777
+MCPO	magnocellular preoptic nucleus	FFFFF0
+MDC	mediodorsal thalamic nucleus, central part	98817B
+MdD	medullary reticular nucleus, dorsal part	893F45
+MDL	mediodorsal thalamic nucleus, lateral part	7B3F00
+MD	mediodorsal thalamic nucleus	777777
+MDM	mediodorsal thalamic nucleus, medial part	FFA700
+MdV	medullary reticular nucleus, ventral part	BE0032
+Me5	mesencephalic trigeminal nucleus	C32148
+me5	mesencephalic trigeminal tract	777777
+MeAD	medial amygdaloid nucleus, ant dorsal	F984EF
+MeA	medial amygdaloid nucleus, anterior part	777777
+MeAV	medial amygdaloid nucleus, anteroventral part	B5651D
+MedCM	medial cerebellar nucleus, caudomedial part	777777
+MedDL	medial cerebellar nucleus, dorsolateral protuberance	FFA07A
+MedL	medial cerebellar nucleus, lateral part	FAEBD7
+Med	medial (fastigial) cerebellar nucleus	777777
+MEE	medial eminence, external layer	00CC99
+MEI	medial eminence, internal layer	FF0038
+Me	medial amygdaloid nucleus	777777
+ME	median eminence	777777
+MEnt	medial entorhinal cortex	8C92AC
+MEntR	-------	FF77FF
+MEntV	medial entorhinal cortex, ventral part	777777
+MePD	medial amygdaloid nucleus, posterodorsal part	B03060
+MePV	medial amygdaloid nucleus, posteroventral part	B76E79
+mfba	medial forebrain bundle, 'a' component	EEE8AA
+mfbb	medial forebrain bundle, 'b' component	E6BE8A
+mfb	medial forebrain bundle	777777
+MGD	medial geniculate nucleus, dorsal part	EE82EE
+MG	medial geniculate nucleus	777777
+MGM	medial geniculate nucleus, medial part	967BB6
+MGV	medial geniculate nucleus, ventral part	7CFC00
+MHb	medial habenular nucleus	AB4E52
+MiA	mitral cell layer of the accessory olfactory bulb	E9967A
+MidM	middle meatus	777777
+Mi	mitral cell layer of the olfactory bulb	777777
+Min	-------	777777
+MiTg	microcellular tegmental nucleus	E97451
+mlf	medial longitudinal fasciculus	321414
+ml	medial lemniscus	777777
+ML	medial mammillary nucleus, lateral part	777777
+mlx	medial lemniscus decussation	933D41
+MM	medial mammillary nucleus, medial part	FFF600
+mm	middle meningeal artery	777777
+mmp	middle meningeal artery,  parietal branch	777777
+MnA	median accessory nucleus of the medulla	FF033E
+MnM	medial mammillary nucleus, median part	6699CC
+MnPO	median preoptic nucleus	009E60
+MnR	median raphe nucleus	FAF0BE
+Mo5	-------	777777
+Mo5DL	-------	777777
+Mo5VM	-------	777777
+MOB	-------	777777
+MoCb	molecular layer of the cerebellum	000000
+MoDG	molecular layer of the dentate gyrus	FAFAD2
+mofr	medial orbitofrontal artery	66FF00
+MO	medial orbital cortex	777777
+MoS	molecular layer of the subiculum	BCD4E6
+mPAG	mesencephalic periaqueductal gray	777777
+MPA	medial preoptic area	777777
+MPBE	medial parabrachial nucleus external part	DB7093
+MPB	medial parabrachial nucleus	777777
+MPL	medial paralemniscial nucleus	B87333
+mp	mammillary peduncle	777777
+MPn	-------	777777
+MPOC	medial preoptic nucleus, central part	B3446C
+MPOL	medial preoptic nucleus, lateral part	E5B73B
+MPO	medial preoptic nucleus	777777
+MPOM	medial preoptic nucleus, medial part	66DDAA
+MPtA	medial parietal association cortex	FFF700
+MPtg	medial pterygoid muscle	777777
+MPT	medial pretectal nucleus	777777
+MRec	medial rectus muscle	777777
+MRe	mammillary recess of the 3rd ventricle	777777
+mRt	mesencephalic reticular formation	777777
+MRVL	-------	777777
+MS	medial septal nucleus	E4717A
+MSO	medial superior olive	7FFF00
+Mst	mastoid process of temporal bone	777777
+mtg	mammillotegmental tract	ED9121
+mt	mammillothalamic tract	777777
+MT	medial terminal nucleus of the accessory optic tract	777777
+MTu	medial tuberal nucleus	7B1113
+MV	-------	FF0800
+MVeMC	medial vestibular nucleus, magnocellular part	777777
+MVe	medial vestibular nucleus	777777
+MVePC	medial vestibular nucleus, parvicellular part	777777
+MVPO	medioventral periolivary nucleus	00A86B
+mxa	maxillary artery	777777
+MxB	maxillary bone (maxilla)	777777
+Mx	matrix region of the medulla	777777
+mxv	maxillary vein	777777
+MyHy	mylohyoid muscle	777777
+MZ	-------	777777
+MZMG	marginal zone of the medial geniculate	E34234
+Na	nasal bone	777777
+NasC	nasal cavity	777777
+ne	neuroepithelium	777777
+noradrenaline-cells	-------	777777
+NPh	nasopharynx	777777
+ns	nigrostriatal bundle	FFF8E7
+NSpt	nasal septum	777777
+Nv	navicular nucleus of the basal forebrain	002FA7
+O	-------	777777
+Obex	obex	A0785A
+OB	olfactory bulb	777777
+ocb	olivocochlear bundle	F984E5
+occ	occipital artery	777777
+Occ	occipital bone	777777
+occs	occipital sinus	777777
+occv	occipital vein	777777
+och	optic chiasm	DA8A67
+oc	olivocerebellar tract	777777
+OF	optic fiber layer of the retina	777777
+Olf	-------	777777
+olfa	-------	F4C2C2
+OlfCx	-------	777777
+OlfCx-1	-------	777777
+OmHy	omohyoid muscle	777777
+ON	olfactory nerve layer	777777
+OO	orbicularis oculi muscle	777777
+OPC	oval paracentral thalamic nucleus	FF6FFF
+OpD	optic disc	777777
+opha	ophthalmic artery	777777
+ophv	ophthalmic vein	777777
+Op	optic nerve layer of the superior colliculus	777777
+OptF	optic foramen	777777
+OPT	olivary pretectal nucleus	777777
+opt	optic tract	777777
+Oral	oral cavity	777777
+Or	oriens layer of the hippocampus	777777
+other	-------	777777
+Otic	otic ganglion	777777
+OT	nucleus of the optic tract	777777
+OvalW	oval window	777777
+OV	olfactory ventricle (olfactory part of lateral ventricle)	777777
+ox	-------	777777
+P	Putamen	777777
+p1	-------	2E8B57
+p1PAG	p1 periaqueductal gray	0F4D92
+p1Rt	-------	E7ACCF
+P3V	preoptic recess of the 3rd ventricle	777777
+P5	peritrigeminal zone	E5E4E2
+P7	perifacial zone	FDDDE6
+Pa4	paratrochlear nucleus	CFB53B
+Pa5	paratrigeminal nucleus	FDF5E6
+Pa6	paraabducens nucleus	796878
+PaAM	-------	777777
+PaAP	paraventricular hypothalamic nucleus, anterior parvicellular part	008000
+PaC	paracommissural nucleus of the posterior commissure	120A8F
+PaDC	paraventricular hypothalamic nucleus, dorsal cap	F0FFFF
+PAG	periaqueductal gray	9BC4E2
+PalGl	palatoglossus muscle	777777
+PaLM	paraventricular hypothalamic nucleus, lateral magnocellular part	08E8DE
+Pal	palatine bone	777777
+PalPh	palatopharyngeus muscle	777777
+PaMM	paraventricular hypothalamic nucleus, medial magnocellular part	CC4E5C
+PaMP	paraventricular hypothalamic nucleus, medial parvicellular part	BF94E4
+Pa	paraventricular hypoth nucleus	777777
+PaPo	paraventricular hypothalamic nucleus, posterior part	00B7EB
+PAP	paraventricular hypothalamic nucleus, anterior parvicellular part	777777
+ParB	parietal bone	777777
+PaR	pararubral nucleus	777777
+ParP	parietal plate	777777
+PaS	parasubiculum	73A9C2
+PaV	paraventricular hypothalamic nucleus, ventral part	ADDFAD
+PaXi	paraxiphoid nucleus of thalamus	C54B8C
+PBG	parabigeminal nucleus	0247FE
+PB	parabrachial nucleus	777777
+PBP	parabrachial pigmented nucleus of the VTA	318CE7
+PBW	-------	777777
+PC5	-------	777777
+pcer	posterior cerebral artery	E08D3C
+PCGS	paracochlear glial substance	674846
+PCom	nucleus of the posterior commissure	3C341F
+PC	paracentral thalamic nucleus	777777
+pc	posterior commissure	777777
+PCRtA	parvicellular reticular nucleus, alpha part	80461B
+PCRt	parvicellular reticular nucleus	777777
+PCTg	-------	777777
+pcuf	preculminate fissure	FFFF31
+PDig	posterior belly of the digastric muscle	777777
+PDP	-------	777777
+PDPO	posterodorsal preoptic nucleus	FF5A36
+PDR	posterodorsal raphe nucleus	FF00FF
+PDTg	posterodorsal tegmental nucleus	FF7E00
+PeFLH	perifornical part of lateral hypothalamus	A99A86
+PeF	perifornical nucleus	777777
+Pe	periventricular hypothalamic nucleus	777777
+PFlCv	parafloccular cavity	777777
+PFl	paraflocculus	777777
+PF	parafascicular thalamic nucleus	777777
+pfs	parafloccular sulcus	FFD12A
+PHA	posterior hypothalamic area	FFCC99
+PHD	posterior hypothalamic area, dorsal part	FF69B4
+PH	posterior hypothalamic nucleus	777777
+Pi-3	-------	777777
+pica	posteroinferior cerebellar artery	777777
+PIF	parainterfascicular nucleus of the VTA	9F00FF
+Pig	pigment layer of the eye	777777
+PIL	posterior intralaminar thalamic nucleus	9F1D35
+Pinna	pinna of the ear	777777
+Pi	pineal gland	777777
+Pir-1	-------	777777
+Pir-1a	-------	777777
+Pir-1b	-------	777777
+Pir1	piriform cortex, layer 1	777777
+Pir-2	-------	777777
+Pir-3	-------	777777
+Pir	piriform cortex	777777
+PiSt	pineal stalk	800020
+Pk	Purkinje cell layer of the cerebellum	FE28A2
+Plat	platysma	777777
+PLCo-1	-------	777777
+PLCo1	posterolateral cortical amygdaloid nucleus, layer 1	777777
+PLCo-2	-------	777777
+PLCo2	posterolateral cortical amygdaloid nucleus, layer 2	777777
+PLCo-3	-------	777777
+PLCo3	posterolateral cortical amygdaloid nucleus, layer 3	777777
+PLCo	posterolateral cortical amygdaloid nucleus	777777
+PLd	paralambdoid septal nucleus	082567
+plf	posterolateral fissure	333399
+PLH	peduncular part of lateral hypothalamus	0FC0FC
+PLi	posterior limitans thalamic nucleus	FF2000
+PlPAG	pleoglial periaqueductal gray	FF1493
+PL	paralemniscal nucleus	777777
+PLV	perilemniscal nucleus, ventral part	76FF7A
+PMCo	posteromedial cortical amygdaloid nucleus	FFFACD
+PMD	premammillary nucleus, dorsal part	FFF600
+PMn	paramedian reticular nucleus	355E3B
+PMnR	paramedian raphe nucleus	7B3F00
+PM	paramedian lobule	777777
+pm	principal mammillary tract	777777
+pms	paramedian sulcus	ACE5EE
+PMV	premammillary nucleus, ventral part	BD33A4
+PnC	pontine reticular nucleus, caudal part	F7E7CE
+PnO	pontine reticular nucleus, oral part	EC3B83
+PN	paranigral nucleus of the VTA	777777
+Pn	pontine nuclei	777777
+PnR	pontine raphe nucleus	9ACD32
+PnV	pontine reticular nucleus, ventral part	92A1CF
+PoDG	polymorph layer of the dentate gyrus	DDA0DD
+POH	periolivary horn	F6ADC6
+POHy	preoptic hypothalamus	777777
+PoMn	posteromedian thalamic nucleus	DEB887
+Po	posterior thalamic nuclear group	777777
+Post	postsubiculum	FFFFED
+PoT	posterior thalamic nuclear group, triangular part	6B8E23
+ppf	prepyramidal fissure	CD7F32
+PPit	posterior lobe of pituitary	777777
+PP	peripeduncular nucleus	777777
+PPTg	-------	777777
+PPT	posterior pretectal nucleus	777777
+PPy	parapyramidal nucleus	E75480
+Pr5DM	principal sensory trigeminal nucleus, dorsomedial part	E3256B
+Pr5	principal sensory trigeminal nucleus	777777
+Pr5VL	principal sensory trigeminal nucleus, ventrolateral part	FF4500
+PrBo	pre-Botzinger complex	002E63
+PrCnF	precuneiform area	FFB7C5
+PrC	precommissural nucleus	777777
+Pre-Cb	-------	777777
+PrEW	pre-Edinger-Westphal nucleus	F0E68C
+prf	primary fissure	E32636
+PRh	perirhinal cortex	F0EAD6
+PrL	prelimbic cortex	A67B5B
+PrLSp	pre lateral spinal	777777
+PrMC	-------	483C32
+Pr	prepositus nucleus	777777
+PR	prerubral field	777777
+PrS	presubiculum	DCDCDC
+PrTh	prethalamus (prosomere 3)	777777
+psa	posterior superior alveolar artery	777777
+PSCCA	posterior semicircular canal ampulla	777777
+PSCC	posterior semicircular canal	777777
+psf	posterior superior fissure	F0F8FF
+PSol	parasolitary nucleus	9955BB
+PS	parastrial nucleus	777777
+PSph	presphenoid bone	777777
+PSphW	presphenoid wing	777777
+PSTh	parasubthalamic nucleus	FF2052
+Ptd	parotid gland	777777
+PTe	paraterete nucleus	777777
+ptgcn	nerve of the pterygoid canal	777777
+PtgC	pterygoid canal	777777
+PtgPal	pterygopalatine ganglion	777777
+ptgpal	pterygopalatine nerve	777777
+PTg	pedunculopontine tegmental nucleus	777777
+Ptg	pterygoid process of the sphenoid bone	777777
+PT	paratenial thalamic nucleus	777777
+Pt	parietal cortex	777777
+PtPC	parietal cortex, posterior area, caudal part	FB9902
+PtPD	parietal cortex, posterior area, dorsal part	FFA500
+PtPR	parietal cortex, posterior area, rostral part	87A96B
+PVA	paraventricular thalamic nucleus, anterior part	777777
+PVG	periventricular gray	777777
+PV	paraventricular thalamic nucleus	777777
+PVP	paraventricular thalamic nucleus, posterior part	B19CD9
+PVZ	-------	777777
+Py	pyramidal cell layer of the hippocampus	F77FBE
+py	pyramidal tract	777777
+pyx	pyramidal decussation	A4DDED
+r	-------	73C2FB
+r1Rt	r1 reticular formation	777777
+r2Rt	r2 reticular formation	777777
+r3Rt	r3 reticular formation	777777
+RA	-------	777777
+Rad	radiatum layer of the hippocampus	E32636
+RAmb	retroambiguus nucleus	AAF0D1
+RAPir-1	-------	777777
+RAPir-2	-------	777777
+RAPir-3	-------	777777
+RAPir	rostral amygdalopiriform area	777777
+Rath	Rathke's pouch	777777
+Rbd	rhabdoid nucleus	FBEC5D
+RC	-------	777777
+rcc	rostrum of the corpus callosum	777777
+RChL	retrochiasmatic area, lateral part	DDA0DD
+RCh	retrochiasmatic area	777777
+RCPMj	rectus capitis posterior major muscle	777777
+Rc	Reichert's cartilage	777777
+ReIC	recess of the inferior colliculus	CD2682
+REn	retroendopiriform nucleus	777777
+Re	reuniens thalamic nucleus	777777
+REth	retroethmoid nucleus	1DACD6
+RetroHippRegion	-------	777777
+rf	rhinal fissure	777777
+RGn	retinal ganglion cell layer of the retina	777777
+Rh	rhomboid thalamic nucleus	6F00FF
+RIP	raphe interpositus nucleus	FADADD
+ri	rhinal incisure	777777
+RI	rostral interstitial nucleus of medial longitudinal fasciculus	777777
+RLH	-------	777777
+RLi	rostral linear nucleus of the raphe	B87333
+rLL	-------	C2B280
+RL	retrolemniscal nucleus	777777
+RMC	red nucleus, magnocellular part	87CEEB
+RMg	raphe magnus nucleus	446CCF
+rmv	retromandibular vein	777777
+ROb	raphe obscurus nucleus	B2BEB5
+Ro	nucleus of Roller	777777
+RPa	raphe pallidus nucleus	00FA9A
+RPC	red nucleus, parvicellular part	21421E
+RPF	retroparafascicular nucleus	5D8AA8
+RPO	-------	777777
+R	red nucleus	777777
+RRe	retrouniens area	964B00
+RRF-A8	retrorubral field and A8 dopamine cells	777777
+RRF	retrorubral field	777777
+RR	retrorubral nucleus	777777
+RSD	retrosplenial dysgranular cortex	EF98AA
+RSGa	retrosplenial granular cortex, a region	008B8B
+RSGb	retrosplenial granular cortex, b region	536878
+RSGc	retrosplenial granular cortex, c region	B8860B
+RSG	retrosplenial granular cortex	777777
+rs	rubrospinal tract	777777
+Rt	reticular thalamic nucleus	E1A95F
+RtSt	reticluostrial nucleus	5D3954
+RtTgL	reticulotegmental nucleus of the pons, lateral part	FFF8DC
+RtTgP	reticulotegmental nucleus of the pons, pericentral part	635147
+RtTg	reticulotegmental nucleus of the pons	777777
+RVL	rostroventrolateral reticular nucleus	004242
+RVRG	rostral ventral respiratory group	990000
+S1BF	primary somatosensory cortex, barrel field	A52A2A
+S1DZO	primary somatosensory cortex, oral dysgranular zone	65000B
+S1DZ	primary somatosensory cortex, dysgranular  zone	777777
+S1FL	primary somatosensory cortex, forelimb region	FF7F00
+S1HL	primary somatosensory cortex, hindlimb region	FADA5E
+S1J	primary somatosensory cortex, jaw region	507D2A
+S1	primary somatosensory cortex	777777
+S1Sh	primary somatosensory cortex, shoulder region	915F6D
+S1T	-------	92000A
+S1Tr	primary somatosensory cortex, trunk region	777777
+S1ULp	primary somatosensory cortex, upper lip region	8B008B
+S2	secondary somatosensory cortex	FFA6C9
+s5	sensory root of the trigeminal nerve	FF003F
+S9Gn	superior ganglion of the glossopharyngeal nerve	777777
+Sacc	saccule	777777
+Sag	sagulum nucleus	465945
+SalPh	salpingopharyngeus muscle	777777
+Scap	scapula	777777
+scc	splenium of the corpus callosum	CD2682
+SCGn	superior cervical ganglion	777777
+SChDL	suprachiasmatic nucleus, dorsolateral part	FD0E35
+SChL	suprachiasmatic nucleus, lateral part	777777
+SCh	suprachiasmatic nucleus	777777
+SChVM	suprachiasmatic nucleus, ventromedial part	D99058
+SCM	superior constrictor muscle of the pharynx	777777
+SCO	subcommissural organ	4169E1
+scpd	superior cerebellar peduncle, descending limb	FFDEAD
+scp	superior cerebellar peduncle (brachium conjunctivum)	777777
+Sc	scaphoid thalamic nucleus	777777
+SC	superior colliculus	777777
+ScTy	scala tympani	777777
+ScVe	scala vestibuli	777777
+Sep	-------	777777
+SFi	septofimbrial nucleus	E49B0F
+SFO	subfornical organ	00A550
+sf	secondary fissure	777777
+SGe	supragenual nucleus	98817B
+SGl	-------	777777
+SG	suprageniculate thalamic nucleus	777777
+SHi	septohippocampal nucleus	FDD5B1
+SHThC	superior horn of thyroid cartilage	777777
+SHy	septohypothalamic nucleus	008B8B
+SIB	substantia innominata, basal part	ED3CCA
+sig	sigmoid sinus	777777
+SimA	simple lobule A	6E7F80
+SimB	simple lobule B	00BFFF
+simf	simplex fissure	777777
+Sim	simple lobule	777777
+SI	substantia innominata	777777
+sl	sulcus limitans	777777
+SLu	stratum lucidum of the hippocampus	654321
+SMD	submandibular duct	777777
+SMGl	submandibular gland	777777
+SM	nucleus of the stria medullaris	777777
+sm	stria medullaris of the thalamus	777777
+SMT	submammillothalamic nucleus	99BADD
+SMV	superior medullary velum	FF43A4
+SNC	-------	777777
+SNCD	substantia nigra, compact part, dorsal tier	177245
+SNCM	substantia nigra, compact part, medial tier	FFCBA4
+SNCV	substantia nigra, compacta part, ventral tier	79443B
+SNL	substantia nigra, lateral part	FAE7B5
+SNM	-------	777777
+SNRDM	-------	777777
+SNR	substantia nigra, reticular part	777777
+SNRVL	-------	777777
+SN	substantia nigra	777777
+SObCa	superior oblique capitis muscle	777777
+SOb	superior oblique muscle	777777
+SolCe	nucleus of the solitary tract, central part	1E4D2B
+SolC	nucleus of the solitary tract, commissural part	777777
+SolDL	solitary nucleus, dorsolateral part	9457EB
+SolDM	nucleus of the solitary tract, dorsomedial part	C4C3D0
+SolG	nucleus of the solitary tract, gelatinous part	CD5B45
+SolIM	nucleus of the solitary tract, intermediate part	BDB76B
+SolI	nucleus of the solitary tract, interstitial part	777777
+SolL	nucleus of the solitary tract, lateral part	00CC99
+SolM	nucleus of the solitary tract, medial part	960018
+Sol	nucleus of the solitary tract	777777
+SolRL	nucleus of the solitary tract, rostrolateral part	C41E3A
+sol	solitary tract	777777
+SOl	superior olivary nucleus. lateral part	777777
+SolVL	nucleus of the solitary tract, ventrolateral part	F4BBFF
+SolV	solitary nucleus, ventral part	777777
+SOR	supraoptic nucleus, retrochiasmatic part	CD5700
+SO	supraoptic nucleus	777777
+sox	supraoptic decussation	800020
+Sp	-------	FF7F50
+Sp5	-------	777777
+Sp5C	spinal trigeminal nucleus, caudal part	FF9966
+Sp5I	spinal trigeminal nucleus, interpolar part	8A3324
+Sp5O	spinal trigeminal nucleus, oral part	F2F3F4
+Sp5OVL	-------	777777
+sp5	spinal trigeminal tract	777777
+spa	sphenopalatine artery pterygopal?	777777
+SPa	subparaventricular zone of the hypothalamus	FF7E00
+SPFPC	subparafascicular thalamic nucleus, parvicellular part	E25098
+SPF	subparafascicular thalamic nucleus	777777
+sphml	sphenomandibular ligament	777777
+SphPal	sphenopalatine ganglion	777777
+sphpl	sphenopalatine artery	777777
+Sph	sphenoid nucleus	777777
+SplCa	splenius capitis muscle	777777
+SPO	superior paraolivary nucleus	008000
+SPTg	subpeduncular tegmental nucleus	E5AA70
+Sptne	septum neuroepithelium	777777
+Spt	septum	777777
+SpV	-------	6D351A
+SpVe	spinal vestibular nucleus	777777
+SRec	superior rectus muscle	777777
+SSp	supraspinal nucleus	777777
+sss	superior sagittal sinus	777777
+S	subiculum	777777
+StapM	stapedius muscle	777777
+Stap	stapedius bone	777777
+StA	strial part of the preoptic area	777777
+ST	bed nucleus of the stria terminalis	777777
+STD	bed nucleus of the stria terminalis, dorsal part	555555
+Stg	stigmoid hypothalamic nucleus	8C92AC
+STh	subthalamic nucleus	696969
+StHy	striohypothalamic nucleus	CD9575
+STIA	bed nucleus of the stria terminalis, intraamygdaloid division	DDADAF
+STI	bed nucleus of the stria terminalis, intermediate division	777777
+STIL	-------	777777
+STL	bed nucleus of the stria terminalis, lateral division	777777
+STLD	bed nucleus of the stria terminalis, lateral division, dorsal part	FFBF00
+STLI	bed nucleus of the stria terminalis, lateral division, intermediate part	9966CC
+STLJ	bed nucleus of the stria terminalis, lateral division, juxtacapsular part	F2F3F4
+STLP	bed nucleus of the stria terminalis, lateral division, posterior part	0000FF
+STLV	bed nucleus of the stria terminalis, lateral division, ventral part	FAEBD7
+STMA	bed nucleus of the stria terminalis, medial division, anterior part	FFC40C
+STMAL	bed nucleus of the stria terminalis, medial division, anterolateral part	DEB887
+STMAM	bed nucleus of the stria terminalis, medial division, anteromedial part	CC5500
+STM	bed nucleus of the stria terminalis, medial division	777777
+STMP	bed nucleus of the stria terminalis, medial division, posterior part	777777
+STMPI	bed nucleus of the stria terminalis, medial division, posterointermediate part	A8E4A0
+STMPL	bed nucleus of the stria terminalis, medial division, posterolateral part	FCC200
+STMPM	bed nucleus of the stria terminalis, medial division, posteromedial part	996515
+StM	sternomastoid muscle	777777
+STMV	bed nucleus of the stria terminalis, medial division, ventral part	BB3385
+Str	Striatum	777777
+StrD	Dorsal striatum	777777
+STr	subiculum, transition area	777777
+str	superior thalamic radiation	777777
+StrV	Ventral striatum	777777
+STS	bed nucleus of stria terminalis, supracapsular division	777777
+STSL	bed nucleus of stria terminalis, supracapsular division, medial part	4F7942
+STSM	bed nucleus of stria terminalis, supracapsular division, lateralpart	FF2800
+st	stria terminalis	777777
+stv	superficial temporal vein	777777
+StyGl	styloglossus muscle	777777
+StyHy	stylohyoid muscle	777777
+StyMF	stylomastoidforamen	777777
+StyPh	stylopharyngeus muscle	777777
+Sty	styloid process	777777
+Su3C	supraoculomotor cap	E52B50
+Su3	supraoculomotor periaqueductal gray	777777
+Su5	supratrigeminal nucleus	C19A6B
+SubB	subbrachial nucleus	FFF8DC
+SubCA	subcoeruleus nucleus, alpha part	ADFF2F
+SubCD	subcoeruleus nucleus, dorsal part	66B032
+subcortical-white-matter	-------	777777
+SubC	subcoeruleus nucleus	777777
+SubCV	subcoeruleus nucleus, ventral part	D4AF37
+SubD	submedius thalamic nucleus, dorsal part	6495ED
+SubG	subgeniculate nucleus	B31B1B
+Subiculum	-------	777777
+SubI	subincertal nucleus	777777
+SubP	subpostrema area	035096
+Sub	submedius thalamic nucleus	777777
+SubVCx	subventricular layer of developing cortex	777777
+SubV	submedius thalamic nucleus, ventral part	777777
+SuG	superficial gray layer of the superior colliculus	FF2052
+SuML	supramammillary nucleus, lateral part	BCD4E6
+SuMM	supramammillary nucleus, medial part	E3A857
+SuM	supramammillary nucleus	777777
+sumx	supramammillary decussation	2C1608
+SupM	superior meatus	777777
+SuspLig	suspensory ligament	777777
+SuS	superior salivatory nucleus	777777
+SuV	-------	FFD12A
+SuVe	superior vestibular nucleus	777777
+Symp	sympathetic trunk	777777
+T	-------	E52B50
+TeA	temporal associatin cortex	777777
+TempM	temporalis muscle	777777
+TempP	temporal bone, petrosal part	777777
+TempS	temporal bone, squamous part	777777
+Te	terete hypothalamic nucleus	777777
+tfp	transverse fibers of the pons	6050DC
+TG	tectal gray	6495ED
+Th	-------	777777
+ThC	thyroid cartilage	777777
+Thy	thyroid gland	777777
+TMJ	temporomandibular joint	777777
+Tongue	tongue	777777
+TPal	tensor palati muscle	777777
+Tr	-------	36454F
+TrLL	triangular nucleus, lateral lemniscus	777777
+trs	transverse sinus	777777
+TSne	triangular septal nucleus, neuroepithelial zone	777777
+ts	tectospinal tract	777777
+TS	triangular septal nucleus	777777
+tth	trigeminothalamic tract	7DF9FF
+TT	tensor tympani muscle	777777
+Tu-1	-------	777777
+Tu1	olfactory tubercle, layer 1	777777
+Tu-2	-------	777777
+Tu-3	-------	777777
+TuLH	tuberal region of lateral hypothalamus	808000
+Tu	olfactory tubercle	777777
+ty9	tympanic branch of the glossopharyngeal nerve	777777
+TyBu	tympanic bulla	777777
+TyC	tympanic cavity	777777
+TyM	tympanic membrane	777777
+TzM	trapezius muscle	777777
+Tz	nucleus of the trapezoid body	777777
+tz	trapezoid body	777777
+tzx	decussation of the trapezoid body	777777
+Unlabeled	-------	30BA8F
+un	uncinate fasciculus of the cerebellum	777777
+unx	uncinate fasciculus decussation	FE2712
+Utr	utricle	777777
+Uvu	-------	777777
+V	-------	FFF8E7
+V1B	primary visual cortex, binocular area	FDBCB4
+V1M	primary visual cortex, monocular area	48D1CC
+V1	primary visual cortex	777777
+V2	-------	777777
+V2L	secondary visual cortex, lateral area	FFD800
+V2ML	secondary visual cortex, mediolateral area	7FFF00
+V2MM	secondary visual cortex, mediomedial area	DFFF00
+VA	ventral anterior thalamic nucleus	0ABAB5
+VA-VL	-------	777777
+VA-VL	region where VA and VL overlap	777777
+vBrain	-------	E0B0FF
+VCAGr	ventral cochlear nucleus, granule cell layer	C9C0BB
+VCA	ventral cochlear nucleus, anterior part	777777
+VCCap	ventral cochlear nucleus, capsular part	FF9F00
+VCl	ventral part of claustrum	A0785A
+VCPO	ventral cochlear nucleus, posterior part, octopus cell area	915C83
+VCP	ventral cochlear nucleus, posterior part	777777
+VC	ventral cochlear nucleus	777777
+vc	ventral column of the spinal cord	777777
+VDB	nucleus of the vertical limb of the diagonal band	FF9966
+Ve	-------	0BDA51
+VeCb	vestibulocerebellar nucleus	777777
+VeGn	vestibular nerve ganglion	777777
+veme	vestibulomesencephalic tract	ACE5EE
+ventricles	-------	777777
+Vent	ventricular space of the eye	777777
+VEn	ventral endopiriform nucleus	777777
+vert	vertebral artery	B2BEB5
+vesp	vestibulospinal tract	A7FC00
+Vest	vestibule of the inner ear	777777
+VG-1	-------	777777
+VG1	ventral geniculate nucleus, layer 1	777777
+VG-2	-------	777777
+VG-3	-------	777777
+VG	ventral geniculate nucleus	777777
+vhc	ventral hippocampal commissure	92A1CF
+VH	ventral horn of spinal cord	777777
+VIEnt	ventral intermediate entorhinal cortex	FF0028
+Vitr	vitreous cavity (posterior chamber) of the eye	777777
+VLG	-------	BF94E4
+VLH	ventrolateral hypothalamic nucleus	79443B
+vlh	ventrolateral hypothalamic tract	777777
+VLi	ventral linear nucleus of the thalamus	FE6F5E
+VLL	ventral nucleus of the lat lemniscus	0070FF
+VLPAG	ventrolateral periaqueductal gray	480607
+VLPO	ventrolateral preoptic nucleus	ED1C24
+VL	ventrolateral thalamic nucleus	777777
+VMHA	ventromedial hypothalamic nucleus, anterior part	777777
+VMHC	ventromedial hypothalamic nucleus, central part	BC8F8F
+VMHDM	ventromedial hypothalamic nucleus, dorsomedial part	EFDECD
+VMHSh	ventromedial nucleus of the hypothalamus shell	00DDDD
+VMH	ventromedial hypothalamic nucleus	777777
+VMHVL	ventromedial hypothalamic nucleus, ventrolateral part	FBCCE7
+vmnf	ventral median fissure	777777
+VMPO	ventromedial preoptic nucleus	002147
+VM	ventromedial thalamic nucleus	777777
+vn	vomeronasal nerve	777777
+VN	vomeronasal nerve layer	777777
+VOLT	vascular organ of the lamina terminalis	B57281
+Vom	vomer	777777
+VO	ventral orbital cortex	777777
+VPL	ventral posterolateral thalamic nucleus	FB607F
+VPM	ventral posteromedial thalamic nucleus	00CED1
+VPPC	ventral posterior nucleus of the thalamus, parvicellular part	8B4513
+VPPn	-------	777777
+VP	ventral pallidum	777777
+VRe	ventral reuniens thalamic nucleus	FF66CC
+vsc	ventral spinocerebellar tract	FFA6C9
+vscx	ventral spinocerebellar tract decussation	FBAED2
+VS	ventral subiculum	777777
+VTAR	ventral tegmental area, rostral part	5F9EA0
+VTA	ventral tegmental area	777777
+VTg	ventral tegmental nucleus	BE0032
+vtgx	ventral tegmental decussation	FBA0E3
+VTM	ventral tuberomammillary nucleus	FFBD88
+VTT-1	-------	777777
+VTT1	ventral tenia tecta, layer 1	777777
+VTT-2	-------	777777
+VTT-3	-------	777777
+VTT	ventral tenia tecta	777777
+v	vein	777777
+xicp	-------	4997D0
+Xi	xiphoid thalamic nucleus	777777
+X	nucleus X	777777
+xscp	decussation of the superior cerebellar peduncle	CCCCFF
+Y	nucleus Y	66023C
+ZIC	zona incerta, caudal part	CC6666
+ZID	zona incerta, dorsal part	FF00FF
+ZIR	zona incerta, rostral part	FF004F
+ZIV	zona incerta, ventral part	F7E98E
+ZI	zona incerta	777777
+ZL	zona limitans	CD7F32
+Z	nucleus Z	777777
+Zo	zona layer of the superior colliculus	F88379
+ZygA	zygomatic arch	777777
+Unknown	Not done yet!	777777
+cs-tract	Corticospinal tract	777777
+pons	Pons	777777
+Medulla-oblongata	Medulla oblongata	777777
+Di	Diencephalon	777777
+Tel	Telencepahlon	777777
+Tg	Tegmentum	777777

@@ -1,0 +1,47 @@
+#Root hierarchy element: Brain
+
+FB	Brain
+MB	Brain
+HB	Brain
+Olf	Brain #FB
+cb	Brain
+VS	Brain
+Aq	VS
+
+fibres	Brain #nerves
+ot	fibres
+ll	fibres
+ac	fibres
+fi	fibres
+ic	fibres
+sp5	fibres
+cc	fibres
+cp	fibres #MB
+Fnx	FB #fibres
+
+Cx	FB
+Hc	FB
+Str	FB
+GP	FB
+Acb	FB
+Amy	FB
+SN	FB
+Hyp	FB
+Pin	FB
+Th	FB
+VT	Th
+LD	Th
+MGen	Th
+LGen	Th
+
+Sn	MB
+SC	MB
+IC	MB
+IP	MB
+DpMe	MB
+APT	MB
+Co	MB #??
+
+PAG	MB #and HB???
+Pg	HB
+Bs	HB # ew. Brain

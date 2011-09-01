@@ -1,0 +1,63 @@
+bcg	background	ffffff #Background color 
+Brain	Whole brain	ffffff
+
+FB	Forebrain	777777
+MB	Midbrain	777777
+fibres	fibres	777777
+CNS	Central Nervous System	777777
+HB	Hindbrain	777777
+
+Cx	Cerebral cortex	454cf2
+Bs	Brainstem (remainder)	ffa28b
+Th	Thalamus (remainder)	ff7f00
+SC	Superior colliculus	007f80
+IC	Inferior colliculus	ff6666
+ll	Lateral lemniscus	7f0080
+PAG	Periaqueductal gray	8e388e
+Sn	Substantia nigra	993300
+VT	Ventral thalamic nuclei	83b470
+ac	Anterior commissure	060684
+Pg	Pontine gray	17f4e1
+SN	Lateral septal nuclei	808080
+cp	Cerebral peduncle	ff00ff
+IP	Interpeduncular nucleus	7fff00
+GP	Globus pallidus	664a85
+ic	Internal capsule	cb0447
+DpMe	Deep mesencephalic nuclei	fcfcc4
+LD	Lateral dorsal nucleus of thalamus	00ffff
+MGen	Medial geniculate	00ff00
+APT	Anterior pretectal nucleus	7f80ff
+ot	Optic tract	5e2612
+VS	Ventricular system	aefdca
+Str	Striatum	2953cc
+Hc	Hippocampus	7f7f00
+fi	Fimbria	317023
+cc	Corpus callosum	9a0404
+LGen	Lateral geniculate	29cc67
+Fnx	Fornix	66ffff
+Aq	Aqueduct	29cc67
+Pin	Pineal gland	29cc67
+Amy	Amygdala	af4732
+Hyp	Hypothalamus	dcf216
+Acb	Nucleus accumbens	00ff00
+Olf	Olfactory areas	15f9bf
+Co	Cochlear nuclei	7fff7f
+sp5	Spinal trigeminal tract	ff5718
+cb	Cerebellum	cc293a
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
