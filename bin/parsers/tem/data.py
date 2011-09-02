@@ -7,8 +7,8 @@ CONF_CONTACT_EMAIL  = 'Put contatct email here'
 CONF_CAF_COMPIL_TIME = datetime.datetime.utcnow().strftime("%F %T") #leave as it is
 CONF_CAF_FULL_NAME = 'Put full name of the CAF dataset here'
 
-REFERENCE_WIDTH  = 512
-REFERENCE_HEIGHT = 512
+REFERENCE_WIDTH  = 520
+REFERENCE_HEIGHT = 520
 
 SLIDE_RANGE = range(0,30)
 

@@ -1,5 +1,5 @@
 import scipy
-import Image
+import Image, ImageOps, ImageSequence
 import os
 
 commands =[\
@@ -12,6 +12,8 @@ map(os.system, commands)
 multiImage = scipy.misc.imread('atlases/tem/src/membranes-neurites-glia.tif')
 multiImageList = multiImage.tolist()
 
-for i in range(0,30):
-    multiImageList.seek(i)
-    multiImageList.save('atlases/tem/src/membranes-neurites-glia_%03d.tiff' % i)
+index = 0
+for frame in ImageSequence.Iterator(multiImageList):
+    frame = ImageOps.expand(frame, border=4, fill=168)
+    frame.save('atlases/tem/src/membranes-neurites-glia_%03d.tiff' % index)
+    index +=1
