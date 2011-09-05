@@ -1,8 +1,34 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+###############################################################################
+#                                                                             #
+#    This file is part of 3d Brain Atlas Reconstructor                        #
+#                                                                             #
+#    Copyright (C) 2010-2011 Piotr Majka, Jakub M. Kowalski                   #
+#                                                                             #
+#    3d Brain Atlas Reconstructor is free software: you can redistribute      #
+#    it and/or modify it under the terms of the GNU General Public License    #
+#    as published by the Free Software Foundation, either version 3 of        #
+#    the License, or (at your option) any later version.                      #
+#                                                                             #
+#    3d Brain Atlas Reconstructor is distributed in the hope that it          #
+#    will be useful, but WITHOUT ANY WARRANTY; without even the implied       #
+#    warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.         #
+#    See the GNU General Public License for more details.                     #
+#                                                                             #
+#    You should have received a copy of the GNU General Public License        #
+#    along  with  3d  Brain  Atlas  Reconstructor.   If  not,  see            #
+#    http://www.gnu.org/licenses/.                                            #
+#                                                                             #
+###############################################################################
+
+"""
+The module provides classes necessary to handle basic structure colour processing.
+
+G{importgraph}
+"""
 import sys
 import colorsys
-import os,bar
 from base import flatten
 from atlas_indexer import barIndexer
 
@@ -98,8 +124,6 @@ def get_item_color(relPos, depth, parentColor, nextColor):
 # Experimental version of automatic color assgnment
 #-----------------------------------------------------
 
-import color
-
 class barColorIndexer(barIndexer):
     """
     Class enabling automated color assignment basing on provided structure
@@ -124,8 +148,8 @@ class barColorIndexer(barIndexer):
         # this is something like initialization step
         # Each child of root element has span of colours proportional to the
         # number of structures that it covers.
-        zc=color.barColor(colorsys.hsv_to_rgb(0, 1., 1.0))
-        ec=color.barColor(colorsys.hsv_to_rgb(.9, 1., 1.0))
+        zc=barColor(colorsys.hsv_to_rgb(0, 1., 1.0))
+        ec=barColor(colorsys.hsv_to_rgb(.9, 1., 1.0))
         self.setChildColours(b, zc, ec, depth=1)
         
         # Define new color mapping and use it
@@ -143,85 +167,21 @@ class barColorIndexer(barIndexer):
         for (j, v) in enumerate(elem.children):
             span += float(self.getSpan(v))/groupLen
             #print >>sys.stderr, span
-            newColor = color.get_item_color(span, depth, cola, colb)
+            newColor = get_item_color(span, depth, cola, colb)
             v.fill = newColor.html
         
         for (j, v) in enumerate(elem.children):
             
             if v is not elem.children[0]:
                 # For all regular children
-                cola = color.barColor.fromHTML(elem.children[j-1].fill)
-                colb = color.barColor.fromHTML(v.fill)
+                cola = barColor.fromHTML(elem.children[j-1].fill)
+                colb = barColor.fromHTML(v.fill)
             else:
                # For the last child
-                cola = color.barColor.fromHTML(v.parent.prevSibling().fill)
-                cola = color.barColor.fromHTML(v.fill)
+                cola = barColor.fromHTML(v.parent.prevSibling().fill)
+                cola = barColor.fromHTML(v.fill)
             
             self.setChildColours(v, cola, colb, depth+1)
-
-#-----------------------------------------------------
-# Experimental landmark loading routine.
-#-----------------------------------------------------
-
-class barLandmarkIndexer(barIndexer):
-    def loadSlide(self, slideNumber, cafFilename):
-        slideFilename = self.properties['FilenameTemplate'].value % (slideNumber, 0) 
-        cafPath = os.path.split(cafFilename)[0]
-        slideFullPath = os.path.join(cafPath, slideFilename)
-        return  bar.barTracedSlideRenderer.fromXML(slideFullPath)
-    
-    def _appendLandmarks(self, slideLandmarkList):
-        pass
-    
-    def _appendLandmark(self, landmark, slide):
-        pass
-    
-    def _assignLandmarks(self, landmarks):
-        pass
-    
-    def appendLandmarksFromFile(self, landmarksFilename, cafp):
-        def cmpf(x,y):
-            if x[1][2] > y[1][2]: return 1
-            elif x[1][2] == y[1][2]: return 0
-            else: return -1
-        lmData = self._loadLandmarksFile(landmarksFilename)
-        lmData.sort(cmp = cmpf)
-        
-        lmToSlide = {}
-        # Assign landmarks by nearest slides:
-        for lm in lmData:
-            cc = lm[1][2]
-            dmap = map(lambda x: (x.name, abs(float(x.coronalcoord) - cc)), self.slides.values())
-            nSl = min(dmap, key = lambda x: x[1])[0]
-            try:
-                lmToSlide[nSl].append(lm)
-            except:
-                lmToSlide[nSl] = [lm]
-        
-        for (slideNo, lmList) in lmToSlide.iteritems():
-            sl = self.loadSlide(slideNo, cafp)
-            for lm in lmList:
-                lc = slide.toSVGcoordinate( (lm[1][0],lm[1][1]) )
-                lmLabel = bar.barSpotLabel(lc, lm[0], lm[0])
-                print lmLabel
-                sl.addLabel(lmLabel)
-
-            sl.Show()    
-        return lmToSlide
-    
-    def _loadLandmarksFile(self, landmarksFilename):
-        fileh = open(landmarksFilename)
-        lmData = []
-        for line in fileh.readlines():
-            line = line.split()
-            coords = map(float, line[1].split(","))
-            name = line[0]
-            shortdesc = line[2]
-            longDesc = line[3]
-            relURI = line[4]
-            lmData.append((name, coords, shortdesc, longDesc, relURI))
-            
-        return lmData
 
 if __name__ == '__main__':
     pass

@@ -253,17 +253,15 @@ class structureHolder():
         # The exact form of T and S matrices depends on direction of axes.
         # Esspecialy direction of Y axis:
         if sy > 0 and  ty < 0:
-            T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
-            S = numpy.array( [[sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
-            spacing = (S[0,0],  -S[1,1], S[2,2])
+            T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,-ty],[0,0,1,tz],[0,0,0,1]])
+            S = numpy.array( [[sx,0,0,0 ],[0,-sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
         elif sy < 0 and ty > 0:
             T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
             S = numpy.array( [[sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
-            spacing = (abs(S[0,0]),  abs(S[1,1]),  abs(S[2,2]))
         else:
             T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
             S = numpy.array( [[sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
-            spacing = (abs(S[0,0]),  abs(S[1,1]),  abs(S[2,2]))
+        
         # Bounding box vector
         #b = numpy.array([bx, by, bz, 1]).reshape(4,1)
         B = numpy.array( [[1,0,0,bx],[0,1,0,-by],[0,0,1,bz],[0,0,0,1]])
@@ -286,6 +284,7 @@ class structureHolder():
         origin  = (Op[0,0], Op[1,0], Op[2,0])
         # We take absolute value of scalings and coronal resosolution as
         # VTK handles negavite scaling very poor.
+        spacing = (abs(S[0,0]),  abs(S[1,1]),  abs(S[2,2]))
         return (origin, spacing)
 
     def __processModelGeneration(self):

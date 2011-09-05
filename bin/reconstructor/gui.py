@@ -31,12 +31,12 @@ G{importgraph}
 from time import time
 import random, sys, os, glob
 
-import wxversion        # Force using wxPython in version 2.6 
-wxversion.select('2.6') # as 2.8 causes blinking in rendering window
+#import wxversion        # Force using wxPython in version 2.6 
+#wxversion.select('2.6') # as 2.8 causes blinking in rendering window
                          # while 2.6 in 10.04 causes segfault when accesing
                          # combo box - your choice.
 # Be careful!
-ENABLE_EXPERIMENTAL_FEATURES = True 
+ENABLE_EXPERIMENTAL_FEATURES = True
 
 import wx
 import wx.gizmos
