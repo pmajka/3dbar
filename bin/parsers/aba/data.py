@@ -24,9 +24,10 @@
 
 import datetime
 
-CONF_PARSER_COMMENT = 'CAF dataset (The Allen Mouse Brain Atlas) based on: \
-<a href="http://mouse.brain-map.org/atlas/index.html"> \
-http://mouse.brain-map.org/atlas/index.html<a/>.'
+CONF_PARSER_COMMENT = 'CAF dataset based on Allen Mouse Brain Atlas [Internet]. Seattle (WA): Allen Institute for Brain \
+Science. (c) 2009. Available from: \
+<a href="http://mouse.brain-map.org/atlas/index.html" target="_blank">http://mouse.brain-map.org</a>.'
+
 CONF_PARSER_NAME = 'aba'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology.'
 CONF_CONTACT_EMAIL = 'pmajka@nencki.gov.pl'
