@@ -180,7 +180,12 @@ class barSBAParser(barExternalParser):
             newPathDefinition = self._sbaImportData['svgpaths'][pathNumber]
             newPathColor      = currentStructureData['fillcolor']
             newPathID         = self._getPathID(currentStructureData['name'])
-            retPaths.append(barPath(newPathID, newPathDefinition, newPathColor))
+            try:
+                pathToAppend = barPath(newPathID,\
+                        newPathDefinition, newPathColor, clearPathDef = True)
+                retPaths.append(pathToAppend)
+            except ValueError:
+                pass
         
         # Dumping diagnostic information        
         if self.debugMode:
@@ -217,7 +222,8 @@ class barSBAParser(barExternalParser):
         # compatibile with 3dBar naming convention. Here we process them so they
         # can pass 3dBAR name validataion.
         structName =  self._sbaImportData['rgb2acr'][structureIDbyFill].strip()
-        print structName, self._cleanStructName(structName)
+        if __debug__:
+            print >>sys.stderr, structName, self._cleanStructName(structName)
         return self._cleanStructName(structName)
     
     def _cleanStructName(self, structName):

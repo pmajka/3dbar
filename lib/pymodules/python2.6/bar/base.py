@@ -500,7 +500,7 @@ class barStructureLabel(barAtlasSlideElement):
         else:
             # Load default SVG properties from configuration file:
             self._attributes = dict(DEFAULT_TEXT_ELEMENTS_ATTRIBUTES)
-        self._attributesNS = dict(CONF_DEFAULT_PATH_ATTRIBUTES_NS)
+        self._attributesNS = dict(CONF_DEFAULT_TEXT_ATTRIBUTES_NS)
         
         self.growlevel = growlevel
         #self._attributesNS['type'] = 'label'
@@ -557,7 +557,6 @@ class barStructureLabel(barAtlasSlideElement):
         
         # Return label with proer type depending on label's prefix
         labelPrefix = labelCaption[0]
-        #print 'label prefix = "%s"' % labelPrefix
         
         # Create label
         if labelPrefix == BAR_COMMENT_LABEL_PREFIX:
@@ -627,8 +626,9 @@ class barStructureLabel(barAtlasSlideElement):
         if not validateStructureName(caption):
             raise ValueError, "Incorrect label caption: '%s'." % caption
         else: return caption
-
+    
     #TODO: x, y should be float
+    #TODO: add assertion
     def __getLocation(self):
         """
         @return: (x,y) Location of the label in SVG (slide) coordinates.
@@ -992,7 +992,7 @@ class barPath(barAtlasSlideElement):
     """
     _elementName = 'path'
     
-    def __init__(self, pathID, pathDefinition, fillColor, properties = None):
+    def __init__(self, pathID, pathDefinition, fillColor, properties = None, clearPathDef = False):
         """
         @type  pathID: string
         @param pathID: id of the path element that will be stored as path id in XML
@@ -1018,7 +1018,7 @@ class barPath(barAtlasSlideElement):
         self._attributesNS = dict(CONF_DEFAULT_PATH_ATTRIBUTES_NS)
         
         # Customize path properties: set ID, path definition and fill color
-        self.pathDef = pathDefinition
+        self._setPathDefinition(pathDefinition, clearPathDef)
         self.color = fillColor
         self.id = pathID
     
@@ -1036,11 +1036,12 @@ class barPath(barAtlasSlideElement):
             growlevel = int(svgPathElement.getAttributeNS(\
                     BAR_XML_NAMESPACE, 'growlevel'))
         except:
-            _printRed('Invalid or empty growlevel provided. Using growlevel=0.\
-                    Don\'t worry, it may happen.')
             growlevel = 0
+            if __debug__:
+                _printRed('Invalid or empty growlevel provided. Using growlevel=0.\
+                    Don\'t worry, it may happen.')
         
-        retPath = cls(pathID, pathDefinition, fillColor)
+        retPath = cls(pathID, pathDefinition, fillColor, clearPathDef = clearPathDef)
         retPath.growlevel = int(growlevel)
         return retPath
     
@@ -1072,26 +1073,28 @@ class barPath(barAtlasSlideElement):
         
         Validates and sets new SVG path definition attribute value
         """
-        if self._validatePath(newPathDefinition):
-            if clearPathDef: self._attributes['d']\
-                    = self.simplifyPathDef(newPathDefinition)
-            else:
-                self._attributes['d'] = newPathDefinition
+        if clearPathDef:
+            if not self._validatePath(newPathDefinition):
+                raise ValueError, "Invalid path definition provided"
+            self._attributes['d'] = self.simplifyPathDef(newPathDefinition)
         else:
-            raise ValueError, "Invalid path definition provided"
+            self._attributes['d'] = newPathDefinition
         
     def _validatePath(self, pathDefinition):
         """
         @type  pathDefinition: string
         @param pathDefinition: SVG path definition to be validated.
         
-        @return: (boolean) hardcoded True
+        @return: (boolean) True, if path definition is correct, False otherwise 
         
         This method is supposed to do some basic valudation of given path. However,
         currently it does absolutely nothing and returns hardcoded True.
         """
+        if len(parsePath(pathDefinition)) <= 3:
+            print >>sys.stderr, "Invalid path detected: %s" % pathDefinition
+            return False
         return True
-    
+        
     def _getGrowlevel(self):
         """
         @return: (int) growlevel property value.
@@ -2980,7 +2983,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
         map(lambda x: x.__setattr__('growlevel',0), self.__vBrainLabels)
         map(self.__labelsLeft.remove, self.__vBrainLabels)
         
-        self._trPathGen = 0 #Traced paths generator TODO: delete it
+        self._trPathGen = 0 # Simple path number holder 
         
         # Remove labels from this slide so they
         #do not interrupt tracing process.
@@ -3379,7 +3382,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
         @rtype: L{barPath<barPath>}
         @return: barPath created from provided svg path element
         
-        Created C{barPath} from provided svg path element (result of tracing)
+        Creates C{barPath} from provided svg path element (result of tracing)
         and C{seedLabel}. Resulting path has proper id and structure name,
         however it has black colour assigned.
         """
