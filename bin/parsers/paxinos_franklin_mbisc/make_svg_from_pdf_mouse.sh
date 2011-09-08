@@ -19,7 +19,7 @@ set -xe
 # Constants, directories and files definitions
 #------------------------------------------------------------------------------
 CONF_CORONAL_PAGE_START=28                            # First page of coronal slices
-CONF_CORONAL_PAGE_END=128                             # Last page of coronal slices
+CONF_CORONAL_PAGE_END=127                             # Last page of coronal slices
 CONF_SOURCE_PDF_ATLAS_FILENAME=$1
 CONF_OUTPUT_SVG_DIR=atlases/paxinos_franklin_mbisc/caf-src/
 CONF_PARSER_NAME=paxinos_franklin_mbisc
@@ -85,4 +85,5 @@ rm ${CONF_OUTPUT_SVG_DIR}*.bak
 #------------------------------------------------------------------------------
 # Trace files using AtlasParser as a standalone module.
 #------------------------------------------------------------------------------
-python $CONF_ATLASPARSER_SCRIPT 
+python $CONF_ATLASPARSER_SCRIPT
+python $CONF_ATLASPARSER_SCRIPT --create-only-index-file

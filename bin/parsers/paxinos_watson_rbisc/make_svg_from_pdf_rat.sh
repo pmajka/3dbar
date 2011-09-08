@@ -84,4 +84,5 @@ rm ${CONF_OUTPUT_SVG_DIR}*.bak
 #------------------------------------------------------------------------------
 # Trace files using AtlasParser as a standalone module.
 #------------------------------------------------------------------------------
-python $CONF_ATLASPARSER_SCRIPT 
+python $CONF_ATLASPARSER_SCRIPT
+python $CONF_ATLASPARSER_SCRIPT --create-only-index-file
