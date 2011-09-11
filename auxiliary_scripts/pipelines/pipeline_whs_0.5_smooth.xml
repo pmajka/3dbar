@@ -155,7 +155,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="5">
+			<pipelineelement disable="False" displayable="True" on="False" order="5">
 				<vtkclass>
 					vtkQuadricClustering
 				</vtkclass>

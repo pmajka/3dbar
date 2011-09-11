@@ -87,7 +87,7 @@ def getIndexedImageData(inputVtkImageData, indexVal):
     cast = vtk.vtkImageCast()
     cast.SetInput(getImageMask(inputVtkImageData))
     cast.SetOutputScalarTypeToUnsignedInt()
-
+    
     # Then multiply the normalized image data by priovided constant
     multip = vtk.vtkImageMathematics()
     multip.SetOperationToMultiplyByK()

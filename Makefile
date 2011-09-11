@@ -35,7 +35,7 @@ doc_gui:
 
 doc_service:
 	mkdir -p doc/service/html
-	epydoc bin/service -v --graph all   --output doc/service/html
+	epydoc bin/sql -v --graph all   --output doc/service/html
 
 parsers: ${PARSERS}
 

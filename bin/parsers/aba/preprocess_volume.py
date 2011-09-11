@@ -4,7 +4,7 @@
 #                                                                             #
 #    This file is part of 3d Brain Atlas Reconstructor                        #
 #                                                                             #
-#    Copyright (C) 2010-2011 Piotr Majka, Jakub M. Kowalski                   #
+#    Copyright (C) 2010-2011 Piotr Majka, Łukasz Wałejko, Jakub M. Kowalski   #
 #                                                                             #
 #    3d Brain Atlas Reconstructor is free software: you can redistribute      #
 #    it and/or modify it under the terms of the GNU General Public License    #
@@ -256,7 +256,7 @@ def preprocessVolume(outputDirectory, outputFilename):
     os.system('unzip -o  /tmp/data -d /tmp/') 
     abaPoiTransformPoints =\
        os.path.join(os.path.split(__file__)[0], POI_TRANSFORM_POINTS_FNAME)
-
+    
     g=Gatherer()
     g.gather(abaPoiTransformPoints)
     g.solve()
