@@ -1103,7 +1103,6 @@ class barPath(barAtlasSlideElement):
         currently it does absolutely nothing and returns hardcoded True.
         """
         if len(parsePath(pathDefinition)) <= 3:
-            print >>sys.stderr, "Invalid path detected: %s" % pathDefinition
             return False
         return True
         
@@ -2825,8 +2824,6 @@ class barTracedSlideRenderer(barTracedSlide):
         
         return contourSlideRen
 
-barCafSlide = barTracedSlideRenderer # Just an alias
-barContourSlide = barPretracedSlideRenderer # Just an alias
 
 class barPretracedSlideRenderer(barPretracedSlide):
     """
@@ -3758,6 +3755,8 @@ barObject._clsMetadataElement             = barMetadataElement
 barObject._clsBregmaMetadataElement       = barBregmaMetadataElement
 barObject._clsTransfMatrixMetadataElement = barTransfMatrixMetadataElement
 
+barCafSlide = barTracedSlideRenderer # Just an alias
+barContourSlide = barPretracedSlideRenderer # Just an alias
 
 def floodFillScanlineStack(image, xy, value):
     """
