@@ -35,7 +35,7 @@ import sys
 import os.path
 
 from bar import barIndexer
-from bar.base import flatten
+#TODO: Deprecated?? from bar.base import flatten
 
 class barReconstructorIndexer(barIndexer):
     """

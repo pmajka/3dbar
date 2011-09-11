@@ -25,7 +25,8 @@
 from base import barObject, barStructureLabel, barRegularLabel, barSpotLabel,\
 barCommentLabel, barMetadataElement, barBregmaMetadataElement, barTransfMatrixMetadataElement,\
 barCoordinateMarker, barCoronalMarker, barPath, barGenericStructure,\
-barBoundingBox, barTracedSlideRenderer, barPretracedSlideRenderer
+barBoundingBox, barTracedSlideRenderer, barPretracedSlideRenderer, barCafSlide,\
+barContourSlide
 from atlas_indexer import barIndexer, barIndexerPropertyElement,\
 barIndexerGroupElement, barIndexerSlideElement, barIndexerStructureElement, barIndexerObject, barIndexerElement
 

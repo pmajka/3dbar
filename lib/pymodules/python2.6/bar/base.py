@@ -297,20 +297,32 @@ class barObject(object):
         """
         raise NotImplementedError, "Virtual method executed."
     
-    def writeXMLtoFile(self, outputFilename):
+    def writeXMLtoFile(self, outputFilename,
+            indent="\t", addindent="\t", newl="\n",
+            encoding=BAR_XML_ENCODING):
         """
         Dumps given xml object to file with given filename.
         
         @type  outputFilename: string
         @param outputFilename: filename to save the file
         
+        @type indent: C{str}
+        @param indent: indentation delimiter
+        
+        @type addindent: C{str}
+        @param addindent: additional indentation delimiter
+        
+        @type newl: C{str}
+        @param newl: newline delimiter
+        
+        @type encoding:
+        @param encoding: output xml file encoding
+        
         @return      : None
         """
-        print outputFilename
         f=open(outputFilename,'w')
-        self.getXMLelement().writexml(f,\
-                indent="\t", addindent="\t", newl="\n",
-                encoding=BAR_XML_ENCODING)
+        self.getXMLelement().writexml(f, indent, addindent, newl, encoding)
+        print >>sys.stderr, "Saved to: ", outputFilename
         f.close()
     
     @staticmethod
@@ -2813,6 +2825,8 @@ class barTracedSlideRenderer(barTracedSlide):
         
         return contourSlideRen
 
+barCafSlide = barTracedSlideRenderer # Just an alias
+barContourSlide = barPretracedSlideRenderer # Just an alias
 
 class barPretracedSlideRenderer(barPretracedSlide):
     """
@@ -3287,6 +3301,14 @@ class barPretracedSlideRenderer(barPretracedSlide):
             
             # Determine BestGrowLevel using provied BestFillAlgorithm
             #TODO: obsolete: BestGrowLevel = self._tracingConf['BestFillAlgorithm'](area)
+            #TODO: Lines below should be obsolete after patching
+            # Sometime it 'selectBestGapFillingLevel' routine crashes,
+            # in such case just put BestGrowLevel = 0; The crach happens ie.
+            # when 2 elements list is provided
+            #try:
+            #    BestGrowLevel = selectBestGapFillingLevel(area)
+            #except:
+            #    BestGrowLevel = 0
             BestGrowLevel = selectBestGapFillingLevel(area)
             imageToTrace  = imgs[BestGrowLevel]
             seedLabel.growlevel = BestGrowLevel
@@ -3672,8 +3694,12 @@ class barPretracedSlideRenderer(barPretracedSlide):
                 "Structure:\t"+ seedLabel.Caption +"\t"        +\
                 "Coords:\t" + "\t" + str(seedLabel.Location) + "\t" +\
                 "Area:\t"+"\t" + " ".join(map(str,result))
-        print seedLabel
-        
+        # Area of traced region can be either of None. None occures when
+        # floodfill was pointing at non-white pixel. In such case we need to
+        # remove occurences of None from the list and then return it.
+        if result.count(None):
+            print result.index(None)
+            result = result[0:result.index(None)]
         images, areas = map(lambda x: x[0], result), map(lambda x: x[1], result)
         return (images, areas)
     
