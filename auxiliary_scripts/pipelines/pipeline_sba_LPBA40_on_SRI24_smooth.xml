@@ -41,13 +41,13 @@
 						</name>
 						<args>
 							<value order="0" type="float">
-								1.25
+								1.95
 							</value>
 							<value order="1" type="float">
-								1.25
+								1.95
 							</value>
 							<value order="2" type="float">
-								1.25
+								1.95
 							</value>
 						</args>
 					</param>
@@ -90,7 +90,7 @@
 								0
 							</value>
 							<value order="1" type="int">
-								119
+								110
 							</value>
 						</args>
 					</param>
@@ -129,7 +129,7 @@
 						</name>
 						<args>
 							<value order="0" type="float">
-								0.05
+								0.9
 							</value>
 						</args>
 					</param>
@@ -139,7 +139,7 @@
 						</name>
 						<args>
 							<value order="0" type="int">
-								100
+								50
 							</value>
 						</args>
 					</param>
@@ -149,7 +149,7 @@
 						</name>
 						<args>
 							<value order="0" type="bool">
-								True
+								False
 							</value>
 						</args>
 					</param>
