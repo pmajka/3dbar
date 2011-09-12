@@ -32,9 +32,9 @@
 import datetime
 
 CONF_PARSER_COMMENT = 'CAF dataset (The LPBA40 parcellation, registered to SRI24 space) based on: \
-Scalable Brain Atlas LPBA40_on_SRI24 template, \
-<a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=LPBA40_on_SRI24">\
-http://scalablebrainatlas.incf.org/main/coronal3d.php?template=LPBA40_on_SRI24</a>.'
+Scalable Brain Atlas \
+<a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=LPBA40_on_SRI24" target="_blank">\
+LPBA40_on_SRI24</a> template.'
 CONF_PARSER_NAME = 'sba_LPBA40_on_SRI24'
 CONF_CONTACT_COMMENT = 'Piotr Majka, Nencki Institute of Experimental Biology.'
 CONF_CONTACT_EMAIL = 'pmajka@nencki.gov.pl'

@@ -32,9 +32,9 @@
 import datetime
 
 CONF_PARSER_COMMENT = 'CAF dataset (Regional Map from Kotter and Wanke 2005) based on: \
-Scalable Brain Atlas RM_on_F99 template, \
-<a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=RM_on_F99">\
-http://scalablebrainatlas.incf.org/main/coronal3d.php?template=RM_on_F99</a>.'
+Scalable Brain Atlas \
+<a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=RM_on_F99" target="_blank">\
+RM_on_F99</a> template.'
 CONF_PARSER_NAME = 'sba_RM_on_F99'
 CONF_CONTACT_COMMENT = 'Piotr Majka, Nencki Institute of Experimental Biology.'
 CONF_CONTACT_EMAIL = 'pmajka@nencki.gov.pl'

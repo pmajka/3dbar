@@ -32,9 +32,9 @@
 import datetime
 
 CONF_PARSER_COMMENT = 'CAF dataset (NeuroMaps Macaque atlas 2008) based on: \
-Scalable Brain Atlas DB08 template, \
-<a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=DB08">\
-http://scalablebrainatlas.incf.org/main/coronal3d.php?template=DB08</a>.'
+Scalable Brain Atlas \
+<a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=DB08" target="_blank">\
+DB08</a> template.'
 CONF_PARSER_NAME = 'sba_DB08'
 CONF_CONTACT_COMMENT = 'Piotr Majka, Nencki Institute of Experimental Biology.'
 CONF_CONTACT_EMAIL = 'pmajka@nencki.gov.pl'

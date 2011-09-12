@@ -32,9 +32,9 @@
 import datetime
 
 CONF_PARSER_COMMENT = 'CAF dataset (Waxholm Space for the mouse 2009) based on: \
-Scalable Brain Atlas WHS09 template, \
-<a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=WHS09"> \
-http://scalablebrainatlas.incf.org/main/coronal3d.php?template=WHS09</a>.'
+Scalable Brain Atlas \
+<a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=WHS09" target="_blank">\
+WHS09</a> template.'
 CONF_PARSER_NAME = 'sba_WHS09'
 CONF_CONTACT_COMMENT = 'Piotr Majka, Nencki Institute of Experimental Biology.'
 CONF_CONTACT_EMAIL = 'pmajka@nencki.gov.pl'

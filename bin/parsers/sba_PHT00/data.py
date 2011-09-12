@@ -32,9 +32,9 @@
 import datetime
 
 CONF_PARSER_COMMENT = 'CAF dataset (Paxinos Rhesus Monkey atlas 2000) based on: \
-Scalable Brain Atlas PHT00 template, \
-<a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=PHT00">\
-http://scalablebrainatlas.incf.org/main/coronal3d.php?template=PHT00</a>.'
+Scalable Brain Atlas \
+<a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=PHT00" target="_blank">\
+PHT00</a> template.'
 CONF_PARSER_NAME = 'sba_PHT00'
 CONF_CONTACT_COMMENT = 'Piotr Majka, Nencki Institute of Experimental Biology.'
 CONF_CONTACT_EMAIL = 'pmajka@nencki.gov.pl'

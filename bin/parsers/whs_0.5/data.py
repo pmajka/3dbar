@@ -25,7 +25,8 @@
 import datetime
 
 CONF_PARSER_COMMENT = 'CAF dataset based on: \
-Waxholm Space: \
+<a href="http://civmvoxport.duhs.duke.edu/voxbase/downloaddataset.php?stackID=18746" target="_blank">\
+Waxholm Space</a>: \
 An image-based reference for coordinating mouse brain research, \
 G.Johnson, et. al., NeuroImage 53 (2010) 365-372.'
 CONF_PARSER_NAME    = 'whs_0.5'
