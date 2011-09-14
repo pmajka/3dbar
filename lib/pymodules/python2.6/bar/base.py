@@ -363,7 +363,7 @@ class barObject(object):
         """
         Extract attributes from L{xmlElement}.
 
-        @type  xmlElement: xml.dom.Node
+        @type  xmlElement: xml.dom.minidom.Node
         @param xmlElement: svg from which all attributes will be extrated
         
         @return: attribute to value mapping
@@ -385,7 +385,7 @@ class barObject(object):
         
         @attention: Do not use until there is not other way.
 
-        @type domElement: xml.dom.Node
+        @type domElement: xml.dom.minidom.Node
         @param domElement: XML element
 
         @type tagName: str
@@ -438,7 +438,7 @@ class barAtlasSlideElement(barObject):
         @type  useBarNS: bool
         @param useBarNS: determines, if element uses 3dBAR XML namespace
         
-        @rtype: xml.dom.Node
+        @rtype: xml.dom.minidom.Node
         @return: XML representation of the object
         """
         retDocument = dom.Document()
@@ -859,7 +859,7 @@ class barMetadataElement(barAtlasSlideElement):
         element. Determine which type of metadata is parsed and return proper
         subclass for L{barMetadataElement}.
         
-        @type  svgMetadataElement: xml.dom.Node
+        @type  svgMetadataElement: xml.dom.minidom.Node
         @param svgMetadataElement: XML representation of 3dBAR metadata element
 
         @return: created metadata element
@@ -1047,7 +1047,7 @@ class barMarker(barAtlasSlideElement):
         """
         Create marker from its XML representation.
 
-        @type  svgTextElement: xml.dom.Node
+        @type  svgTextElement: xml.dom.minidom.Node
         @param svgTextElement: source XML element
 
         @return: created object
@@ -1090,7 +1090,7 @@ class barMarker(barAtlasSlideElement):
         @param textNodeCaption: caption of the marker
 
         @return: generated XML DOM representation
-        @rtype: xml.dom.Node
+        @rtype: xml.dom.minidom.Node
         """
         # Put location (placement) of the marker
         # (expresed in SVG coordinate system)
@@ -1614,8 +1614,8 @@ class barGenericStructure(barAtlasSlideElement):
     @ivar _paths: paths related to the structure
     @type _paths: {str : L{barPath}}
 
-    @ivar name: name of the structure
-    @type name: str
+    @ivar _name: name of the structure
+    @type _name: str
 
     @ivar _color: colour of the structure in hexadecimal format (with or
                   without leading '#')
@@ -1644,7 +1644,7 @@ class barGenericStructure(barAtlasSlideElement):
         """
         Add path to the structure.
 
-        @param key: path identifier (C{L{path}.id})
+        @param key: path identifier (L{barPath.id})
         @type key: str
 
         @param value: path
@@ -1809,7 +1809,7 @@ class barGenericStructure(barAtlasSlideElement):
     def getXMLelement(self):
         """
         @return: iterator over XML DOM representations of contained paths.
-        @rtype: iterator([xml.dom.Node, ...])
+        @rtype: iterator([xml.dom.minidom.Node, ...])
         """
         # Should return iterator
         for path in sorted(self.itervalues(), key=lambda x: x.id):
@@ -1918,7 +1918,7 @@ class barBoundingBox(barObject):
         """
         @type  initialBoundaries: (int, int, int, int) or
                                   (float, float, float, float)
-        @prarm initialBoundaries: initial L{boundaries}.
+        @param initialBoundaries: initial L{boundaries}.
         """
         if not initialBoundaries:
             self.boundaries = (None, None, None, None)
@@ -1944,7 +1944,7 @@ class barBoundingBox(barObject):
         """
         Create bounding box based on SVG 'path' element.
 
-        @type  svgPathElement: xml.dom.Node 
+        @type  svgPathElement: xml.dom.minidom.Node 
         @param svgPathElement: SVG path element
         
         @return: created bounding box
@@ -2030,10 +2030,10 @@ class barVectorSlide(barObject):
 
     @ivar slideTemplate: an empty SVG document which can be filled with labels,
                          structures and metadata
-    @type slideTemplate: xml.dom.Document
+    @type slideTemplate: xml.dom.minidom.Document
     
     @ivar _labels: label ID to label representation mapping
-    @type _labels: {str : L{barGenericLabel}, ...}
+    @type _labels: {str : L{barStructureLabel}, ...}
     
     @ivar _metadata: names of particular metadata to its representation mapping
     @type _metadata: {str : L{barMetadataElement}, ...}
@@ -2060,7 +2060,7 @@ class barVectorSlide(barObject):
     
     def _getLabels(self):
         """
-        @rtype: [L{barGenericLabel}, ...]
+        @rtype: [L{barStructureLabel}, ...]
         @return: labels of the SVG slide
         """
         return self._labels.values()
@@ -2102,7 +2102,7 @@ class barVectorSlide(barObject):
     #TODO: fix setter/getter type conflict
     def _getSlideTemplate(self):
         """
-        @rtype: xml.dom.Document
+        @rtype: xml.dom.minidom.Document
         @return: SVG slide template
         """
         return self._slideTemplate
@@ -2115,7 +2115,7 @@ class barVectorSlide(barObject):
         @param newSlideTemplate: new slide template
         
         @todo: Add slide validation before replacing the template. See
-               L{validateSlideTemplate}.
+               L{_validateSlideTemplate}.
         """
         if self._validateSlideTemplate(newSlideTemplate):
             self._slideTemplate = dom.parseString(newSlideTemplate)
@@ -2396,7 +2396,7 @@ class barVectorSlide(barObject):
 
     Read-only property.
 
-    @type: [L{barGenericLabel}, ...]
+    @type: [L{barStructureLabel}, ...]
     """
 
     labelIndex  = property(_generateLabelIndex)
@@ -2543,7 +2543,7 @@ class barSlideRenderer(barVectorSlide):
             - C{'rec'} - returns NumPy array rendered according to reconstruction
               module requirements
 
-        @type  svgdoc: xml.dom.Document
+        @type  svgdoc: xml.dom.minidom.Document
         @param svgdoc: SVG document to render
         
         @type  renderingSize: (int, int)
@@ -2661,7 +2661,7 @@ class barSlideRenderer(barVectorSlide):
     
     def __setCrispEdges(self, boolValue):
         """
-        Set 'L{crispEdges<barGenericstructure.crispEdges>}' attribute for
+        Set 'L{crispEdges<barGenericStructure.crispEdges>}' attribute for
         every structure representation in the slide.
 
         @param boolValue: new value of the attribute
@@ -2673,7 +2673,7 @@ class barSlideRenderer(barVectorSlide):
         """
         @rtype: bool
         @return: C{True} if every structure representation in the slide has
-                 the 'L{crispEdges<barGenericstructure.crispEdges>}' attribute
+                 the 'L{crispEdges<barGenericStructure.crispEdges>}' attribute
                  equal C{True}; C{False} false.
         """
         return all(map(lambda x:getattr(x, 'crispEdges'), self.values()))
@@ -2758,7 +2758,7 @@ class barPretracedSlide(barSlideRenderer):
         Create object representing given SVG slide.
 
         @param svgDocument: SVG slide (DOM XML or filename or file handler)
-        @type svgDocument: xml.dom.Document or str or file
+        @type svgDocument: xml.dom.minidom.Document or str or file
 
         @rtype: cls
         @return: created object
@@ -2903,7 +2903,7 @@ class barPretracedSlide(barSlideRenderer):
         Generate XML DOM representation of the object.
 
         @return: generated XML DOM representation
-        @rtype: xml.dom.Document
+        @rtype: xml.dom.minidom.Document
 
         @todo: Reimplement this in the nice way
         """
@@ -3007,7 +3007,7 @@ class barTracedSlide(barSlideRenderer):
         Create object representing given SVG slide.
 
         @param svgDocument: SVG slide (DOM XML or filename or file handler)
-        @type svgDocument: xml.dom.Document or str or file
+        @type svgDocument: xml.dom.minidom.Document or str or file
 
         @param fixDrawing: indicates if path definitions has to be redefined
                            with absolute coordinates
@@ -3308,7 +3308,7 @@ class barTracedSlide(barSlideRenderer):
     def getXMLelement(self):
         """
         @return: XML representation of the slide
-        @rtype: xml.dom.Document
+        @rtype: xml.dom.minidom.Document
         """
         # Save tracing and rendering properties as metadata entries:
         self._setMetadata(\
@@ -3531,7 +3531,7 @@ class barTracedSlide(barSlideRenderer):
 
     Read-only property.
 
-    @type: xml.dom.Document
+    @type: xml.dom.minidom.Document
     """
 
 
@@ -4287,7 +4287,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
         and seed label. Resulting path has proper identifier and structure name,
         however it has black colour assigned.
 
-        @param pathElem: xml.dom.Node
+        @param pathElem: xml.dom.minidom.Node
         @type  pathElem: SVG path element 
         
         @param seedLabel: L{barRegularLabel}
@@ -4533,7 +4533,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
         """
         Save provided SVG.
 
-        @type  svgdom: xml.dom.Document 
+        @type  svgdom: xml.dom.minidom.Document 
         @param svgdom: SVG image to be saved
         
         @type  filename: str
@@ -4818,7 +4818,7 @@ def _cleanPotraceOutput(tracerOutput):
     @type  tracerOutput: str
     @param tracerOutput: string produced by PoTrace
     
-    @rtype: xml.dom.Document
+    @rtype: xml.dom.minidom.Document
     @return: SVG image fixed by the procedure.
     """
     svgdom = dom.parseString(tracerOutput)
@@ -4986,9 +4986,9 @@ def _removeWhitespacesXML(domNode, unlink=True):
     """
     emptyTextElements = []
     for child in domNode.childNodes:
-        if child.nodeType == xml.dom.Node.ELEMENT_NODE:
+        if child.nodeType == xml.dom.minidom.Node.ELEMENT_NODE:
             _removeWhitespacesXML(child, unlink)
-        elif child.nodeType == xml.dom.Node.TEXT_NODE:
+        elif child.nodeType == xml.dom.minidom.Node.TEXT_NODE:
             child.data = child.data.strip()
             if child.data == '':
                 emptyTextElements.append(child)
