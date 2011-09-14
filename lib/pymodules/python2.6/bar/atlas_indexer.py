@@ -28,7 +28,8 @@ manipulations.
 
 G{importgraph}
 
-@var CONF_HIERARCHY_ROOT_NAME: Default value of C{L{barIndexer.__init__}()} argument.
+@var CONF_HIERARCHY_ROOT_NAME: Default value of C{L{barIndexer.__init__}()}
+                               argument.
 """
 
 CONF_HIERARCHY_ROOT_NAME = "Brain"
