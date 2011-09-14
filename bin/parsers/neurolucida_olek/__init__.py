@@ -139,8 +139,8 @@ class AtlasParser(nl.nlParser):
                                   self.filenameTemplates['traced'])
         self.indexer.properties = ('RefCords',\
             '-6.06467941507, -2.37689628048,0.010345983719932001,0.010345983719932001')
-        self.indexer.properties = ('CAFSlideOrientation', 'coronal'),
-        self.indexer.properties = ('CAFSlideUnits', 'mm'),
+        self.indexer.properties = ('CAFSlideOrientation', 'coronal')
+        self.indexer.properties = ('CAFSlideUnits', 'mm')
         self.indexer.properties = ('CAFName', '')
         self.indexer.properties = ('CAFComment', '')
         self.indexer.properties = ('CAFCreator', "Dataset prepared by Piotr Majka, Nencki Institute of Experimental Biology")
@@ -171,3 +171,4 @@ if __name__ == '__main__':
     
     ap = AtlasParser(inputDirectory, outputDirectory)
     ap.parseAll()
+    
