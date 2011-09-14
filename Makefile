@@ -53,7 +53,7 @@ whs_0.5:
 	wget --keep-session-cookies --save-cookies ${ATLASES_DIR}whs_0.5/src/cookies.txt --post-data 'username=civmpub&password=civmpub' http://civmvoxport.duhs.duke.edu/voxbase/login.php -O /dev/null
 	wget --load-cookies ${ATLASES_DIR}whs_0.5/src/cookies.txt http://civmvoxport.duhs.duke.edu/voxbase/downloaddataset.php?stackID=18746 -O ${ATLASES_DIR}whs_0.5/src/canon_labels_r.nii.gz
 	rm  ${ATLASES_DIR}whs_0.5/src/cookies.txt
-	gunzip -d ${ATLASES_DIR}whs_0.5/src/canon_labels_r.nii.gz
+	gunzip -f -d ${ATLASES_DIR}whs_0.5/src/canon_labels_r.nii.gz
 	python   ${PARSERS_DIR}whs_0.5/__init__.py
 	if [ -e ${ATLASES_DIR}whs_0.5/caf-reference ]; then diff -r  ${ATLASES_DIR}whs_0.5/caf ${ATLASES_DIR}whs_0.5/caf-reference > diff_whs_0.5.txt; fi
 
@@ -61,7 +61,7 @@ whs_0.51:
 	mkdir -p ${ATLASES_DIR}whs_0.51/src
 	mkdir -p ${ATLASES_DIR}whs_0.51/caf
 	wget -O ${ATLASES_DIR}whs_0.51/src/whs051mbatatlas.zip "http://software.incf.org/software/waxholm-space/waxholm-space/LabeledAtlas0.5.1/file_download?file_field=file"
-	unzip ${ATLASES_DIR}whs_0.51/src/whs051mbatatlas.zip -d ${ATLASES_DIR}whs_0.51/src/
+	unzip -o ${ATLASES_DIR}whs_0.51/src/whs051mbatatlas.zip -d ${ATLASES_DIR}whs_0.51/src/
 	rm ${ATLASES_DIR}whs_0.51/src/whs051mbatatlas.zip
 	python   ${PARSERS_DIR}whs_0.51/__init__.py
 	if [ -e ${ATLASES_DIR}whs_0.51/caf-reference ]; then diff diff -r  ${ATLASES_DIR}whs_0.51/caf ${ATLASES_DIR}whs_0.51/caf-reference > diff_whs_0.51.txt; fi
