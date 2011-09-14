@@ -12,7 +12,7 @@ REFERENCE_HEIGHT = 520
 
 SLIDE_RANGE = range(0,30)
 
-INPUT_FILENAME_TEMPLATE = 'membranes-neurites-glia_%03d.tiff'
+INPUT_FILENAME_TEMPLATE = 'membranes-neurites-glia-%d.png'
 IMAGE_TO_STRUCTURE_FN = 'imagecol2structname.txt'
 COLOR_MAPPING_FN = 'fullnames.txt'
 FULLNAME_MAPPING_FN = 'fullnames.txt'

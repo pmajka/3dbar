@@ -1,19 +1,16 @@
-import scipy
-import Image, ImageOps, ImageSequence
 import os
+import Image, ImageOps
 
 commands =[\
-        'wget http://www.ini.uzh.ch/~acardona/data/membranes-neurites-glia.tif.tar.bz2 -O atlases/tem/src/membranes-neurites-glia.tif.tar.bz2',
-        'bunzip2 -f atlases/tem/src/membranes-neurites-glia.tif.tar.bz2',
-        'tar -xvvf atlases/tem/src/membranes-neurites-glia.tif.tar -C atlases/tem/src/']
+    'wget http://www.ini.uzh.ch/~acardona/data/membranes-neurites-glia.tif.tar.bz2 -O atlases/tem/src/membranes-neurites-glia.tif.tar.bz2',
+    'bunzip2 -f atlases/tem/src/membranes-neurites-glia.tif.tar.bz2',
+    'tar -xvvf atlases/tem/src/membranes-neurites-glia.tif.tar -C atlases/tem/src/',
+    'convert atlases/tem/src/membranes-neurites-glia.tif -level 0,255 -depth 8 -type grayscale  atlases/tem/src/membranes-neurites-glia.png']
 
 map(os.system, commands)
 
-multiImage = scipy.misc.imread('atlases/tem/src/membranes-neurites-glia.tif')
-multiImageList = multiImage.tolist()
-
-index = 0
-for frame in ImageSequence.Iterator(multiImageList):
-    frame = ImageOps.expand(frame, border=4, fill=168)
-    frame.save('atlases/tem/src/membranes-neurites-glia_%03d.tiff' % index)
-    index += 1
+for index in range(30):
+    filename = 'atlases/tem/src/membranes-neurites-glia-%d.png' % index
+    frame = Image.open(filename)
+    frame  = ImageOps.expand(frame, border=4, fill=168)
+    frame.save(filename)
