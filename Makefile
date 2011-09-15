@@ -13,8 +13,8 @@ PARSERS_DIR  = bin/parsers/
 ATLASES_DIR  = atlases/
 
 SBA_PARSERS  = sba_DB08 sba_PHT00 sba_WHS09 sba_WHS10 sba_LPBA40_on_SRI24 sba_RM_on_F99
-FAST_PARSERS = neurolucida_olek a_hess_pfmbaisc ${SBA_PARSERS} tem
-PARSERS      = vector-test whs_0.5 whs_0.51 aba  ${FAST_PARSERS}
+FAST_PARSERS = neurolucida_olek ${SBA_PARSERS} tem
+PARSERS      = vector-test whs_0.5 whs_0.51 aba ${FAST_PARSERS}
 
 all: clean ${PARSERS} doc
 	echo "Done"
@@ -42,10 +42,6 @@ parsers: ${PARSERS}
 parsers_fast: ${FAST_PARSERS}
 	echo "Done"
 
-a_hess_pfmbaisc:
-	mkdir -p ${ATLASES_DIR}anreas_hess_mouse/caf
-	python ${PARSERS_DIR}a_hess_pfmbaisc/__init__.py
-	diff -r ${ATLASES_DIR}anreas_hess_mouse/caf ${ATLASES_DIR}anreas_hess_mouse/caf-reference > diff_anreas_hess_mouse.txt
 	
 whs_0.5:
 	mkdir -p ${ATLASES_DIR}whs_0.5/src
@@ -64,17 +60,17 @@ whs_0.51:
 	unzip -o ${ATLASES_DIR}whs_0.51/src/whs051mbatatlas.zip -d ${ATLASES_DIR}whs_0.51/src/
 	rm ${ATLASES_DIR}whs_0.51/src/whs051mbatatlas.zip
 	python   ${PARSERS_DIR}whs_0.51/__init__.py
-	if [ -e ${ATLASES_DIR}whs_0.51/caf-reference ]; then diff diff -r  ${ATLASES_DIR}whs_0.51/caf ${ATLASES_DIR}whs_0.51/caf-reference > diff_whs_0.51.txt; fi
+	if [ -e ${ATLASES_DIR}whs_0.51/caf-reference ]; then diff -r  ${ATLASES_DIR}whs_0.51/caf ${ATLASES_DIR}whs_0.51/caf-reference > diff_whs_0.51.txt; fi
 
 neurolucida_olek:
 	mkdir -p ${ATLASES_DIR}neurolucida_olek/caf
 	python ${PARSERS_DIR}neurolucida_olek/__init__.py
-	diff -r ${ATLASES_DIR}neurolucida_olek/caf ${ATLASES_DIR}neurolucida_olek/caf-reference > diff_neurolucidaXML.txt
+	if [ -e ${ATLASES_DIR}neurolucida_olek/caf-reference ] diff -r ${ATLASES_DIR}neurolucida_olek/caf ${ATLASES_DIR}neurolucida_olek/caf-reference > diff_neurolucidaXML.txt; fi
 
 vector-test:
 	mkdir -p ${ATLASES_DIR}vector-test/caf
 	python ${PARSERS_DIR}vector-test/__init__.py
-	diff -r ${ATLASES_DIR}vector-test/caf ${ATLASES_DIR}vector-test/caf-reference > diff_vector-test.txt
+	if [ -e ${ATLASES_DIR}vector-test/caf-reference ]; diff -r ${ATLASES_DIR}vector-test/caf ${ATLASES_DIR}vector-test/caf-reference > diff_vector-test.txt; fi
 
 sba_DB08:
 	mkdir -p ${ATLASES_DIR}sba_DB08/src
@@ -131,19 +127,31 @@ clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}sba_PHT00
 	rm -rfv ${ATLASES_DIR}sba_WHS09
 	rm -rfv ${ATLASES_DIR}sba_WHS10
-	rm -rfv ${ATLASES_DIR}sba_LPBA40_on_SRI24/
-	rm -rfv ${ATLASES_DIR}sba_RM_on_F99/
-	rm -rfv ${ATLASES_DIR}whs_0.51/vaf
+	rm -rfv ${ATLASES_DIR}sba_LPBA40_on_SRI24
+	rm -rfv ${ATLASES_DIR}sba_RM_on_F99
+	rm -rfv ${ATLASES_DIR}whs_0.51/caf
 	rm -rfv ${ATLASES_DIR}whs_0.5/caf
-	rm -rfv ${ATLASES_DIR}anreas_hess_mouse/caf/*
-	rm -rfv ${ATLASES_DIR}vector-test/caf/*
-	rm -rfv ${ATLASES_DIR}neurolucida_olek/caf/*
+	rm -rfv ${ATLASES_DIR}vector-test/caf
+	rm -rfv ${ATLASES_DIR}neurolucida_olek/caf
 	rm -rfv ${ATLASES_DIR}aba/caf
 	rm -rfv ${ATLASES_DIR}tem/caf
 
+reference_datasets:
+	rm -rf ${ATLASES_DIR}whs_0.5/caf-reference; cp -r ${ATLASES_DIR}whs_0.5/caf ${ATLASES_DIR}whs_0.5/caf-reference
+	rm -rf ${ATLASES_DIR}whs_0.51/caf-reference; cp -r ${ATLASES_DIR}whs_0.51/caf ${ATLASES_DIR}whs_0.51/caf-reference
+	rm -rf ${ATLASES_DIR}neurolucida_olek/caf-reference; cp -r ${ATLASES_DIR}neurolucida_olek/caf ${ATLASES_DIR}neurolucida_olek/caf-reference
+	rm -rf ${ATLASES_DIR}vector-test/caf-reference; cp -r ${ATLASES_DIR}vector-test/caf ${ATLASES_DIR}vector-test/caf-reference
+	rm -rf ${ATLASES_DIR}sba_DB08/caf-reference; cp -r ${ATLASES_DIR}sba_DB08/caf ${ATLASES_DIR}sba_DB08/caf-reference
+	rm -rf ${ATLASES_DIR}sba_PHT00/caf-reference; cp -r ${ATLASES_DIR}sba_PHT00/caf ${ATLASES_DIR}sba_PHT00/caf-reference
+	rm -rf ${ATLASES_DIR}sba_WHS09/caf-reference; cp -r ${ATLASES_DIR}sba_WHS09/caf ${ATLASES_DIR}sba_WHS09/caf-reference
+	rm -rf ${ATLASES_DIR}sba_WHS10/caf-reference; cp -r ${ATLASES_DIR}sba_WHS10/caf ${ATLASES_DIR}sba_WHS10/caf-reference
+	rm -rf ${ATLASES_DIR}sba_LPBA40_on_SRI24/caf-reference; cp -r ${ATLASES_DIR}sba_LPBA40_on_SRI24/caf ${ATLASES_DIR}sba_LPBA40_on_SRI24/caf-reference
+	rm -rf ${ATLASES_DIR}sba_RM_on_F99/caf-reference; cp -r ${ATLASES_DIR}sba_RM_on_F99/caf ${ATLASES_DIR}sba_RM_on_F99/caf-reference
+	rm -rf ${ATLASES_DIR}aba/caf-reference; cp -r ${ATLASES_DIR}aba/caf ${ATLASES_DIR}aba/caf-reference
+	rm -rf ${ATLASES_DIR}tem/caf-reference; cp -r ${ATLASES_DIR}tem/caf ${ATLASES_DIR}tem/caf-reference
 
 clean_diff:
-	rm -rfv diff_anreas_hess_mouse.txt diff_neurolucidaXML.txt diff_vector-test.txt\
-		    diff_whs_0.51 diff_whs_0.5 diff_sba_PHT00.txt diff_sba_DB08.txt\
+	rm -rfv diff_neurolucidaXML.txt diff_vector-test.txt\
+		    diff_whs_0.51.txt diff_whs_0.5.txt diff_sba_PHT00.txt diff_sba_DB08.txt\
 			diff_sba_WHS09.txt diff_sba_WHS10.txt diff_sba_LPBA40_on_SRI24.txt\
-			diff_sba_RM_on_F99.txt diff_aba.txt diff_tem.txt
+			diff_sba_RM_on_F99.txt diff_aba.txt diff_tem.txt 

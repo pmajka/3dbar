@@ -1,3 +1,7 @@
+.. -*- rest -*-
+.. vim:syntax=rest
+
+
 ========================================
 3d Brain Atlas Reconstructor readme file
 ========================================
@@ -7,7 +11,7 @@ instructions. Please make sure you install packages related to your Ubuntu
 version. Please disregard 'Getting code' section and use provided code instead.
 If you haven't done this already, please let us know that you are using 3D Brain
 Atlas Reconstructor by filling out short form available on
-http://service.3dbar.org/downloadForm . Thanks alot.
+http://service.3dbar.org/downloadForm . Thanks a lot.
 
 Generating CAF datasets
 =======================
