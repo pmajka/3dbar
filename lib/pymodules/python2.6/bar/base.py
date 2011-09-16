@@ -4811,6 +4811,24 @@ def _printRed(str):
     """
     print >>sys.stderr, '\033[0;31m%s\033[m' % str
 
+def debugOutput(msg, error=False):
+    """
+    Print debug message to stderr. Error messages are printed in red colour.
+
+    If the message is not an error message it is printed only if
+    C{__debug__ == True}.
+
+    @type msg: str
+    @param msg: debug message
+
+    @type error: bool
+    @param error: indicates if the debug message is an error message
+    """
+    if error:
+        _printRed(msg)
+    elif __debug__:
+        print >>sys.stderr, msg
+
 def _cleanPotraceOutput(tracerOutput):
     """
     Create SVG document (with fixed paths) from provided PoTrace output.
