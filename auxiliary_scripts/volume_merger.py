@@ -25,11 +25,14 @@
 import vtk
 import sys
 import os
+import random 
+
 from optparse import OptionParser,OptionGroup
 from bar import barIndexer
 from bar.rec.barreconstructor import barReconstructionModule
 from bin.reconstructor.batchreconstructor import barBatchReconstructor
 
+random.seed(0)
 VOLUME_FILENAME_TEMPLATE = "volume_%s.vtk"
 
 def printRed(str):
@@ -476,10 +479,14 @@ class barIndexerColorMapper():
             # If given index is defined in indexer:
             # assign its color to the lookup table
             # otherwise set it to black
-            if i in cm: 
-                c = cm[i]
-                c = map(lambda x: float(x)/255., c)
-                lut.SetTableValue(i, c[0], c[1], c[2], 1)
+            if i in cm:
+                if cm[i][0] == cm[i][1] == cm[i][2] == 119:
+                    c = map(lambda x: float(random.randint(0, 255))/255., [0,0,0])
+                    lut.SetTableValue(i, c[0], c[1], c[2], 1)
+                else:
+                    c = cm[i]
+                    c = map(lambda x: float(x)/255., c)
+                    lut.SetTableValue(i, c[0], c[1], c[2], 1)
             else:
                 lut.SetTableValue(i, 0., 0., 0., 0.)
         
@@ -652,10 +659,10 @@ if __name__ == '__main__':
              'composite': False,\
              'brainoutline': False,\
              'format': None,\
-             'voxelDimensions': [0.0488*4,0.503],\
+             'voxelDimensions': [0.2, 0.2],\
              'format': ['exportToVolume'],\
              'camera': (0.0, 0.0, 1.0),\
-             'generateSubstructures': 0}
+             'generateSubstructures': 10}
         
         dummyOpts = opts(o)
         

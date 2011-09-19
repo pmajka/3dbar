@@ -13,14 +13,14 @@ PARSERS_DIR  = bin/parsers/
 ATLASES_DIR  = atlases/
 
 SBA_PARSERS  = sba_DB08 sba_PHT00 sba_WHS09 sba_WHS10 sba_LPBA40_on_SRI24 sba_RM_on_F99
-FAST_PARSERS = neurolucida_olek ${SBA_PARSERS} tem
+FAST_PARSERS = nl_olek ${SBA_PARSERS} tem
 PARSERS      = vector-test whs_0.5 whs_0.51 aba ${FAST_PARSERS}
 
 all: clean ${PARSERS} doc
 	echo "Done"
 
 doc_clean:
-	rm -rfv doc
+	rm -rfv doc/api doc/gui/ doc/service
 
 doc: doc_api doc_gui doc_service
 	echo "Done doc"
@@ -28,6 +28,7 @@ doc: doc_api doc_gui doc_service
 doc_api:
 	mkdir -p doc/api/html
 	epydoc lib/pymodules/python2.6/bar -v --graph all --no-sourcecode --output doc/api/html
+	cd doc/sphinx/; make html;
 
 doc_gui:
 	mkdir -p doc/gui/html
@@ -62,15 +63,15 @@ whs_0.51:
 	python   ${PARSERS_DIR}whs_0.51/__init__.py
 	if [ -e ${ATLASES_DIR}whs_0.51/caf-reference ]; then diff -r  ${ATLASES_DIR}whs_0.51/caf ${ATLASES_DIR}whs_0.51/caf-reference > diff_whs_0.51.txt; fi
 
-neurolucida_olek:
-	mkdir -p ${ATLASES_DIR}neurolucida_olek/caf
-	python ${PARSERS_DIR}neurolucida_olek/__init__.py
-	if [ -e ${ATLASES_DIR}neurolucida_olek/caf-reference ] diff -r ${ATLASES_DIR}neurolucida_olek/caf ${ATLASES_DIR}neurolucida_olek/caf-reference > diff_neurolucidaXML.txt; fi
+nl_olek:
+	mkdir -p ${ATLASES_DIR}nl_olek/caf
+	python ${PARSERS_DIR}nl_olek/__init__.py
+	if [ -e ${ATLASES_DIR}nl_olek/caf-reference ]; then diff -r ${ATLASES_DIR}nl_olek/caf ${ATLASES_DIR}nl_olek/caf-reference > diff_neurolucidaXML.txt; fi
 
 vector-test:
 	mkdir -p ${ATLASES_DIR}vector-test/caf
 	python ${PARSERS_DIR}vector-test/__init__.py
-	if [ -e ${ATLASES_DIR}vector-test/caf-reference ]; diff -r ${ATLASES_DIR}vector-test/caf ${ATLASES_DIR}vector-test/caf-reference > diff_vector-test.txt; fi
+	if [ -e ${ATLASES_DIR}vector-test/caf-reference ]; then diff -r ${ATLASES_DIR}vector-test/caf ${ATLASES_DIR}vector-test/caf-reference > diff_vector-test.txt; fi
 
 sba_DB08:
 	mkdir -p ${ATLASES_DIR}sba_DB08/src
@@ -132,14 +133,14 @@ clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}whs_0.51/caf
 	rm -rfv ${ATLASES_DIR}whs_0.5/caf
 	rm -rfv ${ATLASES_DIR}vector-test/caf
-	rm -rfv ${ATLASES_DIR}neurolucida_olek/caf
+	rm -rfv ${ATLASES_DIR}nl_olek/caf
 	rm -rfv ${ATLASES_DIR}aba/caf
 	rm -rfv ${ATLASES_DIR}tem/caf
 
 reference_datasets:
 	rm -rf ${ATLASES_DIR}whs_0.5/caf-reference; cp -r ${ATLASES_DIR}whs_0.5/caf ${ATLASES_DIR}whs_0.5/caf-reference
 	rm -rf ${ATLASES_DIR}whs_0.51/caf-reference; cp -r ${ATLASES_DIR}whs_0.51/caf ${ATLASES_DIR}whs_0.51/caf-reference
-	rm -rf ${ATLASES_DIR}neurolucida_olek/caf-reference; cp -r ${ATLASES_DIR}neurolucida_olek/caf ${ATLASES_DIR}neurolucida_olek/caf-reference
+	rm -rf ${ATLASES_DIR}nl_olek/caf-reference; cp -r ${ATLASES_DIR}nl_olek/caf ${ATLASES_DIR}nl_olek/caf-reference
 	rm -rf ${ATLASES_DIR}vector-test/caf-reference; cp -r ${ATLASES_DIR}vector-test/caf ${ATLASES_DIR}vector-test/caf-reference
 	rm -rf ${ATLASES_DIR}sba_DB08/caf-reference; cp -r ${ATLASES_DIR}sba_DB08/caf ${ATLASES_DIR}sba_DB08/caf-reference
 	rm -rf ${ATLASES_DIR}sba_PHT00/caf-reference; cp -r ${ATLASES_DIR}sba_PHT00/caf ${ATLASES_DIR}sba_PHT00/caf-reference
