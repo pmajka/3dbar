@@ -84,7 +84,7 @@ G{importgraph}
     provide custom 'selectBestGapFillingLevel' function
 """
 
-import os, sys, re
+import os,  sys, re
 from string import *
 
 import xml.dom.minidom as dom
@@ -101,23 +101,6 @@ from svgpathparse import parsePath,UnparsePath, extractBoundingBox,_mergeBoundin
 import slides_aligner
 import image_process
 
-CONF_SVG_SLIDE_TEMPLATE="""
-<svg baseProfile="full" height="900" id="body"
-preserveAspectRatio="none"
-version="1.1" 
-viewBox="0 0 1200 900" width="1200"
-xmlns="http://www.w3.org/2000/svg"
-xmlns:ev="http://www.w3.org/2001/xml-events"
-xmlns:xlink="http://www.w3.org/1999/xlink"
-xmlns:bar="http://www.3dbar.org">
-<title></title>
-<desc></desc>
-
-<defs></defs>
-<g id='content'></g>
-
-</svg>
-"""
 
 BAR_XML_NAMESPACE = 'http://www.3dbar.org' 
 BAR_XML_NAMESPACE_PREFIX    = 'bar:'
@@ -166,10 +149,36 @@ DEFAULT_MARKER_ATTRIBUTES={
     
 CONF_ALOWED_STRUCTURE_CHARACTERS = re.compile("^[a-z0-9A-Z-]*$", re.IGNORECASE)
 
-
 #{ Default widht and height of the slide renderer class
 CONF_DEFAULT_RENDER_WIDTH  = 1200 * 1
 CONF_DEFAULT_RENDER_HEIGHT = 900  * 1
+
+CONF_SLIDE_TEMPLATE ="""
+<svg baseProfile="full" id="body"
+height="%(width)s"
+width="%(height)s"
+viewBox="0 0 %(height)s %(width)s"
+preserveAspectRatio="none"
+version="1.1" 
+xmlns="http://www.w3.org/2000/svg"
+xmlns:ev="http://www.w3.org/2001/xml-events"
+xmlns:xlink="http://www.w3.org/1999/xlink"
+xmlns:bar="http://www.3dbar.org">
+<title></title>
+<desc></desc>
+
+<defs></defs>
+<g id='content'></g>
+
+</svg>
+"""
+
+def getSlideTemplate(valuesDict):
+    return CONF_SLIDE_TEMPLATE % valuesDict 
+
+CONF_DEFAULT_SLIDE_TEMPLATE = getSlideTemplate(\
+        {'height': CONF_DEFAULT_RENDER_WIDTH,
+         'width' : CONF_DEFAULT_RENDER_HEIGHT})
 
 CONF_DEFAULT_RENDERER_SIZE =\
         (CONF_DEFAULT_RENDER_WIDTH, CONF_DEFAULT_RENDER_HEIGHT)
@@ -222,13 +231,13 @@ def getDictionaryFromFile(fileName, keyColumn=0, valueColumn=1):
     """
     @type fileName: str
     @param fileName: location of the file
-
+    
     @type keyColumn: int
     @param keyColumn: column containing keys
-
+    
     @type valueColumn: int
     @param valueColumn: column containing values
-
+    
     @return: dictionary read from file
     @rtype: {str : str, ...}
     """
@@ -261,7 +270,7 @@ def getDictionaryFromFile(fileName, keyColumn=0, valueColumn=1):
 class barObject(object):
     """
     Parental class for BAR elements.
-
+    
     The general assumption is that every BAR element should have XML
     representation thus this class holds placeholdes for XML import / export
     methods but they are not always implemented in subclasses. Every element
@@ -1251,7 +1260,7 @@ class barPath(barAtlasSlideElement):
         except:
             growlevel = 0
             if __debug__:
-                _printRed('Invalid or empty growlevel provided. Using growlevel=1.\
+                _printRed('Invalid or empty growlevel provided. Using growlevel=0.\
                     Don\'t worry, it may happen.')
         
         retPath = cls(pathID, pathDefinition, fillColor, clearPathDef = clearPathDef)
@@ -1489,6 +1498,8 @@ class barPath(barAtlasSlideElement):
         @param M: transformation matrix
         @type M: numpy 3x3 array
         """
+        print self.pathDef
+        print self.id
         self.pathDef = svgfix.fixPathDefinition(self.pathDef,  M)
         
     def affineTransform(self, M):
@@ -2053,9 +2064,7 @@ class barVectorSlide(barObject):
     @ivar slideNumber: slide number
     @type slideNumber: int
     """
-    #@change:  pią, 21 sty 2011, 12:25:01 CET, Implemented translating spatial
-    #coordinate into SVG coordinate and vice versa.
-    def __init__(self, slideTemplate=CONF_SVG_SLIDE_TEMPLATE, slideNumber=0):
+    def __init__(self, slideTemplate=CONF_DEFAULT_SLIDE_TEMPLATE, slideNumber=0):
         """
         @type slideTemplate: str
         @param slideTemplate: SVG slide template
@@ -2103,13 +2112,10 @@ class barVectorSlide(barObject):
         if not self._labels.has_key(newLabel.ID):
             self._labels[newLabel.ID] = newLabel
         else:
-            #TODO: fixit
-            #try:
             self._labels[newLabel.ID+'_'] = newLabel
-            #except:
-            #    print >>sys.stderr,\
-            #    "Label with ID %s already in the slide! Skipping!\n" % (newLabel.ID,)
-            #    raise KeyError
+            debugOutput(\
+               "Label with ID %s already in the slide! Trying to fix.!\n"\
+                % (newLabel.ID,), error=False)
         
     #TODO: fix setter/getter type conflict
     def _getSlideTemplate(self):
@@ -2141,7 +2147,7 @@ class barVectorSlide(barObject):
         #TODO: Add template validation.
         return True
     
-    def alignToRefMatrix(self, refTuple, debugMode = False):
+    def alignToRefMatrix(self, refTuple):
         """
         Transform slide in the way that current transformation matrix will be
         equal to L{refTuple}. 
@@ -2163,9 +2169,6 @@ class barVectorSlide(barObject):
         @type  refTuple: (float, float, float, float)
         @param refTuple: reference transformation matrix (sxref, xref, syref,
                          yref) for aligning
-
-        @type debugMode: bool
-        @param debugMode: dummy parameter
         """
         
         currentTranfTuple = tuple(self._metadata[BAR_TRAMAT_METADATA_TAGNAME].value)
@@ -2317,15 +2320,15 @@ class barVectorSlide(barObject):
         @type  svgCoord: (float, float)
         @param svgCoord: coordinates in svg coordinate system to be converted
                          into spatial coordinates.
-
+        
         @type  ndims: int
         @param ndims: number of dimensions of returned value (determines if
                       output value will be 2 or 3 dimensional; when C{ndims == 3}
                       coronal coordinate is also included)
-
+        
         @rtype: (float, float) or (float, float, float)
         @return: spatial coordinates corresponding to given svg coordinates
-
+        
         @requires: All metadata has to be provided and correct.
         """
         # Check metadata availability
@@ -2439,7 +2442,7 @@ class barSlideRenderer(barVectorSlide):
     """
     
     def __init__(self, vectorSlide, rendererConfiguration, tracingConfiguration,
-                 slideNumber=0, debugMode=False):
+                 slideNumber=0):
         """
         Class requires providing following properties in order to work properly:
           - C{L{rendererConfiguration}['ReferenceWidth']}: (C{int}) width
@@ -2448,23 +2451,18 @@ class barSlideRenderer(barVectorSlide):
             of SVG drawing
           - C{L{rendererConfiguration}['imageSize']} : (C{(int, int)}) size
             (width, height) of resulting bitmap image
-
+        
         @param rendererConfiguration: renderer configuration (see module
                                       description for details)
         @type  rendererConfiguration: {str : ?, ...}
-
+        
         @type tracingConfiguration: {str : ?, ...}
         @param tracingConfiguration: tracing configuration (see module
                                      description for details)
-
+        
         @param slideNumber: slide number
         @type slideNumber: int
-
-        @type  debugMode: bool
-        @param debugMode: verbose mode on/off
         """
-        # Just for clarity - set it at the begining
-        self._debugMode = debugMode
         
         # Save rendering and tracing properties
         self._rendererConf = rendererConfiguration 
@@ -2508,7 +2506,7 @@ class barSlideRenderer(barVectorSlide):
         
         return (float( 1./(imSize[0] / refWidth )* ImageCoords[0] ),\
                 float( 1./(imSize[1] / refHeight)* ImageCoords[1] ))
-
+    
     def _toImageCoordinates(self, svgCoords):
         """
         Convert coordinates from SVG image to coordinates in raster image system.
@@ -2599,7 +2597,7 @@ class barSlideRenderer(barVectorSlide):
         svg.render_cairo(cr)
         
         # Save snapshot of rendered image for debug purposes
-        #if self._debugMode: surface.write_to_png ('debugfilename.png')
+        #if __debug__: surface.write_to_png ('debugfilename.png')
         
         # Now we need generate PIL image from raw data extracted
         # from cairo surface. The workflow is following:
@@ -2675,7 +2673,7 @@ class barPretracedSlide(barSlideRenderer):
     Class of objects representing countur slides.
     """
     def __init__(self,\
-            slideTemplate=CONF_SVG_SLIDE_TEMPLATE,\
+            slideTemplate=CONF_DEFAULT_SLIDE_TEMPLATE,\
             rendererConfiguration=CONF_DEFAULT_RENDERING_PROPS,\
             tracingConfiguration=BAR_TRACER_DEFAULT_SETTINGS,\
             slideNumber=0):
@@ -2698,18 +2696,17 @@ class barPretracedSlide(barSlideRenderer):
                 barVectorSlide(slideTemplate, slideNumber),\
                 rendererConfiguration = rendererConfiguration,\
                 tracingConfiguration  = tracingConfiguration,\
-                slideNumber = slideNumber,\
-                debugMode = True)
+                slideNumber = slideNumber)
         
-        self._svgPaths = []
-        self.markers   = []
+        self._svgPaths= []
+        self.markers  = []
     
     def __setitem__(self, key, newLabel):
         """
         Add label to the slide.
-
+        
         @param key: dummy parameter
-
+        
         @param newLabel: label to be added to the slide
         @type newLabel: L{barStructureLabel} 
         """
@@ -2719,7 +2716,7 @@ class barPretracedSlide(barSlideRenderer):
         """
         @param key: label identifier
         @type key: str
-
+        
         @rtype: L{barStructureLabel}
         @return: label of requested identifier
         """
@@ -2728,7 +2725,7 @@ class barPretracedSlide(barSlideRenderer):
     def __delitem__(self, key):
         """
         Remove label of requested identifier from the slide,
-
+        
         @param key: label identifier
         @type key: str
         """
@@ -2867,7 +2864,7 @@ class barPretracedSlide(barSlideRenderer):
         """
         Transform the location (in SVG coordinate system) of every label, marker
         and path in the slide.
-
+        
         @param M: transformation matrix
         @type M: numpy 3x3 array
         """
@@ -2960,11 +2957,10 @@ class barTracedSlide(barSlideRenderer):
     Class of objects representing CAF slides.
     """
     def __init__(self,\
-            slideTemplate = CONF_SVG_SLIDE_TEMPLATE,\
+            slideTemplate = CONF_DEFAULT_SLIDE_TEMPLATE,\
             rendererConfiguration = CONF_DEFAULT_RENDERING_PROPS,\
             tracingConfiguration  = BAR_TRACER_DEFAULT_SETTINGS,\
-            slideNumber = 0,\
-            debugMode = False):
+            slideNumber = 0):
         """
         @type  slideTemplate: str
         @param slideTemplate: SVG slide template
@@ -2979,18 +2975,14 @@ class barTracedSlide(barSlideRenderer):
 
         @type  slideNumber: int
         @param slideNumber: slide number
-
-        @type debugMode: bool
-        @param debugMode: verbose mode on/off
         """
         
         barSlideRenderer.__init__(self,\
                 barVectorSlide(slideTemplate, slideNumber),\
                 rendererConfiguration = rendererConfiguration,\
                 tracingConfiguration  = tracingConfiguration,\
-                slideNumber = slideNumber,\
-                debugMode = False)
-        
+                slideNumber = slideNumber)
+                
         self._structures      = {}
    
     @classmethod
@@ -3356,7 +3348,6 @@ class barTracedSlide(barSlideRenderer):
                 structure.color = colorMapping[structure.name]
             except:
                 pass
-        #map(lambda str: str.__setattr__('color', colorMapping[str.name]) ,self.structures)
         return self
     
     def affineTransform(self, M):
@@ -3571,7 +3562,6 @@ class barTracedSlideRenderer(barTracedSlide):
         @rtype: (float, float)
         @return: optimal coordinates (x, y) of the label in SVG coords
         """
-        #print path
         slideRendering = self.renderPath(path)
         (x,y) = image_process.getBestLabelLocation(slideRendering)
         (x,y) = self._toSVGCoordinates((x,y))
@@ -3585,17 +3575,16 @@ class barTracedSlideRenderer(barTracedSlide):
         @rtype: (float, float)
         @return: coordinates (x, y) of the mass center in SVG coords
         """
-        #@change: corrected buggy mass centre calculations
         imgMassCentre = image_process.massCentre(self.renderSlide())
         return self._toSVGCoordinates(imgMassCentre)
     
     def getMask(self, maskColor='#000000'):
         """
         Change colour of every structure in the slide to given colour.
-
+        
         @param maskColor: colour in hexadecimal format
         @type maskColor: str
-
+        
         @return: self
         @rtype: L{barTracedSlideRenderer}
         """
@@ -3612,7 +3601,7 @@ class barTracedSlideRenderer(barTracedSlide):
         
         @type  skipLabels: [str, ...]
         @param skipLabels: names of structures which labels are preserved
-
+        
         @rtype: L{barTracedSlide}
         @return: self
         """
@@ -3793,7 +3782,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
         @rtype: L{barTracedSlideRenderer}
         @return: traced slide created by tracing the contour slide
         """
-        if self._debugMode: _printRed("Initializing tracing...")
+        if __debug__: _printRed("Initializing tracing...")
         
         # Remove unlabelled labels
         self.deleteLabelByCaption('Unlabelled')
@@ -3834,13 +3823,13 @@ class barPretracedSlideRenderer(barPretracedSlide):
         retSlide._metadata = self._metadata
         
         # Append vBrain structure to the traced slide
-        if self._debugMode: _printRed("Processing vBrain...")        
+        if __debug__: _printRed("Processing vBrain...")        
         map(retSlide.addPath, self.__processVbrain())
         map(retSlide.addLabel, self.__vBrainLabels)
         
         # This is a bit tricky: At first we detect all incorrectly placed labels
         # then we remove them from tracing, 
-        if self._debugMode: _printRed("Detecting invalidly placed labels...")        
+        if __debug__: _printRed("Detecting invalidly placed labels...")        
         labelsRejected =  self.__getMissplacedLabels()
         map(self.__labelsLeft.remove, labelsRejected)
         
@@ -3854,12 +3843,12 @@ class barPretracedSlideRenderer(barPretracedSlide):
         map(retSlide.addLabel, labelsRejected)
         
         # Processing correctly placed regular labels - main part of the script.
-        if self._debugMode: _printRed("Processing labels...")  
+        if __debug__: _printRed("Processing labels...")  
         map(retSlide.addPath, self.__processLabels())
         map(retSlide.addLabel, self.__labelsLeft)
         
         if self._tracingConf['DetectUnlabelled']:
-            if self._debugMode: _printRed("Detecting unlabelles areas...")
+            if __debug__: _printRed("Detecting unlabelles areas...")
             #TODO: Remove unlabelled areas from the labelCache
             UnlabelledLabels, UnlabelledPaths = self.__getUnlabeled()
             map(retSlide.addPath, UnlabelledPaths)
@@ -3867,7 +3856,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
         else:
             UnlabelledLabels = []
         
-        if self._debugMode: _printRed("Finishing...")
+        if __debug__: _printRed("Finishing...")
         # Put all remaining labels back to the contour slide
         self._labels = self.__labelCache
         map(self.addLabel, UnlabelledLabels)
@@ -3944,7 +3933,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
                     self.__applyFill(self.__imageCache[0], vBrainLabel),\
                     source = 'Brain')
             
-            if self._debugMode and self._tracingConf['DumpVBrain']:
+            if __debug__ and self._tracingConf['DumpVBrain']:
                 self.__brainOutline.save("%d_vBrain_%s.png"\
                         % (self.slideNumber, vBrainLabel.ID))
         
@@ -4051,7 +4040,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
                 # Apply minimum filter to slightly increase size of trace structures.
                 #ImageForTracing = ImageForTracing.filter(ImageFilter.MaxFilter(3))
                 map(unlabeledPathList.append, self.__bitmapToPaths(ImageForTracing, newLabel))
-                if self._debugMode and self._tracingConf['DumpEachStepPNG']:
+                if __debug__ and self._tracingConf['DumpEachStepPNG']:
                     self.__brainOutline.save("%d_detected_ublabelled_%d_%d.png"%\
                             (self.slideNumber, coords[0], coords[1]), "PNG")
                 
@@ -4065,7 +4054,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
             #coords = self.__getUnlabeledAreas()
         
         # Dump image after tracing unlabelled areas to show what we have done! :)
-        if self._debugMode and self._tracingConf['DumpEachStepPNG']:
+        if __debug__ and self._tracingConf['DumpEachStepPNG']:
             self.__brainOutline.save("%d_after_tracing.png"% self.slideNumber, "PNG")
         return (unlabeledAreasLabelsList, unlabeledPathList)
 
@@ -4191,12 +4180,12 @@ class barPretracedSlideRenderer(barPretracedSlide):
         
         # If debuging procedures are enabled save tracing results (SVG file) and
         # source image (PNG file)
-        if self._debugMode and self._tracingConf['DumpEachStepSVG']:
+        if __debug__ and self._tracingConf['DumpEachStepSVG']:
             OutputFilename = "%d_%s_%s.svg" % (self.slideNumber,\
                     seedLabel.ID, seedLabel.Caption)
             self._saveSVG(svgdom, OutputFilename)
         
-        if self._debugMode and self._tracingConf['DumpEachStepPNG']:
+        if __debug__ and self._tracingConf['DumpEachStepPNG']:
             OutputFilename = "%d_%s_%s.png" % (self.slideNumber,\
                     seedLabel.ID, seedLabel.Caption)
             self._saveBitmap(sourceImage, OutputFilename)
@@ -4736,13 +4725,13 @@ def _printRed(str):
 def debugOutput(msg, error=False):
     """
     Print debug message to stderr. Error messages are printed in red colour.
-
+    
     If the message is not an error message it is printed only if
     C{__debug__ == True}.
-
+    
     @type msg: str
     @param msg: debug message
-
+    
     @type error: bool
     @param error: indicates if the debug message is an error message
     """

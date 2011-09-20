@@ -50,11 +50,8 @@ class barSBAParser(barExternalParser):
             [ 'renderingProperties', 'templateName', 'tracingProperties',
               'slideTemplate', 'inputDirectory', 'jsonFilelist', 'templateUrl']
     
-    def __init__(self, debugMode = False, **kwargs):
+    def __init__(self, **kwargs):
         barExternalParser.__init__(self, **kwargs)
-        
-        # First of all initialize debug mode if requested
-        self.debugMode         = debugMode
         
         # All JSON files are loaded into this dictionary
         self._sbaImportData      = {}
@@ -85,8 +82,7 @@ class barSBAParser(barExternalParser):
         tracedSlide = barTracedSlideRenderer(\
              slideTemplate = self.slideTemplate,\
              rendererConfiguration = self.renderingProperties,\
-             tracingConfiguration  = self.tracingProperties,\
-             debugMode = False)
+             tracingConfiguration  = self.tracingProperties)
         
         # Define string version of current slide number 
         # I do it because loaded json files are converted to dictionaries
@@ -111,7 +107,7 @@ class barSBAParser(barExternalParser):
         
         # Dump information about structures in given slide
         print >>sys.stderr, "Converting slide number:\t%d" % slideNumber
-        if self.debugMode:
+        if __debug__:
             print >>sys.stderr, "\tThere are %d structures defined." % len(CurrentSlideStructures)
             print >>sys.stderr, "\tInitializing structure index."
         
@@ -119,7 +115,7 @@ class barSBAParser(barExternalParser):
         for structure in CurrentSlideStructures.keys():
             # TODO come up with idea how to do it better
             # Now two thing are passed structureID, and list of path indexes
-            if self.debugMode:
+            if __debug__:
                 print >>sys.stderr, structure, CurrentSlideStructures[structure]
             
             # Create path definition
@@ -188,7 +184,7 @@ class barSBAParser(barExternalParser):
                 pass
         
         # Dumping diagnostic information        
-        if self.debugMode:
+        if __debug__:
             print >>sys.stderr, "\t\tExtracting structure %s" % currentStructureData['name']
             print >>sys.stderr, "\t\tFill color of current structure %s" % currentStructureData['fillcolor']
             print >>sys.stderr, "\t\tNumber of polygons creating this structure %d" % len(structurePathList)

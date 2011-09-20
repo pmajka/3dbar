@@ -79,7 +79,7 @@ def lexPath(d):
             offset = m.end()
             continue
         #TODO: create new exception
-        raise Exception, 'Invalid path data!'
+        raise Exception, 'Invalid path data: "%s" .' % d
 
 
 '''
