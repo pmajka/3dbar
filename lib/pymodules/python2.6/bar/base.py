@@ -179,10 +179,6 @@ CONF_DEFAULT_SLIDE_TEMPLATE = getSlideTemplate(\
         {'height': CONF_DEFAULT_RENDER_WIDTH,
          'width' : CONF_DEFAULT_RENDER_HEIGHT})
 
-#TODO?? Probably deprecated.
-#CONF_DEFAULT_RENDERER_SIZE =\
-#        (CONF_DEFAULT_RENDER_WIDTH, CONF_DEFAULT_RENDER_HEIGHT)
-
 CONF_DEFAULT_RENDERING_PROPS = {}
 CONF_DEFAULT_RENDERING_PROPS['imageSize'] =\
         (CONF_DEFAULT_RENDER_WIDTH * 1, CONF_DEFAULT_RENDER_HEIGHT * 1)
@@ -552,7 +548,6 @@ class barStructureLabel(barAtlasSlideElement):
         self._attributesNS = dict(CONF_DEFAULT_TEXT_ATTRIBUTES_NS)
         
         self.growlevel = growlevel
-        #self._attributesNS['type'] = 'label'
         
         # Public
         self.Location = labelLocation 
@@ -573,7 +568,6 @@ class barStructureLabel(barAtlasSlideElement):
         @return: created label object
         @rtype: L{barStructureLabel}
         """
-        
         # Check if given element is text element:
         if not svgTextElement.tagName == 'text': 
             raise TypeError, "Invalid SVG element provided"
@@ -621,7 +615,7 @@ class barStructureLabel(barAtlasSlideElement):
         retLabel.growlevel = growlevel 
         
         return retLabel
-
+    
     @classmethod
     def castToCommentLabel(cls, sourceLabel):
         """
@@ -1515,8 +1509,6 @@ class barPath(barAtlasSlideElement):
         @param M: transformation matrix
         @type M: numpy 3x3 array
         """
-        print self.pathDef
-        print self.id
         self.pathDef = svgfix.fixPathDefinition(self.pathDef,  M)
         
     def affineTransform(self, M):
@@ -2343,7 +2335,7 @@ class barVectorSlide(barObject):
         except KeyError:
             raise KeyError, "Metadata not provided. Cannot continue."
     
-    def toSpatialCoordinate(self, svgCoord, ndims = 2):
+    def svg2srs(self, svgCoord, ndims = 2):
         """
         @type  svgCoord: (float, float)
         @param svgCoord: coordinates in svg coordinate system to be converted
@@ -2373,7 +2365,7 @@ class barVectorSlide(barObject):
         if ndims == 2: return (a*x +b, c*y + d)
         if ndims == 3: return (a*x +b, c*y + d, coronalC)
     
-    def toSVGcoordinate(self, spatialCoord):
+    def srs2svg(self, spatialCoord):
         """
         @type  spatialCoord: (float, float)
         @param spatialCoord: spatial coorrdinate to be converted into SVG
@@ -2513,7 +2505,7 @@ class barSlideRenderer(barVectorSlide):
     def _toSVGCoordinates(self, ImageCoords):
         """
         Transform coordinates given in pixels (in image coordinate system) to
-        coordinates in SVG drawing coordinate system (not stereotaxic coordinate
+        coordinates in SVG drawing coordinate system (not spatial reference
         system).
 
         @type  ImageCoords: (int, int)
@@ -2572,13 +2564,13 @@ class barSlideRenderer(barVectorSlide):
             1. Render image and convert it to NumPy array
             2. Manipulate channels and colours, convert to indexed mode
             3. Create and return PIL image
-
+        
         Availiable rendering protocols are:
             - C{'pil'} - returns PIL Image with rendered image,
             - C{'npy'} - returns NumPy array,
             - C{'rec'} - returns NumPy array rendered according to reconstruction
               module requirements
-
+        
         @type  svgdoc: xml.dom.minidom.Document
         @param svgdoc: SVG document to render
         
@@ -2593,7 +2585,7 @@ class barSlideRenderer(barVectorSlide):
         @type  otype: str
         @param otype: requested rendering protocol - one of C{'pil'}, C{'npy'},
                       C{'rec'}
-
+        
         @type  grayscale: bool
         @param grayscale: determines if returned image would be in grayscale
                           or RGB mode; applies only to C{'pil'} L{protocol<otype>}
@@ -2694,6 +2686,76 @@ class barSlideRenderer(barVectorSlide):
         A stub of method. Raise NotImplementedError.
         """
         raise NotImplementedError
+
+    def __getSlideSize(self):
+        """
+        Getter for the L{self.size} property.
+        
+        @rtype: (int, int)
+        @return: tuple with (width, height) of the slide.
+        """
+        return tuple(map(lambda x:\
+            int(self._rendererConf[x]),\
+            ['ReferenceWidth','ReferenceHeight']))
+    
+    def __setSlideSize(self, newSize):
+        """
+        Setter for the L{self.size} property.
+        
+        @type  newSize: (int, int)
+        @param newSize: Dimensions of the SVG drawing in pixels
+        """
+        assert map(type, newSize) == map(type, (1,1)),\
+                "(int,int) Tuple of two integers required"
+        x,y = newSize
+        
+        self._rendererConf['ReferenceWidth'] = x
+        self._rendererConf['ReferenceHeight']= y
+        
+        self._tracingConf['PoTraceConf']['potrace_width_string'] = str(x) + 'pt'
+        self._tracingConf['PoTraceConf']['potrace_height_string']= str(y) + 'pt'
+        
+        #TODO: This solution is so lame! There should be 'slideTemplate object
+        # that could be edited as any other object without digging in xml!
+        svg = self._slideTemplate.getElementsByTagName('svg')[0]
+        svg.setAttribute('width',  str(x))
+        svg.setAttribute('height', str(y))
+        svg.setAttribute('viewBox', "0 0 %d %d" % (x,y))
+    
+    def __getBitmapSize(self):
+        """
+        Getter for the L{self.bitmapSize} property
+        
+        @rtype: (int, int)
+        @return: Resolution of the rasterized slide in pixels
+        """
+        return self._rendererConf['imageSize']
+    
+    def __setBitmapSize(self, newBitmapSize):
+        """
+        Setter for the L{self.bitmapSize} property.
+        
+        @type  newBitmapSize: (int, int)
+        @param newBitmapSize: resloution of the rasterized slide in pixels.
+        
+        @raise: ValueError
+        """
+        assert map(type, newBitmapSize) == map(type,(1,1)),\
+                "(int,int) Tuple of two integers required"
+        self._rendererConf['imageSize'] = newBitmapSize
+
+    size = property(__getSlideSize, __setSlideSize)
+    """
+    Get / set the CAF slide dimensions in pixels. 
+    
+    @type: (int, int)
+    """
+    
+    bitmapSize = property(__getBitmapSize, __setBitmapSize)
+    """
+    Get / set the size of the image that will be generated after invoking L{self.renderSlide}.
+    @type: (int, int)
+    """
 
 
 class barPretracedSlide(barSlideRenderer):
