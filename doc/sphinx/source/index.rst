@@ -12,6 +12,9 @@ Contents:
    :maxdepth: 2
    
    README
+   test_crisp-edges
+   test_feature-type
+   test_slide-size
 
 Indices and tables
 ==================
