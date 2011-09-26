@@ -1263,9 +1263,11 @@ class barPath(barAtlasSlideElement):
         # Try to extract feature type and assign it to the path.
         # Skip it, if the feature type is undefined.
         try:
-            type = int(svgPathElement.getAttributeNS(\
-                    BAR_XML_NAMESPACE, 'type'))
-            retPath.type = type
+            strType = svgPathElement.getAttributeNS(\
+                        BAR_XML_NAMESPACE, 'type')
+
+            retPath.type = strType
+
         except:
             pass
         
@@ -1432,7 +1434,7 @@ class barPath(barAtlasSlideElement):
         if newPathType == None:
             self._attributesNS['type'] = newPathType
         else:
-            assert type(newPathType) == type(" "), "String or 'None' value expected"
+            assert type(newPathType) is str or type(newPathType) is unicode, "String or 'None' value expected"
             assert validateStructureName(newPathType) == newPathType,\
                     "Invalid feature type name provided: %s" % newPathType
             self._attributesNS['type'] = newPathType
@@ -1667,6 +1669,7 @@ class barGenericStructure(barAtlasSlideElement):
         self._color = color
         
         if pathList:
+            self._type = pathList[0].type
             for path in pathList:
                 self.addPaths(path)
     
@@ -1791,7 +1794,7 @@ class barGenericStructure(barAtlasSlideElement):
         if newFeatureType == None:
             self._type = None
         else:
-            assert type(newFeatureType) == type(" "), "String or 'None' value expected"
+            assert type(newFeatureType) is str or type(newFeatureType) is unicode, "String or 'None' value expected"
             assert validateStructureName(newFeatureType) == newFeatureType,\
                     "Invalid feature type name provided: %s" % newFeatureType
             self._type = newFeatureType

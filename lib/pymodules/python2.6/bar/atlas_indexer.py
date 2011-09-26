@@ -762,8 +762,8 @@ class barIndexerStructureElement(barIndexerElement):
     @ivar _uid: value of the 'uid' attribute of the represented element
     @type _uid: int 
 
-    @ivar _reversed: value of the 'reversed' attribute of the represented element
-    @type _reversed: bool
+    @ivar _type: value of the 'type' attribute of the represented element
+    @type _type: str
 
     @ivar _slides: 'slide' element attribute 'slidenumber' to 'slide' element
                    representation mapping for 'slide' elements associated with
@@ -771,9 +771,9 @@ class barIndexerStructureElement(barIndexerElement):
     @type _slides: {int: L{barIndexerSlideElement}, ...}
     """
     _elementName = 'structure'
-    _elementAttributes = ['name', 'bbx', 'reversed', 'uid']
+    _elementAttributes = ['name', 'bbx', 'type', 'uid']
     
-    def __init__(self, name, bbx, uid, reversed = False, slideList = None):
+    def __init__(self, name, bbx, uid, type = None, slideList = None):
         """
         @param name: value of the 'name' attribute of the represented element
         @type name: str
@@ -784,18 +784,18 @@ class barIndexerStructureElement(barIndexerElement):
         @param uid: value of the 'uid' attribute of the represented element
         @type uid: convertable to int
 
-        @param reversed: value of the 'reversed' attribute of the represented element
-        @type reversed: bool or str
+        @param type: value of the 'type' attribute of the represented element
+        @type type: str
 
         @param slideList: representations of 'slide' elements related to
                           the represented element
         @type slideList: L{barIndexerSlideElement} or [L{barIndexerSlideElement}, ...] 
 
         """
-        self.name     = name
-        self.bbx      = bbx 
-        self.uid      = uid
-        self.reversed = reversed in set([True, 't', 'T', 'True'])
+        self.name = name
+        self.bbx = bbx 
+        self.uid = uid
+        self.type = type
         
         self._slides = dict()
         if slideList != None:
@@ -804,7 +804,7 @@ class barIndexerStructureElement(barIndexerElement):
     def getXMLelement(self):
         structureDocument = dom.Document()
         structureDocument.encoding = bar.BAR_XML_ENCODING
-        structureElement  = barIndexerElement.getXMLelement(self)
+        structureElement = barIndexerElement.getXMLelement(self)
         
         slideListElement = structureDocument.createElement('slides')
         slideListText = " ".join(map(str, self.slideList))
@@ -887,21 +887,23 @@ class barIndexerStructureElement(barIndexerElement):
         """
         self._uid = int(newValue)
     
-    def __getReversed(self):
+    def __getType(self):
         """
-        @return: value of the 'reversed' attribute of the represented element
-        @rtype: bool
+        @return: value of the 'type' attribute of the represented element
+        @rtype: str
         """
-        return self._reversed
+        return self._type
     
-    def __setReversed(self, newValue):
+    def __setType(self, newValue):
         """
-        Set value of the 'reversed' attribute of the represented element.
+        Set value of the 'type' attribute of the represented element.
 
-        @param newValue: value of the 'reversed' attribute of the represented element
-        @type newValue: bool
+        @param newValue: value of the 'type' attribute of the represented element
+        @type newValue: str or None
         """
-        self._reversed = newValue
+        assert type(newValue) is str or type(newValue) is unicode\
+               or newValue == None, "String or 'None' value expected"
+        self._type = newValue
     
     def __getSlideList(self):
         """
@@ -964,11 +966,11 @@ class barIndexerStructureElement(barIndexerElement):
     @type: int
     """
 
-    reversed = property(__getReversed, __setReversed)
+    type = property(__getType, __setType)
     """
-    Value of the 'reversed' attribute of the represented element.
+    Value of the 'type' attribute of the represented element.
 
-    @type: bool
+    @type: str
     """
 
     slideList= property(__getSlideList, __setSlideList)
@@ -1330,7 +1332,6 @@ class barIndexer(barIndexerObject):
                     structure.name,
                     self._clsBoundingBox(structure.bbx),
                     self.uid,
-                    reversed = False,
                     slideList = slide)
         # Otherwise:
         else:
