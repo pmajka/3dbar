@@ -126,9 +126,8 @@ CONF_DEFAULT_PATH_ATTRIBUTES={
     'd':None,
     'fill':None,
     'id':None,
-    'stroke':'none',
-    'positive':'True'}
-CONF_DEFAULT_PATH_ATTRIBUTES_NS={'growlevel':0}
+    'stroke':'none'}
+CONF_DEFAULT_PATH_ATTRIBUTES_NS={'growlevel':0, 'type':None}
 
 DEFAULT_TEXT_ELEMENTS_ATTRIBUTES={
     'fill':"#000000",
@@ -180,8 +179,9 @@ CONF_DEFAULT_SLIDE_TEMPLATE = getSlideTemplate(\
         {'height': CONF_DEFAULT_RENDER_WIDTH,
          'width' : CONF_DEFAULT_RENDER_HEIGHT})
 
-CONF_DEFAULT_RENDERER_SIZE =\
-        (CONF_DEFAULT_RENDER_WIDTH, CONF_DEFAULT_RENDER_HEIGHT)
+#TODO?? Probably deprecated.
+#CONF_DEFAULT_RENDERER_SIZE =\
+#        (CONF_DEFAULT_RENDER_WIDTH, CONF_DEFAULT_RENDER_HEIGHT)
 
 CONF_DEFAULT_RENDERING_PROPS = {}
 CONF_DEFAULT_RENDERING_PROPS['imageSize'] =\
@@ -1265,6 +1265,16 @@ class barPath(barAtlasSlideElement):
         
         retPath = cls(pathID, pathDefinition, fillColor, clearPathDef = clearPathDef)
         retPath.growlevel = int(growlevel)
+        
+        # Try to extract feature type and assign it to the path.
+        # Skip it, if the feature type is undefined.
+        try:
+            type = int(svgPathElement.getAttributeNS(\
+                    BAR_XML_NAMESPACE, 'type'))
+            retPath.type = type
+        except:
+            pass
+        
         return retPath
     
     @staticmethod
@@ -1410,21 +1420,28 @@ class barPath(barAtlasSlideElement):
         """
         return self._attributes['id']
     
-    def _getPositive(self):
+    def _getPathType(self):
         """
-        @return: value of 'L{positive}' property
-        @rtype: bool
+        @return: value of 'L{type}' property
+        @rtype: str
         """
-        return self._attributes['positive']
+        return self._attributesNS['type']
     
-    def _setPositive(self, isPositive = True):
+    def _setPathType(self, newPathType):
         """
-        Assign the value of the 'L{positive}' property.
+        Assign the value of the 'L{type}' property.
         
-        @type  isPositive: bool
-        @param isPositive: new value of the 'positive' property
+        @type  newPathType: str
+        @param newPathType: new value of the 'type' property
         """
-        self._attributes['positive'] = isPositive
+        
+        if newPathType == None:
+            self._attributesNS['type'] = newPathType
+        else:
+            assert type(newPathType) == type(" "), "String or 'None' value expected"
+            assert validateStructureName(newPathType) == newPathType,\
+                    "Invalid feature type name provided: %s" % newPathType
+            self._attributesNS['type'] = newPathType
     
     def _getBbox(self):
         """
@@ -1490,7 +1507,7 @@ class barPath(barAtlasSlideElement):
         newID     = self.id.split('_')
         newID[-1] = validateStructureName(newStructName)
         self._setID(join('_').join(newID))
-        
+    
     def __affineTransform(self, M):
         """
         Transform the location of the path in SVG coordinate system.
@@ -1545,16 +1562,14 @@ class barPath(barAtlasSlideElement):
     @type: str
     """
     
-    positive   = property(_getPositive, _setPositive)
+    type   = property(_getPathType, _setPathType)
     """
-    If True reconstructing of given path will give "positive" volume, otherwise
-    the path will be substracted from the final volume.
+    Attribute holding type of the feature delineated by given path. For example
+    it can be like 'gray matter', 'white matter', 'single cell', 'ventricle', and
+    other... This property would be extended when INCF DAI common metadata set
+    will be well established.
     
-    This paramater should be used to define "holes" in the tissue.
-    
-    TODO: Neither implemented properly nor tested.
-    
-    @type: bool
+    @type: string
     """
     
     growlevel  = property(_getGrowlevel, _setGrowlevel)
@@ -1655,6 +1670,7 @@ class barGenericStructure(barAtlasSlideElement):
         @type pathList: sequence([L{barPath}, ...])
         """
         self._paths = {}
+        self._type = None
         self.name = name
         self._color = color
         
@@ -1715,6 +1731,7 @@ class barGenericStructure(barAtlasSlideElement):
         # perhaps it should be split into separate functions?
         map(lambda path:  path._setColor(self.color), self.paths)
         map(lambda path:  path._rename(self.name), self.paths)
+        map(lambda path:  setattr(path, 'type', self.type), self.paths)
     
     def keys(self):
         """
@@ -1764,23 +1781,35 @@ class barGenericStructure(barAtlasSlideElement):
         """
         return self.values()
     
-    def _getReverse(self):
+    def _getFeatureType(self):
         """
-        @return: True
-        @rtype: bool
+        Getter for the L{type} property
+        
+        @rtype: str or None
+        @return: value of the L{type} property
         """
-        return True
+        return self._type
     
-    def _setReverse(self):
+    def _setFeatureType(self, newFeatureType):
         """
-        Do nothing.
+        Setter for the L{type} property of the structure.
+        
+        @return: None
         """
-        pass
+        if newFeatureType == None:
+            self._type = None
+        else:
+            assert type(newFeatureType) == type(" "), "String or 'None' value expected"
+            assert validateStructureName(newFeatureType) == newFeatureType,\
+                    "Invalid feature type name provided: %s" % newFeatureType
+            self._type = newFeatureType
+        
+        self.updatePaths()
     
     def _setStructureName(self, name):
         """
         Assign the name of the structure.
-
+        
         @param name: new name of the structure
         @type name: str
         """
@@ -1805,7 +1834,7 @@ class barGenericStructure(barAtlasSlideElement):
     def _setStructureColor(self, newColor):
         """
         Assign the colour of the structure.
-
+        
         @param newColor: new colour of the structure in hexadecimal format
                          (with or without the leading '#')
         @type newColor: str
@@ -1836,15 +1865,16 @@ class barGenericStructure(barAtlasSlideElement):
         # Should return iterator
         for path in sorted(self.itervalues(), key=lambda x: x.id):
             yield path.getXMLelement()
-   
+    
     def addPaths(self, *args):
         """
         Add paths to the structure.
-
+        
         @type args: [L{barPath}, ...]
         """
         for newPath in args:
             self.__setitem__(newPath.id, newPath)
+        self.updatePaths()
             
     def __affineTransform(self, M):
         """
@@ -1854,7 +1884,7 @@ class barGenericStructure(barAtlasSlideElement):
         @type M: numpy 3x3 array
         """
         map(lambda x: x.affineTransform(M),  self.paths)
-                
+    
     def affineTransform(self, M):
         """
         An alias to C{self.L{__affineTransform}(M)}.
@@ -1878,45 +1908,43 @@ class barGenericStructure(barAtlasSlideElement):
         return all(map(lambda x: getattr(x, 'crispEdges'), self._paths.values()))
     
     name           = property(_getStructureName, _setStructureName)
-    """
-    Name of the structure.
     
-    @type: str
+    type           = property(_getFeatureType, _setFeatureType)
+    """
+    Attribute holding type of the feature delineated by given path. For example
+    it can be like 'gray matter', 'white matter', 'single cell', 'ventricle', and
+    other... This property would be extended when INCF DAI common metadata set
+    will be well established.
+    
+    @type: string
     """
     
-    reversed       = property(_getReverse, _setReverse)
-    """
-    A stub of property.
-
-    @type: bool
-    """
-
     color          = property(_getStructureColor, _setStructureColor)
     """
     Colour of the structure in hexadecimal format (with or without the leading
     '#').
-
+    
     @type: str
     """
-
+    
     bbx            = property(_getBbox, _setBbox)
     """
     Bounding box (min_x, min_y, max_x, max_y) of the whole structure.
-
+    
     Read-only property.
-
+    
     @type: (int, int, int, int)
     """
-
+    
     paths          = property(_getPaths)
     """
     Contained paths.
-
+    
     Read-only property.
-
+    
     @type: [L{barPath}, ...]
     """
-
+    
     crispEdges     = property(__getCrispEdges, __setCrispEdges)
     """
     The 'L{crispEdges<barPath.crispEdges>}' attribute of all contained paths.
@@ -2128,7 +2156,7 @@ class barVectorSlide(barObject):
     def _setSlideTemplate(self, newSlideTemplate):
         """
         Assign new slide template.
-
+        
         @type  newSlideTemplate: str
         @param newSlideTemplate: new slide template
         
@@ -2404,7 +2432,7 @@ class barVectorSlide(barObject):
 
     Property of non-consistent type.
     """
-
+    
     labels      = property(_getLabels)
     """
     Labels of the slide.
@@ -2964,15 +2992,15 @@ class barTracedSlide(barSlideRenderer):
         """
         @type  slideTemplate: str
         @param slideTemplate: SVG slide template
-
+        
         @type rendererConfiguration: {str : ?, ...}
         @param rendererConfiguration: renderer configuration (see module
                                       description for details)
-
+        
         @type tracingConfiguration: {str : ?, ...}
         @param tracingConfiguration: tracing configuration (see module
                                      description for details)
-
+        
         @type  slideNumber: int
         @param slideNumber: slide number
         """
@@ -3230,11 +3258,11 @@ class barTracedSlide(barSlideRenderer):
         the structure. Otherwise new structure holding added path is created.
         This is possible as the path element holds name of the structure which
         it belongs to.
-
+        
         @note: Slide element does not contain L{barPath} elements directly.
                Paths are holded in structure elements so paths are added to
                the structures not to the slide directly.
-
+        
         @type  newPath: L{barPath}
         @param newPath: path to be added to the slide
         """
@@ -4757,20 +4785,20 @@ def _cleanPotraceOutput(tracerOutput):
 def performTracing(binaryImage, tracingProperties, dumpName = None):
     """
     Perform image tracing via potrace and pipes mechanism.
-
+    
     Assumes that image is a grayscale image with only two colours used: black
     and white. Black colour is considered as foreground while white colour is
     background colour. The foreground is assumed to be a non-separable area.
-
+    
     This function do not perform parsing the output.
-
+    
     Tracing Workflow:
         1. Save image in bmp format in dummy string
         2. Send bmp string to potrace via pipe mechanism
         3. Perform tracing
         4. Read tracing output via pile
         5. Return raw tracing output
-
+    
     @type  binaryImage: PIL.Image.Image
     @param binaryImage: flooded image for tracing
     

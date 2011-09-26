@@ -1731,10 +1731,10 @@ class barIndexer(barIndexerObject):
     def __setProperty(self, (name, value)):
         """
         Assign the value of property.
-
+        
         @param value: value of the property
         @type value: str
-
+        
         @param name: name of the property
         @type name: str
         """
@@ -1831,16 +1831,16 @@ class barIndexer(barIndexerObject):
 
     @type: str
     """
-
+    
     groups = property(__getHierarchyGroups, __setHierarchyGroups)
     """
     Name to 'group' element representation mapping.
-
+    
     Read-only property.
-
+    
     @type: {str : L{barIndexerGroupElement}}
     """
-
+    
     properties = property(__getProperty, __setProperty)
     """
     Name to 'property' element representation mapping.
