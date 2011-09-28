@@ -40,6 +40,39 @@ from parsers import barExternalParser
 STRUCTURE_NAME_TEMPLATE = "structure%d_label%d_%s"
 
 
+def cleanStructName(structName):
+    """
+    Provided acronyms are usually fine but sometimes they are not
+    compatibile with 3dBar naming convention. Here we process them so they
+    can pass 3dBAR name validataion.
+    
+    @type  structName: C{str}
+    @param structName: initial sturcture name, potentially invalid
+    
+    @rtype: C{str}
+    @return: structure name transformed in the way that passes 3dBAR name validation
+    """
+    # transform name into its valid form by replacing '(',')', '$', '/',
+    # "'", '+', ' ' characters with their names and stripping hypens
+    # from beginning and end of the string
+    replaceMap = [('(', 'OpParen'),
+                  (')', 'ClParen'),
+                  ('$', 'Dollar'),
+                  ('/', 'Slash'),
+                  ('\\', 'Backslash'),
+                  ('+', 'Plus'),
+                  (' ', '-'),
+                  ('\'', 'Prime')]
+
+    # function performing character replacement if necessary
+    def replacer(word, (toBeReplaced, replaceWith)):
+        if toBeReplaced in word:
+            return word.replace(toBeReplaced, replaceWith)
+        return word
+
+    return reduce(replacer, replaceMap, structName).strip('- ')
+
+
 class barSBAParser(barExternalParser):
     """
     Generic class for translating data from ScalableBrainAtlas to CAF dataset.
@@ -221,31 +254,12 @@ class barSBAParser(barExternalParser):
         if __debug__:
             print >>sys.stderr, structName, self._cleanStructName(structName)
         return self._cleanStructName(structName)
-    
+   
     def _cleanStructName(self, structName):
         """
-        Provided acronyms are usually fine but sometimes they are not
-        compatibile with 3dBar naming convention. Here we process them so they
-        can pass 3dBAR name validataion.
-        
-        @type  structName: C{str}
-        @param structName: initial sturcture name, potentially invalid
-        
-        @rtype: C{str}
-        @return: structure name transformed in the way that passes 3dBAR name validation
+        An alias to C{L{cleanStructName}(structName)}.
         """
-        # transform name into its valid form by replacing '(',')', '$', '/',
-        # "'", '+', ' ' characters with their names and stripping hypens
-        # from beginning and end of the string
-        replaceMap = [('(', 'OpParen'),
-                      (')', 'ClParen'),
-                      ('$', 'Dollar'),
-                      ('/', 'Slash'),
-                      ('\\', 'Backslash'),
-                      ('+', 'Plus'),
-                      (' ', '-'),
-                      ('\'', 'Prime')]
-        return reduce(lambda x, (y, z): x.replace(y, z), replaceMap, structName).strip('- ')
+        return cleanStructName(structName)
     
     def _saveTransformationAsMetadata(self, transformation, bregma):
         """
