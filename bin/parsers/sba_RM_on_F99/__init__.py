@@ -70,8 +70,7 @@ class AtlasParser(bar.barSBAParser):
         # Download and import data from SBA website
         self._loadjsonfiles()
         
-        for prop in indexerProps:
-            self.indexer.properties = prop
+        self.indexer.updateProperties(indexerProps)
     
     def parse(self, slideNumber):
         tracedSlide = bar.barSBAParser.parse(self, slideNumber,\
@@ -108,4 +107,3 @@ if __name__=='__main__':
     
     ap = AtlasParser(inputDirectory, outputDirectory)
     ap.parseAll()
-    #ap.reindex()

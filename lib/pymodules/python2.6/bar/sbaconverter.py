@@ -63,13 +63,13 @@ def cleanStructName(structName):
                   ('+', 'Plus'),
                   (' ', '-'),
                   ('\'', 'Prime')]
-
+    
     # function performing character replacement if necessary
     def replacer(word, (toBeReplaced, replaceWith)):
         if toBeReplaced in word:
             return word.replace(toBeReplaced, replaceWith)
         return word
-
+    
     return reduce(replacer, replaceMap, structName).strip('- ')
 
 
@@ -162,8 +162,7 @@ class barSBAParser(barExternalParser):
         
         spatialData = self._saveTransformationAsMetadata(offsets,\
                       self._sbaImportData['bregma'][slideNumber])
-        tracedSlide.metadata = spatialData[0]
-        tracedSlide.metadata = spatialData[1]
+        tracedSlide.updateMetadata(spatialData)
         corrArray = np.array([[0.1,0,0],[0,0.1,0],[0,0,0]])
         
         tracedSlide.affineTransform(corrArray)
@@ -259,6 +258,7 @@ class barSBAParser(barExternalParser):
         """
         An alias to C{L{cleanStructName}(structName)}.
         """
+        print structName
         return cleanStructName(structName)
     
     def _saveTransformationAsMetadata(self, transformation, bregma):
@@ -384,4 +384,5 @@ class barSBAParser(barExternalParser):
             self._sbaImportData['xyscaling'][str(i)] = [b,a,d,c]
         
         # Override values from indexerProps
-        self.indexer.properties = ('RefCords', ','.join(map(str, [b,d,a,c])))
+        self.indexer.updateProperties(\
+                {'RefCords': ','.join(map(str,[b,d,a,c]))})

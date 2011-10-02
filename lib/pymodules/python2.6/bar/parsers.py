@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # vim: set fileencoding=utf-8
 # vim: set foldmethod=indent
+
 ###############################################################################
 #                                                                             #
 #    This file is part of 3d Brain Atlas Reconstructor                        #
@@ -452,11 +453,11 @@ class barBitmapParser(barGenericParser):
             map(retSlide.addPath, self._processStructure(sourceImage, imageColour))
         
         # Append metadata to newly created slide:
-        retSlide.metadata = barTransfMatrixMetadataElement(\
-                self._getSpatialTransfMatrix(slideNumber))
+        spatialLocation = [\
+        barTransfMatrixMetadataElement(self._getSpatialTransfMatrix(slideNumber)),
+        barBregmaMetadataElement(self._getZCoord(slideNumber))]
         
-        retSlide.metadata = barBregmaMetadataElement(\
-                self._getZCoord(slideNumber))
+        retSlide.updateMetadata(spatialLocation)
         
         return retSlide
 

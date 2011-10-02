@@ -61,8 +61,7 @@ class AtlasParser(barMBATParser):
         
         # Set indexer properties, but get indexer reference matrix in advance.
         indexerProperties.append(('RefCords',",".join(map(str,self._getIndexerRefMatrix()))))
-        for prop in indexerProperties:
-            self.indexer.properties = prop
+        self.indexer.updateProperties(indexerProperties)
     
     def _getZCoord(self, slideNumber):
         # Don't ask why - with this corretion it just works better
@@ -106,4 +105,3 @@ if __name__=='__main__':
     
     ap = AtlasParser(inputDirectory, outputDirectory)
     ap.parseAll()
-    #ap.reindex()

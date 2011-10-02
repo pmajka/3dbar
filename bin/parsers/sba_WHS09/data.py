@@ -110,7 +110,7 @@ jsonFilelist=\
         'config':'config.json', 'bregma':'slicepos.json'}
 
 
-indexerProps = [\
+indexerProps = dict([\
         ('ReferenceWidth', str(REFERENCE_WIDTH)),
         ('ReferenceHeight', str(REFERENCE_HEIGHT)),
         ('Genus', 'Mus'),
@@ -130,6 +130,6 @@ indexerProps = [\
         ('CAFComment', CONF_PARSER_COMMENT),
         ('CAFCompilationTime', CONF_CAF_COMPIL_TIME),
         ('CAFCreator', CONF_CONTACT_COMMENT),
-        ('CAFCreatorEmail', CONF_CONTACT_EMAIL)]
+        ('CAFCreatorEmail', CONF_CONTACT_EMAIL)])
 
 hierarchyRootElementName = 'Brain'

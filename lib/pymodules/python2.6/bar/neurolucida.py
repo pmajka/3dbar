@@ -170,12 +170,12 @@ class barNLfile(barObject):
             for labelEl in coordElemList.labels:
                 newSlide.addLabel(labelEl.getLabel())
             
-            newSlide.metadata = barBregmaMetadataElement(coordElemList.zCoord)
+            newSlide.updateMetadata(barBregmaMetadataElement(coordElemList.zCoord))
             transformationMatrixTuple=(\
                     self._scaling[0], self._coord[0],
                     self._scaling[1], self._coord[1])
-            newSlide.metadata =\
-                barTransfMatrixMetadataElement(transformationMatrixTuple)
+            newSlide.updateMetadata =\
+                (barTransfMatrixMetadataElement(transformationMatrixTuple))
         
         return newSlide
     

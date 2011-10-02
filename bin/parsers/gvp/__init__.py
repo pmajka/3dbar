@@ -32,7 +32,7 @@ tracerSettings['NewPathIdTemplate'] = 'structure%d_%s_%s'
 filenameTempates = dict(traced='%d_traced_v%d.svg',\
                         pretraced='%s_pretrace_v%d.svg')
 
-indexerProps = dict(userMetadata)
+indexerProps = userMetadata
 indexerProps.update({\
         'ReferenceWidth':  str(renderingProperties['ReferenceWidth']),
         'ReferenceHeight': str(renderingProperties['ReferenceHeight']),
@@ -54,8 +54,7 @@ class AtlasParser(bar.barVectorParser):
         
         bar.barVectorParser.__init__(self, **props)
         
-        for prop in indexerProps.iteritems():
-            self.indexer.properties = prop
+        self.indexer.updateProperties(indexerProps)
     
     def _getInputFilename(self, slideNumber):
         return bar.barVectorParser._getInputFilename(self, slideNumber, version=1)
@@ -87,5 +86,4 @@ if __name__=='__main__':
     
     ap = AtlasParser(inputDirectory, outputDirectory)
     ap.parse(44)
-    #ap.parseAll()
-    #ap.reindex()
+    ap.parseAll()

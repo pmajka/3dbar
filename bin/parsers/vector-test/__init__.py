@@ -36,7 +36,7 @@ tracerSettings['NewPathIdTemplate'] = 'structure%d_%s_%s'
 filenameTempates = dict(traced='%d_traced_v%d.svg',\
                         pretraced='%s_pretrace_pretrace_v%d.svg')
 
-indexerProps = [\
+indexerProps = dict([\
         ('ReferenceWidth', '1008'),
         ('ReferenceHeight', '1008'),
         ('FilenameTemplate', str('%d_traced_v%d.svg')),
@@ -50,7 +50,7 @@ indexerProps = [\
                 Nencki Institute of Experimental Biology'),
         ('CAFCompilationTime', datetime.datetime.utcnow().strftime("%F %T")),
         ('CAFCreator', 'pmajka@nencki.gov.pl'),
-        ('CAFCreatorEmail','pmajka@nencki.gov.pl')]
+        ('CAFCreatorEmail','pmajka@nencki.gov.pl')])
 
 
 slideRange = range(44,205)
@@ -288,8 +288,7 @@ class AtlasParser(bar.barVectorParser):
         
         bar.barVectorParser.__init__(self, **props)
         
-        for prop in indexerProps:
-            self.indexer.properties = prop
+        self.indexer.updateProperties(indexerProps)
     
     def _getInputFilename(self, slideNumber):
         return bar.barVectorParser._getInputFilename(self, slideNumber, version=1)

@@ -109,8 +109,7 @@ jsonFilelist=\
         'brainslices':'brainslices.json', 'rgb2acr':'rgb2acr.json',
         'config':'config.json', 'bregma':'slicepos.json'}
 
-
-indexerProps = [\
+indexerProps = dict([\
         ('Genus', 'Mus'),
         ('Species', 'Mus musculus'),
         ('Strain', 'C57BL/6'),
@@ -130,6 +129,6 @@ indexerProps = [\
         ('CAFComment', CONF_PARSER_COMMENT),
         ('CAFCompilationTime', CONF_CAF_COMPIL_TIME),
         ('CAFCreator', CONF_CONTACT_COMMENT),
-        ('CAFCreatorEmail', CONF_CONTACT_EMAIL)]
+        ('CAFCreatorEmail', CONF_CONTACT_EMAIL)])
 
 hierarchyRootElementName = 'Brain'

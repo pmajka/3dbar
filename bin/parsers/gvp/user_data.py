@@ -92,7 +92,7 @@ tracerSettings['CacheLevel']               = 5
 # Information about given CAF dataset author (authors)
 
 # CAFCreatorEmail: CAF authors email
-userMetadata=[
+userMetadata = dict([
         ('CAFName', 'PW_RBSC_6th'),
         ('CAFSlideOrientation', 'coronal'),
         ('CAFSlideUnits', 'mm'),
@@ -102,7 +102,7 @@ userMetadata=[
                 Nencki Institute of Experimental Biology'),
         ('RefCords', '-9.5150660793,-1.535588442565,0.0176211453744,0.0176211453744'),
         ('CAFCreator', 'pmajka@nencki.gov.pl'),
-        ('CAFCreatorEmail','pmajka@nencki.gov.pl')]
+        ('CAFCreatorEmail','pmajka@nencki.gov.pl')])
 
 # Color mapping filename:
 # Filename holding color to structure abbreviation assignment.

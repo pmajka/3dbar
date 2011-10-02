@@ -81,7 +81,7 @@ atlasparserProperties=(
 ('tracingProperties', tracerSettings),
 ('slideTemplate', tracedSlideTemplate))
 
-indexerProperties = [
+indexerProperties = dict([
 ('Source','http://link.to.source.dataset.if.available'),
 ('Language', 'En'),
 ('ReferenceWidth', str(REFERENCE_WIDTH)),
@@ -95,4 +95,4 @@ indexerProperties = [
 ('CAFComment', CONF_PARSER_COMMENT),
 ('CAFCreator', CONF_CONTACT_COMMENT),
 ('CAFCreatorEmail', CONF_CONTACT_EMAIL),
-('CAFCompilationTime',CONF_CAF_COMPIL_TIME)]
+('CAFCompilationTime',CONF_CAF_COMPIL_TIME)])

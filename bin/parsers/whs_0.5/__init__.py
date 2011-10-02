@@ -74,8 +74,7 @@ class AtlasParser(bar.barBitmapParser):
         self._pathNumber = 0
         
         # Set indexer properties        
-        for prop in indexerProperties:
-            self.indexer.properties = prop
+        self.indexer.updateProperties(indexerProperties)
         
     def parse(self, slideNumber):
         tracedSlide = bar.barBitmapParser.parse(self, slideNumber,\

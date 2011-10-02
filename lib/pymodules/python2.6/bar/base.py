@@ -1081,10 +1081,10 @@ class barMarker(barAtlasSlideElement):
     def getXMLelement(self, textNodeCaption = ""):
         """
         Generate XML DOM representation of the object.
-
+        
         @type  textNodeCaption: str
         @param textNodeCaption: caption of the marker
-
+        
         @return: generated XML DOM representation
         @rtype: xml.dom.minidom.Node
         """
@@ -2061,6 +2061,7 @@ class barBoundingBox(barObject):
 
     def __ne__(self, other):
         return not self == other
+
     
 #-------------------------------------------------
 # Slides
@@ -2116,10 +2117,16 @@ class barVectorSlide(barObject):
         """
         return self._metadata
     
+    def updateMetadata(self, metadataList):
+        if hasattr(metadataList, '__iter__'):
+            map(self._setMetadata, metadataList)
+        else:
+            self._setMetadata(metadataList)
+    
     def _setMetadata(self, metadataElement):
         """
         Add metadata to the slide.
-
+        
         @type  metadataElement: L{barMetadataElement}
         @param metadataElement: metadata element to be added to the slide
         """
@@ -2139,7 +2146,7 @@ class barVectorSlide(barObject):
             debugOutput(\
                "Label with ID %s already in the slide! Trying to fix.!\n"\
                 % (newLabel.ID,), error=False)
-        
+    
     #TODO: fix setter/getter type conflict
     def _getSlideTemplate(self):
         """
@@ -2412,44 +2419,36 @@ class barVectorSlide(barObject):
         """
         labelIndexByID = dict(map(lambda lab: (lab.ID, lab), self.labels))
         return labelIndexByID
-
-    @staticmethod
-    def calculateTransfFromMarkers((x1, y1), (x2, y2), (x1p, y1p), (x2p, y2p), z):
-        """
-        An alias for L{slides_aligner.calculateTransfFromMarkers}.
-        """
-        return slides_aligner.calculateTransfFromMarkers(\
-                (x1, y1), (x2, y2), (x1p, y1p), (x2p, y2p), z)
     
     slideTemplate=property(_getSlideTemplate, _setSlideTemplate)
     """
     SVG slide template.
-
+    
     Property of non-consistent type.
     """
     
     labels      = property(_getLabels)
     """
     Labels of the slide.
-
+    
     Read-only property.
-
+    
     @type: [L{barStructureLabel}, ...]
     """
-
+    
     labelIndex  = property(_generateLabelIndex)
     """
     Label identifier to label representation mapping.
-
+    
     Read-only property.
-
+    
     @type: {str : L{barStructureLabel}} 
     """
-
-    metadata    = property(_getMetadata, _setMetadata)
+    
+    metadata    = property(_getMetadata)
     """
     Slide metadata.
-
+    
     Property of non-consistent type.
     """
 
@@ -2906,47 +2905,14 @@ class barPretracedSlide(barSlideRenderer):
         
         return slide
     
-    def __processMarkers(self, m1, m2, bm):
-        """
-        Calculate stereotectical coordinates transformation matrix and
-        anterior-posterior coordinate of slide from given markers.
-        
-        @param m1: marker of slide position in coronal plane
-        @type m1: L{barCoordinateMarker}
-        
-        @param m2: marker of slide position in coronal plane
-        @type m2: L{barCoordinateMarker}
-        
-        @param bm: marker of anterior-posterior slide position
-        @type bm: L{barCoronalMarker}
-        
-        @rtype: (L{_clsTransfMatrixMetadataElement}, L{_clsBregmaMetadataElement})
-        @return: representation of metadata elements containing stereotectical
-                 coordinates transformation matrix and anterior-posterior
-                 coordinate of slide
-        """
-        # TODO: add assertion
-        (x1, y1)   = m1.svgLocation
-        (x2, y2)   = m2.svgLocation
-        (x1p, y1p) = m1.spatialLocation
-        (x2p, y2p) = m2.spatialLocation
-        (z,)       = bm.spatialLocation
-        
-        (a,b,c,d,z) = self.calculateTransfFromMarkers(
-                (x1, y1), (x2, y2), (x1p, y1p), (x2p, y2p), z)
-        
-        TransfMatrixMeta = self._clsTransfMatrixMetadataElement((a,b,c,d))
-        CoronalCoordMeta = self._clsBregmaMetadataElement(z)
-        return (TransfMatrixMeta, CoronalCoordMeta)
-    
     def affineTransform(self, M):
         """
         Transform the location (in SVG coordinate system) of every label, marker
         and path in the slide.
-
+        
         @param M: transformation matrix
         @type M: numpy 3x3 array
-
+        
         @return: self
         @rtype: L{barPretracedSlide}
         """
@@ -2976,7 +2942,7 @@ class barPretracedSlide(barSlideRenderer):
         m1 =[ m for m in self.markers if m.__class__ == barCoordinateMarker][0]
         m2 =[ m for m in self.markers if m.__class__ == barCoordinateMarker][1]
         bm =[ m for m in self.markers if m.__class__ == barCoronalMarker][0]
-        map(self._setMetadata, self.__processMarkers(m1, m2, bm))
+        self.updateMetadata(processMarkers(m1, m2, bm))
         self.markers = []
      
     def getXMLelement(self):
@@ -4901,6 +4867,39 @@ def performTracing(binaryImage, tracingProperties, dumpName = None):
     # Read and return tracing output
     return  process.stdout.read()
 
+def processMarkers(m1, m2, bm):
+    """
+    Calculate stereotectical coordinates transformation matrix and
+    anterior-posterior coordinate of slide from given markers.
+    
+    @param m1: marker of slide position in coronal plane
+    @type m1: L{barCoordinateMarker}
+    
+    @param m2: marker of slide position in coronal plane
+    @type m2: L{barCoordinateMarker}
+    
+    @param bm: marker of anterior-posterior slide position
+    @type bm: L{barCoronalMarker}
+    
+    @rtype: (L{_clsTransfMatrixMetadataElement}, L{_clsBregmaMetadataElement})
+    @return: representation of metadata elements containing stereotectical
+             coordinates transformation matrix and anterior-posterior
+             coordinate of slide.
+    """
+    (x1, y1)   = m1.svgLocation
+    (x2, y2)   = m2.svgLocation
+    (x1p, y1p) = m1.spatialLocation
+    (x2p, y2p) = m2.spatialLocation
+    (z,)       = bm.spatialLocation
+    
+    (a,b,c,d,z) = slides_aligner.calculateTransfFromMarkers(\
+            (x1, y1), (x2, y2), (x1p, y1p), (x2p, y2p), z)
+    
+    
+    TransfMatrixMeta = barObject._clsTransfMatrixMetadataElement((a,b,c,d))
+    CoronalCoordMeta = barObject._clsBregmaMetadataElement(z)
+    return (TransfMatrixMeta, CoronalCoordMeta)
+    
 def validateStructureName(structureName):
     """
     @type  structureName: str
@@ -4952,40 +4951,6 @@ def flatten(x):
         else:
             result.append(el)
     return result
-
-def getCorrections(boundingBoxes, smoothedBBoxes):
-    """
-    Calculate list of matrices allowing transforming set of raw bouding
-    boxes to smoothed bounding boxes.
-    
-    @type  boundingBoxes: numpy.ndarray
-    @param boundingBoxes: array of raw bounding boxes (n x 4) extracted from
-                          structures
-    
-    @type  smoothedBBoxes: numpy.ndarray
-    @param smoothedBBoxes: array of smoothed bounding boxes (n x 4) acquired by
-                           smoothing procedure
-    
-    @return: n 3 x 3 matrices allowing transforming each raw bounding
-             box to corresponding smoothed bounding box.
-
-    @rtype: [numpy.ndarray, ...]
-    """
-    # Make some usefull aliases
-    (x1, y1) = boundingBoxes[:,0], boundingBoxes[:,1]
-    (x2, y2) = boundingBoxes[:,2], boundingBoxes[:,3]
-    (x1p, y1p) = smoothedBBoxes[:,0], smoothedBBoxes[:,1]
-    (x2p, y2p) = smoothedBBoxes[:,2], smoothedBBoxes[:,3]
-    
-    # Calculate list of n transformation coefficients    
-    c = barTracedSlide.calculateTransfFromMarkers(barTracedSlide,
-            (x1, y1), (x2, y2), (x1p, y1p), (x2p, y2p), np.zeros(x1.size))
-    c=np.asarray(c[:-1]).transpose()
-    
-    # Return set of matrices ready to use them for transformations
-    return map(lambda x: np.array([ [x[0],0   ,x[1]],\
-                                    [0   ,x[2],x[3]],\
-                                    [0   ,0   ,  1]]),c)
 
 def _removeWhitespacesXML(domNode, unlink=True):
     """

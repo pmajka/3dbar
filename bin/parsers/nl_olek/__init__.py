@@ -133,19 +133,18 @@ class AtlasParser(nl.nlParser):
         nl.nlParser.parseAll(self)
         self.reindex()
         
-        self.indexer.properties = ('ReferenceWidth', 1200)
-        self.indexer.properties = ('ReferenceHeight', 900)
-        self.indexer.properties = ('FilenameTemplate',\
-                                  self.filenameTemplates['traced'])
-        self.indexer.properties = ('RefCords',\
-            '-6.06467941507, -2.37689628048,0.010345983719932001,0.010345983719932001')
-        self.indexer.properties = ('CAFSlideOrientation', 'coronal')
-        self.indexer.properties = ('CAFSlideUnits', 'mm')
-        self.indexer.properties = ('CAFName', '')
-        self.indexer.properties = ('CAFComment', '')
-        self.indexer.properties = ('CAFCreator', "Dataset prepared by Piotr Majka, Nencki Institute of Experimental Biology")
-        self.indexer.properties = ('CAFCreatorEmail', 'pmajka@nencki.gov.pl')
-        self.indexer.properties = ('CAFCompilationTime', datetime.datetime.utcnow().strftime("%F %T"))
+        propsDict = dict([('ReferenceWidth', 1200),
+        ('ReferenceHeight', 900),
+        ('FilenameTemplate', self.filenameTemplates['traced']),
+        ('RefCords','-6.06467941507, -2.37689628048,0.010345983719932001,0.010345983719932001'),
+        ('CAFSlideOrientation', 'coronal'),
+        ('CAFSlideUnits', 'mm'),
+        ('CAFName', ''),
+        ('CAFComment', ''),
+        ('CAFCreator', "Dataset prepared by Piotr Majka, Nencki Institute of Experimental Biology"),
+        ('CAFCreatorEmail', 'pmajka@nencki.gov.pl'),
+        ('CAFCompilationTime', datetime.datetime.utcnow().strftime("%F %T"))])
+        self.indexer.updateProperties(propsDict)
         
         self.indexer.createFlatHierarchy()
         
@@ -171,4 +170,3 @@ if __name__ == '__main__':
     
     ap = AtlasParser(inputDirectory, outputDirectory)
     ap.parseAll()
-    

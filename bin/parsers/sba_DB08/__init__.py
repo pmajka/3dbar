@@ -66,8 +66,7 @@ class AtlasParser(bar.barSBAParser):
         bar.barSBAParser.__init__(self, **props)
         
         self.indexer.hierarchyRootElementName = hierarchyRootElementName
-        for prop in indexerProps:
-            self.indexer.properties = prop
+        self.indexer.updateProperties(indexerProps)
         
         # Download and import data from SBA website
         self._loadjsonfiles()
@@ -99,4 +98,3 @@ if __name__=='__main__':
     
     ap = AtlasParser(inputDirectory, outputDirectory)
     ap.parseAll()
-    #ap.reindex()

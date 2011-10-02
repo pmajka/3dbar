@@ -110,7 +110,7 @@ jsonFilelist=\
          'bregma':'slicepos.json', 'hierarchy':'acr2parent.json',
          'config':'config.json','acr2full':'acr2full.json'}
 
-indexerProps = [\
+indexerProps = dict([\
         ('Source','http://scalablebrainatlas.incf.org/main/coronal3d.php?template=DB08'),
         ('ReferenceWidth', str(REFERENCE_WIDTH)),
         ('ReferenceHeight', str(REFERENCE_HEIGHT)),
@@ -123,6 +123,6 @@ indexerProps = [\
         ('CAFComment', CONF_PARSER_COMMENT),
         ('CAFCompilationTime', CONF_CAF_COMPIL_TIME),
         ('CAFCreator', CONF_CONTACT_COMMENT),
-        ('CAFCreatorEmail', CONF_CONTACT_EMAIL)]
+        ('CAFCreatorEmail', CONF_CONTACT_EMAIL)])
 
 hierarchyRootElementName = 'Br'

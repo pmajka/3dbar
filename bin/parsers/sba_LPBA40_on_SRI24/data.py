@@ -114,7 +114,7 @@ jsonFilelist=\
         'brainslices':'brainslices.json', 'rgb2acr':'rgb2acr.json',
         'config':'config.json', 'bregma':'slicepos.json'}
 
-indexerProps = [\
+indexerProps = dict([\
         ('Source','http://scalablebrainatlas.incf.org/main/coronal3d.php?template=LPBA40_on_SRI24'),
         ('ReferenceWidth', str(REFERENCE_WIDTH)),
         ('ReferenceHeight', str(REFERENCE_HEIGHT)),
@@ -127,6 +127,6 @@ indexerProps = [\
         ('CAFComment', CONF_PARSER_COMMENT),
         ('CAFCompilationTime', CONF_CAF_COMPIL_TIME),
         ('CAFCreator', CONF_CONTACT_COMMENT),
-        ('CAFCreatorEmail', CONF_CONTACT_EMAIL)]
+        ('CAFCreatorEmail', CONF_CONTACT_EMAIL)])
 
 hierarchyRootElementName = 'Brain'

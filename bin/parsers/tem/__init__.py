@@ -66,8 +66,7 @@ class AtlasParser(barBitmapParser):
         barBitmapParser.reindex(self)
         
         # Set indexer properties        
-        for prop in indexerProperties:
-            self.indexer.properties = prop
+        self.indexer.updateProperties(indexerProperties)
         
         # Hierarchy should be set as first, then other mappings
         self.indexer.createFlatHierarchy()

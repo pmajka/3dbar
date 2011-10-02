@@ -91,7 +91,7 @@ atlasparserProperties=[
 ('tracingProperties', tracerSettings),
 ('slideTemplate', tracedSlideTemplate)]
 
-indexerProperties = [
+indexerProperties = dict([
 ('Genus', 'Mus'),
 ('Species', 'Mus musculus'),
 ('Strain', 'C57BL/6'),
@@ -110,4 +110,4 @@ indexerProperties = [
 ('CAFComment', CONF_PARSER_COMMENT),
 ('CAFCreator', CONF_CONTACT_COMMENT),
 ('CAFCreatorEmail', CONF_CONTACT_EMAIL),
-('CAFCompilationTime',CONF_CAF_COMPIL_TIME)]
+('CAFCompilationTime',CONF_CAF_COMPIL_TIME)])

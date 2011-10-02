@@ -47,18 +47,19 @@ class AtlasParser(bar.barBitmapParser):
         self.setProperty('tracingProperties', tracerSettings)
         self.setProperty('slideTemplate', tracedSlideTemplate)
         
-        self.indexer.properties = ('ReferenceWidth', 1000)
-        self.indexer.properties = ('ReferenceHeight', 800)
-        self.indexer.properties = ('FilenameTemplate',\
-                              self.filenameTemplates['traced'])
-        self.indexer.properties = ('RefCords', ','.join(map(str,alignerCoordinateTuple)))
-        self.indexer.properties = ('CAFSlideOrientation', 'coronal')
-        self.indexer.properties = ('CAFSlideUnits', 'mm')
-        self.indexer.properties = ('CAFName', '')
-        self.indexer.properties = ('CAFComment', '')
-        self.indexer.properties = ('CAFCreator', '')
-        self.indexer.properties = ('CAFCreatorEmail', 'pmajka@nencki.gov.pl')
-        self.indexer.properties = ('CAFCompilationTime', datetime.datetime.utcnow().strftime("%F %T"))
+        indexerProps = dict([
+        ('ReferenceWidth', 1000),
+        ('ReferenceHeight', 800),
+        ('FilenameTemplate',self.filenameTemplates['traced']),
+        ('RefCords', ','.join(map(str,alignerCoordinateTuple))),
+        ('CAFSlideOrientation', 'coronal'),
+        ('CAFSlideUnits', 'mm'),
+        ('CAFName', ''),
+        ('CAFComment', ''),
+        ('CAFCreator', ''),
+        ('CAFCreatorEmail', 'pmajka@nencki.gov.pl'),
+        ('CAFCompilationTime', datetime.datetime.utcnow().strftime("%F %T"))])
+        self.indexer.updateProperties(indexerProps)
         
     def parse(self, slideNumber):
         tracedSlide = bar.barBitmapParser.parse(self, slideNumber,\

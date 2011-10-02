@@ -72,8 +72,7 @@ class AtlasParser(bar.barBitmapParser):
         self._pathNumber = 0
         
         # Set indexer properties        
-        for prop in indexerProperties:
-            self.indexer.properties = prop
+        self.indexer.updateProperties(indexerProperties)
     
     def _loadVolume(self, sourceFilename):
         volumetricFile = os.path.join(self.inputDirectory, sourceFilename)

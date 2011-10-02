@@ -38,10 +38,10 @@ CONF_ALIGNER_REFERENCE_COORDS = ( 1.0, -6.0, 0.01, -0.01)
 import os
 import sys
 import xml.dom.minidom as dom
-import base as bar
+import base
 from string import *
 
-class barIndexerObject(bar.barObject):
+class barIndexerObject(base.barObject):
     """
     Virtual class parental to all classes defined in the module.
     """
@@ -87,7 +87,7 @@ class barIndexerElement(barIndexerObject):
         @return: dom XML object describing the object
         """
         retDocument = dom.Document()
-        retDocument.endocing = bar.BAR_XML_ENCODING
+        retDocument.endocing = base.BAR_XML_ENCODING
         retElement  = retDocument.createElement(self._elementName)
         
         # Put all attrubutes into text element
@@ -415,7 +415,7 @@ class barIndexerGroupElement(barIndexerElement):
         @return: identifiers of 'structure' elements related to the represented
                  hierarchy group.
         """
-        allUids = bar.flatten(\
+        allUids = base.flatten(\
                 self.__getMappedChildList(depth=999, properties=('uid',)))
         return filter(lambda x: isinstance(x, int), allUids)
     
@@ -803,7 +803,7 @@ class barIndexerStructureElement(barIndexerElement):
     
     def getXMLelement(self):
         structureDocument = dom.Document()
-        structureDocument.encoding = bar.BAR_XML_ENCODING
+        structureDocument.encoding = base.BAR_XML_ENCODING
         structureElement = barIndexerElement.getXMLelement(self)
         
         slideListElement = structureDocument.createElement('slides')
@@ -1133,7 +1133,7 @@ class barIndexer(barIndexerObject):
         self._colorMapping    = None #Ultimately dict
         
         self._hierarchyRootElementName = hierarchyRootElementName
-
+        
         # CAF dataset location
         self.cafDirectory = None
     
@@ -1391,7 +1391,7 @@ class barIndexer(barIndexerObject):
         @param fullNameCol: column containing full names
         """
         fullNameDictionary =\
-                bar.getDictionaryFromFile(filename, nameCol, fullNameCol)
+                base.getDictionaryFromFile(filename, nameCol, fullNameCol)
         self.fullNameMapping = fullNameDictionary
     
     def __setHierarchyRoot(self, hierarchyRootElementName):
@@ -1468,7 +1468,7 @@ class barIndexer(barIndexerObject):
         @param colourCol: column containing colour
         """
         ColorFillDictionary =\
-                bar.getDictionaryFromFile(colorFilename, nameCol, colourCol)
+                base.getDictionaryFromFile(colorFilename, nameCol, colourCol)
         self.colorMapping = ColorFillDictionary
 
     def fixOrphanStructures(self, parentGrpName = None):
@@ -1545,7 +1545,7 @@ class barIndexer(barIndexerObject):
             self._hierarchyGroups = {}
         
         # Define unique list of hierarchy elements basing on provided dict
-        uniqeNames = list(set(bar.flatten(sourceDictionary.items())))
+        uniqeNames = list(set(base.flatten(sourceDictionary.items())))
         
         #Create index groups items for each structure
         for groupName in uniqeNames:
@@ -1615,7 +1615,7 @@ class barIndexer(barIndexerObject):
         @param parentCol: column containing parent names
         """
         cpDictionary =\
-                bar.getDictionaryFromFile(hierarchyFilename, childCol, parentCol)
+                base.getDictionaryFromFile(hierarchyFilename, childCol, parentCol)
         self.hierarchy = cpDictionary
     
     def _validateInternalData(self):
@@ -1637,16 +1637,16 @@ class barIndexer(barIndexerObject):
         @type  slideNumber: int
         @param slideNumber: slide number
         
-        @type  tracedSlide: L{bar.barTracedSlide}
+        @type  tracedSlide: L{base.barTracedSlide}
         @param tracedSlide: CAF slide representation
         """
         
         print >>sys.stderr, "Indexer: indexing slide %d" % (slideNumber,)
         
         slide = self._slideElement(\
-                tracedSlide.metadata[bar.BAR_BREGMA_METADATA_TAGNAME].value,
+                tracedSlide.metadata[base.BAR_BREGMA_METADATA_TAGNAME].value,
                 slideNumber,
-                tracedSlide.metadata[bar.BAR_TRAMAT_METADATA_TAGNAME].value)
+                tracedSlide.metadata[base.BAR_TRAMAT_METADATA_TAGNAME].value)
         
         # Iterate over all structures in given slide and create index entry for
         # each of the structure:
@@ -1665,7 +1665,7 @@ class barIndexer(barIndexerObject):
         self._validateInternalData()
         self.__normaliseIDs()
         indexerDocument = dom.Document()
-        indexerDocument.encoding=bar.BAR_XML_ENCODING
+        indexerDocument.encoding=base.BAR_XML_ENCODING
         
         (slideindexElement,
          propertiesElement,
@@ -1729,17 +1729,25 @@ class barIndexer(barIndexerObject):
         """
         self._properties = {}
     
-    def __setProperty(self, (name, value)):
+    def updateProperties(self, propsDict):
         """
-        Assign the value of property.
+        Updates properties of the indexer with the data from
+        provided dictionary.
         
-        @param value: value of the property
-        @type value: str
+        @type  propsDict: dict
+        @param propsDict: dictionary holding indexer's properties in which keys
+                          are names of the properties.
         
-        @param name: name of the property
-        @type name: str
+        @return: None
         """
-        self._properties[name] = self._propertyElement(name, value)
+        for (name, value) in propsDict.items():
+            self._properties[name] = self._propertyElement(name, value)
+    
+    def __setProperty(self, newValue):
+        """
+        Raise ValueError.
+        """
+        raise ValueError, "'Properties' is readonly property."
     
     def __setSlides(self, newValue):
         """
@@ -1751,7 +1759,7 @@ class barIndexer(barIndexerObject):
         """
         @return: slidenumber to 'slide' element representation mapping
         @rtype: {int : L{barIndexerSlideElement}}
-
+        
         @note: be aware that it is not a copy, but the original dictionary!
         """
         return self._slides
@@ -1845,12 +1853,12 @@ class barIndexer(barIndexerObject):
     properties = property(__getProperty, __setProperty)
     """
     Name to 'property' element representation mapping.
-
+    
     Read-only property.
-
+    
     @type: {str : L{barIndexerPropertyElement}}
     """
-
+    
     slides = property(__getSlides, __setSlides)
     """
     Slide number to 'slide' element representation mapping.
