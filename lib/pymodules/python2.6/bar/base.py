@@ -218,8 +218,8 @@ BAR_TRACER_DEFAULT_SETTINGS['PoTraceConf'] = CONF_DEFAULT_POTRACE_PROPERTIES
 BAR_TRACER_DEFAULT_SETTINGS['NewPathIdTemplate'] = 'structure%d_%s_%s'
 #}
 
-#GrowLevel - gap filling algorithm constatns
-#{
+#GrowLevel - gap filling algorithm constants
+#{ GrowLevel settings
 CONF_GAPFILLING_MAXLEVEL = 5
 #}
 

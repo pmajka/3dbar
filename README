@@ -6,8 +6,12 @@
 3d Brain Atlas Reconstructor readme file
 ========================================
 
-If you haven't done this already, please let us know that you are using 3D Brain
-Atlas Reconstructor by filling out short form available on
+In this file you can find a brief description of the 3D Brain Atlas
+Reconstructor software instalation and usage. Please visit
+the http://www.3dbar.org website for more detailed description.
+
+If you haven't done this already, please let us know that you are using
+3D Brain Atlas Reconstructor by filling out short form available on
 http://service.3dbar.org/downloadForm . Thanks a lot.
 
 Installing required packages (Ubuntu)
@@ -30,7 +34,11 @@ Installing required packages (Ubuntu)
 
        sudo apt-get install potrace pstoedit python-setuptools python-epydoc
 
-  4. If you are a developer you may also want to install optional packages with
+  4. Install Sphinx::
+
+       sudo easy_install -U Sphinx
+
+  5. If you are a developer you may also want to install optional packages with
      documentation::
 
        sudo apt-get install vtkdata vtk-doc vtk-examples
@@ -53,6 +61,10 @@ Installing required packages (Ubuntu)
 
        sudo apt-get install potrace pstoedit python-setuptools python-epydoc
 
+  4. Install Sphinx::
+
+       sudo easy_install -U Sphinx
+
 
 * Installation in Ubuntu 10.10 and Ubuntu 11.04
 
@@ -70,6 +82,10 @@ Installing required packages (Ubuntu)
   3. Other packages::
 
        sudo apt-get install potrace pstoedit python-setuptools python-epydoc
+
+  4. Install Sphinx::
+
+       sudo easy_install -U Sphinx
 
 
 
