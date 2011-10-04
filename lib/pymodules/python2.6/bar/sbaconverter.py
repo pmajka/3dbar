@@ -64,13 +64,9 @@ def cleanStructName(structName):
                   (' ', '-'),
                   ('\'', 'Prime')]
     
-    # function performing character replacement if necessary
-    def replacer(word, (toBeReplaced, replaceWith)):
-        if toBeReplaced in word:
-            return word.replace(toBeReplaced, replaceWith)
-        return word
-    
-    return reduce(replacer, replaceMap, structName).strip('- ')
+    return reduce(lambda x, (y, z): x.replace(y, z),
+                  replaceMap,
+                  structName).strip('- ')
 
 
 class barSBAParser(barExternalParser):

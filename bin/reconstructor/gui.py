@@ -36,7 +36,7 @@ import random, sys, os, glob
                          # while 2.6 in 10.04 causes segfault when accesing
                          # combo box - your choice.
 # Be careful!
-ENABLE_EXPERIMENTAL_FEATURES = True
+ENABLE_EXPERIMENTAL_FEATURES = False
 
 import wx
 import wx.gizmos
