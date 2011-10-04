@@ -6,12 +6,72 @@
 3d Brain Atlas Reconstructor readme file
 ========================================
 
-At http://www.3dbar.org/wiki/barSoftwareInstallation you can find installation
-instructions. Please make sure you install packages related to your Ubuntu
-version. Please disregard 'Getting code' section and use provided code instead.
 If you haven't done this already, please let us know that you are using 3D Brain
 Atlas Reconstructor by filling out short form available on
 http://service.3dbar.org/downloadForm . Thanks a lot.
+
+Installing required packages (Ubuntu)
+=====================================
+
+* Installation in Ubuntu 9.10
+
+  1. Install the Visualization Toolkit and other graphics libraries::
+
+       sudo apt-get install libvtk5.2 libvtk5-dev libvtk5.2-qt4 \
+       libvtk5-qt4-dev tk8.5 tk8.5-dev python-vtk libgtkgl2.0-1 \
+       libgtkgl2.0-dev libgtkglext1 librsvg2-2 python-nifti
+
+  2. Install python related packages::
+
+       sudo apt-get install python-gtkglext1 python-rsvg python-opengl \
+       python-numpy python-scipy python-wxgtk2.6
+
+  3. Other packages::
+
+       sudo apt-get install potrace pstoedit python-setuptools python-epydoc
+
+  4. If you are a developer you may also want to install optional packages with
+     documentation::
+
+       sudo apt-get install vtkdata vtk-doc vtk-examples
+
+
+* Installation in Ubuntu 10.04
+
+  1. Install the Visualization Toolkit and other graphics libraries::
+
+       sudo apt-get install libvtk5.2 libvtk5-dev libvtk5.2-qt4 \
+       libvtk5-qt4-dev tk8.5 tk8.5-dev python-vtk libgtkgl2.0-1 \
+       libgtkgl2.0-dev libgtkglext1 librsvg2-2 python-nifti
+
+  2. Install python related packages::
+
+       sudo apt-get install python-gtkglext1 python-rsvg python-opengl \
+       python-numpy python-scipy python-wxgtk2.6
+
+  3. Other packages::
+
+       sudo apt-get install potrace pstoedit python-setuptools python-epydoc
+
+
+* Installation in Ubuntu 10.10 and Ubuntu 11.04
+
+  1. Install the Visualization Toolkit and other graphics libraries::
+
+       sudo apt-get install libvtk5.4 libvtk5-dev libvtk5.4-qt4 \
+       libvtk5-qt4-dev tk8.5 tk8.5-dev python-vtk libgtkgl2.0-1 \
+       libgtkgl2.0-dev libgtkglext1 librsvg2-2 python-nifti
+
+  2. Install python related packages::
+
+       sudo apt-get install python-gtkglext1 python-rsvg python-opengl \
+       python-numpy python-scipy python-wxgtk2.8
+
+  3. Other packages::
+
+       sudo apt-get install potrace pstoedit python-setuptools python-epydoc
+
+
 
 Generating CAF datasets
 =======================
@@ -128,6 +188,8 @@ $ make aba
 
 in the root directory of the software.
 
+
+
 Generating 3-D models
 =====================
 
@@ -146,6 +208,8 @@ To test, click the topmost label on the tree in the left panel and press
 *Perform reconstruction* button in the right panel. The reconstruction process
 will start. When it is finished, chose in the menu *Edit/Save Model*. It allows
 you to put it later in context by right click on the ontology tree.
+
+
 
 Generating documentation
 ========================
