@@ -6,6 +6,9 @@
 Welcome to 3d Brain Atlas Reconstructor's documentation!
 ========================================================
 
+.. warning::
+   This is only a draft of documentation!
+
 Contents:
 
 .. toctree::

@@ -23,23 +23,29 @@ two sets of numbers:
       exery point of the slide using SRS coordinates
     - stack coordinate (coordinate perpendicular to the slide plane).
  
-E.g. the first set consists of 4 numbers (a,b,c,d) while the second contains
-only one number (z).  The formula to convert SVG coordinates into SRS
+E.g. the first set consists of 4 numbers :math:`(a,b,c,d)` while the second contains
+only one number (:math:`z`).  The formula to convert SVG coordinates into SRS
 coordinates is following:
     
-    x' = a * x + b
-    y' = c * y + d 
-    z' = z
+.. math::
 
-Where (x,y,z) are SVG coordinates while (x',y',z') are related SRS coordinates.
+    \left\{\begin{matrix}
+    x' & =  & ax + b \\
+    y' & =  & cy + d \\
+    z' & =  & z \\
+    \end{matrix}\right.
+
+Where (x,y,z) are SVG coordinates while :math:`(x',y',z')` are related SRS coordinates.
 
 In the opposite direction:
 
 .. math::
 
-    x = (x' - b)/a
-    y = (y' - d)/c
-    z = z'
+    \left\{\begin{matrix}
+    x & = & (x' - b)/a \\ 
+    y & = & (y' - d)/c \\ 
+    z & = & z'
+    \end{matrix}\right.
 
 Each CAF slide can carry different SVG to SRS coordinates transformation.
 However, if the purpose of the given dataset is to serve as as source to 3-D
