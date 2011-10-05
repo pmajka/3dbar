@@ -4851,14 +4851,21 @@ def performTracing(binaryImage, tracingProperties, dumpName = None):
     # -r SVG Image resolution in DPI
     # -W,H Output dimensions of SVG drawing
     # -o - - Input and output via pipes
-    process = subprocess.Popen(['potrace',\
+    commandLineParams = ['potrace',\
             '-s',\
             '-O', tracingProperties['potrace_accuracy_parameter'],\
             '-r', tracingProperties['potrace_svg_resolution_string'],\
             '-W', tracingProperties['potrace_width_string'],\
             '-H', tracingProperties['potrace_height_string'],\
-            '-o','-','-']\
-            , stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            '-o','-','-']
+    
+    # potrace_turdsize is an optional parameter
+    if 'potrace_turdsize' in tracingProperties:
+        commandLineParams.insert(2, str(tracingProperties['potrace_turdsize']))
+        commandLineParams.insert(2, '-t')
+    
+    process = subprocess.Popen(commandLineParams,\
+              stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     
     # Pass bmp string to pipe, close image string.
     process.stdin.write(ImageString.getvalue())
