@@ -31,7 +31,8 @@ Size is provided as tuple of two Intergers
     >>> map(type, slide.size) == map(type, (1,1))
     True
 
-Also the rendering size of the slide (which is not the same property as dimensions of the CAF slide) can be set
+Also the rendering size of the slide (which is not the same property as
+dimensions of the CAF slide) can be set
 
 .. doctest:: 
     
@@ -40,8 +41,8 @@ Also the rendering size of the slide (which is not the same property as dimensio
     >>> map(type, slide.bitmapSize) == map(type, (1,1))
     True
 
-Size, as well as bitmapsize can be altered. Only tuple of two integers is accepted as new value
-Altering slide dimensions:
+Size, as well as bitmapsize can be altered. Only tuple of two integers is
+accepted as new value Altering slide dimensions:
 
 .. doctest:: 
     
@@ -59,8 +60,9 @@ Altering slide dimensions:
     Traceback (most recent call last):
     AssertionError: (int,int) Tuple of two integers required
 
-`Size` and `bitmap size` are related with some internal properies that can be edited by advanded user to better customize the slides.
-Changing the slide size alters the slide template as well as tracing and rendering properties
+`Size` and `bitmap size` are related with some internal properies that can be
+edited by advanded user to better customize the slides.  Changing the slide size
+alters the slide template as well as tracing and rendering properties
 
 .. doctest:: 
     
@@ -68,7 +70,8 @@ Changing the slide size alters the slide template as well as tracing and renderi
     {'ReferenceHeight': 500, 'ReferenceWidth': 1000, 'imageSize': (1200, 900)}
     >>> slide._tracingConf #doctest: +SKIP
 
-Changing the slide size alters the slide template as well as tracing and rendering properties
+Changing the slide size alters the slide template as well as tracing and
+rendering properties
 
 .. doctest:: 
     
@@ -76,3 +79,29 @@ Changing the slide size alters the slide template as well as tracing and renderi
     >>> slide.bitmapSize = (2000, 1000)
     >>> slide._rendererConf
     {'ReferenceHeight': 500, 'ReferenceWidth': 1000, 'imageSize': (2000, 1000)}
+
+Slide with customized size can be obviously saved to and loaded from XML file:
+
+.. doctest::
+    
+    >>> from xml.dom import minidom as dom
+    >>> slide.writeXMLtoFile('testSlide.svg')
+    >>> testSlide = bar.barCafSlide.fromXML('testSlide.svg')
+    >>> testSlide._rendererConf
+    {'ReferenceHeight': 500, 'ReferenceWidth': 1000, 'imageSize': (2000, 1000)}
+
+All slide size settings are preserved:
+
+.. doctest::
+
+    >>> testSlide.size
+    (1000, 500)
+    >>> slide.bitmapSize
+    (2000, 1000)
+
+Just remove the temporary file containing test slide.
+
+.. doctest::
+
+    >>> import os
+    >>> os.remove('testSlide.svg')

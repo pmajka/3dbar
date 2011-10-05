@@ -12,9 +12,11 @@ Contents:
    :maxdepth: 2
    
    README
+   caf_basics
    test_crisp-edges
    test_feature-type
    test_slide-size
+   test_markers
 
 Indices and tables
 ==================

@@ -38,11 +38,11 @@ Path element has assigned corresponding attribute defined
     >>> testPath = bar.barPath("structure_test_test", "M 100 100 L 100 200 L 200 200 Z", "#ff0000")
     >>> testPath.crispEdges = True
     >>> print testPath
-    <path bar:growlevel="0" d="M 100 100 L 100 200 L 200 200 Z" fill="#ff0000" id="structure_test_test" positive="True" shape-rendering="crisp-edges" stroke="none"/>
+    <path bar:growlevel="0" d="M 100 100 L 100 200 L 200 200 Z" fill="#ff0000" id="structure_test_test" shape-rendering="crisp-edges" stroke="none"/>
     
     >>> testPath.crispEdges = False
     >>> print testPath
-    <path bar:growlevel="0" d="M 100 100 L 100 200 L 200 200 Z" fill="#ff0000" id="structure_test_test" positive="True" shape-rendering="geometric-precision" stroke="none"/>
+    <path bar:growlevel="0" d="M 100 100 L 100 200 L 200 200 Z" fill="#ff0000" id="structure_test_test" shape-rendering="geometric-precision" stroke="none"/>
 
 Note that ``crispEdges`` property accepts only boolean values. Providing type
 other than boolean will cause exception.
