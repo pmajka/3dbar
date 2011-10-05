@@ -752,19 +752,19 @@ class barIndexerSlideElement(barIndexerElement):
 class barIndexerStructureElement(barIndexerElement):
     """
     Class of objects representing 'structure' elements of CAF dataset index file.
-
+    
     @ivar _name: value of the 'name' attribute of the represented element
     @type _name: str
-
+    
     @ivar _bbx: value of the 'bbx' attribute of the represented element
     @type _bbx: L{barIndexerStructureElement._clsBoundingBox}
-
+    
     @ivar _uid: value of the 'uid' attribute of the represented element
     @type _uid: int 
-
+    
     @ivar _type: value of the 'type' attribute of the represented element
     @type _type: str
-
+    
     @ivar _slides: 'slide' element attribute 'slidenumber' to 'slide' element
                    representation mapping for 'slide' elements associated with
                    represented 'structure' element
@@ -777,20 +777,20 @@ class barIndexerStructureElement(barIndexerElement):
         """
         @param name: value of the 'name' attribute of the represented element
         @type name: str
-
+        
         @param bbx: value of the 'bbx' attribute of the represented element
         @type bbx: L{barIndexerStructureElement._clsBoundingBox}
-
+        
         @param uid: value of the 'uid' attribute of the represented element
         @type uid: convertable to int
-
+        
         @param type: value of the 'type' attribute of the represented element
         @type type: str
-
+        
         @param slideList: representations of 'slide' elements related to
                           the represented element
         @type slideList: L{barIndexerSlideElement} or [L{barIndexerSlideElement}, ...] 
-
+        
         """
         self.name = name
         self.bbx = bbx 

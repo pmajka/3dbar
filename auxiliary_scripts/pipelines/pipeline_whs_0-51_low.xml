@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<pipeline>
 		<elements>
-			<pipelineelement disable="False" displayable="True" on="True" order="0">
+			<pipelineelement disable="False" displayable="True" on="False" order="0">
+				<vtkclass>
+					vtkImageFlip
+				</vtkclass>
+				<desc>
+					libvtkImagingPython.vtkImageFlip
+				</desc>
+				<params>
+					<param display="False" hidden="False" order="0">
+						<name>
+							SetFilteredAxes
+						</name>
+						<args>
+							<value order="0" type="int">
+								0
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="False" order="1">
+						<name>
+							FlipAboutOrigin
+						</name>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+				</params>
+			</pipelineelement>
+			<pipelineelement disable="False" displayable="True" on="True" order="1">
 				<vtkclass>
 					vtkImagePermute
 				</vtkclass>
@@ -18,16 +48,42 @@
 								0
 							</value>
 							<value order="1" type="int">
-								1
+								2
 							</value>
 							<value order="2" type="int">
-								2
+								1
 							</value>
 						</args>
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="1">
+			<pipelineelement disable="False" displayable="True" on="False" order="2">
+				<vtkclass>
+					vtkImageChangeInformation
+				</vtkclass>
+				<desc>
+					libvtkImagingPython.vtkImageChangeInformation
+				</desc>
+				<params>
+					<param display="False" hidden="False" order="0">
+						<name>
+							SetOriginTranslation
+						</name>
+						<args>
+							<value order="0" type="float">
+								0.01075
+							</value>
+							<value order="1" type="float">
+								0.01075
+							</value>
+							<value order="2" type="float">
+								0.01075
+							</value>
+						</args>
+					</param>
+				</params>
+			</pipelineelement>
+			<pipelineelement disable="False" displayable="True" on="False" order="3">
 				<vtkclass>
 					vtkImageGaussianSmooth
 				</vtkclass>
@@ -53,7 +109,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="2">
+			<pipelineelement disable="False" displayable="True" on="True" order="4">
 				<vtkclass>
 					vtkMarchingCubes
 				</vtkclass>
@@ -90,7 +146,7 @@
 								0
 							</value>
 							<value order="1" type="int">
-								114
+								128
 							</value>
 						</args>
 					</param>
@@ -106,7 +162,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="False" on="True" order="3">
+			<pipelineelement disable="False" displayable="False" on="True" order="5">
 				<vtkclass>
 					vtkTriangleFilter
 				</vtkclass>
@@ -115,7 +171,7 @@
 				</desc>
 				<params/>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="4">
+			<pipelineelement disable="False" displayable="True" on="False" order="6">
 				<vtkclass>
 					vtkSmoothPolyDataFilter
 				</vtkclass>
@@ -129,7 +185,7 @@
 						</name>
 						<args>
 							<value order="0" type="float">
-								0.15
+								0.5
 							</value>
 						</args>
 					</param>
@@ -139,7 +195,7 @@
 						</name>
 						<args>
 							<value order="0" type="int">
-								100
+								20
 							</value>
 						</args>
 					</param>
@@ -155,7 +211,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="5">
+			<pipelineelement disable="False" displayable="True" on="True" order="7">
 				<vtkclass>
 					vtkQuadricClustering
 				</vtkclass>
@@ -169,7 +225,7 @@
 						</name>
 						<args>
 							<value order="0" type="int">
-								90
+								20
 							</value>
 						</args>
 					</param>
@@ -179,7 +235,7 @@
 						</name>
 						<args>
 							<value order="0" type="int">
-								90
+								20
 							</value>
 						</args>
 					</param>
@@ -189,13 +245,13 @@
 						</name>
 						<args>
 							<value order="0" type="int">
-								90
+								20
 							</value>
 						</args>
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="False" on="True" order="6">
+			<pipelineelement disable="False" displayable="False" on="True" order="8">
 				<vtkclass>
 					vtkPolyDataNormals
 				</vtkclass>
@@ -233,7 +289,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="7">
+			<pipelineelement disable="False" displayable="True" on="False" order="9">
 				<vtkclass>
 					barVtkMirror
 				</vtkclass>
@@ -242,7 +298,7 @@
 				</desc>
 				<params/>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="False" on="True" order="8">
+			<pipelineelement disable="False" displayable="False" on="True" order="10">
 				<vtkclass>
 					vtkPolyDataMapper
 				</vtkclass>

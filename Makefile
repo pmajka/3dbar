@@ -28,7 +28,7 @@ doc: doc_api doc_gui doc_service
 doc_api:
 	mkdir -p doc/api/html
 	epydoc lib/pymodules/python2.6/bar -v --graph all --no-sourcecode --output doc/api/html
-	cd doc/sphinx/; make html;
+	cd doc/sphinx/; make html; python -m doctest source/*.rst
 
 doc_gui:
 	mkdir -p doc/gui/html

@@ -38,11 +38,6 @@ Installing required packages (Ubuntu)
 
        sudo easy_install -U Sphinx
 
-  5. If you are a developer you may also want to install optional packages with
-     documentation::
-
-       sudo apt-get install vtkdata vtk-doc vtk-examples
-
 
 * Installation in Ubuntu 10.04
 
