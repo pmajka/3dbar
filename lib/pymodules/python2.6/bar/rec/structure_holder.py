@@ -255,6 +255,9 @@ class structureHolder():
         if sy > 0 and  ty < 0:
             T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,-ty],[0,0,1,tz],[0,0,0,1]])
             S = numpy.array( [[sx,0,0,0 ],[0,-sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
+        elif sx < 0 and sy < 0 and ty > 0:
+            T = numpy.array( [[1 ,0,0,w*sx+tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
+            S = numpy.array( [[-sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
         elif sy < 0 and ty > 0:
             T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
             S = numpy.array( [[sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
@@ -396,7 +399,7 @@ class structureHolder():
     def __initModelGeneration(self, coronalResolution):
         mx = float(self.ih.refCords[2]) / float(coronalResolution)
         my = float(self.ih.refCords[3]) / float(coronalResolution)
-        multiplier = mx
+        multiplier = abs(mx)
         self.ih.volumeConfiguration['ReduceFactor'] = 1./multiplier
         
         self.ih.volumeConfiguration['FullPlaneDimensions']=\

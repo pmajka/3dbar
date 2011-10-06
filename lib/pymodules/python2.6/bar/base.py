@@ -1068,13 +1068,13 @@ class barMarker(barAtlasSlideElement):
         
         try:
             spatialCoordinates = map(float, re_CoordinateMarker.search(labelCaption).groups())
-            return cls(spatialCoordinates, (x,y))
+            return barCoordinateMarker(spatialCoordinates, (x,y))
         except AttributeError:
             pass
         
         try:
             spatialCoordinates = map(float, re_CoronalCoord.search(labelCaption).groups())
-            return cls(spatialCoordinates, (x,y))
+            return barCoronalMarker(spatialCoordinates, (x,y))
         except AttributeError:
             pass
     
