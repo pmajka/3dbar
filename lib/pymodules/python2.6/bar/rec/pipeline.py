@@ -59,9 +59,57 @@ class barVtkMirror(vtk.vtkAppendPolyData):
         self.AddInput(rev.GetOutput())
         self.AddInput(sourcePolyData)
 
+class barVtkAllFlip():
+    def __init__(self):
+        self._flip       = [False, False, False]
+        self._flipOrigin = [False, False, False]
+        self._input = None
+        
+        for (si,bi) in [('On', True), ('Off', False)]:
+            for (sj,bj) in [('x',0),('y',1),('z',2)]:
+                def flip(self, x, y):
+                    self._flip[x] = y
+                
+                def origin(self, x, y):
+                    self._flipOrigin[x] = y
+                 
+                setattr(self,'SetFlip'+sj+si, lambda s=self,x=bj,y=bi: flip(s,x,y))
+                setattr(self,'SetFlipAbOrigin'+sj+si, lambda s=self,x=bj,y=bi: origin(s,x,y))
+    
+    def SetInput(self, imageData):
+        self._input = imageData
+    
+    def Update(self):
+        source = self._input
+        output = None
+        self._output = None
+        
+        print self._flip, self._flipOrigin
+        
+        if not any(self._flip):
+            output = source
+        
+        for i in range(3):
+            if self._flip[i]:
+                transpose = vtk.vtkImageFlip()
+                transpose.SetFilteredAxis(i)
+                if self._flipOrigin[i]:
+                    transpose.FlipAboutOriginOn()
+                else:
+                    transpose.FlipAboutOriginOff()
+                transpose.SetInput(source)
+                transpose.Update()
+                output = transpose.GetOutput()
+                source = output
+        
+        self._output = output
+    
+    def GetOutput(self):
+        self.Update()
+        return self._output
 
-BAR_VTK_TRANSFORMATION = {'barVtkMirror': barVtkMirror}
 
+BAR_VTK_TRANSFORMATION = {'barVtkMirror': barVtkMirror, 'barVtkAllFlip':barVtkAllFlip}
 
 class barPipelineXML(barObject):
     """
@@ -253,7 +301,7 @@ class barPipeline(barPipelineXML, list):
         """
         vtkAlgorithmObj.SetInput(vtksource.GetOutput())
         vtkAlgorithmObj.Update()
-        print vtkAlgorithmObj.__class__.__name__
+        print "\t" + vtkAlgorithmObj.__class__.__name__
         return vtkAlgorithmObj
     
     def execute(self, imImport):

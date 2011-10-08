@@ -2668,18 +2668,18 @@ class barSlideRenderer(barVectorSlide):
             return a.astype(np.uint8)
         
         # Returns scaled and cropped np. array.
-        if otype == 'rec':
+        if otype[0:3] == 'rec':
             # Convert bitmap to grayscale
             image = Image.fromarray(a.astype(np.uint8),'RGBA').convert("L")
             
             # Crop region of interest:
-            print boundingBox
             image = image.crop(tuple(map(int,boundingBox)))
             
             # By default reverse image to make background black and foreground
             # white:
             image = ImageChops.invert(image)
-            image = image.transpose(Image.FLIP_TOP_BOTTOM)
+            if otype[-1] == '1': image = image.transpose(Image.FLIP_TOP_BOTTOM)
+            if otype[-2] == '1': image = image.transpose(Image.FLIP_LEFT_RIGHT)
             volumeSlice = np.array(image.getdata()).reshape(int(image.size[0]), int(image.size[1]), 1)
             return volumeSlice
     

@@ -29,7 +29,6 @@ structure reconstruction.
 G{importgraph}
 """
 
-import xml.dom.minidom as dom
 from string import *
 import sys
 import os.path
@@ -41,12 +40,13 @@ class barReconstructorIndexer(barIndexer):
     @ivar _visibleGID: GIDs of visible in CAF slides hierarchy tree elements
     @type _visibleGID: set(int)
     """
-    def __init__(self, debugMode = True):
+    def __init__(self):
         barIndexer.__init__(self)
-        self.volumeConfiguration={}
-        self.debugMode = debugMode
+        
+        self.volumeConfiguration = {}
         self._visibleGID = None
-   
+        self.flipAxes = 3*[False]
+    
     def _findVisibleGIDs(self):
         """
         Generate C{self.L{_visibleGID}} for the CAF index.
@@ -54,19 +54,19 @@ class barReconstructorIndexer(barIndexer):
         self._visibleGID = frozenset(self.groups[name].id for name, uidList\
                                      in self.uidList.iteritems()\
                                      if len(uidList) > 0)
-
+    
     def unfoldSubtrees(self, rootStructures, defaultDepth=0, leavesOnly=False):
         """
         @param rootStructures: names of root elements of hierarchy subtrees or
                                pairs of root element name and depth of the subtree
         @type rootStructures: iterable([str | (str, int), ...])
-
+        
         @param defaultDepth: the default depth of hierarchy subtrees
         @type defaultDepth: int
-
+        
         @param leavesOnly: indicates if only the leaf nodes has to be returned
         @type leavesOnly: bool
-
+        
         @return: names of hierarchy subtree tree nodes
         @rtype: set([str, ...])
         """
@@ -76,10 +76,10 @@ class barReconstructorIndexer(barIndexer):
                 root, depth = arg
             else:
                 root, depth = arg, defaultDepth
-
+            
             hierarchyTree = self.getHierarchyTree(root, depth)
             return set(self.names(hierarchyTree, leavesOnly=leavesOnly))
-
+        
         return reduce(lambda x, y: x | y, (unfoldSubtree(z) for z in rootStructures))
 
     def names(self, tree, leavesOnly=False):
@@ -163,13 +163,28 @@ class barReconstructorIndexer(barIndexer):
         #               2: (22.050000000000001, 20.925000000000001),...
         self.slidesBregmas={ 'Bregma':{}, 'SlideNumber':[], 'SlideSpans':{} }
         self.slidesBregmas['Bregma'] =\
-             dict(map(lambda (k,v): (k, float(v.coronalcoord)),self.slides.iteritems()))
+             dict(map(lambda (k,v): (k, float(v.coronalcoord)), self.slides.iteritems()))
         self.slidesBregmas['SlideNumber'] = self.slides.keys()
         self.slidesBregmas['SlideNumber'].sort()
         self.__defineSlicesSpan()
         
         self.__refCoords =  map(float, self.properties['RefCords'].value.strip().split(','))
+        self.__defineAxesFlips()
         
+        if __debug__:
+            print >>sys.stderr, self.slidesBregmas['SlideSpans']
+            print >>sys.stderr, self.slidesBregmas['Bregma']
+            print >>sys.stderr, self.slidesBregmas['SlideNumber']
+            print >>sys.stderr, self.flipAxes
+    
+    def __defineAxesFlips(self):
+        if self.refCords[2] < 0: self.flipAxes[0] = True
+        if self.refCords[3] < 0: self.flipAxes[1] = True
+        
+        n = self.slidesBregmas['SlideNumber']
+        b = self.slidesBregmas['Bregma']
+        if  b[n[0]] > b[n[-1]]: self.flipAxes[2] = True
+    
     def __defineSlicesSpan(self):
         """
         Calculate span for each slide. By span I mean minimal and maximal bregma
@@ -232,8 +247,8 @@ class barReconstructorIndexer(barIndexer):
             dr=dl
         else:
             dr=(abs(l[1]-l[2])/2)
-        
-        return (l[1]+dl,l[1]-dr)
+         
+        return tuple(sorted((l[1]+dl,l[1]-dr)))
     
     def getUIDsForGivenGroupName(self, topStructureName):
         """
@@ -290,17 +305,18 @@ class barReconstructorIndexer(barIndexer):
         
         Please note that calculations abov do not include margins!
         """
-        #m = self.volumeConfiguration['VolumeMargin'] XXX Not used?
         r = self.volumeConfiguration['CoronalResolution']
         vc = self._bregmaToVolumeCoordinates
         sp = self.slidesBregmas['SlideSpans']
         n  = self.slidesBregmas['SlideNumber']
+        b  = self.slidesBregmas['Bregma']
         
         # offset:
         o = 1./r * sp[n[0]][0] 
         
-        # scaling
-        a = -1./r
+        # scaling (if slides are in descending/descending order)
+        if b[n[0]] > b[n[-1]]: a = -1./r
+        else: a = 1./r
         
         return int( a * bregmaCoordinate + o)
     
@@ -385,11 +401,10 @@ class barReconstructorIndexer(barIndexer):
         sc = self._scaleBregmaToCoronalBasic              # Alias
         sp = self.slidesBregmas['SlideSpans']             # Alias
         n  = slideNumberSpan                              # Just alias
-        
         leftBregmaValueIndex  = sc(sp[n[0]][0])           # left plane index 
         rigthBregmaValueIndex = sc(sp[n[1]][1])           # right plane index
         
-        return  (leftBregmaValueIndex, rigthBregmaValueIndex)
+        return  tuple(sorted((leftBregmaValueIndex, rigthBregmaValueIndex)))
     
     def getStructureList(self, HierarchyRootElementName):
         """
@@ -456,19 +471,27 @@ class barReconstructorIndexer(barIndexer):
         return reduce(lambda x,y: x+y, bbxList)        
     
     def getDefaultZres(self):
+        """
+        Calculate distance between central slide in the stack and the next one.
+        This value is considered as default interplane resolution.
+        
+        @rtype: float
+        @return: Default interplane distance (default z resolution)
+        """
+        
         slidesNumber = len(self.slidesBregmas['SlideNumber'])
         firstSlideNo = self.slidesBregmas['SlideNumber'][0]
-        b = self.slidesBregmas['Bregma'] # Just alias
-        retVal  = abs(b[int(slidesNumber/2)+ firstSlideNo] - \
-                b[int(slidesNumber/2)+1+ firstSlideNo])
-        return retVal
+        b = self.slidesBregmas['Bregma'] # Just an alias
+        
+        centralSlNo = int(slidesNumber/2) + firstSlideNo
+        return abs(b[centralSlNo] - b[centralSlNo+1])
     
     def __getRefCords(self):
         return self.__refCoords
     
     def __setRefCords(self, value):
         raise ValueError, "Read only property"
-
+    
     def __getVisibleGIDs(self):
         if self._visibleGID == None:
             self._findVisibleGIDs()
@@ -476,7 +499,7 @@ class barReconstructorIndexer(barIndexer):
     
     def __setVisibleGIDs(self, value):
         raise ValueError, "Read only property"
-
+    
     refCords = property(__getRefCords, __setRefCords)
     visibleGIDs = property(__getVisibleGIDs, __setVisibleGIDs)
     

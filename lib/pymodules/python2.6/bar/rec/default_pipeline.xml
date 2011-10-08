@@ -1,7 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<pipeline>
 		<elements>
-			<pipelineelement disable="False" displayable="True" on="True" order="0">
+			<pipelineelement disable="False" displayable="True" on="False" order="0">
+				<vtkclass>
+					barVtkAllFlip
+                </vtkclass>
+				<desc>
+					Flip axes
+				</desc>
+				<params>
+					<param display="True" hidden="False" order="0">
+						<name>
+							SetFlipx
+						</name>
+						<desc>
+							FlipX
+						</desc>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+					<param display="True" hidden="False" order="0">
+						<name>
+							SetFlipAbOriginx
+						</name>
+						<desc>
+							Flip about x origin
+						</desc>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+					<param display="True" hidden="False" order="0">
+						<name>
+							SetFlipy
+						</name>
+						<desc>
+							Flipy
+						</desc>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+					<param display="True" hidden="False" order="0">
+						<name>
+							SetFlipAbOriginy
+						</name>
+						<desc>
+							Flip about y origin
+						</desc>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+					<param display="True" hidden="False" order="0">
+						<name>
+							SetFlipz
+						</name>
+						<desc>
+							Flipz
+						</desc>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+					<param display="True" hidden="False" order="0">
+						<name>
+							SetFlipAbOriginz
+						</name>
+						<desc>
+							Flip about z origin
+						</desc>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+				</params>
+            </pipelineelement>
+
+			<pipelineelement disable="False" displayable="True" on="False" order="0">
 				<vtkclass>
 					vtkImagePermute
 				</vtkclass>
@@ -29,7 +118,39 @@
 						</args>
 					</param>
 				</params>
-			</pipelineelement>
+            </pipelineelement>
+
+
+			<pipelineelement disable="False" displayable="True" on="False" order="0">
+				<vtkclass>
+				    vtkImageChangeInformation
+				</vtkclass>
+				<desc>
+					Change volume information
+				</desc>
+				<params>
+					<param display="False" hidden="False" order="0">
+						<name>
+							SetOriginTranslation
+						</name>
+						<desc>
+							Translate origin
+						</desc>
+						<args>
+							<value order="0" type="float">
+								0.0
+							</value>
+							<value order="1" type="float">
+								0.0
+							</value>
+							<value order="2" type="float">
+								0.0
+							</value>
+						</args>
+					</param>
+				</params>
+            </pipelineelement>
+
 			<pipelineelement disable="False" displayable="True" on="False" order="1">
 				<vtkclass>
 					vtkImageGaussianSmooth

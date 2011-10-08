@@ -476,7 +476,7 @@ class barBatchReconstructor(object):
         if not type(self.sh.getSlidesSpan(structureName)) == type(("",)): return
         
         volume = self._generateVolume(structureName)
-        volume.prepareVolume()
+        volume.prepareVolume(self.sh.ih)
         
         # Get colour of the structure
         ct = self.getStructureColor(structureName)
@@ -520,7 +520,7 @@ class barBatchReconstructor(object):
         """
         indexFile = os.path.join(indexDirectory, indexFile)
         self.sh = structureHolder.structureHolder(\
-                indexFile, indexDirectory, debugMode = True)
+                indexFile, indexDirectory)
         
         self.__atlasDirectory   = indexDirectory
         

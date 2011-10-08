@@ -55,9 +55,6 @@ from bar.rec.barreconstructor import barPipeline, barParam, barPipeElem, VTK_PIP
 
 random.seed(10000)
 
-#TODO: Deprecated, needs to be removed in near future
-#sys.path.append('../parsers/s')
-
 BAR_VERSION = "ver. 0.1"
 
 BAR_HELP_WEBSITE_URL = 'firefox -new-tab http://www.3dbar.org/'
@@ -186,7 +183,6 @@ class vtkPipelineElement(wx.Panel):
         # Create checkbox determining wheter filter is enabled or disabled.
         # Enabling filter means using it in pipeline, disabling filter means
         # excluding it from pipeline.
-        # old method: self.filterEnabled = wx.CheckBox(self, -1, pelem.cls.__name__)
         self.filterEnabled = wx.CheckBox(self, -1, pelem.desc)
         self.filterEnabled.SetValue(pelem.on)
         # It is possible to fix enabled/disabled state of the filter.
@@ -238,7 +234,7 @@ class vtkPipelineElement(wx.Panel):
                      for pararg in param.args:
                          newElemCtrl = vtkParamCtrl(self,
                                                     value = str(pararg),
-                                                    size=(40, -1),
+                                                    size=(80, -1),
                                                     type = param.type)
                          newElemSizer.Add(newElemCtrl, 0, border = 0)
                          self.paramCtrls[param.name].append(newElemCtrl)
@@ -766,7 +762,7 @@ class pipelineManipulationPanel(wx.Panel):
         # save referece to frame
         self.frame = frameRef
         # Create sizer
-        self.sizer = wx.BoxSizer()
+        self.sizer = wx.GridSizer(rows=2)
         
         # Create empty dictionary holding references to vtk pipeline panels
         self.pipeListDict = {}
@@ -1356,7 +1352,7 @@ class mainGuiFrame(wx.Frame):
         
         indexFile = os.path.join(indexDirectory, BAR_ATLAS_INDEX_FILENAME)
         self.sh = structureHolder.structureHolder(\
-                indexFile, indexDirectory, debugMode = True)
+                indexFile, indexDirectory)
         self.__atlasDirectory   = indexDirectory
         
         # Try to create reconstruction directory, if directory cannot be created
@@ -1630,7 +1626,7 @@ class mainGuiFrame(wx.Frame):
         self.sh.handleAllModelGeneration(\
                 structureName, coronalPlaneRes, saggitalAxisRes) 
         
-        self.sh.StructVol.prepareVolume()
+        self.sh.StructVol.prepareVolume(self.sh.ih)
 
         # Get colour of the structure
         ct = self.getStructureColor(structureName)

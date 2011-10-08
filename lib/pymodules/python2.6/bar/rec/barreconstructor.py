@@ -634,8 +634,8 @@ class barReconstructionModule(object):
         # TODO: Implement automatic pipeline splitting
         # depending on filter output types.
         # Tue May 17 15:26:28 CEST 2011
-        self.__volumePipeline = self.__pipeline[:2]
-        self.__meshPipeline = self.__pipeline[2:-1]
+        self.__volumePipeline = self.__pipeline[:4]
+        self.__meshPipeline = self.__pipeline[4:-1]
         self.__finalPipeline = self.__pipeline[-1:]
         self.__clearCache()
     

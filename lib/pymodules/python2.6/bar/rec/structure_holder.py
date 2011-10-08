@@ -56,55 +56,41 @@ class VTKStructuredPoints():
         self.spacing=(sx, sy, sz)
     
     def setSlice(self, slideIndex, sliceArray):
-        #+1 is here because we want to have unit margin with zeros
-        # around whole structure
         self.vol[:, :, slideIndex]=sliceArray[:,:,0]
     
-    def __getVolume(self):
-        #self.vol= numpy.swapaxes(self.vol, 0,2)
-        #(x0,y0,z0)...(xnx,y0,z0)...(x0,y1,z0)
-
-        zlist=range(self.size[2])
-        ylist=range(self.size[1])
-        xlist=range(self.size[0])
-        self.vol=self.vol[:,:,::-1]
+    def prepareVolume(self, indexholderReference):
+        # Optional reverse of z axis:
+        if indexholderReference.flipAxes[2]:
+            self.vol=self.vol[:,:,::-1]
         
+        # Obligatory (required by vtk):
         self.vol= numpy.swapaxes(self.vol, 1,0)
     
-    def prepareVolume(self):
-        self.__getVolume()
-
-    def saveVolume(self, filename):
-        # create an uncompressed archive
-        #numpy.savez(filename,
-        #            volume=self.vol,
-        #            origin=numpy.array(self.origin),
-        #            spacing=numpy.array(self.spacing))
-
+    def saveVolume(self, filename):       
         # create a compressed zip archive instead
         zip = zipfile.ZipFile(filename, mode="w", compression=zipfile.ZIP_DEFLATED)
         # Place to write temporary .npy files
         #  before storing them in the zip
         (fh, filepath) = tempfile.mkstemp('.npy', 'numpy')
         os.close(fh)
-
+        
         # the list containing (filename, numpy array) pairs
         # controls execution of subsequent loop
         mainloop = [('volume.npy', self.vol),
                     ('origin.npy', numpy.array(self.origin)),
                     ('spacing.npy',numpy.array(self.spacing))]
+        
         for (name, data) in mainloop:
             # add 'data' to the archive 'zip' as 'name'
             fh = open(filepath, "wb")
             numpy.save(fh, data)
             fh.close()
             zip.write(filepath, arcname=name)
-
         zip.close()
-
+        
         # remove temporary file
         os.remove(filepath)
-
+    
     @classmethod
     def loadVolume(cls, filename):
         arch = numpy.load(filename)
@@ -122,8 +108,8 @@ class structureHolder():
     """
     clsIndexHolder = index_holder.barReconstructorIndexer
     clsSlide = barTracedSlideRenderer
-
-    def __init__(self, indexFilename, tracedFilesDirectory, debugMode = True):
+    
+    def __init__(self, indexFilename, tracedFilesDirectory):
         
         self.ih = self.clsIndexHolder.fromXML(indexFilename)
         self.tracedFilesDirectory =\
@@ -134,10 +120,8 @@ class structureHolder():
                 (float(self.ih.properties['ReferenceWidth'].value),
                  float(self.ih.properties['ReferenceHeight'].value))
         
-        self.CurrentStructureProperties={}
-        self.csp=self.CurrentStructureProperties #alias
-        
-        self.debugMode = debugMode 
+        self.CurrentStructureProperties = {}
+        self.csp = self.CurrentStructureProperties #alias
     
     def __initializeVolume(self):
         """
@@ -176,13 +160,15 @@ class structureHolder():
         # Aliases
         n   = self.ih.slidesBregmas['SlideNumber']
         res = self.ih.volumeConfiguration['CoronalResolution']
-        rc  = self.ih.volumeConfiguration['AlignerReferenceCoords']
+        #TODO:Remove: rc  = self.ih.volumeConfiguration['AlignerReferenceCoords']
+        rc  = self.ih.refCords
         bo  = self.ih.volumeConfiguration['BoundingBoxOffset']
         ppd = self.ih.volumeConfiguration['FullPlaneDimensions']
         sp  = self.ih.slidesBregmas['SlideSpans']
         bb  = self.ih.volumeConfiguration['CoronalBoundaryIndexes']
         rf  = self.ih.volumeConfiguration['ReduceFactor']
         m   = self.ih.volumeConfiguration['VolumeMargin']     # Margin in vol units.
+        b   = self.ih.slidesBregmas['Bregma']
         
         # Define scaling in x,y,z direction. Scaling in x and y are calculated
         # by taking scaling defined in svg file and multiplying it by some
@@ -205,8 +191,15 @@ class structureHolder():
         # into vtk reruirements (by = h-bo[3]). Bz is calculated basing on
         # minimum bregma coordinate ("right" bregma coordinate of slide with
         # maximum index): bz = -bb[1]+margin.
-        bx, by, bz = bo[0] , h-bo[3], -(bb[1]+m)
-
+        if sx > 0: bx =     bo[0]
+        else:      bx = w - bo[2]
+        
+        if sy > 0: by =     bo[1]
+        else:      by = h - bo[3]
+        
+        if b[n[0]] > b[n[-1]]: bz = -(bb[1]+m)
+        else: bz = -m
+        
         return self.__calcOriginAndSpacing((sx, sy, sz), (tx, ty, tz), (w, h), (bx,by, bz))
     
     def __calcOriginAndSpacing(self, (sx, sy, sz), (tx, ty, tz), (w, h), (bx, by, bz)):
@@ -246,41 +239,46 @@ class structureHolder():
         
         # Initial origin of coordinate system in image coordinates (it is
         # located in lower left corner of the image.
-        O = numpy.array([0, h, 0, 1]).reshape(4,1)
+        O = numpy.array([0, 0, 0, 1]).reshape(4,1)
         
         # Matrix transforming from image coordinate system to stereotaxic
         # coordinate system:
         # The exact form of T and S matrices depends on direction of axes.
         # Esspecialy direction of Y axis:
-        if sy > 0 and  ty < 0:
-            T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,-ty],[0,0,1,tz],[0,0,0,1]])
-            S = numpy.array( [[sx,0,0,0 ],[0,-sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
-        elif sx < 0 and sy < 0 and ty > 0:
-            T = numpy.array( [[1 ,0,0,w*sx+tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
-            S = numpy.array( [[-sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
-        elif sy < 0 and ty > 0:
-            T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
-            S = numpy.array( [[sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
-        else:
-            T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
-            S = numpy.array( [[sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
         
-        # Bounding box vector
-        #b = numpy.array([bx, by, bz, 1]).reshape(4,1)
-        B = numpy.array( [[1,0,0,bx],[0,1,0,-by],[0,0,1,bz],[0,0,0,1]])
+        if sx > 0 and sy > 0:
+            O = numpy.array([0, 0, 0, 1]).reshape(4,1)
+            B = numpy.array( [[1,0,0,bx],[0,1,0,by],[0,0,1,bz],[0,0,0,1]])
+            T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
+            S = numpy.array( [[sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
+        elif sx > 0 and sy < 0:
+            O = numpy.array([0, 0, 0, 1]).reshape(4,1)
+            B = numpy.array( [[1,0,0,bx],[0,1,0,by],[0,0,1,bz],[0,0,0,1]])
+            S = numpy.array( [[sx,0,0,0 ],[0,-sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
+            T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,sy*h+ty],[0,0,1,tz],[0,0,0,1]])
+        elif sx < 0 and sy > 0:
+            O = numpy.array([0, 0, 0, 1]).reshape(4,1)
+            B = numpy.array( [[1,0,0,bx],[0,1,0,by],[0,0,1,bz],[0,0,0,1]])
+            S = numpy.array( [[-sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
+            T = numpy.array( [[1 ,0,0,w*sx+tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
+        elif sx < 0 and sy < 0:
+            O = numpy.array([0, 0, 0, 1]).reshape(4,1)
+            B = numpy.array( [[1,0,0,bx],[0,1,0,by],[0,0,1,bz],[0,0,0,1]])
+            S = numpy.array( [[-sx,0,0,0 ],[0,-sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
+            T = numpy.array( [[1 ,0,0,w*sx+tx],[0,1,0,h*sy+ty],[0,0,1,tz],[0,0,0,1]])
         
         # Origin after including bounding box
         Op = numpy.dot(T,numpy.dot(S,numpy.dot(B,O)))
         
         if __debug__:
-            print >>sys.stderr, "Reference translation matrix:"
-            print >>sys.stderr, T
-            print >>sys.stderr, "Reference scaling matrix:"
-            print >>sys.stderr, S
             print >>sys.stderr, "Origin in stereotaxic coordinates:"
             print >>sys.stderr, O
             print >>sys.stderr, "Bounding box transformation matrix:"
             print >>sys.stderr, B
+            print >>sys.stderr, "Reference scaling matrix:"
+            print >>sys.stderr, S
+            print >>sys.stderr, "Reference translation matrix:"
+            print >>sys.stderr, T
             print >>sys.stderr, "Final origin of stereotaxic coordinate system:"
             print >>sys.stderr, Op
         
@@ -289,7 +287,7 @@ class structureHolder():
         # VTK handles negavite scaling very poor.
         spacing = (abs(S[0,0]),  abs(S[1,1]),  abs(S[2,2]))
         return (origin, spacing)
-
+    
     def __processModelGeneration(self):
         """
         Performs all operation related to rasterizing slides and
@@ -317,9 +315,8 @@ class structureHolder():
         # volume extraction from each slide:
         slideNumbersRange = range(firstSlideIndex, lastSlideIndex)
         for slide in slideNumbersRange:
-            print >>sys.stderr, "Processing slide: %d" % slide
-            vp = self.__processSingleSlide(slide)\
-        
+            self.__processSingleSlide(slide)
+     
     def __processSingleSlide(self, slideNumber):
         
         # Define some very useful aliases
@@ -345,15 +342,14 @@ class structureHolder():
         # Get adjusted coronal plane indexes of boundaries of whole slides set
         adjPlanesSpan    = (\
                 acs(currentSlideSpan[0], slideIndexSpan),
-                acs(currentSlideSpan[1], slideIndexSpan)\
-                )
+                acs(currentSlideSpan[1], slideIndexSpan))
         
         # Get coronal plane index of center of processed slide: 
         centralAdj = acs(bregmaCoordinate, slideIndexSpan) 
         
         self.tempCentralPlanes.append(centralAdj)
+        print >>sys.stderr,"Processing slide number:\t%d" % slideNumber
         if __debug__:
-            print >>sys.stderr,"Processing slide number:\t%d" % slideNumber
             print >>sys.stderr,"    Bregma:\t%f" %   bregmaCoordinate
             print >>sys.stderr,"    Slide span:\t" + str(currentSlideSpan)
             print >>sys.stderr,"    Rasterized span:\t" + str(slidePlanesSpan)
@@ -361,7 +357,6 @@ class structureHolder():
             print >>sys.stderr,"    Central plane:\t" + str(cs(bregmaCoordinate))+"\t"+str(centralAdj)
         
         structuresToInclude = self.csp['StructuresList']  
-        
         fpd = self.ih.volumeConfiguration['FullPlaneDimensions']
         bbo = self.ih.volumeConfiguration['BoundingBoxOffset']
         
@@ -374,17 +369,27 @@ class structureHolder():
             map(lambda x: setattr(x,'crispEdges',True), maskedSlide.values())
         # ------------------ Experimental ---------------------
         
+        # Determine if, the rendered plane shoud be flipped in x and y axis.
+        # It should be done if
+        otype = 'rec'
+        if self.ih.flipAxes[0]:
+            otype+='1'
+            if __debug__: print >>sys.stderr, '\tFlip x'
+        if self.ih.flipAxes[1]:
+            otype+='1'
+            if __debug__: print >>sys.stderr, '\tFlip y'
+        
         volumeFromOneSlice = maskedSlide._renderSvgDrawing(\
                                 maskedSlide.getXMLelement(),
                                 renderingSize=fpd,
                                 boundingBox=bbo,
-                                otype='rec')
+                                otype=otype)
         
+        adjPlanesSpan = tuple(sorted(adjPlanesSpan))
         for volumePlane in range(adjPlanesSpan[0], adjPlanesSpan[1]+1):
             if __debug__:
                 print >>sys.stderr, "\t\tFilling plane %s" %volumePlane
             self.StructVol.setSlice(volumePlane, volumeFromOneSlice)
-        return volumePlane
     
     def _loadSlide(self, slideNumber, structuresToInclude = None, version = 0):
         tracedSlideFilename = self.tracedFilesDirectory % (slideNumber,version)
@@ -397,8 +402,8 @@ class structureHolder():
         del self.tempCentralPlanes
     
     def __initModelGeneration(self, coronalResolution):
-        mx = float(self.ih.refCords[2]) / float(coronalResolution)
-        my = float(self.ih.refCords[3]) / float(coronalResolution)
+        mx = self.ih.refCords[2] / float(coronalResolution)
+        my = self.ih.refCords[3] / float(coronalResolution)
         multiplier = abs(mx)
         self.ih.volumeConfiguration['ReduceFactor'] = 1./multiplier
         
@@ -416,8 +421,6 @@ class structureHolder():
         self.ih.volumeConfiguration['PlaneDimensions']   = (bb[2]-bb[0],bb[3]-bb[1])
     
     def __getStructureList(self, HierarchyRootElementName):
-        """
-        """
         stlist = self.ih.getStructureList(HierarchyRootElementName)
         self.csp['StructuresList'] = stlist
         self.csp['slides'] = self.ih._structList2SlideSpan(stlist)
@@ -426,8 +429,7 @@ class structureHolder():
         
         # ------------------ Experimental ---------------------
         if ENABLE_EXPERIMENTAL_FEATURES:
-            xbbx=int(float(self.ih.properties['ReferenceWidth'].value))
-            ybbx=int(float(self.ih.properties['ReferenceHeight'].value))
+            xbbx, ybbx = tuple(map(int, self.refDimestions))
             bbx = barBoundingBox((1, 1, xbbx-1, ybbx-1))
             self.csp['slides'] =\
                     (self.ih.slidesBregmas['SlideNumber'][0],\
@@ -442,9 +444,8 @@ class structureHolder():
             CoronalResolution,\
             saggitalResolution,\
             VolumeMargin = 10):
-        """
-        """
-        self.ih.volumeConfiguration['AlignerReferenceCoords'] = self.ih.refCords
+        
+        #TODO: Remove: self.ih.volumeConfiguration['AlignerReferenceCoords'] = self.ih.refCords
         self.ih.volumeConfiguration['CoronalResolution']      = saggitalResolution 
         self.ih.volumeConfiguration['VolumeMargin']           = VolumeMargin
         self.__getStructureList(HierarchyRootElementName)
