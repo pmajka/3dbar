@@ -60,8 +60,9 @@ class VTKStructuredPoints():
     
     def prepareVolume(self, indexholderReference):
         # Optional reverse of z axis:
-        if indexholderReference.flipAxes[2]:
-            self.vol=self.vol[:,:,::-1]
+        #if indexholderReference.flipAxes[2]:
+        #print >>sys.stderr, "\tFlipping z"
+        #self.vol=self.vol[:,:,::-1]
         
         # Obligatory (required by vtk):
         self.vol= numpy.swapaxes(self.vol, 1,0)
@@ -133,7 +134,20 @@ class structureHolder():
         
         # Calculate volume dimensions basing on set of slides and
         # (implicitly) values defined in C{indexHolder.volumeConfiguration}
-        volumeDimensions = self.ih.defineVolumeSize( self.csp['slides'] )
+        
+        if round(self.ih.volumeConfiguration['zRes'] - self.getDefaultZres(),5) == 0:
+            eqSpacing = True
+        else:
+            eqSpacing = False
+         
+        zSize = self.ih.getZExtent( self.csp['slides'],\
+                self.ih.volumeConfiguration['zRes'],
+                self.ih.volumeConfiguration['zMargin'], eqSpacing)
+        
+        dm = self.ih.volumeConfiguration['PlaneDimensions']  # Bitmap size
+        volumeDimensions = (dm[0], dm[1], zSize)
+        
+        self.ih.volumeConfiguration['zSize'] = zSize
         
         print >>sys.stderr, "Defining volume for structure:"
         print >>sys.stderr, "\tDimensions: (%d, %d, %d)" % volumeDimensions
@@ -158,29 +172,24 @@ class structureHolder():
         """
         
         # Aliases
-        n   = self.ih.slidesBregmas['SlideNumber']
-        res = self.ih.volumeConfiguration['CoronalResolution']
-        #TODO:Remove: rc  = self.ih.volumeConfiguration['AlignerReferenceCoords']
+        zRes = self.ih.volumeConfiguration['zRes']
         rc  = self.ih.refCords
         bo  = self.ih.volumeConfiguration['BoundingBoxOffset']
         ppd = self.ih.volumeConfiguration['FullPlaneDimensions']
-        sp  = self.ih.slidesBregmas['SlideSpans']
-        bb  = self.ih.volumeConfiguration['CoronalBoundaryIndexes']
+        bb  = self.ih.volumeConfiguration['zOrigin']
         rf  = self.ih.volumeConfiguration['ReduceFactor']
-        m   = self.ih.volumeConfiguration['VolumeMargin']     # Margin in vol units.
-        b   = self.ih.slidesBregmas['Bregma']
         
         # Define scaling in x,y,z direction. Scaling in x and y are calculated
         # by taking scaling defined in svg file and multiplying it by some
         # resolution-dependent factor. Coronal scaling is taken directly from
         # coronal resolution.
-        sx, sy, sz = rc[2]*rf, rc[3]*rf, res
+        sx, sy, sz = rc[2]*rf, rc[3]*rf, zRes
         
         # Coordinates of upper left image corner and maximal bregma coordinate.
         # tx,ty are taken from AlignerReferenceCoords while tz is calculated by
         # taking bregma coordinate of "left" boundary of first slice of
         # structure.
-        tx, ty, tz = rc[0] , rc[1], sp[n[0]][0]
+        tx, ty, tz  = rc[0] , rc[1], bb
         
         # Full width and height of image (the save values which are passed to
         # rederer
@@ -197,8 +206,7 @@ class structureHolder():
         if sy > 0: by =     bo[1]
         else:      by = h - bo[3]
         
-        if b[n[0]] > b[n[-1]]: bz = -(bb[1]+m)
-        else: bz = -m
+        bz = 0
         
         return self.__calcOriginAndSpacing((sx, sy, sz), (tx, ty, tz), (w, h), (bx,by, bz))
     
@@ -301,11 +309,6 @@ class structureHolder():
         """
         self.__initializeVolume()
         
-        # Define some aliases:
-        fpd = self.ih.volumeConfiguration['FullPlaneDimensions']
-        ppd = self.ih.volumeConfiguration['PlaneDimensions']
-        bbo = self.ih.volumeConfiguration['BoundingBoxOffset']
-        
         self.tempCentralPlanes = []   # For collecting central planes indexes
         
         firstSlideIndex = self.csp['slides'][0]    # Index of first slide  
@@ -313,61 +316,45 @@ class structureHolder():
         
         # Iterate trought all slides and process with 
         # volume extraction from each slide:
-        slideNumbersRange = range(firstSlideIndex, lastSlideIndex)
-        for slide in slideNumbersRange:
-            self.__processSingleSlide(slide)
+        self.slideNumbersRange = range(firstSlideIndex, lastSlideIndex)
+        
+        Oz = self.StructVol.origin[2]
+        ez = self.StructVol.size[2]
+        sz = self.StructVol.spacing[2]
+        print (Oz,sz,ez)
+        
+        z = numpy.array(map(lambda x: sz*(x+0) + Oz, range(0, ez)))
+        zi= numpy.array(range(0, ez))
+        print z
+        ass = {}
+        css = {}
+        
+        for s in map(lambda x: self.ih.s[x], range(firstSlideIndex, lastSlideIndex)):
+            mask = (0>=numpy.round(s.span[0]-z,5)) & (0<=numpy.round(s.span[1]-z,5))
+            #print "z >", s.span[0], "& z <=", s.span[1]
+            #print list(zi[mask])
+            #print list(z[mask])
+            ass[s.name] = (list(zi[mask]), list(z[mask]))
+        print ass
+        
+        raw_input()
+        for (slideNo, (planes,coor)) in ass.iteritems():
+            print slideNo
+            print planes
+            print coor
+            self.__processSingleSlide(slideNo, planes)
      
-    def __processSingleSlide(self, slideNumber):
-        
-        # Define some very useful aliases
-        bgi = self.ih.slidesBregmas
-        cs  = self.ih._scaleBregmaToCoronalBasic
-        acs = self.ih.adjustedScaling
-        
-        # for getting adj. indexes of boundary coronal planes
-        scbi= self.ih.setCoronalBoundaryIndexes
-        
+    def __processSingleSlide(self, slideNumber, planes):
         # Another set of usefull aliases:
-        firstSlideIndex = self.csp['slides'][0]
-        lastSlideIndex  = self.csp['slides'][1]
-        slideIndexSpan  = (firstSlideIndex, lastSlideIndex)
         
-        # Get bregmaCoordinate and coronal span of currently processed slide
-        bregmaCoordinate = bgi['Bregma'][slideNumber]
-        currentSlideSpan = bgi['SlideSpans'][slideNumber]
-        
-        #  Get coronal plane indexes of boundaries of current slide
-        slidePlanesSpan  = scbi((slideNumber, slideNumber))
-        
-        # Get adjusted coronal plane indexes of boundaries of whole slides set
-        adjPlanesSpan    = (\
-                acs(currentSlideSpan[0], slideIndexSpan),
-                acs(currentSlideSpan[1], slideIndexSpan))
-        
-        # Get coronal plane index of center of processed slide: 
-        centralAdj = acs(bregmaCoordinate, slideIndexSpan) 
-        
-        self.tempCentralPlanes.append(centralAdj)
         print >>sys.stderr,"Processing slide number:\t%d" % slideNumber
-        if __debug__:
-            print >>sys.stderr,"    Bregma:\t%f" %   bregmaCoordinate
-            print >>sys.stderr,"    Slide span:\t" + str(currentSlideSpan)
-            print >>sys.stderr,"    Rasterized span:\t" + str(slidePlanesSpan)
-            print >>sys.stderr,"    Adjusted span:\t" + str(adjPlanesSpan)
-            print >>sys.stderr,"    Central plane:\t" + str(cs(bregmaCoordinate))+"\t"+str(centralAdj)
-        
+#       
         structuresToInclude = self.csp['StructuresList']  
         fpd = self.ih.volumeConfiguration['FullPlaneDimensions']
         bbo = self.ih.volumeConfiguration['BoundingBoxOffset']
         
         maskedSlide = self._loadSlide(slideNumber, structuresToInclude, version=0)
         maskedSlide.getMask()
-        
-        # ------------------ Experimental ---------------------
-        if ENABLE_EXPERIMENTAL_FEATURES:
-            #maskedSlide.writeXMLtoFile("%04d.svg"%slideNumber)
-            map(lambda x: setattr(x,'crispEdges',True), maskedSlide.values())
-        # ------------------ Experimental ---------------------
         
         # Determine if, the rendered plane shoud be flipped in x and y axis.
         # It should be done if
@@ -385,11 +372,8 @@ class structureHolder():
                                 boundingBox=bbo,
                                 otype=otype)
         
-        adjPlanesSpan = tuple(sorted(adjPlanesSpan))
-        for volumePlane in range(adjPlanesSpan[0], adjPlanesSpan[1]+1):
-            if __debug__:
-                print >>sys.stderr, "\t\tFilling plane %s" %volumePlane
-            self.StructVol.setSlice(volumePlane, volumeFromOneSlice)
+        for z in planes:
+            self.StructVol.setSlice(z, volumeFromOneSlice)
     
     def _loadSlide(self, slideNumber, structuresToInclude = None, version = 0):
         tracedSlideFilename = self.tracedFilesDirectory % (slideNumber,version)
@@ -400,6 +384,7 @@ class structureHolder():
     def __flushCache(self):
         del self.StructVol
         del self.tempCentralPlanes
+        self.csp = {}
     
     def __initModelGeneration(self, coronalResolution):
         mx = self.ih.refCords[2] / float(coronalResolution)
@@ -423,7 +408,7 @@ class structureHolder():
     def __getStructureList(self, HierarchyRootElementName):
         stlist = self.ih.getStructureList(HierarchyRootElementName)
         self.csp['StructuresList'] = stlist
-        self.csp['slides'] = self.ih._structList2SlideSpan(stlist)
+        self.csp['slides'] = self.ih._structList2SlideSpan(stlist,rawIndexes=True)
         
         bbx = self.ih.getStructuresListBbx(stlist)
         
@@ -437,19 +422,30 @@ class structureHolder():
         # ------------------ Experimental ---------------------
         
         self.ih.volumeConfiguration['StructureBoundingBoxes'] = bbx
-        self.ih.volumeConfiguration['CoronalBoundaryIndexes'] = self.ih.setCoronalBoundaryIndexes(self.csp['slides'])
+
+        #XX: REPLACE WITH EQUAL THICKNESS
+        print round(self.ih.volumeConfiguration['zRes'] - self.getDefaultZres(),5)
+        if  round(self.ih.volumeConfiguration['zRes'] - self.getDefaultZres(),5) == 0:
+            eqSpacing = True
+        else:
+            eqSpacing = False
+        
+        self.ih.volumeConfiguration['zOrigin'] =\
+                self.ih.getZOrigin(self.csp['slides'],\
+                self.ih.volumeConfiguration['zRes'],
+                self.ih.volumeConfiguration['zMargin'],\
+                eqSpacing)
     
     def handleAllModelGeneration(self,\
             HierarchyRootElementName,\
-            CoronalResolution,\
-            saggitalResolution,\
+            xyRes, zRes,\
             VolumeMargin = 10):
         
         #TODO: Remove: self.ih.volumeConfiguration['AlignerReferenceCoords'] = self.ih.refCords
-        self.ih.volumeConfiguration['CoronalResolution']      = saggitalResolution 
-        self.ih.volumeConfiguration['VolumeMargin']           = VolumeMargin
+        self.ih.volumeConfiguration['zRes']    =  zRes
+        self.ih.volumeConfiguration['zMargin'] = VolumeMargin
         self.__getStructureList(HierarchyRootElementName)
-        self.__initModelGeneration(CoronalResolution)
+        self.__initModelGeneration(xyRes)
         self.__processModelGeneration()
     
     def getSlidesSpan(self, HierarchyRootElementName):

@@ -33,7 +33,81 @@ from string import *
 import sys
 import os.path
 
-from bar import barIndexer
+from bar import barIndexer, barIndexerSlideElement
+from bar.base import flatten
+
+def qdist((z1, z2), zRes = None):
+        thickness = abs(float(z2 - z1))
+        
+        if __debug__:
+            print "\tqdist: span: ", z1, z2
+            print "\tqdist: thickness:", thickness
+        
+        if not zRes:
+            return thickness
+        
+        qthick    = thickness/float(zRes)
+        if __debug__:
+            print "\tqdist: qthick: ", qthick
+            print "\tqdist: retval:", int(round(qthick))
+        
+        return int(round(qthick))
+
+
+class barReconstructorSlideElem(barIndexerSlideElement):
+    def __init__(self, *args):
+        barIndexerSlideElement.__init__(self, *args)
+        
+        self.z    = float(self.coronalcoord)
+        self.idx  = None
+        self.span = None
+        self.prev = None
+        self.next = None
+    
+    def getThickness(self, zRes):
+        return qdist(self.span, zRes)
+    
+    def defineSpan(self):
+        if self.prev == None:
+            self.span = self._calculateSlideSpan(\
+                    [self.z, self.z, self.next.z])
+        
+        if self.next == None:
+            self.span = self._calculateSlideSpan(\
+                    [self.prev.z, self.z, self.z])
+        
+        if self.prev and self.next:
+            self.span = self._calculateSlideSpan(\
+                    [self.prev.z, self.z, self.next.z])
+    
+    def _calculateSlideSpan(self, l):
+        """
+        Slide spans are calculated using following formulas::
+        
+            s_n=
+            \\left \\langle 
+            b_n - \\frac{\\left | b_{n-1} - b_n \\right |}{2}
+            ,
+            b_n + \\frac{\\left | b_{n} - b_{n+1} \\right |}{2}
+             \\right \\rangle
+        
+        @type  l: list
+        @param l: list of three values of bregmas: left (the highest value),
+                 middle (slide's bregma coordinate) and right (lowest value)
+        @type  eq: Boolean
+        @param eq: Determines wether left and rigth span are the same. If True,
+                   left and right spans are the same. Option is implemented but
+                   not used.
+        @return: (tuple) Maximal and minimal bregma coordinate of given slide.
+        """
+        l.sort()
+        dl = abs(l[0]-l[1])/2
+        dr = abs(l[1]-l[2])/2
+        #print tuple(sorted((l[1]-dl,l[1]+dr))) 
+        return tuple(sorted((l[1]-dl,l[1]+dr)))
+        
+
+barIndexer._slideElement = barReconstructorSlideElem
 
 class barReconstructorIndexer(barIndexer):
     """
@@ -161,94 +235,38 @@ class barReconstructorIndexer(barIndexer):
         # 'SlideNumber': [1,2,3,4,...]
         # 'SlideSpans' {1: (22.949999999999999, 22.050000000000001),
         #               2: (22.050000000000001, 20.925000000000001),...
-        self.slidesBregmas={ 'Bregma':{}, 'SlideNumber':[], 'SlideSpans':{} }
-        self.slidesBregmas['Bregma'] =\
-             dict(map(lambda (k,v): (k, float(v.coronalcoord)), self.slides.iteritems()))
-        self.slidesBregmas['SlideNumber'] = self.slides.keys()
-        self.slidesBregmas['SlideNumber'].sort()
-        self.__defineSlicesSpan()
+        
+        self.s = []
+        skeys = sorted(self.slides.keys())
+        for i in range(len(skeys)):
+                self.s.append(self.slides[skeys[i]])
+        for i in range(1,len(self.s)-1):
+            self.s[i].idx = i
+            self.s[i].prev = self.s[i-1]
+            self.s[i].next = self.s[i+1]
+        self.s[0].next = self.s[1]
+        self.s[0].idx = 0;
+        self.s[-1].idx = range(len(self.s))[-1]
+        self.s[-1].prev = self.s[-2]
+        map(lambda x: x.defineSpan(), self.s) 
         
         self.__refCoords =  map(float, self.properties['RefCords'].value.strip().split(','))
         self.__defineAxesFlips()
         
         if __debug__:
-            print >>sys.stderr, self.slidesBregmas['SlideSpans']
-            print >>sys.stderr, self.slidesBregmas['Bregma']
-            print >>sys.stderr, self.slidesBregmas['SlideNumber']
+#           print >>sys.stderr, map(lambda sl: sl.span, self.s)
+#           print >>sys.stderr, map(lambda sl: sl.z, self.s)
+#           print >>sys.stderr, map(lambda sl: sl.name, self.s)
             print >>sys.stderr, self.flipAxes
     
     def __defineAxesFlips(self):
-        if self.refCords[2] < 0: self.flipAxes[0] = True
-        if self.refCords[3] < 0: self.flipAxes[1] = True
-        
-        n = self.slidesBregmas['SlideNumber']
-        b = self.slidesBregmas['Bregma']
-        if  b[n[0]] > b[n[-1]]: self.flipAxes[2] = True
-    
-    def __defineSlicesSpan(self):
-        """
-        Calculate span for each slide. By span I mean minimal and maximal bregma
-        coordinate on which given slide exists::
-        
-            min bregma     slide bregma     max bregma
-            |                   ||            |
-            |<------------------||----------->|
-            |                   ||            |
-            <--------------------------------->
-                               slide span
-        
-        @return: None
-        """
-        #alias: sn - slideNumbers
-        sN = self.slidesBregmas['SlideNumber']
-        
-        #alias: sp - slideSpans. We will will this dictionary with data
-        sp = self.slidesBregmas['SlideSpans']
-        
-        #alias: b - Bregma
-        b = self.slidesBregmas['Bregma']
-        
-        #alias csp - calculateSlideSpan
-        csp = self._calculateSlideSpan
-        
-        # We need to manually set slide spans for first, last and last but one
-        # slide
-        sp[sN[0]]  = csp( map( lambda x: b[x], [sN[1] , sN[0] , sN[1]]  ) )
-        sp[sN[-2]] = csp( map( lambda x: b[x], [sN[-3], sN[-2], sN[-1]] ) )
-        sp[sN[-1]] = csp( map( lambda x: b[x], [sN[-2], sN[-1], sN[-2]] ) )
-        
-        # For other slide we do it in a loop
-        for seg in  listPartition(sN, 3):
-            sp[ seg[1] ] = csp( map( lambda x: b[x], seg ) )
-    
-    def _calculateSlideSpan(self, l, eq=False):
-        """
-        Slide spans are calculated using following formulas::
-        
-            s_n=
-            \\left \\langle 
-            b_n - \\frac{\\left | b_{n-1} - b_n \\right |}{2}
-            ,
-            b_n + \\frac{\\left | b_{n} - b_{n+1} \\right |}{2}
-             \\right \\rangle
-        
-        @type  l: list
-        @param l: list of three values of bregmas: left (the highest value),
-                 middle (slide's bregma coordinate) and right (lowest value)
-        @type  eq: Boolean
-        @param eq: Determines wether left and rigth span are the same. If True,
-                   left and right spans are the same. Option is implemented but
-                   not used.
-        @return: (tuple) Maximal and minimal bregma coordinate of given slide.
-        """
-        
-        dl = (abs(l[0]-l[1])/2)
-        if eq:
-            dr=dl
-        else:
-            dr=(abs(l[1]-l[2])/2)
-         
-        return tuple(sorted((l[1]+dl,l[1]-dr)))
+       if self.refCords[2] < 0: self.flipAxes[0] = True
+       if self.refCords[3] < 0: self.flipAxes[1] = True
+       
+       s = self.s
+       if s[0].z < s[-1].z : self.flipAxes[2] = True
+       
+       print s[0].z,s[-1].z
     
     def getUIDsForGivenGroupName(self, topStructureName):
         """
@@ -268,143 +286,6 @@ class barReconstructorIndexer(barIndexer):
     
     def getHierarchyTree(self, root, depth = 100):
         return self.groups[root].getNameFullNameUid(depth = depth)
-    
-    def _bregmaToVolumeCoordinates(self, bregmaCoordinate):
-        """
-        @type  bregmaCoordinate: float
-        @param bregmaCoordinate: bregma coordinate to be converted to volume
-               coordinate using defined coronal resolution.
-        
-        @return: bregmaCoordinate in volumetric units.
-        """
-        return bregmaCoordinate / self.volumeConfiguration['CoronalResolution']
-    
-    def _scaleBregmaToCoronalBasic(self, bregmaCoordinate):
-        """
-        @type  bregmaCoordinate: float
-        @param bregmaCoordinate: bregma coordinate to be rescaled
-        @return: (integer) coronal plane index according to scaling and offset
-        
-        Converts bregma coordinate to pixel number in coronal plane.
-        It is very important function widely used in other functions :)
-        
-        Following steps are performed in order to rescale given bregma
-        coordinate:
-            
-            1. Total number of coronal planes C{vc} is defined. C{vc} is
-                dependent from coronal resolution and calculated by:
-                volumetric plane index of "left" boundary of first slide - 
-                volumetric plane index of"right" boundary of last slide
-                
-                C{v_c( s(1)^L) - v_c( s(n)^P)}
-            
-            2. Offset and scaling are calculated in the way that leftmost value (max
-               bregma) is transformed o 0 coronal plane index while rightmost
-               (min bregma coordinate) is transformed to last (tcp) coronal plane.
-               So the lower bregma coordinate, the higher coronal plane index.
-        
-        Please note that calculations abov do not include margins!
-        """
-        r = self.volumeConfiguration['CoronalResolution']
-        vc = self._bregmaToVolumeCoordinates
-        sp = self.slidesBregmas['SlideSpans']
-        n  = self.slidesBregmas['SlideNumber']
-        b  = self.slidesBregmas['Bregma']
-        
-        # offset:
-        o = 1./r * sp[n[0]][0] 
-        
-        # scaling (if slides are in descending/descending order)
-        if b[n[0]] > b[n[-1]]: a = -1./r
-        else: a = 1./r
-        
-        return int( a * bregmaCoordinate + o)
-    
-    def adjustedScaling(self, bregmaCoordinate, slideIndexSpan):
-        """
-        Calculates adjusted scaling. Adjustd scaling means that volume margins
-        and current structure slide span are taken into account. Adjustmets are
-        made by shifting regular scaling and adding margin:
-        
-        C{ adj.scaling = reg.scaling(bregmaCoord) - reg.scaling(leftBoundary)+margin}
-        
-        So the leftmost bregma value is translatesd to m coronal plane (not m+1
-        as coronal planes starts from 0)::
-        
-            asc(sll)=m
-        
-        @type  bregmaCoordinate: float
-        @param bregmaCoordinate: bregma coordinate to be rescaled
-        
-        @type  slideIndexSpan: tuple of two integers
-        @param slideIndexSpan: slide span of structure: (lowest slide number,
-                               highest slide number).
-        
-        @return: Adjusted coronal plane index.
-        """
-        
-        slb = self.slidesBregmas['SlideSpans']
-        sc  = self._scaleBregmaToCoronalBasic
-        m   = self.volumeConfiguration['VolumeMargin']
-        
-        # Get bregma coordinates of extreme slide numbers:
-        # slide number -> ( b_left in mm, b_right in mm) 
-        slideCoronalSpan = map( lambda x: slb[x], slideIndexSpan)
-        
-        scp = slideCoronalSpan # Just convinient alias
-        
-        return +sc(bregmaCoordinate) - sc(scp[0][0]) +m
-    
-    def defineVolumeSize(self, slideNumberSpan):
-        """
-        Defines size of volumetrix box for given structure taking into account
-        slide span of given structure and margins. Number of voxels in x and y
-        is taken directly from bitmap resolution while number of coronal planes
-        is calculated basing on slide span and margins.
-
-        @type  slideNumberSpan: tuple of two integers
-        @param slideNumberSpan: min and max slide number of given structure
-        
-        @return: tuple of three integers with numbers ov voxels in x,y and z
-                 dimensions
-        """
-        
-        sc = self._scaleBregmaToCoronalBasic              # Alias
-        sp = self.slidesBregmas['SlideSpans']             # Alias
-        n  = slideNumberSpan                              # Just alias
-        dm = self.volumeConfiguration['PlaneDimensions']  # Bitmap size
-        m  = self.volumeConfiguration['VolumeMargin']     # Margin in vol units.
-        
-        leftBregmaValueIndex  = sc(sp[n[0]][0])           # left plane index 
-        rigthBregmaValueIndex = sc(sp[n[1]][1])           # right plane index
-        
-        # Number of voxels in coronal plane:
-        # Total number of planes is difference of indexes + 1 + 2*margin
-        coronalDimension = abs(leftBregmaValueIndex - rigthBregmaValueIndex)+1 + 2*m
-        return (dm[0], dm[1], coronalDimension)
-    
-    def setCoronalBoundaryIndexes(self, slideNumberSpan):
-        """
-        @type  slideNumberSpan: tuple of two integers
-        @param slideNumberSpan: min and max slide number of given structure
-        
-        @return: tuple of two integers: (adj. coronal plane index of left plane,
-        adj. coronal plane index of right plane). Left plane is a plane with
-        max. bregma coordinate while right coronal plane is plane with min.
-        bregma coordinate.
-        
-        Defines size of volumetrix box for given structure taking into account
-        slide span of given structure and margins. Number of voxels in x and y
-        is taken directly from bitmap resolution while number of coronal planes
-        is calculated basing on slide span and margins.
-        """
-        sc = self._scaleBregmaToCoronalBasic              # Alias
-        sp = self.slidesBregmas['SlideSpans']             # Alias
-        n  = slideNumberSpan                              # Just alias
-        leftBregmaValueIndex  = sc(sp[n[0]][0])           # left plane index 
-        rigthBregmaValueIndex = sc(sp[n[1]][1])           # right plane index
-        
-        return  tuple(sorted((leftBregmaValueIndex, rigthBregmaValueIndex)))
     
     def getStructureList(self, HierarchyRootElementName):
         """
@@ -432,7 +313,7 @@ class barReconstructorIndexer(barIndexer):
         structureList = self.getStructureList(HierarchyRootElementName)
         return self._structList2SlideSpan(structureList)
     
-    def _structList2SlideSpan(self, structuresList):
+    def _structList2SlideSpan(self, structuresList, rawIndexes = False):
         """
         @type  structuresList: list of strings 
         @param structuresList: list of structure's names for which slide span
@@ -454,7 +335,60 @@ class barReconstructorIndexer(barIndexer):
             retSpan = ( min(returnSet), max(returnSet) )
         except ValueError:
             retSpan = ("Structure not defined on any slide")
-        return retSpan
+        
+        if rawIndexes:
+            return tuple(map(lambda x: self.slides[x].idx, retSpan))
+        else:
+            return retSpan
+    
+    def getZOrigin(self, slideNumberSpan, zRes, margin, eqSpacing = False):
+        n  = slideNumberSpan                              # Just alias
+        
+        if eqSpacing:
+            zOrig = min(self.s[n[0]].z, self.s[n[1]].z)
+        else:
+            zOrig = min([self.s[n[0]].span[1],\
+                         self.s[n[0]].span[0],\
+                         self.s[n[1]].span[1],\
+                         self.s[n[1]].span[0]])
+        
+        retval = zOrig - zRes*margin
+        
+        if __debug__:
+            print "\tgetZOrigin: eqSpacing:", eqSpacing
+            print "\tgetZOrigin: slides:", slideNumberSpan
+            print "\tgetZOrigin: zOrig:",  zOrig 
+            print "\tgetZOrigin: zRes:",  zRes
+            print "\tgetZOrigin: margin:", zRes*margin
+            print "\tgetZOrigin: final:", retval
+        return retval
+    
+    def getZExtent(self, slideNumberSpan, zRes, margin, eqSpacing = False):
+         
+        n  = slideNumberSpan                              # Just alias
+        
+        if eqSpacing:
+            lZcoord = self.s[n[0]].z
+            rZcoord = self.s[n[1]].z
+        else:
+            chList = [self.s[n[0]].span[1],\
+                      self.s[n[0]].span[0],\
+                      self.s[n[1]].span[1],\
+                      self.s[n[1]].span[0]]
+            lZcoord = min(chList)
+            rZcoord = max(chList)
+        
+        retval = qdist((lZcoord, rZcoord), zRes) + 2*margin
+        
+        if __debug__:
+            print "\tgetZExtent: eqSpacing:", eqSpacing
+            print "\tgetZExtent: slideNumberSpan:", slideNumberSpan
+            print "\tgetZExtent: extent coords:", lZcoord, rZcoord
+            print "\tgetZExtent: zRes:", zRes
+            print "\tgetZExtent: margin:", margin
+            print "\tgetZExtent: retval:", retval
+        
+        return retval
     
     def getStructuresListBbx(self, structuresList):
         """
@@ -479,12 +413,9 @@ class barReconstructorIndexer(barIndexer):
         @return: Default interplane distance (default z resolution)
         """
         
-        slidesNumber = len(self.slidesBregmas['SlideNumber'])
-        firstSlideNo = self.slidesBregmas['SlideNumber'][0]
-        b = self.slidesBregmas['Bregma'] # Just an alias
-        
-        centralSlNo = int(slidesNumber/2) + firstSlideNo
-        return abs(b[centralSlNo] - b[centralSlNo+1])
+        s = self.s
+        centralSl = s[int(len(s)/2)]
+        return abs(centralSl.z - centralSl.next.z)
     
     def __getRefCords(self):
         return self.__refCoords
@@ -502,42 +433,3 @@ class barReconstructorIndexer(barIndexer):
     
     refCords = property(__getRefCords, __setRefCords)
     visibleGIDs = property(__getVisibleGIDs, __setVisibleGIDs)
-    
-def listPartition(sourceList, length = 0):
-    """
-    @type  sourceList: list
-    @param sourceList: list to be splited
-    
-    @type  length: integer
-    @param length: Length of single piece.
-    
-    @return: (list) C{sourceList} splitted into pieces of length C{length}.
-    
-    Splits list C{sourceList} into elements of length C{length}.
-    If list cannot be splitted into pieces of equal length, last piece is
-    shorter. If C{length} is not provided exeption will appear and function
-    would not work properly.
-    
-    Please look at the examples to be sure how this function works.
-    
-        >>> listPartition(range(10),0)
-        [[], [], [], [], [], [], [], [], [], []]
-        
-        >>> listPartition(range(10),1)
-        [[0], [1], [2], [3], [4], [5], [6], [7], [8]]
-        
-        >>> listPartition(range(10),2)
-        [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7], [7, 8]]
-        
-        >>> listPartition(range(10),6)
-        [[0, 1, 2, 3, 4, 5],
-        [1, 2, 3, 4, 5, 6],
-        [2, 3, 4, 5, 6, 7],
-        [3, 4, 5, 6, 7, 8]]
-    """
-    resultingList = []
-    
-    for i in range(len(sourceList) - length):
-        resultingList.append( sourceList[i:i+length])
-    
-    return resultingList
