@@ -39,7 +39,7 @@ from base import barPath, barTracedSlideRenderer, barTracedSlide,barBregmaMetada
 from parsers import barExternalParser
 STRUCTURE_NAME_TEMPLATE = "structure%d_label%d_%s"
 
-
+#TODO: move to base.py
 def cleanStructName(structName):
     """
     Provided acronyms are usually fine but sometimes they are not

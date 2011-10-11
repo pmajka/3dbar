@@ -1103,7 +1103,8 @@ class barIndexer(barIndexerObject):
     
     _initialIDs = {'uid': 100000,
                    'gid': 200000}
-    
+   
+    _indexerElement = barIndexerElement
     _propertyElement = barIndexerPropertyElement
     _groupElement = barIndexerGroupElement
     _slideElement = barIndexerSlideElement
