@@ -37,37 +37,72 @@ from bar import barIndexer, barIndexerSlideElement
 from bar.base import flatten
 
 def qdist((z1, z2), zRes = None):
-        thickness = abs(float(z2 - z1))
-        
-        if __debug__:
-            print "\tqdist: span: ", z1, z2
-            print "\tqdist: thickness:", thickness
-        
-        if not zRes:
-            return thickness
-        
-        qthick    = thickness/float(zRes)
-        if __debug__:
-            print "\tqdist: qthick: ", qthick
-            print "\tqdist: retval:", int(round(qthick))
-        
-        return int(round(qthick))
+    thickness = abs(float(z2 - z1))
+    
+    if __debug__:
+        print "\tqdist: span: ", z1, z2
+        print "\tqdist: thickness:", thickness
+    
+    if not zRes:
+        return thickness
+    
+    qthick    = thickness/float(zRes)
+    if __debug__:
+        print "\tqdist: qthick: ", qthick
+        print "\tqdist: retval:", int(round(qthick))
+        print
+    
+    return int(round(qthick))
 
 
 class barReconstructorSlideElem(barIndexerSlideElement):
+    """
+    @ivar z: coordinate of the slide plane
+    @type z: float
+    
+    @ivar idx: index in the slide
+    @type idx: int
+    
+    @ivar span: spatial span of the slide
+    @type span: (float, float)
+    
+    @ivar prev: reference to the slide with the previous index
+    @type prev: L{barIndexerSlideElement}
+    
+    @ivar next: refrence to the slide with the next index
+    @type next: L{barIndexerSlideElement}
+    """
+    
     def __init__(self, *args):
         barIndexerSlideElement.__init__(self, *args)
         
         self.z    = float(self.coronalcoord)
         self.idx  = None
-        self.span = None
+        self.span = None #TODO: Implement as property
         self.prev = None
         self.next = None
     
     def getThickness(self, zRes):
+        """
+        Calculate thicknes of the slide in using zRes as quantification unit. If
+        C{zRes == None}. Distance without applying quantyfication.
+        
+        @type  zRes: quantification unit
+        @param zRes: float
+        
+        @return: thicknes of the slide in zRes units
+        @rtype: int or flaot
+        """
         return qdist(self.span, zRes)
     
     def defineSpan(self):
+        """
+        Calculate spatial span along plane perpendicular to slide plane.
+        
+        @return: None
+        @rtype: None
+        """
+        #TODO: Implement as cacheable property
         if self.prev == None:
             self.span = self._calculateSlideSpan(\
                     [self.z, self.z, self.next.z])
@@ -103,23 +138,24 @@ class barReconstructorSlideElem(barIndexerSlideElement):
         l.sort()
         dl = abs(l[0]-l[1])/2
         dr = abs(l[1]-l[2])/2
-        #print tuple(sorted((l[1]-dl,l[1]+dr))) 
         return tuple(sorted((l[1]-dl,l[1]+dr)))
-        
 
-barIndexer._slideElement = barReconstructorSlideElem
 
 class barReconstructorIndexer(barIndexer):
     """
     @ivar _visibleGID: GIDs of visible in CAF slides hierarchy tree elements
     @type _visibleGID: set(int)
     """
+    _slideElement = barReconstructorSlideElem
+    
     def __init__(self):
         barIndexer.__init__(self)
         
-        self.volumeConfiguration = {}
         self._visibleGID = None
         self.flipAxes = 3*[False]
+        
+        self.s = []
+        self._equalDistribution = False
     
     def _findVisibleGIDs(self):
         """
@@ -181,7 +217,6 @@ class barReconstructorIndexer(barIndexer):
         if tree[0][2] in self._visibleGID:
             yield tree[0][0]
 
-    
     @classmethod
     def fromXML(cls, filename):
         result = barIndexer._fromXML(cls, filename)
@@ -222,51 +257,62 @@ class barReconstructorIndexer(barIndexer):
         self.structureBoundingBoxes =\
              dict(map(lambda (k,v): (k, v.bbx.boundaries), self.structures.iteritems()))
         
-        # Initialize empty data structures. C{slidesBregmas} hold information
-        # about slide bregma coordinates, slide numbers and slide spans, all in
-        # following form
-        # Bregma: { Consecutive slide number: its bregma coordinate }
-        # SlideNumber: [ list of numbers of consecutive slides ]
-        # in general it is possible that slide enumeration starts from number
-        # other than 1.
-        # SlideSpans { Consecutive slide number: tuple (min border, max border) }
-        # eg: 
-        # 'Bregma': {1: 22.5, 2: 21.6, 3: 20.25, 4: 19.8, ...
-        # 'SlideNumber': [1,2,3,4,...]
-        # 'SlideSpans' {1: (22.949999999999999, 22.050000000000001),
-        #               2: (22.050000000000001, 20.925000000000001),...
-        
-        self.s = []
+        # Initialize easy-and-fast-to-access aliases to slide elements
+        # self.s[n] --> slide of index n
         skeys = sorted(self.slides.keys())
         for i in range(len(skeys)):
                 self.s.append(self.slides[skeys[i]])
+        
+        # Assigns convenience references for each slide element.
+        # .idx --> index of given slide; .prev, .next --> references to
+        # previous/next slides, None for boundary slides
         for i in range(1,len(self.s)-1):
             self.s[i].idx = i
             self.s[i].prev = self.s[i-1]
             self.s[i].next = self.s[i+1]
-        self.s[0].next = self.s[1]
-        self.s[0].idx = 0;
-        self.s[-1].idx = range(len(self.s))[-1]
-        self.s[-1].prev = self.s[-2]
-        map(lambda x: x.defineSpan(), self.s) 
+        self.s[0].next = self.s[1]; self.s[0].idx = 0;
+        self.s[-1].idx = range(len(self.s))[-1]; self.s[-1].prev = self.s[-2]
         
-        self.__refCoords =  map(float, self.properties['RefCords'].value.strip().split(','))
+        self.__defineSpan()  
+        self.__refCoords = map(float, self.properties['RefCords'].value.strip().split(','))
         self.__defineAxesFlips()
+    
+    def __defineSpan(self):
+        """
+        Defines span of all slides. Checks, if all slides have the same
+        thickness.
         
-        if __debug__:
-#           print >>sys.stderr, map(lambda sl: sl.span, self.s)
-#           print >>sys.stderr, map(lambda sl: sl.z, self.s)
-#           print >>sys.stderr, map(lambda sl: sl.name, self.s)
-            print >>sys.stderr, self.flipAxes
+        @rtype: None
+        @return: None
+        """
+        map(lambda x: x.defineSpan(), self.s)
+        
+        # Check if the spacing between slides is constant
+        if len(set(map(lambda x: round(x.getThickness(None),5), self.s[1:-1]))) == 1:
+           self._equalDistribution = True
+           if __debug__:
+               print "\t__defineSpan: equal slide distances: ",\
+                       self._equalDistribution
     
     def __defineAxesFlips(self):
-       if self.refCords[2] < 0: self.flipAxes[0] = True
-       if self.refCords[3] < 0: self.flipAxes[1] = True
-       
-       s = self.s
-       if s[0].z < s[-1].z : self.flipAxes[2] = True
-       
-       print s[0].z,s[-1].z
+        """
+        Checks if the rasterized slided will be flipped during the
+        reconstruction. 
+
+        @rtype: None
+        @return: None
+        """
+        # Axes are flipped if the spatial indexes are in the different direction
+        # than image axes or slide indexes
+        if self.refCords[2] < 0: self.flipAxes[0] = True
+        if self.refCords[3] < 0: self.flipAxes[1] = True
+        
+        s = self.s
+        if s[0].z < s[-1].z : self.flipAxes[2] = True
+        
+        if __debug__:
+            for i in range(3): print "\t__defineAxesFlips: Flip %d: "%i, self.flipAxes[i]
+            print
     
     def getUIDsForGivenGroupName(self, topStructureName):
         """
@@ -341,54 +387,107 @@ class barReconstructorIndexer(barIndexer):
         else:
             return retSpan
     
-    def getZOrigin(self, slideNumberSpan, zRes, margin, eqSpacing = False):
-        n  = slideNumberSpan                              # Just alias
+#   def getZOrigin(self, slideNumberSpan, zRes, margin, eqSpacing = False):
+#       n  = slideNumberSpan                              # Just alias
+#       
+#       if eqSpacing:
+#           zOrig = min(self.s[n[0]].z, self.s[n[1]].z)
+#       else:
+#           zOrig = min([self.s[n[0]].span[1],\
+#                        self.s[n[0]].span[0],\
+#                        self.s[n[1]].span[1],\
+#                        self.s[n[1]].span[0]])
+#       
+#       retval = zOrig - zRes*margin
+#       
+#       if __debug__:
+#           print "\tgetZOrigin: eqSpacing:", eqSpacing
+#           print "\tgetZOrigin: slides:", slideNumberSpan
+#           print "\tgetZOrigin: zOrig:",  zOrig 
+#           print "\tgetZOrigin: zRes:",  zRes
+#           print "\tgetZOrigin: margin:", zRes*margin
+#           print "\tgetZOrigin: final:", retval
+#           print 
+#       
+#       return retval
+#   
+#   def getZExtent(self, slideIdxSpan, zRes, margin, eqSpacing=False):
+#       n  = slideIdxSpan     # Just an alias
+#       
+#       if eqSpacing:
+#           lZcoord = self.s[n[0]].z
+#           rZcoord = self.s[n[1]].z
+#       else:
+#           chList = [self.s[n[0]].span[1],\
+#                     self.s[n[0]].span[0],\
+#                     self.s[n[1]].span[1],\
+#                     self.s[n[1]].span[0]]
+#           lZcoord = min(chList)
+#           rZcoord = max(chList)
+#       
+#       retval = qdist((lZcoord, rZcoord), zRes) + 2*margin
+#       
+#       if __debug__:
+#           print "\tgetZExtent: eqSpacing:", eqSpacing
+#           print "\tgetZExtent: slideIdxSpan:", slideIdxSpan
+#           print "\tgetZExtent: extent coords:", lZcoord, rZcoord
+#           print "\tgetZExtent: zRes:", zRes
+#           print "\tgetZExtent: margin:", margin
+#           print "\tgetZExtent: retval:", retval
+#           print 
+#       
+#       return retval
+
+    def getZOriginAndExtent(self, slideIdxSpan, zRes, margin, eqSpacing=False):
+        """
+        Calculates span of the given set of slides in plane perpendicular to the
+        slide plane.
         
-        if eqSpacing:
-            zOrig = min(self.s[n[0]].z, self.s[n[1]].z)
-        else:
-            zOrig = min([self.s[n[0]].span[1],\
-                         self.s[n[0]].span[0],\
-                         self.s[n[1]].span[1],\
-                         self.s[n[1]].span[0]])
+        @param slideIdxSpan: tuple containing boundary slides indexes.
+        @type  slideIdxSpan: (int, int)
         
-        retval = zOrig - zRes*margin
+        @param zRes: Quantification unit of the reconstruction
+        @type  zRes: float
         
-        if __debug__:
-            print "\tgetZOrigin: eqSpacing:", eqSpacing
-            print "\tgetZOrigin: slides:", slideNumberSpan
-            print "\tgetZOrigin: zOrig:",  zOrig 
-            print "\tgetZOrigin: zRes:",  zRes
-            print "\tgetZOrigin: margin:", zRes*margin
-            print "\tgetZOrigin: final:", retval
-        return retval
-    
-    def getZExtent(self, slideNumberSpan, zRes, margin, eqSpacing = False):
-         
-        n  = slideNumberSpan                              # Just alias
+        @param margin: Number of margin voxels (voxels not filled with the
+                       reconstruction) in the z plane.
+        @type  margin: int
+        
+        @param eqSpacing: Flag determining if the provided C{zRes} is equal to
+                          the spacing of the all slides. Implies that all the
+                          slides are qualy spaced.
+        @type  eqSpacing: bool
+        """
+        n  = slideIdxSpan     # Just an alias
         
         if eqSpacing:
             lZcoord = self.s[n[0]].z
             rZcoord = self.s[n[1]].z
+            zOrig = min(self.s[n[0]].z, self.s[n[1]].z)
         else:
-            chList = [self.s[n[0]].span[1],\
-                      self.s[n[0]].span[0],\
-                      self.s[n[1]].span[1],\
-                      self.s[n[1]].span[0]]
+            chList = [self.s[n[0]].span[1], self.s[n[0]].span[0],\
+                      self.s[n[1]].span[1], self.s[n[1]].span[0]]
+            zOrig   = min(chList)
             lZcoord = min(chList)
             rZcoord = max(chList)
         
-        retval = qdist((lZcoord, rZcoord), zRes) + 2*margin
+        # We assume that the origin is located on the point having the lowest
+        # coordinates! That is required by the vtkImageData class.
+        
+        zOrigin = zOrig - zRes*margin
+        zExtent = qdist((lZcoord, rZcoord), zRes) + 2*margin
         
         if __debug__:
-            print "\tgetZExtent: eqSpacing:", eqSpacing
-            print "\tgetZExtent: slideNumberSpan:", slideNumberSpan
-            print "\tgetZExtent: extent coords:", lZcoord, rZcoord
-            print "\tgetZExtent: zRes:", zRes
-            print "\tgetZExtent: margin:", margin
-            print "\tgetZExtent: retval:", retval
+            print "\tgetZOriginAndExtent: eqSpacing:", eqSpacing
+            print "\tgetZOriginAndExtent: slideIdxSpan:", slideIdxSpan 
+            print "\tgetZOriginAndExtent: zOrig:",  zOrig 
+            print "\tgetZOriginAndExtent: zRes:",  zRes
+            print "\tgetZOriginAndExtent: margin:", zRes*margin
+            print "\tgetZOriginAndExtent: origin:", zOrigin
+            print "\tgetZOriginAndExtent: extent:", zExtent
+            print 
         
-        return retval
+        return zOrigin, zExtent
     
     def getStructuresListBbx(self, structuresList):
         """
@@ -412,7 +511,7 @@ class barReconstructorIndexer(barIndexer):
         @rtype: float
         @return: Default interplane distance (default z resolution)
         """
-        
+        # TODO: implement as cacheable property
         s = self.s
         centralSl = s[int(len(s)/2)]
         return abs(centralSl.z - centralSl.next.z)

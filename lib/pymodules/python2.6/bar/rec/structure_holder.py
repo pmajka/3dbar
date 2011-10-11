@@ -28,6 +28,12 @@ The module provides class necessary to perform structure reconstruction.
 G{importgraph}
 """
 
+# Eliminating diffucult-to-use self.ih.volumeConfiguration dict.
+# Z plane to slide assignment using numpy array fltering
+# More numpy-ish volume filling
+# Separated way of caltulating origin and extent for equaly spaced slides.
+# Still requires plenty of refactoring
+
 import sys
 import os
 import numpy
@@ -38,11 +44,9 @@ import xml.dom.minidom as dom
 import bar.rec.index_holder as index_holder
 
 from PIL import Image 
-from bar import barTracedSlideRenderer
+from bar import barCafSlide
 from bar import barBoundingBox
 
-# DO NOT CHANGE!
-ENABLE_EXPERIMENTAL_FEATURES = False
 
 class VTKStructuredPoints():
     def __init__(self, (nx, ny, nz)):
@@ -55,15 +59,10 @@ class VTKStructuredPoints():
     def setSpacing(self, (sx, sy, sz)):
         self.spacing=(sx, sy, sz)
     
-    def setSlice(self, slideIndex, sliceArray):
-        self.vol[:, :, slideIndex]=sliceArray[:,:,0]
+    def setSlices(self, slideIndexList, sliceArray):
+        self.vol[:, :, slideIndexList] = sliceArray
     
     def prepareVolume(self, indexholderReference):
-        # Optional reverse of z axis:
-        #if indexholderReference.flipAxes[2]:
-        #print >>sys.stderr, "\tFlipping z"
-        #self.vol=self.vol[:,:,::-1]
-        
         # Obligatory (required by vtk):
         self.vol= numpy.swapaxes(self.vol, 1,0)
     
@@ -108,7 +107,7 @@ class structureHolder():
     Main class for generating and processing slides.
     """
     clsIndexHolder = index_holder.barReconstructorIndexer
-    clsSlide = barTracedSlideRenderer
+    clsSlide = barCafSlide
     
     def __init__(self, indexFilename, tracedFilesDirectory):
         
@@ -121,8 +120,9 @@ class structureHolder():
                 (float(self.ih.properties['ReferenceWidth'].value),
                  float(self.ih.properties['ReferenceHeight'].value))
         
-        self.CurrentStructureProperties = {}
-        self.csp = self.CurrentStructureProperties #alias
+        self.recSettings = {}
+        self.StructVol = None
+        self.tempCentralPlanes = None
     
     def __initializeVolume(self):
         """
@@ -131,23 +131,17 @@ class structureHolder():
         
         @return: None.
         """
-        
         # Calculate volume dimensions basing on set of slides and
         # (implicitly) values defined in C{indexHolder.volumeConfiguration}
         
-        if round(self.ih.volumeConfiguration['zRes'] - self.getDefaultZres(),5) == 0:
-            eqSpacing = True
-        else:
-            eqSpacing = False
-         
-        zSize = self.ih.getZExtent( self.csp['slides'],\
-                self.ih.volumeConfiguration['zRes'],
-                self.ih.volumeConfiguration['zMargin'], eqSpacing)
+#       zExtent = self.ih.getZExtent( self.recSettings['slides'],\
+#               self.recSettings['zRes'],
+#               self.recSettings['zMargin'],
+#               self._checkEqualSpacing())
         
-        dm = self.ih.volumeConfiguration['PlaneDimensions']  # Bitmap size
-        volumeDimensions = (dm[0], dm[1], zSize)
-        
-        self.ih.volumeConfiguration['zSize'] = zSize
+        zExtent = self.recSettings['zExtent']
+        dm = self.recSettings['CroppedImageSize']  # Bitmap size
+        volumeDimensions = (dm[0], dm[1], zExtent)
         
         print >>sys.stderr, "Defining volume for structure:"
         print >>sys.stderr, "\tDimensions: (%d, %d, %d)" % volumeDimensions
@@ -172,12 +166,12 @@ class structureHolder():
         """
         
         # Aliases
-        zRes = self.ih.volumeConfiguration['zRes']
+        zRes = self.recSettings['zRes']
         rc  = self.ih.refCords
-        bo  = self.ih.volumeConfiguration['BoundingBoxOffset']
-        ppd = self.ih.volumeConfiguration['FullPlaneDimensions']
-        bb  = self.ih.volumeConfiguration['zOrigin']
-        rf  = self.ih.volumeConfiguration['ReduceFactor']
+        bo  = self.recSettings['BoundingBox']
+        ppd = self.recSettings['ScaledImageSize']
+        bb  = self.recSettings['zOrigin']
+        rf  = self.recSettings['ScaleFactor']
         
         # Define scaling in x,y,z direction. Scaling in x and y are calculated
         # by taking scaling defined in svg file and multiplying it by some
@@ -197,9 +191,7 @@ class structureHolder():
         
         # Bounding box coordinates. Those coordinates are taking into accounts
         # fact that renderer module flips resulting image upside down to fit it
-        # into vtk reruirements (by = h-bo[3]). Bz is calculated basing on
-        # minimum bregma coordinate ("right" bregma coordinate of slide with
-        # maximum index): bz = -bb[1]+margin.
+        # into vtk reruirements (e.g. by = h-bo[3]). 
         if sx > 0: bx =     bo[0]
         else:      bx = w - bo[2]
         
@@ -241,59 +233,44 @@ class structureHolder():
             3. Define matrix describing bounding box.
             4. Use all matrices defined above to calculate new origin.
         
-        @return: ((numpy 3x1 array),(3x1)):  stereotactic coordinates of vtk coordinate
+        @return: ((numpy 3x1 array),(3x1)):  spatial coordinates of vtk coordinate
                  system origin and spacing in x,y and z directions.
         """
         
         # Initial origin of coordinate system in image coordinates (it is
         # located in lower left corner of the image.
         O = numpy.array([0, 0, 0, 1]).reshape(4,1)
+        B = numpy.array( [[1,0,0,bx],[0,1,0,by],[0,0,1,bz],[0,0,0,1]])
         
         # Matrix transforming from image coordinate system to stereotaxic
         # coordinate system:
         # The exact form of T and S matrices depends on direction of axes.
         # Esspecialy direction of Y axis:
+        # We take absolute value of scalings and coronal resosolution as
+        # VTK handles negavite scaling very poor.
         
         if sx > 0 and sy > 0:
-            O = numpy.array([0, 0, 0, 1]).reshape(4,1)
-            B = numpy.array( [[1,0,0,bx],[0,1,0,by],[0,0,1,bz],[0,0,0,1]])
             T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
             S = numpy.array( [[sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
         elif sx > 0 and sy < 0:
-            O = numpy.array([0, 0, 0, 1]).reshape(4,1)
-            B = numpy.array( [[1,0,0,bx],[0,1,0,by],[0,0,1,bz],[0,0,0,1]])
             S = numpy.array( [[sx,0,0,0 ],[0,-sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
             T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,sy*h+ty],[0,0,1,tz],[0,0,0,1]])
         elif sx < 0 and sy > 0:
-            O = numpy.array([0, 0, 0, 1]).reshape(4,1)
-            B = numpy.array( [[1,0,0,bx],[0,1,0,by],[0,0,1,bz],[0,0,0,1]])
             S = numpy.array( [[-sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
             T = numpy.array( [[1 ,0,0,w*sx+tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
         elif sx < 0 and sy < 0:
-            O = numpy.array([0, 0, 0, 1]).reshape(4,1)
-            B = numpy.array( [[1,0,0,bx],[0,1,0,by],[0,0,1,bz],[0,0,0,1]])
             S = numpy.array( [[-sx,0,0,0 ],[0,-sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
             T = numpy.array( [[1 ,0,0,w*sx+tx],[0,1,0,h*sy+ty],[0,0,1,tz],[0,0,0,1]])
         
         # Origin after including bounding box
         Op = numpy.dot(T,numpy.dot(S,numpy.dot(B,O)))
+        origin  = (Op[0,0], Op[1,0], Op[2,0])
+        spacing = (abs(S[0,0]),  abs(S[1,1]),  abs(S[2,2]))
         
         if __debug__:
-            print >>sys.stderr, "Origin in stereotaxic coordinates:"
-            print >>sys.stderr, O
-            print >>sys.stderr, "Bounding box transformation matrix:"
-            print >>sys.stderr, B
-            print >>sys.stderr, "Reference scaling matrix:"
-            print >>sys.stderr, S
-            print >>sys.stderr, "Reference translation matrix:"
-            print >>sys.stderr, T
-            print >>sys.stderr, "Final origin of stereotaxic coordinate system:"
-            print >>sys.stderr, Op
+            print "\t__calcOriginAndSpacing: volume origin:", origin
+            print "\t__calcOriginAndSpacing: volume spacing:", spacing
         
-        origin  = (Op[0,0], Op[1,0], Op[2,0])
-        # We take absolute value of scalings and coronal resosolution as
-        # VTK handles negavite scaling very poor.
-        spacing = (abs(S[0,0]),  abs(S[1,1]),  abs(S[2,2]))
         return (origin, spacing)
     
     def __processModelGeneration(self):
@@ -311,60 +288,55 @@ class structureHolder():
         
         self.tempCentralPlanes = []   # For collecting central planes indexes
         
-        firstSlideIndex = self.csp['slides'][0]    # Index of first slide  
-        lastSlideIndex  = self.csp['slides'][1] +1 # Index of last slide +1
+        firstSlideIndex = self.recSettings['slides'][0]    # Index of first slide  
+        lastSlideIndex  = self.recSettings['slides'][1] +1 # Index of last slide +1
         
-        # Iterate trought all slides and process with 
-        # volume extraction from each slide:
-        self.slideNumbersRange = range(firstSlideIndex, lastSlideIndex)
+        slideNumbersRange = range(firstSlideIndex, lastSlideIndex)
         
         Oz = self.StructVol.origin[2]
         ez = self.StructVol.size[2]
         sz = self.StructVol.spacing[2]
-        print (Oz,sz,ez)
         
-        z = numpy.array(map(lambda x: sz*(x+0) + Oz, range(0, ez)))
+        z = numpy.array(map(lambda x: sz*(x) + Oz, range(0, ez)))
         zi= numpy.array(range(0, ez))
-        print z
-        ass = {}
-        css = {}
         
-        for s in map(lambda x: self.ih.s[x], range(firstSlideIndex, lastSlideIndex)):
+#       #-------- TESTING --------------------------------------------
+#       ooz, eez = self.ih.getZOriginAndExtent(\
+#               (self.recSettings['slides'][0],self.recSettings['slides'][1]),
+#               self.recSettings['zRes'], self.recSettings['zMargin'],
+#               self._checkEqualSpacing())
+#       if Oz != ooz or eez != ez:
+#           print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+#           print "\tOz -ooz: ", Oz - ooz
+#           print "\teez - ez: ", eez - ez
+#           raw_input()
+#       #-------- TESTING --------------------------------------------
+        
+        slidePlanes = {}
+        for s in map(lambda x: self.ih.s[x], slideNumbersRange):
             mask = (0>=numpy.round(s.span[0]-z,5)) & (0<=numpy.round(s.span[1]-z,5))
-            #print "z >", s.span[0], "& z <=", s.span[1]
-            #print list(zi[mask])
-            #print list(z[mask])
-            ass[s.name] = (list(zi[mask]), list(z[mask]))
-        print ass
+            slidePlanes[s.name] = (list(zi[mask]), list(z[mask]))
         
-        raw_input()
-        for (slideNo, (planes,coor)) in ass.iteritems():
-            print slideNo
-            print planes
-            print coor
-            self.__processSingleSlide(slideNo, planes)
+        self.recSettings['FlipFlags'] = self.__getFlips()
+        
+        for (slideNo, (planes,coor)) in slidePlanes.iteritems():
+            self.__processSingleSlide(slideNo, (planes,coor))
      
-    def __processSingleSlide(self, slideNumber, planes):
-        # Another set of usefull aliases:
+    def __processSingleSlide(self, slideNumber, (planes,coor)):
+        print "Processing slide number:\t%d" % slideNumber
         
-        print >>sys.stderr,"Processing slide number:\t%d" % slideNumber
-#       
-        structuresToInclude = self.csp['StructuresList']  
-        fpd = self.ih.volumeConfiguration['FullPlaneDimensions']
-        bbo = self.ih.volumeConfiguration['BoundingBoxOffset']
+        if __debug__:
+            print "\t__processModelGeneration: planes:", planes
+            print "\t__processModelGeneration: corresponding coords:",  coor
+            print 
+        
+        structuresToInclude = self.recSettings['StructuresList']  
+        fpd = self.recSettings['ScaledImageSize']
+        bbo = self.recSettings['BoundingBox']
+        otype = self.recSettings['FlipFlags']
         
         maskedSlide = self._loadSlide(slideNumber, structuresToInclude, version=0)
         maskedSlide.getMask()
-        
-        # Determine if, the rendered plane shoud be flipped in x and y axis.
-        # It should be done if
-        otype = 'rec'
-        if self.ih.flipAxes[0]:
-            otype+='1'
-            if __debug__: print >>sys.stderr, '\tFlip x'
-        if self.ih.flipAxes[1]:
-            otype+='1'
-            if __debug__: print >>sys.stderr, '\tFlip y'
         
         volumeFromOneSlice = maskedSlide._renderSvgDrawing(\
                                 maskedSlide.getXMLelement(),
@@ -372,80 +344,111 @@ class structureHolder():
                                 boundingBox=bbo,
                                 otype=otype)
         
-        for z in planes:
-            self.StructVol.setSlice(z, volumeFromOneSlice)
+        self.StructVol.setSlices(planes, volumeFromOneSlice)
     
     def _loadSlide(self, slideNumber, structuresToInclude = None, version = 0):
         tracedSlideFilename = self.tracedFilesDirectory % (slideNumber,version)
         testslide = self.clsSlide.fromXML(tracedSlideFilename)
         maskedSlide = testslide.getStructuresSubset(structuresToInclude)
+        map(lambda x: setattr(x, 'crispEdges', True), maskedSlide.values())        
         return maskedSlide
+    
+    def __getFlips(self):
+        # Determine if, the rendered plane shoud be flipped in x and y axis.
+        # It should be done if direction of spatial axes is opposite to image
+        # direction
+        otype = 'rec'
+        if self.ih.flipAxes[0]:
+            otype+='1'
+            if __debug__: print '\t__getFlips: Flip x'
+        if self.ih.flipAxes[1]:
+            otype+='1'
+            if __debug__: print '\t__getFlips: Flip y'
+        print
+        return otype
     
     def __flushCache(self):
         del self.StructVol
         del self.tempCentralPlanes
-        self.csp = {}
+        self.recSettings = {}
     
-    def __initModelGeneration(self, coronalResolution):
-        mx = self.ih.refCords[2] / float(coronalResolution)
-        my = self.ih.refCords[3] / float(coronalResolution)
-        multiplier = abs(mx)
-        self.ih.volumeConfiguration['ReduceFactor'] = 1./multiplier
+    def __initModelGeneration(self, xyRes, ignoreBbx = False):
+        mx, my = map(lambda x: abs(x/float(xyRes)), self.ih.refCords[2:])
+        assert (round(mx - my,4) ==0),\
+                "Resolution in x and y plane does not match. Cannot continue."
         
-        self.ih.volumeConfiguration['FullPlaneDimensions']=\
-        (self.refDimestions[0] * multiplier, self.refDimestions[1] * multiplier)
+        scaleFactor = mx
+        self.recSettings['ScaleFactor'] = 1./scaleFactor
         
-        boundingBox = self.ih.volumeConfiguration['StructureBoundingBoxes']
-        boundingBox*=multiplier
-        if not ENABLE_EXPERIMENTAL_FEATURES:
-            boundingBox.extend((-1,-1,1,1))
+        self.recSettings['ScaledImageSize']=\
+            map(lambda x: x* scaleFactor, self.refDimestions)
         
-        self.ih.volumeConfiguration['BoundingBoxOffset'] = boundingBox
+        bbx = self.ih.getStructuresListBbx(self.recSettings['StructuresList'])
+        self.recSettings['CafBoundingBox'] = bbx
         
-        bb = boundingBox
-        self.ih.volumeConfiguration['PlaneDimensions']   = (bb[2]-bb[0],bb[3]-bb[1])
-    
-    def __getStructureList(self, HierarchyRootElementName):
-        stlist = self.ih.getStructureList(HierarchyRootElementName)
-        self.csp['StructuresList'] = stlist
-        self.csp['slides'] = self.ih._structList2SlideSpan(stlist,rawIndexes=True)
-        
-        bbx = self.ih.getStructuresListBbx(stlist)
-        
-        # ------------------ Experimental ---------------------
-        if ENABLE_EXPERIMENTAL_FEATURES:
+        if ignoreBbx:
             xbbx, ybbx = tuple(map(int, self.refDimestions))
-            bbx = barBoundingBox((1, 1, xbbx-1, ybbx-1))
-            self.csp['slides'] =\
-                    (self.ih.slidesBregmas['SlideNumber'][0],\
-                     self.ih.slidesBregmas['SlideNumber'][-1])
-        # ------------------ Experimental ---------------------
+            bbx = barBoundingBox((0, 0, xbbx, ybbx))
+            self.recSettings['slides'] = (self.ih.s[0], self.ih.s[-1])
         
-        self.ih.volumeConfiguration['StructureBoundingBoxes'] = bbx
-
-        #XX: REPLACE WITH EQUAL THICKNESS
-        print round(self.ih.volumeConfiguration['zRes'] - self.getDefaultZres(),5)
-        if  round(self.ih.volumeConfiguration['zRes'] - self.getDefaultZres(),5) == 0:
+        bbx*=scaleFactor
+        
+        if not ignoreBbx:
+            bbx.extend((-1,-1,1,1))
+        
+        self.recSettings['BoundingBox'] = bbx
+        self.recSettings['CroppedImageSize'] = (bbx[2]-bbx[0],bbx[3]-bbx[1])
+        
+        if __debug__:
+            print "\t__initModelGeneration: xyRes:", xyRes
+            print "\t__initModelGeneration: ignoreBbx:", ignoreBbx
+            print "\t__initModelGeneration: final bbx:", self.recSettings['BoundingBox']
+            print "\t__initModelGeneration: final bitmap size:", self.recSettings['CroppedImageSize']
+            print 
+    
+    def _checkEqualSpacing(self, roundoff=5):
+        zRes = self.recSettings['zRes']
+        refRes = self.getDefaultZres()
+        
+        if  round(zRes - refRes, roundoff) == 0:
             eqSpacing = True
         else:
             eqSpacing = False
         
-        self.ih.volumeConfiguration['zOrigin'] =\
-                self.ih.getZOrigin(self.csp['slides'],\
-                self.ih.volumeConfiguration['zRes'],
-                self.ih.volumeConfiguration['zMargin'],\
-                eqSpacing)
+        if __debug__:
+            print "\t_checkEqualSpacing: fullDiff:", zRes - refRes
+            print "\t_checkEqualSpacing: roundoff:", roundoff
+            print "\t_checkEqualSpacing: eqSpacing:", eqSpacing
+            print 
+        
+        return eqSpacing
+    
+    def __getStructureList(self, HierarchyRootElementName):
+        stlist = self.ih.getStructureList(HierarchyRootElementName)
+        self.recSettings['StructuresList'] = stlist
+        self.recSettings['slides'] = self.ih._structList2SlideSpan(stlist, rawIndexes=True)
+        
+        (zOirign, zExtent) = self.ih.getZOriginAndExtent(\
+                self.recSettings['slides'], self.recSettings['zRes'],\
+                self.recSettings['zMargin'], self._checkEqualSpacing())
+        
+        self.recSettings['zOrigin'], self.recSettings['zExtent'] =\
+                zOirign, zExtent
+        
+        if __debug__:
+            print "\t__getStructureList: Zorigin, Zextent, Zspacing:", Oz, ez, sz
     
     def handleAllModelGeneration(self,\
             HierarchyRootElementName,\
             xyRes, zRes,\
-            VolumeMargin = 10):
+            VolumeMargin = 10,\
+            ignoreBoundingBox = False):
         
-        #TODO: Remove: self.ih.volumeConfiguration['AlignerReferenceCoords'] = self.ih.refCords
-        self.ih.volumeConfiguration['zRes']    =  zRes
-        self.ih.volumeConfiguration['zMargin'] = VolumeMargin
+        self.__flushCache()
+        self.recSettings['zRes']    = zRes
+        self.recSettings['zMargin'] = VolumeMargin
         self.__getStructureList(HierarchyRootElementName)
-        self.__initModelGeneration(xyRes)
+        self.__initModelGeneration(xyRes, ignoreBbx = ignoreBoundingBox)
         self.__processModelGeneration()
     
     def getSlidesSpan(self, HierarchyRootElementName):

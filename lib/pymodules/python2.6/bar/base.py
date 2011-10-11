@@ -2557,7 +2557,7 @@ class barSlideRenderer(barVectorSlide):
         return (int(float( imSize[0] / refWidth * svgCoords[0] )),\
                 int(float( imSize[1] / refHeight* svgCoords[1] )))
     
-    def _renderSvgDrawing(self, svgdoc, renderingSize=None, boundingBox=None, otype='pil', grayscale=True):
+    def _renderSvgDrawing(self, svgdoc, renderingSize = None, boundingBox=None, otype='pil', grayscale=True):
         """
         Renders provided SVG image with varioous options and returns rendered
         image.
