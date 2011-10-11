@@ -374,8 +374,9 @@ class structureHolder():
     
     def __initModelGeneration(self, xyRes, ignoreBbx = False):
         mx, my = map(lambda x: abs(x/float(xyRes)), self.ih.refCords[2:])
-        assert (round(mx - my,4) ==0),\
-                "Resolution in x and y plane does not match. Cannot continue."
+        #print mx - my
+        #assert (round(mx - my,4) ==0),\
+        #        "Resolution in x and y plane does not match. Cannot continue."
         
         scaleFactor = mx
         self.recSettings['ScaleFactor'] = 1./scaleFactor
@@ -436,6 +437,9 @@ class structureHolder():
                 zOirign, zExtent
         
         if __debug__:
+            Oz = self.recSettings['zOrigin']
+            ez = self.recSettings['zExtent']
+            sz = self.recSettings['zRes']
             print "\t__getStructureList: Zorigin, Zextent, Zspacing:", Oz, ez, sz
     
     def handleAllModelGeneration(self,\

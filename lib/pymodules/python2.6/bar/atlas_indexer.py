@@ -456,6 +456,59 @@ class barIndexerGroupElement(barIndexerElement):
                 result.children.append(cls.fromXML(child))
         return result
     
+    def getStructureNameIterator(self, depth=999):
+        """
+        @param depth: hierarchy tree iteration depth limit
+        @type depth: int
+
+        @return: iterator over names of structures composing the group
+                 in the hierarchy tree deep up to the given L{depth}
+        @rtype: generator
+        """
+        if self._structure != None:
+            yield self._structure.name
+        elif self._uid != None:
+            yield self.name
+
+        if depth > 0:
+            for child in self.children:
+                for name in child.getStructureNameIterator(depth - 1):
+                    yield name
+
+    def getVisibleGroupIterator(self, depth=999, leavesOnly=False):
+        """
+        @param depth: hierarchy tree iteration depth limit
+        @type depth: int
+
+        @param leavesOnly: True if requested to iterate over names of
+                           the leaves of the iteration tree only, False
+                           otherwise
+        @type leavesOnly: bool
+
+        @return: iterator over groups ascendant to any structure included 
+                 in CAF slides in the hierarchy tree deep up to the given 
+                 L{depth}
+        @rtype: generator
+        """
+        isVisible = self.uid != None
+        isNotLeaf = False
+
+        for group in self.children:
+            if depth == 0:
+                if isVisible:
+                    break
+                for subgroup in group.getVisibleGroupIterator(0, leavesOnly):
+                    isVisible = True
+                    break
+            else:
+                for subgroup in group.getVisibleGroupIterator(depth - 1, leavesOnly):
+                    isVisible = True
+                    isNotLeaf = True
+                    yield subgroup
+
+        if isVisible and not (leavesOnly and isNotLeaf):
+            yield self
+
     def getChildList(self, depth=1):
         """
         An alias for C{self.L{__getMappedChildList<barIndexerGroupElement.__getMappedChildList>}(depth, ('name',))}
@@ -1041,6 +1094,10 @@ class barIndexer(barIndexerObject):
 
     @cvar _initialIDs: initial values of UID/GID sequences
     @type _initialIDs: {str: int}
+
+    @cvar _indexerElement: parental class for classes of objects representing
+                           encapsulated elements
+    @type _indexerElement: class
 
     @cvar _propertyElement: class of objects representing 'property' elements
     @type _propertyElement: class
@@ -1715,7 +1772,47 @@ class barIndexer(barIndexerObject):
         
         if name in self._structures:
             group.structure = self._structures[name]
+
+    def visibleGroups(self, depth = 999, leavesOnly = False):
+        """
+        An alias for C{self.L{groups}[self.L{hierarchyRootElementName}].L{getVisibleGroupIterator<barIndexerGroupElement.getVisibleGroupIterator>}()}.
+        """
+        group = self.hierarchyRootElementName
+
+        return self.groups[group].getVisibleGroupIterator(depth = depth,
+                                                          leavesOnly = leavesOnly)
     
+    def unfoldSubtrees(self, rootStructures, defaultDepth=0, leavesOnly=False):
+        """
+        @param rootStructures: names of root elements of hierarchy subtrees or
+                               pairs of root element name and depth of the subtree
+        @type rootStructures: iterable([str | (str, int), ...])
+        
+        @param defaultDepth: the default depth of hierarchy subtrees
+        @type defaultDepth: int
+        
+        @param leavesOnly: indicates if only the leaf nodes has to be returned
+        @type leavesOnly: bool
+        
+        @return: names of hierarchy subtree tree nodes related to any structure
+                 present in CAF slides
+        @rtype: set([str, ...])
+        """
+        def unfoldSubtree(arg):
+            # check the argument type
+            if type(arg) is tuple:
+                root, depth = arg
+            else:
+                root, depth = arg, defaultDepth
+
+            group = self.groups[root]
+
+            return set(x.name\
+                       for x in group.getVisibleGroupIterator(depth = depth,
+                                                              leavesOnly=leavesOnly))
+        
+        return reduce(lambda x, y: x | y, (unfoldSubtree(z) for z in rootStructures))
+
     def __getProperty(self):
         """
         @return: CAF dataset index property name to 'property' element

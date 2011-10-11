@@ -143,87 +143,23 @@ class barReconstructorSlideElem(barIndexerSlideElement):
 
 class barReconstructorIndexer(barIndexer):
     """
-    @ivar _visibleGID: GIDs of visible in CAF slides hierarchy tree elements
-    @type _visibleGID: set(int)
     """
     _slideElement = barReconstructorSlideElem
     
     def __init__(self):
         barIndexer.__init__(self)
         
-        self._visibleGID = None
         self.flipAxes = 3*[False]
         
         self.s = []
         self._equalDistribution = False
     
-    def _findVisibleGIDs(self):
-        """
-        Generate C{self.L{_visibleGID}} for the CAF index.
-        """
-        self._visibleGID = frozenset(self.groups[name].id for name, uidList\
-                                     in self.uidList.iteritems()\
-                                     if len(uidList) > 0)
-    
-    def unfoldSubtrees(self, rootStructures, defaultDepth=0, leavesOnly=False):
-        """
-        @param rootStructures: names of root elements of hierarchy subtrees or
-                               pairs of root element name and depth of the subtree
-        @type rootStructures: iterable([str | (str, int), ...])
-        
-        @param defaultDepth: the default depth of hierarchy subtrees
-        @type defaultDepth: int
-        
-        @param leavesOnly: indicates if only the leaf nodes has to be returned
-        @type leavesOnly: bool
-        
-        @return: names of hierarchy subtree tree nodes
-        @rtype: set([str, ...])
-        """
-        def unfoldSubtree(arg):
-            # check the argument type
-            if type(arg) is tuple:
-                root, depth = arg
-            else:
-                root, depth = arg, defaultDepth
-            
-            hierarchyTree = self.getHierarchyTree(root, depth)
-            return set(self.names(hierarchyTree, leavesOnly=leavesOnly))
-        
-        return reduce(lambda x, y: x | y, (unfoldSubtree(z) for z in rootStructures))
-
-    def names(self, tree, leavesOnly=False):
-        """
-        @param tree: hierarchy tree
-        @type tree: see L{getHierarchyTree} for details
-        
-        @param leavesOnly: True if requested to iterate over names of the
-                           leaves of the hierarchy tree only, False otherwise
-        @type leavesOnly: bool
-        
-        @return: iterator over names of the nodes of a given C{tree}
-        @rtype: generator
-        """
-        if len(tree) > 1:
-            # tree is not a leaf
-            for subtree in tree[1]:
-                for name in self.names(subtree, leavesOnly):
-                    yield name
-            
-            if leavesOnly:
-                # do not iterate over the root element name of the tree
-                return
-        
-        if tree[0][2] in self._visibleGID:
-            yield tree[0][0]
-
     @classmethod
     def fromXML(cls, filename):
         result = barIndexer._fromXML(cls, filename)
         
         # Create necessary mappings
         result._createMappings()
-        result._findVisibleGIDs()
         return result
     
     def _createMappings(self):
@@ -522,13 +458,4 @@ class barReconstructorIndexer(barIndexer):
     def __setRefCords(self, value):
         raise ValueError, "Read only property"
     
-    def __getVisibleGIDs(self):
-        if self._visibleGID == None:
-            self._findVisibleGIDs()
-        return self._visibleGID
-    
-    def __setVisibleGIDs(self, value):
-        raise ValueError, "Read only property"
-    
     refCords = property(__getRefCords, __setRefCords)
-    visibleGIDs = property(__getVisibleGIDs, __setVisibleGIDs)
