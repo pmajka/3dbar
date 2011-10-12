@@ -103,7 +103,6 @@ indexerProperties = dict([
 ('ReferenceWidth', str(REFERENCE_WIDTH)),
 ('ReferenceHeight', str(REFERENCE_HEIGHT)),
 ('FilenameTemplate',filenameTempates['traced']),
-('CAFSpatialAxesOrientation', 'RSA'),
 ('CAFSlideOrientation', 'coronal'),
 ('CAFSlideUnits', 'mm'),
 ('CAFName', CONF_PARSER_NAME),
