@@ -139,7 +139,7 @@ class AtlasParser(nl.nlParser):
         ('RefCords','-6.06467941507, -2.37689628048,0.010345983719932001,0.010345983719932001'),
         ('CAFSlideOrientation', 'coronal'),
         ('CAFSlideUnits', 'mm'),
-        ('CAFName', ''),
+        ('CAFName', 'nl_olek'),
         ('CAFComment', ''),
         ('CAFCreator', "Dataset prepared by Piotr Majka, Nencki Institute of Experimental Biology"),
         ('CAFCreatorEmail', 'pmajka@nencki.gov.pl'),
