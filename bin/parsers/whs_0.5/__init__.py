@@ -53,13 +53,13 @@ class AtlasParser(bar.barBitmapParser):
         
         self.inputDirectory = inputDirectory
         self.outputDirectory= outputDirectory
-         
+        
         # Define source dataset location and initialize parser by loading
         # source dataset
         sourceFilename = 'canon_labels_r.nii'
         volumetricFile = os.path.join(inputDirectory,sourceFilename)
-        self._volume =\
-            nifti.NiftiImage(volumetricFile).data[0]
+        self._volumeSrc = nifti.NiftiImage(volumetricFile)
+        self._volume = self._volumeSrc.data[0]
         
         #Some properties cannot be predefined, adding them now:
         self.setProperty('outputDirectory', outputDirectory)
@@ -103,7 +103,6 @@ class AtlasParser(bar.barBitmapParser):
         fullnameMappingFile = os.path.join(self.inputDirectory,'fullnames.txt')
         self.indexer.setNameMappingFromFile(fullnameMappingFile, 0 , 1)
         
-        #self.indexer.writeXMLtoFile(self._getIndexFilename())\
         self.writeIndex()
     
     def _getSourceImage(self, slideNumber):
@@ -130,11 +129,12 @@ class AtlasParser(bar.barBitmapParser):
         resizeTuple = self.renderingProperties['imageSize']
         image = ImageChops.multiply(ImageChops.multiply(mask[1], mask[0]),mask[2])
         image = ImageChops.invert(image).resize(resizeTuple, Image.ANTIALIAS)
+        #image = ImageChops.invert(image).resize(resizeTuple, Image.NEAREST)
         return image
     
     def _getZCoord(self, slideNumber):
-        bregma = 10.018999099 - float(slideNumber + 2) * voxelSize
-        return bregma
+        zVoxelIndex = self.slideRange[slideNumber]
+        return self._volumeSrc.vx2s((0, zVoxelIndex, 0))[1]
     
     def _getSpatialTransfMatrix(self, slideNumber):
         return spatialTransformationMatrix
@@ -155,4 +155,3 @@ if __name__=='__main__':
 
     ap = AtlasParser(inputDirectory, outputDirectory)
     ap.parseAll()
-    #ap.reindex()

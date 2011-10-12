@@ -60,12 +60,11 @@ class AtlasParser(barMBATParser):
         self.indexer.colorMapping    = self.structureColours
         
         # Set indexer properties, but get indexer reference matrix in advance.
-        indexerProperties.append(('RefCords',",".join(map(str,self._getIndexerRefMatrix()))))
+        indexerProperties['RefCords'] = ",".join(map(str,self._getIndexerRefMatrix()))
         self.indexer.updateProperties(indexerProperties)
     
     def _getZCoord(self, slideNumber):
-        # Don't ask why - with this corretion it just works better
-        zVoxelIndex = self.slideRange[slideNumber] -2
+        zVoxelIndex = self.slideRange[slideNumber]
         return self._volumeSrc.vx2s((0, zVoxelIndex, 0))[1]
     
     def _getSpatialTransfMatrix(self, slideNumber):
@@ -76,9 +75,11 @@ class AtlasParser(barMBATParser):
     def _defineSlideRange(self, antPostAxis = 2):
         antPostDim = self._volumeHeader['dim'][antPostAxis]
         self._voxelSize = self._volumeHeader['pixdim'][antPostAxis]
-        #self.slideRange = range(antPostDim)
+        
+        # Reverse direction of the slides along A-P axis just to have
+        # anterior on first slides and posteror on the latter.
         self.slideRange = map(lambda x: (antPostDim - 1) - x, range(0, antPostDim))
-     
+    
     def parse(self, slideNumber):
         tracedSlide = barMBATParser.parse(self, slideNumber,\
                                                  generateLabels = True,
@@ -90,7 +91,6 @@ class AtlasParser(barMBATParser):
         self.indexer.hierarchy       = self.parents
         self.indexer.fullNameMapping = self.fullNameMapping
         self.indexer.colorMapping    = self.structureColours
-        
         self.writeIndex()
     
 

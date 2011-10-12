@@ -28,12 +28,6 @@ The module provides class necessary to perform structure reconstruction.
 G{importgraph}
 """
 
-# Eliminating diffucult-to-use self.ih.volumeConfiguration dict.
-# Z plane to slide assignment using numpy array fltering
-# More numpy-ish volume filling
-# Separated way of caltulating origin and extent for equaly spaced slides.
-# Still requires plenty of refactoring
-
 import sys
 import os
 import numpy
@@ -320,7 +314,8 @@ class structureHolder():
         self.recSettings['FlipFlags'] = self.__getFlips()
         
         for (slideNo, (planes,coor)) in slidePlanes.iteritems():
-            self.__processSingleSlide(slideNo, (planes,coor))
+            if planes:
+                self.__processSingleSlide(slideNo, (planes,coor))
      
     def __processSingleSlide(self, slideNumber, (planes,coor)):
         print "Processing slide number:\t%d" % slideNumber

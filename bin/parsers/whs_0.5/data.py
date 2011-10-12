@@ -33,7 +33,7 @@ CONF_PARSER_NAME    = 'whs_0.5'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology'
 CONF_CONTACT_EMAIL  = 'pmajka@nencki.gov.pl'
 CONF_CAF_COMPIL_TIME= datetime.datetime.utcnow().strftime("%F %T")
-CONF_CAF_FULL_NAME = 'Waxholm Space - mouse brain reference space'
+CONF_CAF_FULL_NAME = 'The Waxholm Space - mouse brain reference space'
 
 REFERENCE_WIDTH = 512
 REFERENCE_HEIGHT = 512
@@ -79,15 +79,12 @@ imageToStructure=\
     "#090909" : "VT",
     "#ffffff" : "bcg"}
 
-voxelSize = 0.021499998867511749
+voxelSize = 0.0215
 
 # ax+b, cy+d
-spatialTransformationMatrix=\
-        (voxelSize, -5.3965001106262207, -voxelSize, 5.4824995994567871,)
-
-alignerCoordinateTuple =\
-(-5.3965001106262207, 5.4824995994567871, voxelSize, -voxelSize)
-
+a, b, c, d = voxelSize, -5.3965, -voxelSize, 5.4825
+spatialTransformationMatrix= (a,b,c,d)
+alignerCoordinateTuple = (b,d,a,c)
 
 tracedSlideTemplate = """<?xml version="1.0" ?><svg baseProfile="full" height="%d" id="body"
 preserveAspectRatio="none" version="1.1" viewBox="0 0 %d %d"
@@ -156,6 +153,7 @@ indexerProperties = dict([
 ('ReferenceHeight', str(REFERENCE_HEIGHT)),
 ('FilenameTemplate',filenameTempates['traced']),
 ('RefCords', ",".join(map(str,alignerCoordinateTuple))),
+('CAFSpatialAxesOrientation', 'RSA'),
 ('CAFSlideOrientation', 'coronal'),
 ('CAFSlideUnits', 'mm'),
 ('CAFName', CONF_PARSER_NAME),

@@ -3,25 +3,65 @@
 		<elements>
 			<pipelineelement disable="False" displayable="True" on="False" order="0">
 				<vtkclass>
-					vtkImageFlip
+					barVtkAllFlip
 				</vtkclass>
 				<desc>
-					libvtkImagingPython.vtkImageFlip
+					bar.rec.pipeline.barVtkAllFlip
 				</desc>
 				<params>
 					<param display="False" hidden="False" order="0">
 						<name>
-							SetFilteredAxes
+							SetFlipz
 						</name>
 						<args>
-							<value order="0" type="int">
-								0
+							<value order="0" type="bool">
+								True
 							</value>
 						</args>
 					</param>
 					<param display="False" hidden="False" order="1">
 						<name>
-							FlipAboutOrigin
+							SetFlipy
+						</name>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="False" order="2">
+						<name>
+							SetFlipx
+						</name>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="False" order="3">
+						<name>
+							SetFlipAbOriginz
+						</name>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="False" order="4">
+						<name>
+							SetFlipAbOriginx
+						</name>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="False" order="5">
+						<name>
+							SetFlipAbOriginy
 						</name>
 						<args>
 							<value order="0" type="bool">
@@ -71,13 +111,13 @@
 						</name>
 						<args>
 							<value order="0" type="float">
-								0.01075
+								0.0
 							</value>
 							<value order="1" type="float">
-								0.01075
+								0.0
 							</value>
 							<value order="2" type="float">
-								0.01075
+								0.0
 							</value>
 						</args>
 					</param>
