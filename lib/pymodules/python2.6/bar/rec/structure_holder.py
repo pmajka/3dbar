@@ -363,8 +363,11 @@ class structureHolder():
         return otype
     
     def __flushCache(self):
-        del self.StructVol
-        del self.tempCentralPlanes
+	try:
+		del self.StructVol
+		del self.tempCentralPlanes
+	except:
+		pass
         self.recSettings = {}
     
     def __initModelGeneration(self, xyRes, ignoreBbx = False):
