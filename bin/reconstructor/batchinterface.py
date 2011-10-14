@@ -35,10 +35,10 @@ G{importgraph}
 import sys
 import time
 from optparse import OptionParser, OptionGroup
-from bar.rec.barreconstructor import barReconstructionModule, SCENE_EXPORT_FORMAT_MASK
+from bar.rec.barreconstructor import barReconstructionModule, SCENE_EXPORT_FORMAT_MASK,\
+                                     BAR_RECONSTRUCTOR_VERSION
 
-BAR_VERSION = "0.1"
-BAR_DESCRIPTION = "3d Brain Atlas Reconstructor ver." + BAR_VERSION+ " Batch reconstruction interface\n"
+BAR_DESCRIPTION = "3d Brain Atlas Reconstructor ver." + BAR_RECONSTRUCTOR_VERSION + " Batch reconstruction interface\n"
 
 class batchInterface(object):
     """
@@ -88,7 +88,7 @@ class batchInterface(object):
 
     description = BAR_DESCRIPTION
     usage = "./batchinterface.sh [options] <CAF index> [<structure 1> [<structure 2> ...]]"
-    version = BAR_VERSION
+    version = BAR_RECONSTRUCTOR_VERSION
 
     # Determines, how many second script waits before launching the reconstruction
     # process
@@ -118,6 +118,9 @@ class batchInterface(object):
         parser.add_option('--useTop', '-t', type='float', nargs=3, dest='top',
                           default=(0., 1., 0.),
                           help='the "up" direction vector')
+        parser.add_option('--angles', '-a', type='float', nargs=3, dest='angles',
+                          default=None,
+                          help='camera angles - overrides -v and -t')
         
         formatOptions = OptionGroup(parser, 'Output Format Options')
         for (keyword, description) in self.output_format:

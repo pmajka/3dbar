@@ -33,15 +33,32 @@ G{importgraph}
 """
 
 import os
-import random 
+import random
+import math
 import vtk 
 from batchinterface import batchInterface
 
+from bar.base import debugOutput
 import bar.rec.structure_holder as structureHolder
 from bar.rec.barreconstructor import barReconstructionModule, HTMLColorToRGB,\
                              barPipeline, BAR_DEFAULT_RECONSTRUCTION_DIR,\
                              BAR_TEMPLATE, BAR_ATLAS_INDEX_FILENAME,\
                              BAR_BRAIN_OUTLINE_PROPS, SCENE_EXPORT_FORMAT_MASK
+
+def rotateY(a, (x, y, z)):
+    return (math.sin(a) * z + math.cos(a) * x,
+            y,
+            math.cos(a) * z - math.sin(a) * x)
+
+def rotateZ(a, (x, y, z)):
+    return (math.cos(a) * x - math.sin(a) * y,
+            math.sin(a) * x + math.cos(a) * y,
+            z)
+
+def rotateX(a, (x, y, z)):
+    return (x,
+            math.sin(a) * z + math.cos(a) * y,
+            math.cos(a) * z - math.sin(a) * y)
 
 class barBatchReconstructor(object):
     """
@@ -124,6 +141,8 @@ class barBatchReconstructor(object):
                         attributes:
                           - C{camera} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}} value,
                           - C{top} - C{self.L{vtkapp}.L{top<barReconstructionModule.top>}} value,
+                          - C{angles} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}}
+                            and C{self.L{vtkapp}.L{top<barReconstructionModule.top>}} values encoded as angles,
                           - C{pipeline} - C{self.L{vtkapp}.L{pipeline<barReconstructionModule.pipeline>}} value,
                           - C{voxelDimensions} - C{(self.L{xyres}, self.L{zres})} value,
                           - C{exportDir} - C{self.L{exportDir}} value,
@@ -166,6 +185,8 @@ class barBatchReconstructor(object):
                         attributes:
                           - C{camera} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}} value,
                           - C{top} - C{self.L{vtkapp}.L{top<barReconstructionModule.top>}} value,
+                          - C{angles} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}}
+                            and C{self.L{vtkapp}.L{top<barReconstructionModule.top>}} values encoded as angles,
                           - C{pipeline} - C{self.L{vtkapp}.L{pipeline<barReconstructionModule.pipeline>}} value,
                           - C{voxelDimensions} - C{(self.L{xyres}, self.L{zres})} value,
                           - C{exportDir} - C{self.L{exportDir}} value,
@@ -182,6 +203,23 @@ class barBatchReconstructor(object):
         # Process options
         self.vtkapp.cameraPosition = options.camera
         self.vtkapp.top = options.top
+        if options.angles != None:
+            a, b, c = options.angles
+            camera = (0.0, 0.0, 1.0)
+            top = (0.0, 1.0, 0.0)
+
+            #camera = rotateZ(-c, camera) # x,y are 0
+            top = rotateZ(-c, top)
+
+            camera = rotateX(b, camera)
+            top = rotateX(b, top)
+
+            camera = rotateY(a, camera)
+            top = rotateY(a, top)
+
+            self.vtkapp.top = top
+            self.vtkapp.cameraPosition = camera
+
         
         if options.voxelDimensions != None:
             self.xyres, self.zres = options.voxelDimensions
@@ -288,8 +326,31 @@ class barBatchReconstructor(object):
         if updateRenderWindow:
             self.vtkapp.updateRenderWindow()
         self.iren.Start()
-        print '--useViewport', " ".join(map(str,self.vtkapp.cameraPosition))
+
         print '-d', self.xyres, self.zres
+
+        camera = self.vtkapp.cameraPosition
+        top = self.vtkapp.top
+
+        print '--useViewport', " ".join(map(str, camera))
+        print '--useTop', " ".join(map(str,top))
+
+        if camera[0] != 0 or camera[2] != 0:
+            a = math.atan2(camera[0], camera[2])
+            camera = rotateY(-a, camera)
+            top = rotateY(-a, top)
+
+        b = math.atan2(camera[1], camera[2])
+        camera = rotateX(-b, camera)
+        top = rotateX(-b, top)
+
+        debugOutput("last top: %s" % str(top))
+        c = math.atan2(top[0], top[1])
+        #camera = rotateZ(c, camera)
+        top = rotateZ(c, top)
+        print '--angle %f %f %f' % (a, b, c)
+        debugOutput("initial top: %s" % str(top))
+        debugOutput("initial camera: %s" % str(camera))
 
     def prepareLoop(self, structureNames):
         """

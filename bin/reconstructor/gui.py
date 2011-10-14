@@ -51,11 +51,10 @@ from bar.rec.barreconstructor import barPipeline, barParam, barPipeElem, VTK_PIP
                              HTMLColorToRGB, BAR_DEFAULT_RECONSTRUCTION_DIR,\
                              BAR_ATLAS_INDEX_FILENAME, BAR_TEMPLATE,\
                              BAR_EXPORT_VOLUME_FORMATS,\
-                             BAR_EXPORT_SCENE_FORMATS, BAR_CACHED_MODEL_MASK
+                             BAR_EXPORT_SCENE_FORMATS, BAR_CACHED_MODEL_MASK,\
+                             BAR_RECONSTRUCTOR_VERSION
 
 random.seed(10000)
-
-BAR_VERSION = "ver. 0.1"
 
 BAR_HELP_WEBSITE_URL = 'firefox -new-tab http://www.3dbar.org/'
 BAR_HELP_ABOUT_URL   = 'firefox -new-tab http://www.3dbar.org/wiki/barSoftware3dbarTeaser'
@@ -64,7 +63,7 @@ BAR_GUI_MSGBOX_TITLE = '3d Brain Atlas Reconstructor'
 BAR_GUI_NODEFEXPDIR  = "No default model directory selected. Please choose directory."
 BAR_GUI_NOTEBOOK_MODEL_TITLE = "Model customization"
 BAR_GUI_NOTEBOOK_STRC_SEL_TITLE = "Structure selection"
-BAR_GUI_FRAME_TITLE = "3d Brain Atlas Reconstructor " + BAR_VERSION
+BAR_GUI_FRAME_TITLE = "3d Brain Atlas Reconstructor " + BAR_RECONSTRUCTOR_VERSION
 
 
 class vtkParamCtrl(wx.TextCtrl):

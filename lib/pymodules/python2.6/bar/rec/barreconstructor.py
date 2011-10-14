@@ -52,6 +52,8 @@ from bar.rec.formats import BAR_SCENE_TEMPLATE, BAR_VOLUME_TEMPLATE,\
 from bar.rec.thumbnail import Thumbnail
 
 #TODO: documentation
+BAR_RECONSTRUCTOR_VERSION = "ver. 0.1"
+
 BAR_DEFAULT_RECONSTRUCTION_DIR = '../reconstructions'
 BAR_ATLAS_INDEX_FILENAME = 'index.xml'
 
