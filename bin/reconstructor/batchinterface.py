@@ -37,6 +37,9 @@ import time
 from optparse import OptionParser, OptionGroup
 from bar.rec.barreconstructor import barReconstructionModule, SCENE_EXPORT_FORMAT_MASK
 
+BAR_VERSION = "0.1"
+BAR_DESCRIPTION = "3d Brain Atlas Reconstructor ver." + BAR_VERSION+ " Batch reconstruction interface\n"
+
 class batchInterface(object):
     """
     Class providing the commandline interface for L{barBatchReconstructor} class.
@@ -83,7 +86,9 @@ class batchInterface(object):
                      ('exportScreenshot', 'saves screenshot as an PNG image'),
                      ('exportThumbnail', 'saves scaled screenshot as an PNG image')]
 
-    usage = "usage: %s [options] <CAF index> [<structure 1> [<structure 2> ...]]"
+    description = BAR_DESCRIPTION
+    usage = "./batchinterface.sh [options] <CAF index> [<structure 1> [<structure 2> ...]]"
+    version = BAR_VERSION
 
     # Determines, how many second script waits before launching the reconstruction
     # process
@@ -96,7 +101,7 @@ class batchInterface(object):
         self.index = None
         self.reconstructorClass = reconstructorClass
 
-        parser = OptionParser(usage=self.usage)
+        parser = OptionParser(usage=self.usage,description=self.description,version=self.version)
         parser.add_option('--generateSubstructures', '-g',
                           type='int', dest='generateSubstructures', default=0,
                           help='maximum level of substructures (in the structure tree) to be generated; defaults to 0')
