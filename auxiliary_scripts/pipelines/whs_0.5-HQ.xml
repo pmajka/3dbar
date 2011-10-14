@@ -1,88 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<pipeline>
 		<elements>
-			<pipelineelement disable="False" displayable="True" on="False" order="0">
-				<vtkclass>
-					barVtkAllFlip
-				</vtkclass>
-				<desc>
-					bar.rec.pipeline.barVtkAllFlip
-				</desc>
-				<params>
-					<param display="False" hidden="False" order="0">
-						<name>
-							SetFlipz
-						</name>
-						<args>
-							<value order="0" type="bool">
-								True
-							</value>
-						</args>
-					</param>
-					<param display="False" hidden="False" order="1">
-						<name>
-							SetFlipy
-						</name>
-						<args>
-							<value order="0" type="bool">
-								True
-							</value>
-						</args>
-					</param>
-					<param display="False" hidden="False" order="2">
-						<name>
-							SetFlipx
-						</name>
-						<args>
-							<value order="0" type="bool">
-								True
-							</value>
-						</args>
-					</param>
-					<param display="False" hidden="False" order="3">
-						<name>
-							SetFlipAbOriginz
-						</name>
-						<args>
-							<value order="0" type="bool">
-								True
-							</value>
-						</args>
-					</param>
-					<param display="False" hidden="False" order="4">
-						<name>
-							SetFlipAbOriginx
-						</name>
-						<args>
-							<value order="0" type="bool">
-								True
-							</value>
-						</args>
-					</param>
-					<param display="False" hidden="False" order="5">
-						<name>
-							SetFlipAbOriginy
-						</name>
-						<args>
-							<value order="0" type="bool">
-								True
-							</value>
-						</args>
-					</param>
-				</params>
-			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="1">
+			<pipelineelement disable="False" displayable="False" on="True" order="0">
 				<vtkclass>
 					vtkImagePermute
 				</vtkclass>
 				<desc>
-					libvtkImagingPython.vtkImagePermute
+					Axes permutation
 				</desc>
 				<params>
 					<param display="False" hidden="False" order="0">
 						<name>
 							SetFilteredAxes
 						</name>
+						<desc>
+							New order of axes
+						</desc>
 						<args>
 							<value order="0" type="int">
 								0
@@ -97,44 +30,22 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="2">
-				<vtkclass>
-					vtkImageChangeInformation
-				</vtkclass>
-				<desc>
-					libvtkImagingPython.vtkImageChangeInformation
-				</desc>
-				<params>
-					<param display="False" hidden="False" order="0">
-						<name>
-							SetOriginTranslation
-						</name>
-						<args>
-							<value order="0" type="float">
-								0.0
-							</value>
-							<value order="1" type="float">
-								0.0
-							</value>
-							<value order="2" type="float">
-								0.0
-							</value>
-						</args>
-					</param>
-				</params>
-			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="3">
+			<pipelineelement disable="False" displayable="True" on="False" order="1">
 				<vtkclass>
 					vtkImageGaussianSmooth
 				</vtkclass>
 				<desc>
-					libvtkImagingPython.vtkImageGaussianSmooth
+					Gaussian volume smoothing
 				</desc>
 				<params>
 					<param display="False" hidden="False" order="0">
 						<name>
 							SetStandardDeviation
 						</name>
+						<desc>
+							Standard deviation
+along x,y and z axes
+						</desc>
 						<args>
 							<value order="0" type="float">
 								1.0
@@ -149,38 +60,21 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="4">
+			<pipelineelement disable="True" displayable="True" on="True" order="2">
 				<vtkclass>
 					vtkMarchingCubes
 				</vtkclass>
 				<desc>
-					libvtkGraphicsPython.vtkMarchingCubes
+					Isosurface extraction
 				</desc>
 				<params>
 					<param display="False" hidden="False" order="0">
 						<name>
-							ComputeNormals
-						</name>
-						<args>
-							<value order="0" type="bool">
-								False
-							</value>
-						</args>
-					</param>
-					<param display="False" hidden="False" order="1">
-						<name>
-							ComputeGradients
-						</name>
-						<args>
-							<value order="0" type="bool">
-								False
-							</value>
-						</args>
-					</param>
-					<param display="False" hidden="False" order="2">
-						<name>
 							SetValue
 						</name>
+						<desc>
+							Contour value
+						</desc>
 						<args>
 							<value order="0" type="int">
 								0
@@ -190,7 +84,7 @@
 							</value>
 						</args>
 					</param>
-					<param display="False" hidden="False" order="3">
+					<param display="False" hidden="True" order="1">
 						<name>
 							ComputeScalars
 						</name>
@@ -200,9 +94,29 @@
 							</value>
 						</args>
 					</param>
+					<param display="False" hidden="True" order="2">
+						<name>
+							ComputeGradients
+						</name>
+						<args>
+							<value order="0" type="bool">
+								False
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="True" order="3">
+						<name>
+							ComputeNormals
+						</name>
+						<args>
+							<value order="0" type="bool">
+								False
+							</value>
+						</args>
+					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="False" on="True" order="5">
+			<pipelineelement disable="False" displayable="False" on="True" order="3">
 				<vtkclass>
 					vtkTriangleFilter
 				</vtkclass>
@@ -211,38 +125,63 @@
 				</desc>
 				<params/>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="6">
+			<pipelineelement disable="False" displayable="True" on="False" order="4">
 				<vtkclass>
 					vtkSmoothPolyDataFilter
 				</vtkclass>
 				<desc>
-					libvtkGraphicsPython.vtkSmoothPolyDataFilter
+					Mesh smoothing
 				</desc>
 				<params>
 					<param display="False" hidden="False" order="0">
 						<name>
 							SetRelaxationFactor
 						</name>
+						<desc>
+							Relaxation factor
+						</desc>
 						<args>
 							<value order="0" type="float">
 								0.5
 							</value>
 						</args>
+						<span>
+							<value order="0" type="int">
+								0
+							</value>
+							<value order="1" type="int">
+								2
+							</value>
+						</span>
 					</param>
 					<param display="False" hidden="False" order="1">
 						<name>
 							SetNumberOfIterations
 						</name>
+						<desc>
+							Number of iterations
+						</desc>
 						<args>
 							<value order="0" type="int">
 								20
 							</value>
 						</args>
+						<span>
+							<value order="0" type="int">
+								1
+							</value>
+							<value order="1" type="int">
+								50
+							</value>
+						</span>
 					</param>
 					<param display="False" hidden="False" order="2">
 						<name>
 							FeatureEdgeSmoothing
 						</name>
+						<desc>
+							Edge smoothing
+						</desc>
 						<args>
 							<value order="0" type="bool">
 								True
@@ -251,47 +190,80 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="7">
+			<pipelineelement disable="False" displayable="True" on="True" order="5">
 				<vtkclass>
 					vtkQuadricClustering
 				</vtkclass>
 				<desc>
-					libvtkGraphicsPython.vtkQuadricClustering
+					Mesh simplification
 				</desc>
 				<params>
 					<param display="False" hidden="False" order="0">
 						<name>
 							SetNumberOfXDivisions
 						</name>
+						<desc>
+							Number of x divisions
+						</desc>
 						<args>
 							<value order="0" type="int">
 								100
 							</value>
 						</args>
+						<span>
+							<value order="0" type="int">
+								1
+							</value>
+							<value order="1" type="int">
+								200
+							</value>
+						</span>
 					</param>
 					<param display="False" hidden="False" order="1">
 						<name>
-							SetNumberOfZDivisions
+							SetNumberOfYDivisions
 						</name>
+						<desc>
+							Number of y divisions
+						</desc>
 						<args>
 							<value order="0" type="int">
 								100
 							</value>
 						</args>
+						<span>
+							<value order="0" type="int">
+								1
+							</value>
+							<value order="1" type="int">
+								200
+							</value>
+						</span>
 					</param>
 					<param display="False" hidden="False" order="2">
 						<name>
-							SetNumberOfYDivisions
+							SetNumberOfZDivisions
 						</name>
+						<desc>
+							Number of z divisions
+						</desc>
 						<args>
 							<value order="0" type="int">
 								100
 							</value>
 						</args>
+						<span>
+							<value order="0" type="int">
+								1
+							</value>
+							<value order="1" type="int">
+								200
+							</value>
+						</span>
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="False" on="True" order="8">
+			<pipelineelement disable="False" displayable="False" on="True" order="6">
 				<vtkclass>
 					vtkPolyDataNormals
 				</vtkclass>
@@ -329,16 +301,17 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="9">
+			<pipelineelement disable="False" displayable="True" on="False" order="7">
 				<vtkclass>
 					barVtkMirror
 				</vtkclass>
 				<desc>
-					bar.rec.pipeline.barVtkMirror
+					Mirror
+hemisphere
 				</desc>
 				<params/>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="False" on="True" order="10">
+			<pipelineelement disable="False" displayable="False" on="True" order="8">
 				<vtkclass>
 					vtkPolyDataMapper
 				</vtkclass>

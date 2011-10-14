@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 	<pipeline>
 		<elements>
-			<pipelineelement disable="False" displayable="True" on="True" order="0">
+			<pipelineelement disable="False" displayable="True" on="True" order="1">
 				<vtkclass>
 					vtkImagePermute
 				</vtkclass>
@@ -18,10 +18,10 @@
 								0
 							</value>
 							<value order="1" type="int">
-								1
+								2
 							</value>
 							<value order="2" type="int">
-								2
+								1
 							</value>
 						</args>
 					</param>

@@ -3,6 +3,76 @@
 		<elements>
 			<pipelineelement disable="False" displayable="True" on="True" order="0">
 				<vtkclass>
+					barVtkAllFlip
+				</vtkclass>
+				<desc>
+					bar.rec.pipeline.barVtkAllFlip
+				</desc>
+				<params>
+					<param display="False" hidden="False" order="0">
+						<name>
+							SetFlipz
+						</name>
+						<args>
+							<value order="0" type="bool">
+								False
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="False" order="1">
+						<name>
+							SetFlipy
+						</name>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="False" order="2">
+						<name>
+							SetFlipx
+						</name>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="False" order="3">
+						<name>
+							SetFlipAbOriginz
+						</name>
+						<args>
+							<value order="0" type="bool">
+								False
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="False" order="4">
+						<name>
+							SetFlipAbOriginx
+						</name>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="False" order="5">
+						<name>
+							SetFlipAbOriginy
+						</name>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+				</params>
+			</pipelineelement>
+			<pipelineelement disable="False" displayable="True" on="True" order="1">
+				<vtkclass>
 					vtkImagePermute
 				</vtkclass>
 				<desc>
@@ -18,16 +88,16 @@
 								0
 							</value>
 							<value order="1" type="int">
-								1
+								2
 							</value>
 							<value order="2" type="int">
-								2
+								1
 							</value>
 						</args>
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="1">
+			<pipelineelement disable="False" displayable="True" on="True" order="3">
 				<vtkclass>
 					vtkImageGaussianSmooth
 				</vtkclass>
@@ -53,7 +123,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="2">
+			<pipelineelement disable="False" displayable="True" on="True" order="4">
 				<vtkclass>
 					vtkMarchingCubes
 				</vtkclass>
@@ -106,7 +176,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="False" on="True" order="3">
+			<pipelineelement disable="False" displayable="False" on="True" order="5">
 				<vtkclass>
 					vtkTriangleFilter
 				</vtkclass>
@@ -115,7 +185,7 @@
 				</desc>
 				<params/>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="4">
+			<pipelineelement disable="False" displayable="True" on="False" order="6">
 				<vtkclass>
 					vtkSmoothPolyDataFilter
 				</vtkclass>
@@ -155,7 +225,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="5">
+			<pipelineelement disable="False" displayable="True" on="False" order="7">
 				<vtkclass>
 					vtkQuadricClustering
 				</vtkclass>
@@ -195,7 +265,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="False" on="True" order="6">
+			<pipelineelement disable="False" displayable="False" on="True" order="8">
 				<vtkclass>
 					vtkPolyDataNormals
 				</vtkclass>
@@ -233,7 +303,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="7">
+			<pipelineelement disable="False" displayable="True" on="True" order="9">
 				<vtkclass>
 					barVtkMirror
 				</vtkclass>
@@ -242,7 +312,7 @@
 				</desc>
 				<params/>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="False" on="True" order="8">
+			<pipelineelement disable="False" displayable="False" on="True" order="10">
 				<vtkclass>
 					vtkPolyDataMapper
 				</vtkclass>
