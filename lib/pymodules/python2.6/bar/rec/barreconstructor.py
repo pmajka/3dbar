@@ -612,7 +612,21 @@ class barReconstructionModule(object):
         camera = self.renderer.GetActiveCamera()
         camera.SetPosition(position)
         camera.SetFocalPoint(fp)
-    
+
+    def __setTop(self, top):
+        """
+        The L{top} property setter.
+        """
+        camera = self.renderer.GetActiveCamera()
+        camera.SetViewUp(top)
+
+    def __getTop(self):
+        """
+        The L{top} property getter.
+        """
+        camera = self.renderer.GetActiveCamera()
+        return tuple(camera.GetViewUp())
+
     def __getPipeline(self):
         """
         The L{pipeline} property getter.
@@ -692,6 +706,11 @@ class barReconstructionModule(object):
     cameraPosition = property(__getCameraPosition, __setCameraPosition)
     """
     The direction from the center of the scene to the camera position.
+    """
+
+    top = property(__getTop, __setTop)
+    """
+    The "up" direction.
     """
     
     vtkVolume = property(__getVtkVolume, __setVtkVolume)

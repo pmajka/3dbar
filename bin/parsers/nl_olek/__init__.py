@@ -140,6 +140,7 @@ class AtlasParser(nl.nlParser):
         ('CAFSlideOrientation', 'coronal'),
         ('CAFSlideUnits', 'mm'),
         ('CAFName', 'nl_olek'),
+        ('CAFFullName', 'Neurolucida'),
         ('CAFComment', ''),
         ('CAFCreator', "Dataset prepared by Piotr Majka, Nencki Institute of Experimental Biology"),
         ('CAFCreatorEmail', 'pmajka@nencki.gov.pl'),

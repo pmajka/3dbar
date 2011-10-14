@@ -123,6 +123,7 @@ class barBatchReconstructor(object):
         @param options: an object containing constructor options as its
                         attributes:
                           - C{camera} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}} value,
+                          - C{top} - C{self.L{vtkapp}.L{top<barReconstructionModule.top>}} value,
                           - C{pipeline} - C{self.L{vtkapp}.L{pipeline<barReconstructionModule.pipeline>}} value,
                           - C{voxelDimensions} - C{(self.L{xyres}, self.L{zres})} value,
                           - C{exportDir} - C{self.L{exportDir}} value,
@@ -164,6 +165,7 @@ class barBatchReconstructor(object):
         @param options: an object containing constructor options as its
                         attributes:
                           - C{camera} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}} value,
+                          - C{top} - C{self.L{vtkapp}.L{top<barReconstructionModule.top>}} value,
                           - C{pipeline} - C{self.L{vtkapp}.L{pipeline<barReconstructionModule.pipeline>}} value,
                           - C{voxelDimensions} - C{(self.L{xyres}, self.L{zres})} value,
                           - C{exportDir} - C{self.L{exportDir}} value,
@@ -179,6 +181,7 @@ class barBatchReconstructor(object):
         
         # Process options
         self.vtkapp.cameraPosition = options.camera
+        self.vtkapp.top = options.top
         
         if options.voxelDimensions != None:
             self.xyres, self.zres = options.voxelDimensions

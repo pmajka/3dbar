@@ -110,6 +110,9 @@ class batchInterface(object):
         parser.add_option('--useViewport', '-v', type='float', nargs=3, dest='camera',
                           default=(0., 0., 1.),
                           help='the direction vector from the center of the scene to the camera position')
+        parser.add_option('--useTop', '-t', type='float', nargs=3, dest='top',
+                          default=(0., 1., 0.),
+                          help='the "up" direction vector')
         
         formatOptions = OptionGroup(parser, 'Output Format Options')
         for (keyword, description) in self.output_format:
