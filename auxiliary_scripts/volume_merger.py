@@ -238,6 +238,8 @@ class merger():
         @return: C{None}
         """
         # If privided volume is the first one, simply take it as output volume.
+        #uid -=200000
+        print uid
         if not self.outVol:
             self.outVol = volToAppend.GetIndexed(uid)
             print >>sys.stderr, "No volume found. Creating initial volume."
@@ -466,7 +468,7 @@ class barIndexerColorMapper():
         """
         Creates vtkLookupTable for mapping the volumes
         """
-        
+        random.seed(0)
         lut = vtk.vtkLookupTable()
         cm  = self._gidToColorMap   # Just simple alias
         
@@ -553,7 +555,7 @@ def createOptionParser():
             action="store_true", default=False,
             help="Merge structures from volume files stored in single directory. Requires providing working directory.")
     
-    parser.add_option("-d", "--volumesDirectory", dest="workingDir", action="store",
+    parser.add_option("-v", "--volumesDirectory", dest="workingDir", action="store",
             help="Directory containing volumes with corresponding structures.",
             metavar="DIR", default=".")
     
@@ -573,9 +575,17 @@ def createOptionParser():
     parser.add_option("-c", "--colorVolumeFilename", dest="oColorFilename", action="store",
             default=None,
             help="Output volume filename.", metavar="FILENAME")
+    parser.add_option('--usePipeline', '-p', dest='pipeline', default=None,
+            help='the path to a custom pipeline definition')
     
     parser.add_option("-t", "--volumeFilenameTemplate", dest="volFnTemplate",
             action="store", default=VOLUME_FILENAME_TEMPLATE, type="string")
+    parser.add_option('--voxelDimensions', '-d', type='float',
+                      nargs=2, dest='voxelDimensions', default = (0.1, 0.1),
+                      help='voxel size [mm] (in coronal plane, along anterior-posterior axis)')
+    parser.add_option('--generateSubstructures', '-g',
+                      type='int', dest='generateSubstructures', default=0,
+                      help='maximum level of substructures (in the structure tree) to be generated; defaults to 0')
     return parser
 
 
@@ -653,16 +663,18 @@ if __name__ == '__main__':
     
     # Merging volumes reconstructed on the fly
     if options.mergeReconstructor:
-        o = {'pipeline': None,\
+        o = {'pipeline': options.pipeline,\
              'exportDir': '.',\
              'show': False,\
              'composite': False,\
              'brainoutline': False,\
-             'format': None,\
-             'voxelDimensions': [0.2, 0.2],\
+             'ignoreBoundingBox': True,\
+             'voxelDimensions': options.voxelDimensions,\
              'format': ['exportToVolume'],\
              'camera': (0.0, 0.0, 1.0),\
-             'generateSubstructures': 10}
+             'top': (0.0, 0.0, 1.0),\
+             'angles': None,\
+             'generateSubstructures': options.generateSubstructures}
         
         dummyOpts = opts(o)
         
@@ -681,7 +693,7 @@ if __name__ == '__main__':
     integrator.save(options.outVolFilename)
     
     # Exporting colored volume:
-    if options.oColorFilename:
+    if options.oColorFilename and not options.recolorOnly:
         colorMapper = barIndexerColorMapper(indexer)
         colorMapper.SetInput(integrator.m.GetOutput())
         colorMapper.save(options.oColorFilename)
