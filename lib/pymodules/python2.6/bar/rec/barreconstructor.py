@@ -262,7 +262,7 @@ class barReconstructionModule(object):
             ct = self.__mainActorCol
             vtksource = self.__finalPipeline.execute(self.vtkMesh)
             
-            self.__mainActor = vtk.vtkActor()
+            self.__mainActor = vtk.vtkLODActor()
             self.__mainActor.SetMapper(vtksource)
             self.__mainActor.GetProperty().SetColor(ct[0],ct[1],ct[2])
             
@@ -614,21 +614,21 @@ class barReconstructionModule(object):
         camera = self.renderer.GetActiveCamera()
         camera.SetPosition(position)
         camera.SetFocalPoint(fp)
-
+    
     def __setTop(self, top):
         """
         The L{top} property setter.
         """
         camera = self.renderer.GetActiveCamera()
         camera.SetViewUp(top)
-
+    
     def __getTop(self):
         """
         The L{top} property getter.
         """
         camera = self.renderer.GetActiveCamera()
         return tuple(camera.GetViewUp())
-
+    
     def __getPipeline(self):
         """
         The L{pipeline} property getter.
@@ -647,12 +647,12 @@ class barReconstructionModule(object):
         """
         self.__pipeline = newPipeline
         
-        # TODO: Implement automatic pipeline splitting
-        # depending on filter output types.
-        # Tue May 17 15:26:28 CEST 2011
-        self.__volumePipeline = self.__pipeline[:4]
-        self.__meshPipeline = self.__pipeline[4:-1]
-        self.__finalPipeline = self.__pipeline[-1:]
+        types = self.__pipeline.getOutputDataTypes()
+        volumePipeIdx = types['vtkImageData']
+        polyDataPipeIdx = types['vtkPolyData']
+        self.__volumePipeline = self.__pipeline[slice(*volumePipeIdx)]
+        self.__meshPipeline   = self.__pipeline[slice(*polyDataPipeIdx)]
+        self.__finalPipeline  = self.__pipeline[-1:]
         self.__clearCache()
     
     def __getVtkVolume(self):

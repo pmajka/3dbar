@@ -116,7 +116,6 @@ class structureHolder():
         
         self.recSettings = {}
         self.StructVol = None
-        self.tempCentralPlanes = None
     
     def __initializeVolume(self):
         """
@@ -125,14 +124,6 @@ class structureHolder():
         
         @return: None.
         """
-        # Calculate volume dimensions basing on set of slides and
-        # (implicitly) values defined in C{indexHolder.volumeConfiguration}
-        
-#       zExtent = self.ih.getZExtent( self.recSettings['slides'],\
-#               self.recSettings['zRes'],
-#               self.recSettings['zMargin'],
-#               self._checkEqualSpacing())
-        
         zExtent = self.recSettings['zExtent']
         dm = self.recSettings['CroppedImageSize']  # Bitmap size
         volumeDimensions = (dm[0], dm[1], zExtent)
@@ -284,7 +275,6 @@ class structureHolder():
         
         firstSlideIndex = self.recSettings['slides'][0]    # Index of first slide  
         lastSlideIndex  = self.recSettings['slides'][1] +1 # Index of last slide +1
-        
         slideNumbersRange = range(firstSlideIndex, lastSlideIndex)
         
         Oz = self.StructVol.origin[2]
@@ -293,18 +283,6 @@ class structureHolder():
         
         z = numpy.array(map(lambda x: sz*(x) + Oz, range(0, ez)))
         zi= numpy.array(range(0, ez))
-        
-#       #-------- TESTING --------------------------------------------
-#       ooz, eez = self.ih.getZOriginAndExtent(\
-#               (self.recSettings['slides'][0],self.recSettings['slides'][1]),
-#               self.recSettings['zRes'], self.recSettings['zMargin'],
-#               self._checkEqualSpacing())
-#       if Oz != ooz or eez != ez:
-#           print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-#           print "\tOz -ooz: ", Oz - ooz
-#           print "\teez - ez: ", eez - ez
-#           raw_input()
-#       #-------- TESTING --------------------------------------------
         
         slidePlanes = {}
         for s in map(lambda x: self.ih.s[x], slideNumbersRange):
@@ -363,18 +341,15 @@ class structureHolder():
         return otype
     
     def __flushCache(self):
-	try:
-		del self.StructVol
-		del self.tempCentralPlanes
-	except:
-		pass
+        try:
+            del self.StructVol
+            del self.tempCentralPlanes
+        except:
+            pass
         self.recSettings = {}
     
     def __initModelGeneration(self, xyRes, ignoreBbx = False):
         mx, my = map(lambda x: abs(x/float(xyRes)), self.ih.refCords[2:])
-        #print mx - my
-        #assert (round(mx - my,4) ==0),\
-        #        "Resolution in x and y plane does not match. Cannot continue."
         
         scaleFactor = mx
         self.recSettings['ScaleFactor'] = 1./scaleFactor
@@ -386,14 +361,11 @@ class structureHolder():
         self.recSettings['CafBoundingBox'] = bbx
         
         if ignoreBbx:
-            xbbx, ybbx = tuple(map(int, self.refDimestions))
-            bbx = barBoundingBox((0, 0, xbbx, ybbx))
-            self.recSettings['slides'] = (self.ih.s[0], self.ih.s[-1])
+            stlist = self.ih.getStructureList(self.ih.hierarchyRootElementName)
+            bbx = self.ih.getStructuresListBbx(stlist)
         
         bbx*=scaleFactor
-        
-        if not ignoreBbx:
-            bbx.extend((-1,-1,1,1))
+        bbx.extend((-1,-1,1,1))
         
         self.recSettings['BoundingBox'] = bbx
         self.recSettings['CroppedImageSize'] = (bbx[2]-bbx[0],bbx[3]-bbx[1])
@@ -422,26 +394,33 @@ class structureHolder():
         
         return eqSpacing
     
-    def __getStructureList(self, HierarchyRootElementName):
-        stlist = self.ih.getStructureList(HierarchyRootElementName)
+    def __getStructureList(self, rootElementName, ignoreBbx = False):
+        stlist = self.ih.getStructureList(rootElementName)
         self.recSettings['StructuresList'] = stlist
-        self.recSettings['slides'] = self.ih._structList2SlideSpan(stlist, rawIndexes=True)
         
-        (zOirign, zExtent) = self.ih.getZOriginAndExtent(\
+        if ignoreBbx:
+            self.recSettings['slides'] = (self.ih.s[0].idx, self.ih.s[-1].idx)
+        else:
+            self.recSettings['slides'] = self.ih._structList2SlideSpan(stlist, rawIndexes=True)
+        
+        (zOrigin, zExtent) = self.ih.getZOriginAndExtent(\
                 self.recSettings['slides'], self.recSettings['zRes'],\
                 self.recSettings['zMargin'], self._checkEqualSpacing())
         
+        self.recSettings['slides'] = self.ih._structList2SlideSpan(stlist, rawIndexes=True)
         self.recSettings['zOrigin'], self.recSettings['zExtent'] =\
-                zOirign, zExtent
+                zOrigin, zExtent
         
         if __debug__:
             Oz = self.recSettings['zOrigin']
             ez = self.recSettings['zExtent']
             sz = self.recSettings['zRes']
             print "\t__getStructureList: Zorigin, Zextent, Zspacing:", Oz, ez, sz
+            print "\t__getStructureList: ignoreBbx:", ignoreBbx
+            print "\t__getStructureList: slides:", self.recSettings['slides']
     
     def handleAllModelGeneration(self,\
-            HierarchyRootElementName,\
+            rootElementName,\
             xyRes, zRes,\
             VolumeMargin = 10,\
             ignoreBoundingBox = False):
@@ -449,12 +428,12 @@ class structureHolder():
         self.__flushCache()
         self.recSettings['zRes']    = zRes
         self.recSettings['zMargin'] = VolumeMargin
-        self.__getStructureList(HierarchyRootElementName)
+        self.__getStructureList(rootElementName, ignoreBbx = ignoreBoundingBox)
         self.__initModelGeneration(xyRes, ignoreBbx = ignoreBoundingBox)
         self.__processModelGeneration()
     
-    def getSlidesSpan(self, HierarchyRootElementName):
-        return self.ih.getSlidesSpan(HierarchyRootElementName)
+    def getSlidesSpan(self, rootElementName):
+        return self.ih.getSlidesSpan(rootElementName)
     
     def getDefaultZres(self):
         return self.ih.getDefaultZres()

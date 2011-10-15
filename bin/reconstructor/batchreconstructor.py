@@ -151,6 +151,12 @@ class barBatchReconstructor(object):
                           - C{show} - C{self.L{show}} value,
                           - C{brainoutline} - C{self.L{brainoutline}} value,
                           - C{composite} - C{self.L{composite}} value; if True forces C{'exportToVTKPolydata' in self.L{formats}}
+                          - C{ignoreBoundingBox} - C{self.L{ignoreBoundingBox}}
+                            Overrides bounding box calculation - bounding box
+                            will be always equal to hierarchy root element
+                            bounding box. Volumes for all structures will always
+                            have the same size and origin. This feature
+                            increases memory usage and reconstruction time.
         
         @type options: optparse.Values object
         
@@ -165,12 +171,12 @@ class barBatchReconstructor(object):
         # load CAF dataset
         atlasDir, indexFilename = os.path.split(index)
         self.loadAtlas(atlasDir, indexFilename)
-
+        
         self._basicSetup(vtkapp, options)
-
+        
         if options.pipeline != None:
             self.vtkapp.pipeline = barPipeline.fromXML(options.pipeline)
-
+        
         if self.composite:
             self.formats.add('exportToVTKPolydata')
 
@@ -203,6 +209,7 @@ class barBatchReconstructor(object):
         # Process options
         self.vtkapp.cameraPosition = options.camera
         self.vtkapp.top = options.top
+        #TODO: Zmien prosze: nie --angle(s), ale np. --cameraViewAngles
         if options.angles != None:
             a, b, c = options.angles
             camera = (0.0, 0.0, 1.0)
@@ -220,7 +227,6 @@ class barBatchReconstructor(object):
             self.vtkapp.top = top
             self.vtkapp.cameraPosition = camera
 
-        
         if options.voxelDimensions != None:
             self.xyres, self.zres = options.voxelDimensions
         
@@ -240,7 +246,8 @@ class barBatchReconstructor(object):
         
         self.show = options.show
         self.composite = options.composite
-
+        self.ignoreBoundingBox = options.ignoreBoundingBox
+        
         #---------------------- done with options
         
         # Proceed with VTK setup 
@@ -326,24 +333,27 @@ class barBatchReconstructor(object):
         if updateRenderWindow:
             self.vtkapp.updateRenderWindow()
         self.iren.Start()
-
+        
         print '-d', self.xyres, self.zres
-
+        
         camera = self.vtkapp.cameraPosition
-        top = self.vtkapp.top
-
+        top = self.vtkapp.top #TODO: Zmien prosze ta nazwe na cos bardziej
+        #znaczacego np. self.vtkapp.cameraViewUp, zeby bylo spojnie
+        #TODO: podobnie z angles:  nie: --angle, ale np. --cameraViewAngles
+        #TODO: Rozumiem, ze --useTop docelowo zniknie? 
+        
         print '--useViewport', " ".join(map(str, camera))
         print '--useTop', " ".join(map(str,top))
-
+        
         if camera[0] != 0 or camera[2] != 0:
             a = math.atan2(camera[0], camera[2])
             camera = rotateY(-a, camera)
             top = rotateY(-a, top)
-
+        
         b = math.atan2(camera[1], camera[2])
         camera = rotateX(-b, camera)
         top = rotateX(-b, top)
-
+        
         debugOutput("last top: %s" % str(top))
         c = math.atan2(top[0], top[1])
         #camera = rotateZ(c, camera)
@@ -525,7 +535,8 @@ class barBatchReconstructor(object):
         @return: a volumetric representation of requested structure
         """
         self.sh.handleAllModelGeneration(\
-                structureName, self.xyres, self.zres) 
+                structureName, self.xyres, self.zres,\
+                ignoreBoundingBox=self.ignoreBoundingBox) 
         return self.sh.StructVol
     
     def generateModel(self, structureName):

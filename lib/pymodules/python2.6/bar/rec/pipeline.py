@@ -63,7 +63,7 @@ class barVtkAllFlip():
     def __init__(self):
         self._flip       = [False, False, False]
         self._flipOrigin = [False, False, False]
-        self._input = None
+        self._input = vtk.vtkImageData()
         
         for (si,bi) in [('On', True), ('Off', False)]:
             for (sj,bj) in [('x',0),('y',1),('z',2)]:
@@ -81,10 +81,8 @@ class barVtkAllFlip():
     
     def Update(self):
         source = self._input
-        output = None
-        self._output = None
-        
-        print self._flip, self._flipOrigin
+        output = vtk.vtkImageData()
+        self._output = vtk.vtkImageData()
         
         if not any(self._flip):
             output = source
@@ -301,7 +299,9 @@ class barPipeline(barPipelineXML, list):
         """
         vtkAlgorithmObj.SetInput(vtksource.GetOutput())
         vtkAlgorithmObj.Update()
-        print "\t" + vtkAlgorithmObj.__class__.__name__
+        if __debug__:
+            print "\tAppying: " + vtkAlgorithmObj.__class__.__name__
+            print "\tOutput data type: " + vtksource.GetOutput().GetClassName()
         return vtkAlgorithmObj
     
     def execute(self, imImport):
@@ -347,6 +347,23 @@ class barPipeline(barPipelineXML, list):
         pipelineDocument.appendChild(\
                         barPipelineXML.getXMLelement(self, pipelineDocument))
         return pipelineDocument
+
+    def getOutputDataTypes(self):
+        """
+        @return: Dictionary mapping fioter data output type to span of list
+                 elements that return given output data type.
+        @rtype: {'str':(int,int),...}
+        """
+        dataTypesList  = map(lambda x: x.outputDataType, self[0:-1])
+        uniqeDataTypes = list(set(dataTypesList))
+        dataTypesMapping = {}
+        
+        for dataType in uniqeDataTypes:
+            firstIxd = dataTypesList.index(dataType)
+            nElems   = dataTypesList.count(dataType)
+            dataTypesMapping[dataType] =\
+                    (firstIxd, firstIxd + nElems)
+        return dataTypesMapping
     
     def __setElements(self, val):
         """
@@ -421,6 +438,16 @@ class barPipeElem(barPipelineXML):
             else:
                 getattr(obj,param.name)(*param.args)
         return obj
+    
+    def __getOutputDataType(self):
+        """
+        """
+        return self.cls().GetOutput().GetClassName()
+    
+    def __setOutputDataType(self, newValue):
+        """
+        """
+        raise ValueError, "Read only property."
 
     def set(self, on, show=True):
         """
@@ -486,15 +513,16 @@ class barPipeElem(barPipelineXML):
         else:
             v = val
         self.cls = v
-
+    
     def __getCls(self):
         """
         @return: name of the L{self.cls<barPipeElem.cls>}
         @rtype: unicode
         """
         return unicode(self.cls.__name__)
-
+    
     vtkclass = property(__getCls, __setCls)
+    outputDataType = property(__getOutputDataType, __setOutputDataType)
 
 
 class barParam(barPipelineXML):

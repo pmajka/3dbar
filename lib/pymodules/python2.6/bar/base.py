@@ -1245,7 +1245,14 @@ class barPath(barAtlasSlideElement):
         pathID = svgPathElement.getAttribute('id')
         if clearPathDef:
             pathDefinition = cls.simplifyPathDef(pathDefinition)
-        fillColor = svgPathElement.getAttribute('fill')
+        
+        # If path element has defined fill color remove it and overwrite it with
+        # inline style
+        if svgPathElement.hasAttribute('fill'):
+            fillColor = svgPathElement.getAttribute('fill')
+        else:
+            styleDict = parseStyle(svgPathElement.getAttribute('style'))
+            fillColor = styleDict.get('fill',"#000000")
         
         # we treat growlevel as optional parameter
         try:

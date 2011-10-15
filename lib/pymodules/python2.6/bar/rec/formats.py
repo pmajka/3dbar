@@ -40,7 +40,7 @@ BAR_VOLUME_TEMPLATE = 'volume_%s'
 BAR_EXPORT_FORMATS = [('exportToVRML', 'VRML files', '.wrl', BAR_SCENE_TEMPLATE),
                       ('exportToX3d', 'X3D files', '.x3d', BAR_SCENE_TEMPLATE),
                       ('exportToPOVRay', 'POV-Ray files', '.pov', BAR_SCENE_TEMPLATE),
-                      ('exportToNiftii', 'NIfTI files', '.nii', BAR_VOLUME_TEMPLATE),
+                      ('exportToNiftii', 'NIfTI files', '.nii.gz', BAR_VOLUME_TEMPLATE),
                       ('exportToVTKPolydata', 'vtk polydata files', '.vtk', 'model_%s'),
                       ('exportToNumpy', 'NumPy array files', '.npy', BAR_VOLUME_TEMPLATE),
                       ('exportToVolume', 'vtk structured grid files', '.vtk', BAR_VOLUME_TEMPLATE),
@@ -70,11 +70,6 @@ def getFormatInfo(formats=None):
 
     formatInfo = {}
     for (method, description, extension, template) in BAR_EXPORT_FORMATS:
-        #TODO: Piotrek:
-        # Rozumiem, że jeżeli poda się pustą listęformatów, to zwracany ma być
-        # słownik ze wszystkimi formatami, tak
-        #       Kuba: nie - wtedy zwroci pusty slownik
-
         if method in formats:
             formatInfo[method] = {'desc': description,
                                   'ext': extension,

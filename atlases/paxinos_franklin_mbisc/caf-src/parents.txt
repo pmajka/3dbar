@@ -342,7 +342,7 @@ cu	Unknown
 s5	HB# sensory root of trigeminal nerve
 
 
-sp5	HB#spinal trigeminal tract
+sp5	Tracts#spinal trigeminal tract
 
 
 
@@ -571,7 +571,7 @@ BM	Amy
 #BSTV	Amy
 
 CeC	Ce
-CeCv	Unknown
+CeCv	HB
 CeL	Ce
 CeM	Ce
 Ce	Amy
@@ -870,16 +870,18 @@ VTA	MB
 ##################
 # Cb
 HB	Brain
+CbL	Cb
+
 Cb	HB
 
 Med	Cb
-10Cb	Cb
+10Cb	CbL
 
-6Cb	Cb
+6Cb	CbL
 6a	6Cb
 6b	6Cb
-7Cb	Cb
-8Cb	Cb
+7Cb	CbL
+8Cb	CbL
 
 Ant	Cb
 1Cb	Ant
@@ -916,20 +918,20 @@ Sim	Cb
 Uvu	Cb
 VeCb	Cb
 
-2-3Cb	Cb
-2bCb	2Cb
-2Cb	Cb
-3-4Cb	Cb
-3Cb	Cb
-4-5Cb	Cb
-4Cb	Cb
-5Cb	Cb
+2-3Cb	CbL
+2bCb	2CbL
+2Cb	CbL
+3-4Cb	CbL
+3Cb	CbL
+4-5Cb	CbL
+4Cb	CbL
+5Cb	CbL
 6aCb	6Cb
 6bCb	6Cb
 6cCb	6Cb
 9a,bCb	9Cb
-9Cb	Cb
-9cCb	9Cb
+9Cb	CbL
+9cCb	9CbL
 
 ############################
 ## HB:
@@ -946,8 +948,11 @@ LDTgV	LDTg
 LC	HB
 MRVL	HB
 MnA	HB
-MdD	HB
-MdV	HB
+
+MdD	Md
+MdV	Md
+Md	Medulla-oblongolata
+
 PSol	HB#parasolitary nucleus
 Pa5	HB#paratrigeminal nucleus
 PC5	HB
@@ -1010,7 +1015,7 @@ Dk	HB
 DPGi	HB
 DPO	HB
 
-DTg	HB
+DTg	Tg
 DTgC	DTg
 DTgP	DTg
 
@@ -1057,7 +1062,12 @@ PBP	PB
 PBW	PB
 
 PMn	HB
-PM	HB
+PM	Cb
+C1	adrenaline-cells
+C3	adrenaline-cells
+C2	adrenaline-cells
+
+adrenaline-cells	HB
 
 # sensory trigeminal brainstem nuclei
 Pr5DM	Pr5
@@ -1177,6 +1187,7 @@ VC	HB
 VCP	VC
 
 VCA	VC
+VCCap	VC
 VCAGr	VCA
 
 X	HB
@@ -1332,7 +1343,7 @@ DT	MB
 
 
 DTM	Unknown
-DTr	Unknown
+DTr	Olf
 
 
 e	Unknown
@@ -1351,11 +1362,11 @@ FV	Unknown
 g7	Unknown
 Gem	Hy
 GP	Unknown
-GrCb	Unknown
+GrCb	HB
 GrC	Unknown
 hbc	Hb
 hif	HippFormation
-I8	Unknown
+I8	HB
 ia	Unknown
 IB	Unknown
 icf	Cb
@@ -1363,7 +1374,7 @@ icp	Cb
 icpx	icp
 ID	Unknown
 IEn	OlfCx
-IF	Unknown
+IF	MB
 II	Unknown
 ILL	Medulla-oblongolata
 IMG	Unknown
@@ -1403,7 +1414,7 @@ LOT1	Unknown
 
 LT	HB
 LTe	Unknown
-Lth	Unknown
+Lth	MB
 m	Unknown
 mch	Unknown
 MCPC	MB
@@ -1426,7 +1437,7 @@ ML	Unknown
 mlf	Medulla-oblongolata
 MM	MZ
 MnM	MZ
-MnPO	Unknown
+MnPO	Hy
 MoCb	Unknown
 
 MPA	Unknown
@@ -1449,7 +1460,7 @@ Nv	BG
 Obex	Unknown
 ocb	Unknown
 oc	Unknown
-och	Unknown
+och	Hy
 olfa	Unknown
 opt	Tracts
 OPT	MB
@@ -1472,10 +1483,10 @@ PeFLH	LH
 PHA	Hy
 PHD	PHA
 Pi	Di
-PIF	Unknown
+PIF	VTA
 PiSt	Unknown
 Pk	Unknown
-PL	Unknown
+PL	HB
 PLd	Unknown
 plf	Cb
 PLH	LH
@@ -1574,7 +1585,6 @@ V	Unknown
 #vBrain	Brain
 p1Rt	MB
 
-VCCap	HB
 VCl	Unknown
 VCPO	Unknown
 Ve	Unknown
@@ -1588,10 +1598,10 @@ VLH	Hy
 VLL	Medulla-oblongolata
 
 VOLT	Unknown
-vsc	HB
+vsc	Tracts
 #vsIsoCx	Unknown
 VTAR	Tg
-VTg	HB
+VTg	Tg
 vtgx	Tg
 Tg	HB
 xicp	Unknown

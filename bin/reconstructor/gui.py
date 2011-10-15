@@ -1452,7 +1452,6 @@ class mainGuiFrame(wx.Frame):
         @return: None
         """
         wildcard = self.__getWildcard(BAR_EXPORT_VOLUME_FORMATS) 
-        #wildcard  = "vtk structured grid files (*.vtk)|*.vtk|NIfTI (*.nii)|.nii|All files (*.*)|*.*"
         dialogMsg = "Save volume as..."
         
         # Define dialog
@@ -1467,7 +1466,10 @@ class mainGuiFrame(wx.Frame):
         # selected file type
         if dlg.ShowModal() == wx.ID_OK:
             filename = dlg.GetPath()
-            self.vtkapp.exportVolumeByExt[filename[-4:]](filename)
+            if filename[-7:] == '.nii.gz':
+                self.vtkapp.exportVolumeByExt[filename[-7:]](filename)
+            else:
+                self.vtkapp.exportVolumeByExt[filename[-4:]](filename)
     
     def __savePolyDataModel(self, name = None):
         """

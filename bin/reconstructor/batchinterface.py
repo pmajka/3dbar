@@ -89,7 +89,7 @@ class batchInterface(object):
     description = BAR_DESCRIPTION
     usage = "./batchinterface.sh [options] <CAF index> [<structure 1> [<structure 2> ...]]"
     version = BAR_RECONSTRUCTOR_VERSION
-
+    
     # Determines, how many second script waits before launching the reconstruction
     # process
     delay = 1
@@ -136,6 +136,13 @@ class batchInterface(object):
         parser.add_option('--includeBrainOutline', action='store_const',
                           const=True, dest='brainoutline', default=False,
                           help='Includes additional translucent brain outline to the reconstructions. Applies only when exporting to VRML, X3D or thumbnail.')
+        parser.add_option('--ignoreBoundingBox', action='store_const',
+                          const=True, dest='ignoreBoundingBox', default=False,
+                          help='Overrides bounding box calculation - bounding\
+                          box will be always equal to hierarchy root element\
+                          bounding box. Volumes for all structures will always\
+                          have the same size and origin. This feature increases\
+                          memory usage and reconstruction time.')
         self.parser = parser
     
     

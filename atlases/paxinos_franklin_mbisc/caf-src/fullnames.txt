@@ -1444,3 +1444,7 @@ Tg	Tegmentum	777777
 PGPC	------	777777
 PG	------	777777
 PGMC	------	777777
+Md	Medullary recticular nucleus	777777
+adrenaline-cells	adrenaline-cells	777777
+CbL	Cerebral lobules	777777
+
