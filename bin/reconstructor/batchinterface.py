@@ -36,7 +36,7 @@ import sys
 import time
 from optparse import OptionParser, OptionGroup
 from bar.rec.barreconstructor import barReconstructionModule, SCENE_EXPORT_FORMAT_MASK,\
-                                     BAR_RECONSTRUCTOR_VERSION
+                                     BAR_RECONSTRUCTOR_VERSION, BAR_RENDERER_BACKGROUND
 
 BAR_DESCRIPTION = "3d Brain Atlas Reconstructor ver." + BAR_RECONSTRUCTOR_VERSION + " Batch reconstruction interface\n"
 
@@ -112,15 +112,12 @@ class batchInterface(object):
                           help='the path to a directory for reconstructions')
         parser.add_option('--usePipeline', '-p', dest='pipeline',
                           help='the path to a custom pipeline definition')
-        parser.add_option('--useViewport', '-v', type='float', nargs=3, dest='camera',
-                          default=(0., 0., 1.),
-                          help='the direction vector from the center of the scene to the camera position')
-        parser.add_option('--useTop', '-t', type='float', nargs=3, dest='top',
-                          default=(0., 1., 0.),
-                          help='the "up" direction vector')
-        parser.add_option('--angles', '-a', type='float', nargs=3, dest='angles',
-                          default=None,
-                          help='camera angles - overrides -v and -t')
+        parser.add_option('--cameraMovementAngles', '-a', type='float', nargs=3, dest='cameraMovementAngles',
+                          default=(0.0, 0.0, 0.0),
+                          help='camera movement angles (azimuth, elevation, roll)')
+        parser.add_option('--background', '-b', type='float', nargs=3, dest='background',
+                          default=BAR_RENDERER_BACKGROUND,
+                          help='RGB background colourcomponents (within 0.0-255.0 range)')
         
         formatOptions = OptionGroup(parser, 'Output Format Options')
         for (keyword, description) in self.output_format:
@@ -176,7 +173,7 @@ class batchInterface(object):
             print "  --usePipeline:", self.options.pipeline
         else:
             print "    DEFAULT PIPELINE"
-        print "  --useViewport:", self.rm.vtkapp.cameraPosition
+        print "  --cameraMovementAngles:", self.rm.cameraMovementAngles
         print "Output:"
         for (keyword, description) in self.output_format:
             if keyword in self.rm.formats:

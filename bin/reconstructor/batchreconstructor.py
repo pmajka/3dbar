@@ -139,10 +139,10 @@ class barBatchReconstructor(object):
         
         @param options: an object containing constructor options as its
                         attributes:
-                          - C{camera} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}} value,
-                          - C{top} - C{self.L{vtkapp}.L{top<barReconstructionModule.top>}} value,
-                          - C{angles} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}}
-                            and C{self.L{vtkapp}.L{top<barReconstructionModule.top>}} values encoded as angles,
+                          - C{cameraMovementAngles} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}}
+                            and C{self.L{vtkapp}.L{cameraViewUp<barReconstructionModule.cameraViewUp>}}
+                            values encoded as camera movement angles,
+                          - C{background} - C{self.L{vtkapp}.L{background<barReconstructionModule.background>}},
                           - C{pipeline} - C{self.L{vtkapp}.L{pipeline<barReconstructionModule.pipeline>}} value,
                           - C{voxelDimensions} - C{(self.L{xyres}, self.L{zres})} value,
                           - C{exportDir} - C{self.L{exportDir}} value,
@@ -189,10 +189,10 @@ class barBatchReconstructor(object):
         
         @param options: an object containing constructor options as its
                         attributes:
-                          - C{camera} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}} value,
-                          - C{top} - C{self.L{vtkapp}.L{top<barReconstructionModule.top>}} value,
-                          - C{angles} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}}
-                            and C{self.L{vtkapp}.L{top<barReconstructionModule.top>}} values encoded as angles,
+                          - C{cameraMovementAngles} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}}
+                            and C{self.L{vtkapp}.L{cameraViewUp<barReconstructionModule.cameraViewUp>}}
+                            values encoded as camera movement angles,
+                          - C{background} - C{self.L{vtkapp}.L{background<barReconstructionModule.background>}},
                           - C{pipeline} - C{self.L{vtkapp}.L{pipeline<barReconstructionModule.pipeline>}} value,
                           - C{voxelDimensions} - C{(self.L{xyres}, self.L{zres})} value,
                           - C{exportDir} - C{self.L{exportDir}} value,
@@ -207,25 +207,8 @@ class barBatchReconstructor(object):
         self.vtkapp = vtkapp
         
         # Process options
-        self.vtkapp.cameraPosition = options.camera
-        self.vtkapp.top = options.top
-        #TODO: Zmien prosze: nie --angle(s), ale np. --cameraViewAngles
-        if options.angles != None:
-            a, b, c = options.angles
-            camera = (0.0, 0.0, 1.0)
-            top = (0.0, 1.0, 0.0)
-
-            #camera = rotateZ(-c, camera) # x,y are 0
-            top = rotateZ(-c, top)
-
-            camera = rotateX(b, camera)
-            top = rotateX(b, top)
-
-            camera = rotateY(a, camera)
-            top = rotateY(a, top)
-
-            self.vtkapp.top = top
-            self.vtkapp.cameraPosition = camera
+        self.vtkapp.background = tuple(x/255 for x in options.background)
+        self.cameraMovementAngles = options.cameraMovementAngles
 
         if options.voxelDimensions != None:
             self.xyres, self.zres = options.voxelDimensions
@@ -322,9 +305,9 @@ class barBatchReconstructor(object):
     def exportToWindow(self, updateRenderWindow=True):
         """
         Displays the reconstruction to the user and waits until the window
-        is closed, then prints the final L{camera position<barReconstructionModule.cameraPosition>}
-        and voxel size (C{self.L{xyres}} and C{self.L{zres}}) as the
-        L{batchreconstructor} script arguments.
+        is closed, then prints the final camera position and voxel size
+        (C{self.L{xyres}} and C{self.L{zres}}) as the L{batchreconstructor}
+        script arguments.
 
         @param updateRenderWindow: idicates if the method has to update the render
                                    window
@@ -335,32 +318,7 @@ class barBatchReconstructor(object):
         self.iren.Start()
         
         print '-d', self.xyres, self.zres
-        
-        camera = self.vtkapp.cameraPosition
-        top = self.vtkapp.top #TODO: Zmien prosze ta nazwe na cos bardziej
-        #znaczacego np. self.vtkapp.cameraViewUp, zeby bylo spojnie
-        #TODO: podobnie z angles:  nie: --angle, ale np. --cameraViewAngles
-        #TODO: Rozumiem, ze --useTop docelowo zniknie? 
-        
-        print '--useViewport', " ".join(map(str, camera))
-        print '--useTop', " ".join(map(str,top))
-        
-        if camera[0] != 0 or camera[2] != 0:
-            a = math.atan2(camera[0], camera[2])
-            camera = rotateY(-a, camera)
-            top = rotateY(-a, top)
-        
-        b = math.atan2(camera[1], camera[2])
-        camera = rotateX(-b, camera)
-        top = rotateX(-b, top)
-        
-        debugOutput("last top: %s" % str(top))
-        c = math.atan2(top[0], top[1])
-        #camera = rotateZ(c, camera)
-        top = rotateZ(c, top)
-        print '--angle %f %f %f' % (a, b, c)
-        debugOutput("initial top: %s" % str(top))
-        debugOutput("initial camera: %s" % str(camera))
+        print '--cameraMovementAngles %f %f %f' % self.cameraMovementAngles
 
     def prepareLoop(self, structureNames):
         """
@@ -617,6 +575,63 @@ class barBatchReconstructor(object):
         # Getting and updating default reconstruction parameters:
         self.xyres = abs(float(self.sh.ih.refCords[-1]))
         self.zres  = abs(float(self.sh.ih.getDefaultZres()))
+
+    def __setCameraMovementAngles(self, (azimuth, elevation, roll)):
+        """
+        Move camera to requested position.
+
+        @param azimuth: azimuth angle [rad]
+        @type azimuth: float
+
+        @param elevation: elevation angle [rad]
+        @type elevation: float
+
+        @param roll: roll angle [rad]
+        @type roll: float
+        """
+        camera = (0.0, 0.0, 1.0)
+        top = (0.0, 1.0, 0.0)
+
+        #camera = rotateZ(-roll, camera) # x,y are 0
+        top = rotateZ(-roll, top)
+
+        camera = rotateX(elevation, camera)
+        top = rotateX(elevation, top)
+
+        camera = rotateY(azimuth, camera)
+        top = rotateY(azimuth, top)
+
+        self.vtkapp.cameraViewUp = top
+        self.vtkapp.cameraPosition = camera
+
+    def __getCameraMovementAngles(self):
+        """
+        @return: camera position as its movement angles (azimuth, elevation
+                 and roll) in radians
+        @rtype: (float, float, float)
+        """
+        camera = self.vtkapp.cameraPosition
+        top = self.vtkapp.cameraViewUp
+        
+        if camera[0] != 0 or camera[2] != 0:
+            a = math.atan2(camera[0], camera[2])
+            camera = rotateY(-a, camera)
+            top = rotateY(-a, top)
+        
+        b = math.atan2(camera[1], camera[2])
+        camera = rotateX(-b, camera)
+        top = rotateX(-b, top)
+        
+        c = math.atan2(top[0], top[1])
+        #camera = rotateZ(c, camera)
+        top = rotateZ(c, top)
+
+        debugOutput("initial top: %s" % str(top))
+        debugOutput("initial camera: %s" % str(camera))
+        return (a, b, c)
+
+    cameraMovementAngles = property(__getCameraMovementAngles, __setCameraMovementAngles)
+
 
 if __name__ == '__main__':
     bi = batchInterface(barBatchReconstructor)

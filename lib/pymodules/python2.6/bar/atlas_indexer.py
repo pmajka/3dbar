@@ -1150,7 +1150,7 @@ class barIndexer(barIndexerObject):
     _requiredInternalData = ['ReferenceWidth', 'ReferenceHeight',
             'FilenameTemplate', 'RefCords', 'CAFName', 'CAFComment',
             'CAFCreator', 'CAFCreatorEmail', 'CAFCompilationTime',
-            'CAFSlideUnits', 'CAFFullName']
+            'CAFSlideUnits', 'CAFFullName', 'CAFAxesOrientation']
     
     _elementsList = ['slideindex',
                      'atlasproperties',

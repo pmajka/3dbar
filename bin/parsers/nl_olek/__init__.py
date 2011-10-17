@@ -144,7 +144,8 @@ class AtlasParser(nl.nlParser):
         ('CAFComment', ''),
         ('CAFCreator', "Dataset prepared by Piotr Majka, Nencki Institute of Experimental Biology"),
         ('CAFCreatorEmail', 'pmajka@nencki.gov.pl'),
-        ('CAFCompilationTime', datetime.datetime.utcnow().strftime("%F %T"))])
+        ('CAFCompilationTime', datetime.datetime.utcnow().strftime("%F %T")),
+        ('CAFAxesOrientation', 'LIP')])
         self.indexer.updateProperties(propsDict)
         
         self.indexer.createFlatHierarchy()

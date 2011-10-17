@@ -130,6 +130,7 @@ indexerProps = dict([\
         ('CAFComment', CONF_PARSER_COMMENT),
         ('CAFCompilationTime', CONF_CAF_COMPIL_TIME),
         ('CAFCreator', CONF_CONTACT_COMMENT),
-        ('CAFCreatorEmail', CONF_CONTACT_EMAIL)])
+        ('CAFCreatorEmail', CONF_CONTACT_EMAIL),
+        ('CAFAxesOrientation', 'RSA')])
 
 hierarchyRootElementName = 'Brain'

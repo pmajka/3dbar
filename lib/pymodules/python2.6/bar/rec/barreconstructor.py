@@ -62,12 +62,8 @@ BAR_ATLAS_INDEX_FILENAME = 'index.xml'
 # when it is appended along with regular reconstructions.
 BAR_BRAIN_OUTLINE_PROPS = {'SetColor':(0.8,0.8,0.8), 'SetOpacity': 0.05}
 
-BAR_RENDERER_BACKGROUND = [1.0, 1.0, 1.0]
+BAR_RENDERER_BACKGROUND = (1.0, 1.0, 1.0)
 #BAR_RENDERER_BACKGROUND = (0.93, 0.87, 0.67)
-
-class barVtkRenderer(vtk.vtkRenderer):
-    def __init__(self):
-        self.SetBackground(*BAR_RENDERER_BACKGROUND)
 
 
 def VTKtoNumpy(vol):
@@ -210,7 +206,8 @@ class barReconstructionModule(object):
     """
     
     def __init__(self):
-        self.renderer = barVtkRenderer()
+        self.renderer = vtk.vtkRenderer()
+        self.background = BAR_RENDERER_BACKGROUND
         self.renWin = None
         
         self.__mainActorCol = None
@@ -615,14 +612,14 @@ class barReconstructionModule(object):
         camera.SetPosition(position)
         camera.SetFocalPoint(fp)
     
-    def __setTop(self, top):
+    def __setCameraViewUp(self, top):
         """
         The L{top} property setter.
         """
         camera = self.renderer.GetActiveCamera()
         camera.SetViewUp(top)
     
-    def __getTop(self):
+    def __getCameraViewUp(self):
         """
         The L{top} property getter.
         """
@@ -690,6 +687,22 @@ class barReconstructionModule(object):
         """
         raise ValueError, 'vtkMesh is a read-only property'
 
+    def __setBackground(self, background):
+        """
+        Background colour setter.
+
+        @type background: (float, float, float)
+        @param background: RGB components of background colour
+        """
+        self.renderer.SetBackground(background)
+
+    def __getBackground(self):
+        """
+        @return: RGB components of background colour
+        @rtype: (float, float, float)
+        """
+        return tuple(self.renderer.GetBackground())
+
 #}
 
     pipeline = property(__getPipeline, __setPipeline)
@@ -710,7 +723,7 @@ class barReconstructionModule(object):
     The direction from the center of the scene to the camera position.
     """
 
-    top = property(__getTop, __setTop)
+    cameraViewUp = property(__getCameraViewUp, __setCameraViewUp)
     """
     The "up" direction.
     """
@@ -727,4 +740,11 @@ class barReconstructionModule(object):
     vtkMesh = property(__getVtkMesh, __setVtkMesh)
     """
     @note: read-only property
+    """
+
+    background = property(__getBackground, __setBackground)
+    """
+    RGB components of background colour.
+
+    @type: (float, float, float)
     """
