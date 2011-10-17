@@ -116,7 +116,7 @@ class batchInterface(object):
                           default=(0.0, 0.0, 0.0),
                           help='camera movement angles (azimuth, elevation, roll)')
         parser.add_option('--background', '-b', type='float', nargs=3, dest='background',
-                          default=BAR_RENDERER_BACKGROUND,
+                          default=tuple(x*255 for x in BAR_RENDERER_BACKGROUND),
                           help='RGB background colourcomponents (within 0.0-255.0 range)')
         
         formatOptions = OptionGroup(parser, 'Output Format Options')
@@ -173,7 +173,7 @@ class batchInterface(object):
             print "  --usePipeline:", self.options.pipeline
         else:
             print "    DEFAULT PIPELINE"
-        print "  --cameraMovementAngles:", self.rm.cameraMovementAngles
+        print "  --cameraMovementAngles: %f %f %f" % self.rm.cameraMovementAngles
         print "Output:"
         for (keyword, description) in self.output_format:
             if keyword in self.rm.formats:
