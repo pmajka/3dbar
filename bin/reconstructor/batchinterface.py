@@ -35,6 +35,7 @@ G{importgraph}
 import sys
 import time
 from optparse import OptionParser, OptionGroup
+from bar.color import floatColourToInt
 from bar.rec.barreconstructor import barReconstructionModule, SCENE_EXPORT_FORMAT_MASK,\
                                      BAR_RECONSTRUCTOR_VERSION, BAR_RENDERER_BACKGROUND
 
@@ -116,7 +117,7 @@ class batchInterface(object):
                           default=(0.0, 0.0, 0.0),
                           help='camera movement angles (azimuth, elevation, roll)')
         parser.add_option('--background', '-b', type='float', nargs=3, dest='background',
-                          default=tuple(x*255 for x in BAR_RENDERER_BACKGROUND),
+                          default=floatColourToInt(BAR_RENDERER_BACKGROUND),
                           help='RGB background colourcomponents (within 0.0-255.0 range)')
         
         formatOptions = OptionGroup(parser, 'Output Format Options')

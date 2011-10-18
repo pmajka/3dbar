@@ -39,6 +39,7 @@ import vtk
 from batchinterface import batchInterface
 
 from bar.base import debugOutput
+from bar.color import intColourToFloat
 import bar.rec.structure_holder as structureHolder
 from bar.rec.barreconstructor import barReconstructionModule, HTMLColorToRGB,\
                              barPipeline, BAR_DEFAULT_RECONSTRUCTION_DIR,\
@@ -207,7 +208,7 @@ class barBatchReconstructor(object):
         self.vtkapp = vtkapp
         
         # Process options
-        self.vtkapp.background = tuple(x/255 for x in options.background)
+        self.vtkapp.background = intColourToFloat(options.background)
         self.cameraMovementAngles = options.cameraMovementAngles
 
         if options.voxelDimensions != None:
@@ -540,7 +541,7 @@ class barBatchReconstructor(object):
             ct = map(lambda x: random.randint(0, 255), [0,0,0])
         
         if not rgb:
-            ct = map(lambda x: float(x)/255, ct)
+            ct = list(intColourToFloat(ct))
         return ct
     
     def loadAtlas(self, indexDirectory, indexFile = BAR_ATLAS_INDEX_FILENAME):
@@ -580,17 +581,19 @@ class barBatchReconstructor(object):
         """
         Move camera to requested position.
 
-        @param azimuth: azimuth angle [rad]
+        @param azimuth: azimuth angle [deg]
         @type azimuth: float
 
-        @param elevation: elevation angle [rad]
+        @param elevation: elevation angle [deg]
         @type elevation: float
 
-        @param roll: roll angle [rad]
+        @param roll: roll angle [deg]
         @type roll: float
         """
         camera = (0.0, 0.0, 1.0)
         top = (0.0, 1.0, 0.0)
+
+        (azimuth, elevation, roll) = [x * math.pi / 180 for x in (azimuth, elevation, roll)]
 
         #camera = rotateZ(-roll, camera) # x,y are 0
         top = rotateZ(-roll, top)
@@ -607,7 +610,7 @@ class barBatchReconstructor(object):
     def __getCameraMovementAngles(self):
         """
         @return: camera position as its movement angles (azimuth, elevation
-                 and roll) in radians
+                 and roll) in degres
         @rtype: (float, float, float)
         """
         camera = self.vtkapp.cameraPosition
@@ -628,7 +631,7 @@ class barBatchReconstructor(object):
 
         debugOutput("initial top: %s" % str(top))
         debugOutput("initial camera: %s" % str(camera))
-        return (a, b, c)
+        return tuple(x * 180 / math.pi for x in (a, b, c))
 
     cameraMovementAngles = property(__getCameraMovementAngles, __setCameraMovementAngles)
 

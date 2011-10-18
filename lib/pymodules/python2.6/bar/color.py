@@ -32,6 +32,12 @@ import colorsys
 from base import flatten
 from atlas_indexer import barIndexer
 
+def intColourToFloat(colour, maxValue = 255.):
+    return tuple(x / maxValue for x in colour)
+
+def floatColourToInt(colour, maxValue = 255):
+    return tuple(int(x * maxValue) for x in colour)
+
 class barColor():
     def __init__(self, (r, g, b)):
         self.r=r
@@ -40,7 +46,7 @@ class barColor():
     
     @classmethod
     def fromInt(barColor, (rInt, bInt, gInt)):
-        (r,g,b) = tuple(map(lambda x: x/255., (rInt, bInt, gInt)))
+        (r,g,b) = intColourToFloat((rInt, bInt, gInt))
         return barColor((r,g,b))
     
     @classmethod
