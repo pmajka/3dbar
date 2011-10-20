@@ -41,7 +41,7 @@ from PIL import Image,ImageChops
 import atlas_indexer
 
 from base import performTracing, barPath, barTransfMatrixMetadataElement,\
-                        barBregmaMetadataElement, _cleanPotraceOutput,\
+                        barBregmaMetadataElement, cleanPotraceOutput,\
                         barTracedSlide, barTracedSlideRenderer,\
                         barPretracedSlideRenderer, _printRed
 
@@ -595,7 +595,7 @@ class barBitmapParser(barGenericParser):
         
         @return: SVG XML DOM stucture generated from PoTrace SVG output string.
         """
-        svgdom = _cleanPotraceOutput(tracerOutput)
+        svgdom = cleanPotraceOutput(tracerOutput)
         
         structName = self.imageToStructure[pathColour]
         structFill = self.structureColours[structName]

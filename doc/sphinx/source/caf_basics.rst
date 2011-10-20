@@ -108,10 +108,12 @@ Putting pieces togeater
     ...     'FilenameTemplate' : '%02d_traced_v%d.svg',\
     ...     'RefCords'  : "0,0,1.0,1.0",\
     ...     'CAFName'   : "caf_test",\
+    ...     'CAFFullName' : 'caf_test_fullname',\
     ...     'CAFComment': 'Exemplary CAF dataset',\
     ...     'CAFCreator': 'Put your fullname here',\
     ...     'CAFCreatorEmail': 'your.email@here.org',\
     ...     'CAFCompilationTime': datetime.datetime.utcnow().strftime("%F %T"),\
+    ...     'CAFAxesOrientation':'RAS',\
     ...     'CAFSlideUnits':'mm'}
     
     # Set indexer properties        

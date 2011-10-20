@@ -91,7 +91,6 @@ import xml.dom.minidom as dom
 import xml.dom
 import numpy as np
 import cairo,  rsvg
-import cStringIO,  subprocess
 from PIL import Image, ImageFilter, ImageChops, ImageOps, ImageDraw
 
 import svgfix
@@ -99,7 +98,8 @@ from defaults import re_CoordinateMarker, re_CoronalCoord
 from svgpathparse import parsePath,UnparsePath, extractBoundingBox,_mergeBoundingBox,\
                          modifyContour, parseStyle, formatStyle
 import slides_aligner
-import image_process
+from image_process import performTracing, getBestLabelLocation, massCentre,\
+        floodFillScanlineStack, selectBestGapFillingLevel
 
 
 BAR_XML_NAMESPACE = 'http://www.3dbar.org' 
@@ -2839,13 +2839,13 @@ class barPretracedSlide(barSlideRenderer):
         return self._svgPaths
     
     @classmethod
-    def fromXML(cls, svgDocument):
+    def fromXML(cls, svgDocument, fixDrawing=False):
         """
         Create object representing given SVG slide.
-
+        
         @param svgDocument: SVG slide (DOM XML or filename or file handler)
         @type svgDocument: xml.dom.minidom.Document or str or file
-
+        
         @rtype: cls
         @return: created object
         """
@@ -2859,6 +2859,12 @@ class barPretracedSlide(barSlideRenderer):
             svgdom = dom.parse(svgDocument)
         else:
             svgdom = svgDocument
+        _removeWhitespacesXML(svgdom)
+        
+        # Redefine path definitions using absolute coordinates
+        if fixDrawing:
+            svgfix.fixSvgImage(svgdom, pagenumber=0, fixHeader=False)
+        
         svgElement = svgdom.getElementsByTagName('svg')[0]
         # In case, when 3dBAR namespace is not defined, we declare it.
         svgElement.setAttribute('xmlns:bar', BAR_XML_NAMESPACE)
@@ -3629,7 +3635,7 @@ class barTracedSlideRenderer(barTracedSlide):
         @return: optimal coordinates (x, y) of the label in SVG coords
         """
         slideRendering = self.renderPath(path)
-        (x,y) = image_process.getBestLabelLocation(slideRendering)
+        (x,y) = getBestLabelLocation(slideRendering)
         (x,y) = self._toSVGCoordinates((x,y))
         return (x, y)
     
@@ -3641,7 +3647,7 @@ class barTracedSlideRenderer(barTracedSlide):
         @rtype: (float, float)
         @return: coordinates (x, y) of the mass center in SVG coords
         """
-        imgMassCentre = image_process.massCentre(self.renderSlide())
+        imgMassCentre = massCentre(self.renderSlide())
         return self._toSVGCoordinates(imgMassCentre)
     
     def getMask(self, maskColor='#000000'):
@@ -4094,7 +4100,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
                 # all colors are converted to white. Values "1" are converted to "0"
                 # so the structure is black and surroundings are white
                 ImageForTracing = self.__brainOutline.point([255]+[0]+254*[255])
-                newLabelLocation = image_process.getBestLabelLocation(ImageForTracing)
+                newLabelLocation = getBestLabelLocation(ImageForTracing)
                 
                 newLabel = self._clsRegularLabel(\
                             self._toSVGCoordinates(newLabelLocation),\
@@ -4237,7 +4243,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
         # Perform tracing procedure and cleam output
         tracerOutput = performTracing(sourceImage,\
                            self._tracingConf['PoTraceConf'])
-        svgdom = _cleanPotraceOutput(tracerOutput)
+        svgdom = cleanPotraceOutput(tracerOutput)
         
         # Convert resulting svg document into set of barPaths
         newPathList = map(lambda x:\
@@ -4623,137 +4629,6 @@ barObject._clsTransfMatrixMetadataElement = barTransfMatrixMetadataElement
 barCafSlide = barTracedSlideRenderer # Just an alias
 barContourSlide = barPretracedSlideRenderer # Just an alias
 
-def floodFillScanlineStack(image, xy, value):
-    """
-    Custom floodfill algorithm that replaces original PIL ImageDraw.floodfill().
-    This algorithm appears to be twice as fast as the original algorithm and more
-    roboust. This algorithm requires reimplementing in C/Fortran and connecting
-    to python somehow. Implementation is based on:
-    http://www.academictutorials.com/graphics/graphics-flood-fill.asp
-    
-    This is implementaion on scanline floodfill algorithm using stack. The
-    algorithm is not described here. To get insight please consult google using
-    'floodfill scanline'.
-    
-    @note: Please note that this algorithm assume that floodfilled image is in
-           indexed colour mode.
-    
-    @type  image: PIL.Image.Image
-    @param image: image on which floodfill will be performed
-    
-    @type  xy: (int, int)
-    @param xy: coordinates of floodfill seed
-    
-    @type  value: int
-    @param value: fill colour
-    
-    @rtype: int
-    @return: number of pixels with changed color (area of floodfill)
-    """
-    
-    pixel = image.load()
-    x, y = xy
-    w, h = image.size
-    
-    npix=0
-    background = pixel[x, y]
-    stack=[]
-    stack.append((x,y))
-    
-    while stack:
-        x,y=stack.pop()
-        y1=y
-        while y1>= 0 and pixel[x, y1] == background:
-            y1-=1
-        y1+=1
-        
-        spanLeft = spanRight = 0
-        
-        while y1 < h and pixel[x, y1] == background:
-            pixel[x, y1] = value
-            npix+=1
-            
-            if (not spanLeft) and x > 0 and pixel[x-1,y1] == background:
-                stack.append((x-1,y1))
-                spanLeft=1
-            else:
-                if spanLeft and x > 0 and pixel[x-1,y1] != background:
-                    spanLeft=0
-            
-            if (not spanRight) and x<w-1 and pixel[x+1,y1] == background:
-                stack.append((x+1, y1))
-                spanRight=1
-            else:
-                if spanRight and x<w-1 and pixel[x+1,y1] != background:
-                    spanRight=0
-            y1+=1
-    
-    return npix                    
-
-def selectBestGapFillingLevel(area):
-    """
-    Select the best level of "gap filling" by analyzing number of flooded pixels
-    for each "gap filling" level.
-    
-    Agorithm used for selecting best level is totally heuristic and relies
-    on assumption that filling each gap is equivalent to rapid lowering of number of
-    flooded pixels (as we have smaller region after closing the gap than before).
-    
-    Algorith tries to seach for such rapid changes and prefers smaller structures
-    rather than larger.
-    
-    If number of flooded pixels do not changes rapidly across different levels of
-    gap filling it means that most probably structure do not have any gaps.
-    In such case, algorithm selects region defined without using "gap filling".
-    
-    There are several cases defined for detecting one, two and more gaps fills.
-    You should note that algorithm do not exhaust every possible case and
-    reconstructed structures should be reviewed manually.
-    
-    @type  area: [int, ...]
-    @param area: structure size defined by number of floodfilled pixels
-                 (each value for consecutive "gap filling" level)
-    
-    @rtype: int
-    @return: gap filling level considered to be the most proper
-    """
-    
-    a=area
-    # Case 1.
-    # All areas are simmilar
-    # Percentage difference between two consecutive areas is less than x%
-    if _areNearlyTheSame(area,0.02):
-        return 0
-    
-    # Case 2.
-    # First area is about 1.2 times larger than the second. (step)
-    # Second and next are nearly the same as third and further
-    # Take the second
-    if a[0]>=1.2*a[1] and _areNearlyTheSame(a[1:],0.02):
-        return 1
-    
-    # Case 4.
-    # handling rapid jump to near-zero value
-    # If, after second filtering area falls to near-zero in comparison with
-    # previous fill, it means that filling was too large 
-    if a[1]>=20*a[2] and\
-            _areNearlyTheSame(a[0:2],0.02) and\
-            _areNearlyTheSame(a[2:],0.02):
-        return 1
-    
-    # Case 3.
-    # First two are nearly the same and ~1.2 larger than other
-    # 3rd and next are nearly the same
-    # One region of overgrown take 3rd.
-    if a[1]>=1.2*a[2] and\
-            a[1]>=10*a[2] and\
-            _areNearlyTheSame(a[0:2], 0.02) and\
-            _areNearlyTheSame(a[2:] , 0.02):
-        return 2
-    
-    # None of above return 1 to be at the safe side
-    return 1
-
 #TODO: stupid! do something. Algorithms settings:
 #BAR_TRACER_DEFAULT_SETTINGS['BestFillAlgorithm'] = selectBestGapFillingLevel
 
@@ -4806,81 +4681,6 @@ def debugOutput(msg, error=False):
     elif __debug__:
         print >>sys.stderr, msg
 
-def _cleanPotraceOutput(tracerOutput):
-    """
-    Create SVG document (with fixed paths) from provided PoTrace output.
-
-    @type  tracerOutput: str
-    @param tracerOutput: string produced by PoTrace
-    
-    @rtype: xml.dom.minidom.Document
-    @return: SVG image fixed by the procedure.
-    """
-    svgdom = dom.parseString(tracerOutput)
-    svgfix.fixSvgImage(svgdom, pagenumber=None, fixHeader=False)
-    return svgdom
-
-def performTracing(binaryImage, tracingProperties, dumpName = None):
-    """
-    Perform image tracing via potrace and pipes mechanism.
-    
-    Assumes that image is a grayscale image with only two colours used: black
-    and white. Black colour is considered as foreground while white colour is
-    background colour. The foreground is assumed to be a non-separable area.
-    
-    This function do not perform parsing the output.
-    
-    Tracing Workflow:
-        1. Save image in bmp format in dummy string
-        2. Send bmp string to potrace via pipe mechanism
-        3. Perform tracing
-        4. Read tracing output via pile
-        5. Return raw tracing output
-    
-    @type  binaryImage: PIL.Image.Image
-    @param binaryImage: flooded image for tracing
-    
-    @return: raw tracing output string
-    @rtype: str
-    """
-    
-    # Create file-like object which handles bmp string
-    ImageString = cStringIO.StringIO()
-    
-    # Save image to this file-like object
-    binaryImage.save(ImageString, "BMP")
-    if dumpName: binaryImage.save(dumpName, "BMP")
-    
-    # Create process pipes
-    # potrace parameters:
-    # -s for settring SVG output
-    # -O Optimization parameter
-    # -r SVG Image resolution in DPI
-    # -W,H Output dimensions of SVG drawing
-    # -o - - Input and output via pipes
-    commandLineParams = ['potrace',\
-            '-s',\
-            '-O', tracingProperties['potrace_accuracy_parameter'],\
-            '-r', tracingProperties['potrace_svg_resolution_string'],\
-            '-W', tracingProperties['potrace_width_string'],\
-            '-H', tracingProperties['potrace_height_string'],\
-            '-o','-','-']
-    
-    # potrace_turdsize is an optional parameter
-    if 'potrace_turdsize' in tracingProperties:
-        commandLineParams.insert(2, str(tracingProperties['potrace_turdsize']))
-        commandLineParams.insert(2, '-t')
-    
-    process = subprocess.Popen(commandLineParams,\
-              stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    
-    # Pass bmp string to pipe, close image string.
-    process.stdin.write(ImageString.getvalue())
-    ImageString.close()
-    
-    # Read and return tracing output
-    return  process.stdout.read()
-
 def processMarkers(m1, m2, bm):
     """
     Calculate stereotectical coordinates transformation matrix and
@@ -4925,6 +4725,20 @@ def validateStructureName(structureName):
     return (len(structureName) <= 40 # length is within proper range
         and not structureName.startswith("-") and not structureName.endswith("-") # no bordering hyphens
         and CONF_ALOWED_STRUCTURE_CHARACTERS.search(structureName) and structureName) # contains only legal characters
+
+def cleanPotraceOutput(tracerOutput):
+    """
+    Create SVG document (with fixed paths) from provided PoTrace output.
+
+    @type  tracerOutput: str
+    @param tracerOutput: string produced by PoTrace
+    
+    @rtype: xml.dom.minidom.Document
+    @return: SVG image fixed by the procedure.
+    """
+    svgdom = dom.parseString(tracerOutput)
+    svgfix.fixSvgImage(svgdom, pagenumber=None, fixHeader=False)
+    return svgdom
 
 def CleanFilename(filename):
     """
@@ -4990,28 +4804,3 @@ def _removeWhitespacesXML(domNode, unlink=True):
         domNode.removeChild(child)
         if unlink:
             child.unlink()
-
-
-#if __name__=='__main__':
-#    #sl = barTracedSlide.fromXML(sys.argv[1]) 
-#    #print sl.svgDocument.toxml()
-#    if True:
-#        m1 = barCoordinateMarker((0,0),(10,10))
-#        m2 = barCoordinateMarker((5,5),(500,500))
-#        bm = barCoronalMarker(6.0, (800, 800))
-#        sl = barPretracedSlideRenderer()
-#        sl.markers.append(m1)
-#        sl.markers.append(m2)
-#        sl.markers.append(bm)
-#        sl.writeXMLtoFile('1.svg')
-#        sl = barPretracedSlide.fromXML('1.svg')
-#        sl.parseMarkers()
-#        sl.writeXMLtoFile('1.svg')
-#        print sl
-#    
-#        import pycallgraph
-#        e = np.eye(3)
-#        pycallgraph.start_trace()
-#        sl.affineTransform(e)
-#        pycallgraph.stop_trace()
-#        pycallgraph.make_dot_graph('1.png')
