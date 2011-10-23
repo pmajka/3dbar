@@ -363,6 +363,27 @@ def selectBestGapFillingLevel(area):
     # None of above return 1 to be at the safe side
     return 1
 
+def _areNearlyTheSame(TestList, Treshold):
+    """
+    Check if elements "are nearly the same" - if they are quotient
+    of consecutive items are less than given treshold:
+    (a2/a1, a3/a2,...) > Treshold.
+    
+    @type  TestList : [convertable to float, ...]
+    @param TestList : sequence of elements to be checked
+
+    @type  Treshold : float
+    @param Treshold : threshold (has to be positive)
+    
+    @rtype          : bool
+    @return         : C{True} if numbers may be considered as nearly the same,
+                      C{False} otherwise
+    """
+    # Create temporary list of quotient if consecutive elements: (a2/a1, a3/a2,...)
+    temp = map(lambda x,y: float(x)/float(y)-1, TestList[:-1], TestList[1:])
+    
+    # Check if all elements are withing given treshold
+    return all( x <= Treshold and x >= -Treshold for x in temp)
 
 ################################################################################ 
 ##  Code below not used in 3dBAR yet - it is just for testing purposes        ## 

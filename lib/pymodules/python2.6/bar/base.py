@@ -1069,13 +1069,13 @@ class barMarker(barAtlasSlideElement):
         try:
             spatialCoordinates = map(float, re_CoordinateMarker.search(labelCaption).groups())
             return barCoordinateMarker(spatialCoordinates, (x,y))
-        except AttributeError:
+        except:
             pass
         
         try:
             spatialCoordinates = map(float, re_CoronalCoord.search(labelCaption).groups())
             return barCoronalMarker(spatialCoordinates, (x,y))
-        except AttributeError:
+        except:
             pass
     
     def getXMLelement(self, textNodeCaption = ""):
@@ -4442,9 +4442,10 @@ class barPretracedSlideRenderer(barPretracedSlide):
             # If white pixel is spotted, check if it belongs to group of adjacent white pixels.
             # If it belongs, return coordinates of the pixel. If not, continue iteration.
             if i==255:
-                y = pn //self.__brainOutline.size[1]
-                x = pn % self.__brainOutline.size[1]-1
-                #print "White pixel found at coords %d,%d" % (x,y)
+                x = pn % self.__brainOutline.size[0]-1
+                y = pn //self.__brainOutline.size[0]
+                #print "White pixel found at coords %d,%d" % (x,y)#,\
+                #self.__brainOutline.size, pn
                 if pix[x-1,y]==255 and pix[x+1,y]==255 and pix[x,y+1]==255 and pix[x,y-1]==255:
                     #self.__brainOutline.save("%d_%d.png"% (y,x), "PNG")
                     #return (x,y)
@@ -4632,27 +4633,6 @@ barContourSlide = barPretracedSlideRenderer # Just an alias
 #TODO: stupid! do something. Algorithms settings:
 #BAR_TRACER_DEFAULT_SETTINGS['BestFillAlgorithm'] = selectBestGapFillingLevel
 
-def _areNearlyTheSame(TestList, Treshold):
-    """
-    Check if elements "are nearly the same" - if they are quotient
-    of consecutive items are less than given treshold:
-    (a2/a1, a3/a2,...) > Treshold.
-    
-    @type  TestList : [convertable to float, ...]
-    @param TestList : sequence of elements to be checked
-
-    @type  Treshold : float
-    @param Treshold : threshold (has to be positive)
-    
-    @rtype          : bool
-    @return         : C{True} if numbers may be considered as nearly the same,
-                      C{False} otherwise
-    """
-    # Create temporary list of quotient if consecutive elements: (a2/a1, a3/a2,...)
-    temp = map(lambda x,y: float(x)/float(y)-1, TestList[:-1], TestList[1:])
-    
-    # Check if all elements are withing given treshold
-    return all( x <= Treshold and x >= -Treshold for x in temp)
     
 def _printRed(str):
     """
