@@ -33,7 +33,7 @@ CONF_PARSER_NAME    = 'whs_0.51'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology'
 CONF_CONTACT_EMAIL  = 'pmajka@nencki.gov.pl'
 CONF_CAF_COMPIL_TIME= datetime.datetime.utcnow().strftime("%F %T")
-CONF_CAF_FULL_NAME = 'Waxholm Space - mouse brain reference space, another delineation'
+CONF_CAF_FULL_NAME = 'The Waxholm Space - mouse brain reference space, another delineation'
 
 REFERENCE_WIDTH = 512
 REFERENCE_HEIGHT = 512
