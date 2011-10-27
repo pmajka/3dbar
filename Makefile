@@ -14,7 +14,8 @@ ATLASES_DIR  = atlases/
 
 SBA_PARSERS  = sba_DB08 sba_PHT00 sba_WHS09 sba_WHS10 sba_LPBA40_on_SRI24 sba_RM_on_F99
 FAST_PARSERS = nl_olek ${SBA_PARSERS} tem
-PARSERS      = vector-test whs_0.5 whs_0.51 aba ${FAST_PARSERS}
+WHS          = whs_0.5 whs_0.51 whs_0.5_symm
+PARSERS      = vector-test aba ${FAST_PARSERS} ${WHS}
 
 all: clean ${PARSERS} doc
 	echo "Done"
@@ -53,6 +54,16 @@ whs_0.5:
 	gunzip -f -d ${ATLASES_DIR}whs_0.5/src/canon_labels_r.nii.gz
 	python   ${PARSERS_DIR}whs_0.5/__init__.py
 	if [ -e ${ATLASES_DIR}whs_0.5/caf-reference ]; then diff -r  ${ATLASES_DIR}whs_0.5/caf ${ATLASES_DIR}whs_0.5/caf-reference > diff_whs_0.5.txt; fi
+
+whs_0.5_symm:
+	mkdir -p ${ATLASES_DIR}whs_0.5_symm/src
+	mkdir -p ${ATLASES_DIR}whs_0.5_symm/caf
+	wget --keep-session-cookies --save-cookies ${ATLASES_DIR}whs_0.5_symm/src/cookies.txt --post-data 'username=civmpub&password=civmpub' http://civmvoxport.duhs.duke.edu/voxbase/login.php -O /dev/null
+	wget --load-cookies ${ATLASES_DIR}whs_0.5_symm/src/cookies.txt http://civmvoxport.duhs.duke.edu/voxbase/downloaddataset.php?stackID=20494 -O ${ATLASES_DIR}whs_0.5_symm/src/SYMCLabel.nii.gz
+	rm  ${ATLASES_DIR}whs_0.5_symm/src/cookies.txt
+	gunzip -f -d ${ATLASES_DIR}whs_0.5_symm/src/SYMCLabel.nii.gz
+	python   ${PARSERS_DIR}whs_0.5_symm/__init__.py
+	if [ -e ${ATLASES_DIR}whs_0.5_symm/caf-reference ]; then diff -r  ${ATLASES_DIR}whs_0.5_symm/caf ${ATLASES_DIR}whs_0.5_symm/caf-reference > diff_whs_0.5_symm.txt; fi
 
 whs_0.51:
 	mkdir -p ${ATLASES_DIR}whs_0.51/src
@@ -124,21 +135,23 @@ tem:
 	if [ -e ${ATLASES_DIR}tem/caf-reference ]; then diff -r  ${ATLASES_DIR}tem/caf ${ATLASES_DIR}tem/caf-reference > diff_tem.txt; fi
 
 clean: clean_diff doc_clean
-	rm -rfv ${ATLASES_DIR}sba_DB08
-	rm -rfv ${ATLASES_DIR}sba_PHT00
-	rm -rfv ${ATLASES_DIR}sba_WHS09
-	rm -rfv ${ATLASES_DIR}sba_WHS10
-	rm -rfv ${ATLASES_DIR}sba_LPBA40_on_SRI24
-	rm -rfv ${ATLASES_DIR}sba_RM_on_F99
+	rm -rfv ${ATLASES_DIR}sba_DB08/caf ${ATLASES_DIR}sba_DB08/src
+	rm -rfv ${ATLASES_DIR}sba_PHT00/caf ${ATLASES_DIR}sba_PHT00/src
+	rm -rfv ${ATLASES_DIR}sba_WHS09/caf ${ATLASES_DIR}sba_WHS09/caf/src
+	rm -rfv ${ATLASES_DIR}sba_WHS10/caf ${ATLASES_DIR}sba_WHS10/src
+	rm -rfv ${ATLASES_DIR}sba_LPBA40_on_SRI24/caf ${ATLASES_DIR}sba_LPBA40_on_SRI24/src
+	rm -rfv ${ATLASES_DIR}sba_RM_on_F99/caf ${ATLASES_DIR}sba_RM_on_F99/src
 	rm -rfv ${ATLASES_DIR}whs_0.51/caf
-	rm -rfv ${ATLASES_DIR}whs_0.5/caf
+	rm -rfv ${ATLASES_DIR}whs_0.5/caf 
+	rm -rfv ${ATLASES_DIR}whs_0.5_symm/caf 
 	rm -rfv ${ATLASES_DIR}vector-test/caf
 	rm -rfv ${ATLASES_DIR}nl_olek/caf
-	rm -rfv ${ATLASES_DIR}aba/caf
-	rm -rfv ${ATLASES_DIR}tem/caf
+	rm -rfv ${ATLASES_DIR}aba/caf ${ATLASES_DIR}aba/src
+	rm -rfv ${ATLASES_DIR}tem/caf ${ATLASES_DIR}tem/src
 
 reference_datasets:
 	rm -rf ${ATLASES_DIR}whs_0.5/caf-reference; cp -r ${ATLASES_DIR}whs_0.5/caf ${ATLASES_DIR}whs_0.5/caf-reference
+	rm -rf ${ATLASES_DIR}whs_0.5_symm/caf-reference; cp -r ${ATLASES_DIR}whs_0.5_symm/caf ${ATLASES_DIR}whs_0.5_symm/caf-reference
 	rm -rf ${ATLASES_DIR}whs_0.51/caf-reference; cp -r ${ATLASES_DIR}whs_0.51/caf ${ATLASES_DIR}whs_0.51/caf-reference
 	rm -rf ${ATLASES_DIR}nl_olek/caf-reference; cp -r ${ATLASES_DIR}nl_olek/caf ${ATLASES_DIR}nl_olek/caf-reference
 	rm -rf ${ATLASES_DIR}vector-test/caf-reference; cp -r ${ATLASES_DIR}vector-test/caf ${ATLASES_DIR}vector-test/caf-reference

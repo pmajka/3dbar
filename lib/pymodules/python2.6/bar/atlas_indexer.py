@@ -544,7 +544,7 @@ class barIndexerGroupElement(barIndexerElement):
             pass
         else:
             for val in tree:
-                print >>sys.stderr, "|"+" |---" * depth, val.name
+                print >>sys.stderr, "|"+" |   " * depth, val.name
                 val.printHierarchyTree(depth+1)
     
     def nextSibling(self):
@@ -1433,6 +1433,7 @@ class barIndexer(barIndexerObject):
             # Assign fullname mapping. If given group element has no fullname
             # use the goup name as the fullname
             group.fullname = sourceDictionary.get(group.name, group.name)
+	
     
     def setNameMappingFromFile(self, filename, nameCol=0, fullNameCol=1):
         """
