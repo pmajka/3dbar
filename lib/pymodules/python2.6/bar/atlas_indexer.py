@@ -47,7 +47,7 @@ class barIndexerObject(base.barObject):
     """
     def __init__(self):
         pass
-
+    
     @classmethod
     def fromXML(cls, sourceXMLElement):
         """
@@ -254,25 +254,25 @@ class barIndexerGroupElement(barIndexerElement):
     @type children: [L{barIndexerGroupElement}, ...]
     """
     _elementName = 'group'
-    _elementAttributes = ['name', 'id', 'fill', 'fullname', 'uid']
+    _elementAttributes = ['name', 'id', 'fill', 'fullname', 'uid', 'ontologyid']
     
-    def __init__(self, name, id, fill=None, fullname=None, uid=None, structure=None):
+    def __init__(self, name, id, fill=None, fullname=None, uid=None, structure=None, ontologyid=None):
         """
         @param name: value of the 'name' attribute of represented XML element
         @type name: str
-
+        
         @param id: value of the 'id' attribute of represented XML element
         @type id: int
-
+        
         @param fill: value of the 'fill' attribute of represented XML element
         @type fill: str
-
+        
         @param fullname: value of the 'fullname' attribute of represented XML element
         @type fullname: str
-
+        
         @param uid: value of the 'uid' attribute of represented XML element
         @type uid: int
-
+        
         @param structure: object handling manipulation of the structure related to the group;
                           its L{uid<barIndexerStructureElement.uid>}overrides the L{uid} argument
                           if given
@@ -284,7 +284,8 @@ class barIndexerGroupElement(barIndexerElement):
         self.fill      = fill
         self.fullname  = fullname
         self.structure = structure
-
+        self.ontologyid = ontologyid
+        
         if structure == None:
             self.uid   = uid
         
@@ -1433,7 +1434,6 @@ class barIndexer(barIndexerObject):
             # Assign fullname mapping. If given group element has no fullname
             # use the goup name as the fullname
             group.fullname = sourceDictionary.get(group.name, group.name)
-	
     
     def setNameMappingFromFile(self, filename, nameCol=0, fullNameCol=1):
         """
@@ -1920,7 +1920,7 @@ class barIndexer(barIndexerObject):
     """
     L{__fromXML} method bound to the class as its classmethod.
     """
-
+    
     _fromXML = staticmethod(__fromXML)
     """
     L{__fromXML} method not bound to the class nor to the class instance.
@@ -1929,14 +1929,14 @@ class barIndexer(barIndexerObject):
     hierarchy = property(__getHierarchy, __setHierarchy)
     """
     Hierarchy of the CAF dataset structures.
-
+    
     @type: non consistent
     """
-
+    
     hierarchyRootElementName = property(__getHierarchyRoot, __setHierarchyRoot)
     """
     Name of the superior group of the CAF dataset structures hierarhy.
-
+    
     @type: str
     """
     
@@ -1961,63 +1961,63 @@ class barIndexer(barIndexerObject):
     slides = property(__getSlides, __setSlides)
     """
     Slide number to 'slide' element representation mapping.
-
+    
     Read-only property.
-
+    
     @type: {str : L{barIndexerSlideElement}}
     """
-
+    
     structures = property(__getStructures, __setStructures)
     """
     Name to 'structure' element representation mapping.
-
+    
     Read-only property.
-
+    
     @type: {str : L{barIndexerGroupElement}}
     """
-
+    
     colorMapping = property(__getColorMapping, __setColorMapping)
     """
     Hierarchy group name to colour mapping.
-
+    
     @type: {str : str}
     """
-
+    
     fullNameMapping = property(__getFullNameMapping, __setFullNameMapping)
     """
     Hierarchy group name to fullname mapping.
-
+    
     @type: {str : str}
     """
-
+    
     uid = property(__getUID, __setUID)
     """
     If read - he value of the next element of the UID sequence.
-
+    
     If write - the value of the current element of the sequence.
     The value of the current element of the sequence can be only increased.
-
+    
     @type: int
     """
-
+    
     gid = property(__getGID, __setGID)
     """
     If read - the value of the next element of the GID sequence.
-
+    
     If write - the value of the current element of the sequence.
     The value of the current element of the sequence can be only increased.
-
+    
     @type: int
-
+    
     @note: The property can be only increased.
     """
-
+    
     uidList = property(__getUidList, __setUidList)
     """
     Hierarchy group name to UIDs of assigned structures mapping.
-
+    
     Read-only property.
-
+    
     @type: {str : [int, ...]}
     """
 

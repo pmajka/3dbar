@@ -57,14 +57,13 @@ def _parse_hex(string):
         3: '([0-9A-Fa-f]{1})' * 3, # shorthand RGB
         4: '([0-9A-Fa-f]{1})' * 4, # shorthand RGBA
         6: '([0-9A-Fa-f]{2})' * 3, # RGB
-        8: '([0-9A-Fa-f]{2})' * 4 # RGBA
+        8: '([0-9A-Fa-f]{2})' * 4  # RGBA
     }
-        
+    
     match = re.match(fmt[n], string)
     
     if match:
         groups = match.groups()
-        
         # shorthand RGB{,A} must be extended
         if n in [3,4]:
             groups = tuple([2*x for x in groups])
@@ -78,6 +77,7 @@ class barMbatLabel(object):
     Helper class for mbat .lif file
     """
     _elementAttributes = ['abbreviation', 'color', 'name', 'id']
+    _optionalAttributes = ['description']
     
     def __init__(self, xmlElement):
         """
@@ -89,6 +89,14 @@ class barMbatLabel(object):
         """
         map(lambda x:\
                 setattr(self, x, xmlElement.getAttribute(x)), self._elementAttributes)
+        
+        for optAttr in self._optionalAttributes:
+            try:
+                optAttrVal = xmlElement.getAttribute(optAttr)
+            except:
+                optAttrVal = None
+            if optAttrVal == "": optAttrVal = None
+            setattr(self, optAttr, optAttrVal)
         
         self.id = int(self.id)
         self.color = _parse_hex(self.color)
@@ -217,16 +225,28 @@ class barMBATParser(barBitmapParser):
                 dict(map(lambda x: (x.abbreviation, x.name), structures))
         self.structureColours =\
                 dict(map(lambda x: (x.abbreviation, x.color), structures))
+        self.ontologyMapping =\
+                dict(map(lambda x: (x.abbreviation, x.description), structures))
         self.imageToStructure =\
                 dict(map(lambda x:\
                 ("#%02x%02x%02x" % (x.id,x.id,x.id), x.abbreviation), structures))
-
+    
     def parse(self, slideNumber, generateLabels=True, useIndexer=False):
         tracedSlide = barBitmapParser.parse(self, slideNumber,\
                                                  generateLabels,
                                                  useIndexer)
         return tracedSlide
     
+    def reindex(self):
+        barBitmapParser.reindex(self)
+        
+        # Append ontology references if such mapping exist
+        self.indexer.hierarchy       = self.parents
+        groups = self.indexer.groups
+        for (k,v) in groups.iteritems():
+            ontologyId = self.ontologyMapping.get(k)
+            v.__setattr__('ontologyid', ontologyId)
+     
     def parseAll(self):
         barBitmapParser.parseAll(self)
         self.reindex()

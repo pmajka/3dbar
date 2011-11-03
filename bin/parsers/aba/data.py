@@ -4,7 +4,7 @@
 #                                                                             #
 #    This file is part of 3d Brain Atlas Reconstructor                        #
 #                                                                             #
-#    Copyright (C) 2010-2011 Piotr Majka, Jakub M. Kowalski                   #
+#    Copyright (C) 2010-2011 Piotr Majka, Lukasz Walejko, Jakub M. Kowalski   #
 #                                                                             #
 #    3d Brain Atlas Reconstructor is free software: you can redistribute      #
 #    it and/or modify it under the terms of the GNU General Public License    #
@@ -29,7 +29,7 @@ Science. (c) 2009. Available from: \
 <a href="http://mouse.brain-map.org/atlas/index.html" target="_blank">http://mouse.brain-map.org</a>.'
 
 CONF_PARSER_NAME = 'aba'
-CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology.'
+CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology. Lukasz Walejko'
 CONF_CONTACT_EMAIL = 'pmajka@nencki.gov.pl'
 CONF_CAF_COMPIL_TIME = datetime.datetime.utcnow().strftime("%F %T")
 CONF_CAF_FULL_NAME = 'The Allen Mouse Brain Reference Atlas'

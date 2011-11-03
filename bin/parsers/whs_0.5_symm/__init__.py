@@ -4,7 +4,7 @@
 #                                                                             #
 #    This file is part of 3d Brain Atlas Reconstructor                        #
 #                                                                             #
-#    Copyright (C) 2010-2011 Piotr Majka, Lukasz Walejko, Jakub M. Kowalski   #
+#    Copyright (C) 2010-2011 Piotr Majka, Jakub M. Kowalski                   #
 #                                                                             #
 #    3d Brain Atlas Reconstructor is free software: you can redistribute      #
 #    it and/or modify it under the terms of the GNU General Public License    #
@@ -53,45 +53,29 @@ class AtlasParser(bar.barBitmapParser):
         
         self.inputDirectory = inputDirectory
         self.outputDirectory= outputDirectory
-        
+         
         # Define source dataset location and initialize parser by loading
         # source dataset
-        sourceFilename = 'atlas.nii'
-        self._loadVolume(sourceFilename)
+        sourceFilename = 'SYMCLabel.nii'
+        volumetricFile = os.path.join(inputDirectory,sourceFilename)
+        self._volumeSrc = nifti.NiftiImage(volumetricFile)
+        self._volume    = self._volumeSrc.data[0][0]
         
-        # Some properties cannot be predefined, adding them now:
+        #Some properties cannot be predefined, adding them now:
         self.setProperty('outputDirectory', outputDirectory)
         
-        # structure name -> structure colour mapping
+        # set structure name -> structure colour mapping
         fullnameMappingFile = os.path.join(self.inputDirectory,'fullnames.txt')
         structureColours = getDictionaryFromFile(fullnameMappingFile, 0, 2)
         self.setProperty('structureColours', structureColours)
-        self.indexer.colorMapping = structureColours
+        self.indexer.colorMapping=structureColours
         
-        self._defineSlideRange(antPostAxis=3)
+        self.slideRange = map(lambda x: 1023 - x, range(0,1024))
         self._pathNumber = 0
         
         # Set indexer properties        
         self.indexer.updateProperties(indexerProperties)
-    
-    def _loadVolume(self, sourceFilename):
-        volumetricFile = os.path.join(self.inputDirectory, sourceFilename)
         
-        self._volumeSrc = nifti.NiftiImage(volumetricFile)
-        self._volume  = self._volumeSrc.data
-        self._volumeHeader = self._volumeSrc.header 
-    
-    def _defineSlideRange(self, antPostAxis):
-        """
-        Defines number of sections along anterior-posterior axis.
-        
-        @type  antPostAxis: C{int}
-        @prarm antPostAxis: Dimension representing ant-pos direction.
-        """
-        antPostDim = self._volumeHeader['dim'][antPostAxis]
-        self._voxelSize = self._volumeHeader['pixdim'][antPostAxis]
-        self.slideRange = map(lambda x: (antPostDim - 1) - x, range(0, antPostDim))
-    
     def parse(self, slideNumber):
         tracedSlide = bar.barBitmapParser.parse(self, slideNumber,\
                                                  generateLabels = False,
@@ -101,7 +85,7 @@ class AtlasParser(bar.barBitmapParser):
     def parseAll(self):
         bar.barBitmapParser.parseAll(self)
         self.reindex()
-    
+        
     def reindex(self): 
         bar.barBitmapParser.reindex(self)
         
@@ -122,37 +106,40 @@ class AtlasParser(bar.barBitmapParser):
         self.writeIndex()
     
     def _getSourceImage(self, slideNumber):
-        volumeSlide = self._volume[self.slideRange[slideNumber] ,:,:]
+        volumeSlide = self._volume[:, self.slideRange[slideNumber], :]
         volumeSlide[ volumeSlide[:,:]==0 ] = 255
         
-        image = Image.fromarray(volumeSlide).convert("RGB")
+        image = Image.fromarray(volumeSlide, 'L').convert("RGB")
+        image = image.transpose(Image.FLIP_TOP_BOTTOM).convert("RGB")
         return image
     
     def _createMask(self, image, colorValue):
         r,g,b = colorValue
-        R, G, B = 0, 1, 2 # Meaningfull channel names
+        R, G, B = 0, 1, 2
         
         source = image.split()
+        # select regions where red is less than 100
         mask = (source[R].point(lambda i: i == r and 255),\
-                source[G].point(lambda i: i == g and 255),\
-                source[B].point(lambda i: i == b and 255))
+        source[G].point(lambda i: i == g and 255),\
+        source[B].point(lambda i: i == b and 255))
         
         # Resize image it order to get better tracing effects:
-        # Use nearest neiborhood to get saw-like shape as this dataset has
-        # number of single voxels which we don't want to lose.
+        # resizing is performed using high quality anialiasing filter
+        # get size:
         resizeTuple = self.renderingProperties['imageSize']
         image = ImageChops.multiply(ImageChops.multiply(mask[1], mask[0]),mask[2])
-        image = ImageChops.invert(image).resize(resizeTuple, Image.NEAREST)
+        image = ImageChops.invert(image).resize(resizeTuple, Image.ANTIALIAS)
+        #image = ImageChops.invert(image).resize(resizeTuple, Image.NEAREST)
         return image
     
     def _getZCoord(self, slideNumber):
-        zVoxelIndex = self.slideRange[slideNumber] 
-        return self._volumeSrc.vx2s((0, 0, zVoxelIndex))[2]
+        # The offset is hardcoded because the source file has corrupted spatial
+        # information which causes automatic vx -> s conversion unreliable
+        zVoxelIndex = self.slideRange[slideNumber]
+        return -12.0615 + zVoxelIndex * voxelSize
     
     def _getSpatialTransfMatrix(self, slideNumber):
-        # The spatial transformation matrix does not depend on slideNumber in
-        # this dataset
-        return coordinateTuple
+        return spatialTransformationMatrix
     
     def _getNewPathID(self, structName = None):
         self._pathNumber+=1
@@ -164,8 +151,9 @@ if __name__=='__main__':
         inputDirectory  = sys.argv[1]
         outputDirectory = sys.argv[2]
     except:
-        inputDirectory  = 'atlases/aba/src/'
-        outputDirectory = 'atlases/aba/caf/'
+        inputDirectory  = 'atlases/whs_0.5_symm/src/'
+        outputDirectory = 'atlases/whs_0.5_symm/caf/'
     
     ap = AtlasParser(inputDirectory, outputDirectory)
-    ap.parseAll()
+    #ap.parseAll()
+    ap.reindex()

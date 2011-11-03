@@ -91,7 +91,7 @@ class barGenericParser(object):
     L{CONF_POTRACE_HEIGHT_STRING<base.CONF_POTRACE_HEIGHT_STRING>}.
     
     @change: pią, 21 sty 2011, 11:40:31 CET, Creating index without parsing all
-    slides again: L{<reindex>} method introduced.
+    nlides again: L{<reindex>} method introduced.
     """
     _requiredInternalData = ['outputDirectory', 'filenameTemplates',\
                             'slideRange','tracingProperties',\
@@ -184,10 +184,10 @@ class barGenericParser(object):
     
     def __setInternalData(self, name, value):
         self.__setattr__(name, value)
-
+    
     def __getInternalData(self, name):
         self.__getattribute__(name)
-
+    
     def getProperty(self, name):
         """
         @type  name: string

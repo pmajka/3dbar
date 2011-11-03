@@ -323,57 +323,6 @@ class barReconstructorIndexer(barIndexer):
         else:
             return retSpan
     
-#   def getZOrigin(self, slideNumberSpan, zRes, margin, eqSpacing = False):
-#       n  = slideNumberSpan                              # Just alias
-#       
-#       if eqSpacing:
-#           zOrig = min(self.s[n[0]].z, self.s[n[1]].z)
-#       else:
-#           zOrig = min([self.s[n[0]].span[1],\
-#                        self.s[n[0]].span[0],\
-#                        self.s[n[1]].span[1],\
-#                        self.s[n[1]].span[0]])
-#       
-#       retval = zOrig - zRes*margin
-#       
-#       if __debug__:
-#           print "\tgetZOrigin: eqSpacing:", eqSpacing
-#           print "\tgetZOrigin: slides:", slideNumberSpan
-#           print "\tgetZOrigin: zOrig:",  zOrig 
-#           print "\tgetZOrigin: zRes:",  zRes
-#           print "\tgetZOrigin: margin:", zRes*margin
-#           print "\tgetZOrigin: final:", retval
-#           print 
-#       
-#       return retval
-#   
-#   def getZExtent(self, slideIdxSpan, zRes, margin, eqSpacing=False):
-#       n  = slideIdxSpan     # Just an alias
-#       
-#       if eqSpacing:
-#           lZcoord = self.s[n[0]].z
-#           rZcoord = self.s[n[1]].z
-#       else:
-#           chList = [self.s[n[0]].span[1],\
-#                     self.s[n[0]].span[0],\
-#                     self.s[n[1]].span[1],\
-#                     self.s[n[1]].span[0]]
-#           lZcoord = min(chList)
-#           rZcoord = max(chList)
-#       
-#       retval = qdist((lZcoord, rZcoord), zRes) + 2*margin
-#       
-#       if __debug__:
-#           print "\tgetZExtent: eqSpacing:", eqSpacing
-#           print "\tgetZExtent: slideIdxSpan:", slideIdxSpan
-#           print "\tgetZExtent: extent coords:", lZcoord, rZcoord
-#           print "\tgetZExtent: zRes:", zRes
-#           print "\tgetZExtent: margin:", margin
-#           print "\tgetZExtent: retval:", retval
-#           print 
-#       
-#       return retval
-
     def getZOriginAndExtent(self, slideIdxSpan, zRes, margin, eqSpacing=False):
         """
         Calculates span of the given set of slides in plane perpendicular to the
