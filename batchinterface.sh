@@ -13,5 +13,6 @@
 #------------------------------------------------------------------------------
 
 export LC_ALL=C
-source setbarenv.sh
-python bin/reconstructor/batchreconstructor.py $@
+BAR_DIR=`dirname $(readlink -f $0)`
+source ${BAR_DIR}/setbarenv.sh
+python $BAR_DIR/bin/reconstructor/batchreconstructor.py $@
