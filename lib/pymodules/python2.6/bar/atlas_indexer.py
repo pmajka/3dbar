@@ -256,38 +256,33 @@ class barIndexerGroupElement(barIndexerElement):
     _elementName = 'group'
     _elementAttributes = ['name', 'id', 'fill', 'fullname', 'uid', 'ontologyid']
     
-    def __init__(self, name, id, fill=None, fullname=None, uid=None, structure=None, ontologyid=None):
+    def __init__(self, **kwargs):
         """
-        @param name: value of the 'name' attribute of represented XML element
-        @type name: str
-        
-        @param id: value of the 'id' attribute of represented XML element
-        @type id: int
-        
-        @param fill: value of the 'fill' attribute of represented XML element
-        @type fill: str
-        
-        @param fullname: value of the 'fullname' attribute of represented XML element
-        @type fullname: str
-        
-        @param uid: value of the 'uid' attribute of represented XML element
-        @type uid: int
-        
-        @param structure: object handling manipulation of the structure related to the group;
-                          its L{uid<barIndexerStructureElement.uid>}overrides the L{uid} argument
-                          if given
-        @type structure: L{barIndexerStructureElement}
+        Accepted keyword arguments:
+          - 'name' (str) - value of the 'name' attribute of represented XML
+             element,
+          - 'id' (int) - value of the 'id' attribute of represented XML
+             element,
+          - 'fill' (str) - value of the 'fill' attribute of represented XML
+            element,
+          - 'fullname' (str) - value of the 'fullname' attribute of represented
+             XML element,
+          - 'uid' (int) - value of the 'uid' attribute of represented XML
+            element,
+          - 'structure' (L{barIndexerStructureElement}) - object handling
+            manipulation of the structure related to the group;
+            its L{uid<barIndexerStructureElement.uid>} overrides the L{uid}
+            argument if given,
+          - 'ontologyid' - value of the 'ontologyid' of represented XML.
         """
+        self.structure   = None
+
         # Set initial settings
-        self.name      = name
-        self.id        = id
-        self.fill      = fill
-        self.fullname  = fullname
-        self.structure = structure
-        self.ontologyid = ontologyid
-        
-        if structure == None:
-            self.uid   = uid
+        for attribute in self._elementAttributes:
+            setattr(self, attribute, kwargs.get(attribute))
+
+        if 'structure' in kwargs:
+            self.structure   = kwargs['structure']
         
         # By default parents and children list is empty
         self.parent = None
