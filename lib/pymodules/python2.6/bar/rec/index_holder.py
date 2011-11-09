@@ -73,8 +73,8 @@ class barReconstructorSlideElem(barIndexerSlideElement):
     @type next: L{barIndexerSlideElement}
     """
     
-    def __init__(self, *args):
-        barIndexerSlideElement.__init__(self, *args)
+    def __init__(self, **kwargs):
+        barIndexerSlideElement.__init__(self, **kwargs)
         
         self.z    = float(self.coronalcoord)
         self.idx  = None

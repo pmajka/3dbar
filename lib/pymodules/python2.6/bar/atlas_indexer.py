@@ -762,9 +762,9 @@ class barIndexerSlideElement(barIndexerElement):
         transformationmatrix = tuple(map(float,
                 domXMLElement.getAttribute('transformationmatrix').split(',')))
         
-        return cls(domXMLElement.getAttribute('coronalcoord'),
-                   domXMLElement.getAttribute('slidenumber'),
-                   transformationmatrix)
+        return cls(coronalcoord=domXMLElement.getAttribute('coronalcoord'),
+                   slidenumber=domXMLElement.getAttribute('slidenumber'),
+                   transformationmatrix=transformationmatrix)
     
     coronalcoord = property(__getCoronalCoord, __setCoronalCoord)
     """
@@ -1546,7 +1546,7 @@ class barIndexer(barIndexerObject):
             # Chceck if parent node exist, create it if not. Newly created group
             # will have hierarchy root as its parent.
             self._hierarchyGroups[parentGrpName] =\
-                    self._groupElement(parentGrpName, self.gid)
+                    self._groupElement(name=parentGrpName, id=self.gid)
             self._setHierarchyRelation(parentGrpName, self._hierarchyRootElementName)
         
         # Extract names of orphan structures
@@ -1557,8 +1557,8 @@ class barIndexer(barIndexerObject):
         # parent group element
         for structureName in orphans:
             group = self._groupElement(\
-                      structureName,
-                      self.gid,
+                      name=structureName,
+                      id=self.gid,
                       structure=self._structures[structureName]) 
             self._hierarchyGroups[structureName] = group
             self._setHierarchyRelation(structureName, parentGrpName)
@@ -1609,7 +1609,7 @@ class barIndexer(barIndexerObject):
                 structure = None
             
             self._hierarchyGroups[groupName]=\
-                self._groupElement(groupName, self.gid,
+                self._groupElement(name=groupName, id=self.gid,
                         structure=structure)
         
         # Bind all group elements into hierarchy by assigning child - parent
