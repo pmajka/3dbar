@@ -29,6 +29,7 @@ G{importgraph}
 """
 import sys
 import colorsys
+import numpy as np
 from base import flatten
 from atlas_indexer import barIndexer
 
@@ -89,41 +90,16 @@ class barColor():
     hsv = property(__getHSVTuple)
 
 
-BAR_HIERARHY_ROOT_ELEM_COLOUR = barColor((0.83, 0.84, 0.82))
+BAR_HIERARHY_ROOT_ELEM_COLOUR = barColor((0.4, 0.4, 0.4))
 BAR_MAX_DEPTH = 6
 
-
-def splitRainbow(border):
-    return barColor(colorsys.hsv_to_rgb(border, 1., 1.0))
-
-def interpolate_colors(colora, colorb, percentage):
-    color = barColor((0,0,0))
-
-    (a,b,c) = colora.hsv
-    (d,e,f) = colorb.hsv
-    #print >>sys.stderr, a,d, percentage, abs(d-a), abs(d-a)*percentage
-    #print >>sys.stderr, colorb.hsv 
-    #print >>sys.stderr, abs(a-d)*percentage
-    diff = a+abs(d-a)*percentage
-    print >>sys.stderr, diff
-    
-    color =  barColor.fromHSVTuple((diff,b,c))
-    return color
-
-def get_item_color(relPos, depth, parentColor, nextColor):
-    
+def get_item_color(ic,d, depth):
     if depth == 0:
         return BAR_HIERARHY_ROOT_ELEM_COLOUR
     else:
-        percentage = relPos
-        (r,g,b) = interpolate_colors(parentColor, nextColor, percentage)()
-        
-        #print >>sys.stderr, (r,g,b)
-        h,s,v = colorsys.rgb_to_hsv(r,g,b)
-        #intensity = 1. - (depth -1)*.5 / BAR_MAX_DEPTH 
-        saturation = 1. - (depth -1)*.5 / BAR_MAX_DEPTH 
-        #v *= intensity
-        s *= saturation
+        h = ic
+        s = 0.3+0.7*d#1. - (depth -1)*.5 / BAR_MAX_DEPTH 
+        v = 0.5 + 0.5*float(depth) / 8
         return barColor(colorsys.hsv_to_rgb(h,s,v))
 
 #-----------------------------------------------------
@@ -139,7 +115,7 @@ class barColorIndexer(barIndexer):
         """
         @return: number of nodes in elem tree
         """
-        return len(flatten(elem.getChildList(depth=999)))
+        return len(flatten(elem.getChildList(depth=1)))
     
     def recolor(self):
         """
@@ -154,40 +130,41 @@ class barColorIndexer(barIndexer):
         # this is something like initialization step
         # Each child of root element has span of colours proportional to the
         # number of structures that it covers.
-        zc=barColor(colorsys.hsv_to_rgb(0, 1., 1.0))
-        ec=barColor(colorsys.hsv_to_rgb(.9, 1., 1.0))
-        self.setChildColours(b, zc, ec, depth=1)
+        self.ccmap =  dict(\
+            map(lambda x:\
+            (x.name, self.getSpan(x)), self.groups.itervalues()))
+        
+        zc=0.1
+        ec=.9
+        self.setChildColours(b, (zc, ec, 0.5), depth=0)
         
         # Define new color mapping and use it
         newColorMap =\
          dict(map(lambda x: (x.name, x.fill), self.groups.values()))
     
-    def setChildColours(self, elem, cola, colb, depth = 0):
-        groupLen = float(self.getSpan(elem))*1.0
+    def setChildColours(self, elem, span, depth = 0):
+        d = span[2]
+        s = span[0:2]
+        ic = sum(list(s))/2.
+        #ic = s[1]
+        print elem.name, s,ic, depth
+        elem.fill = get_item_color(ic, d, depth).html
         
-        # Cannot set children colors when there are no children
-        if elem.children == []:
-            return
+        if elem.children==[]: return
+       
+        n = sorted([x.name for x in elem.children])
+        l = np.array(map(lambda x: self.ccmap[x], n))
+        l = np.cumsum(l/float(sum(l)))
+        r = abs(s[1]-s[0])
+        #print r, s[0]
+        lk = (l-l[0])*r+s[0]
+        ll = l*r + s[0]
+        #ll = l
+        nn = [self.groups[x] for x in n]
+        k = zip(nn, zip(lk,ll,l))
         
-        span = 0
-        for (j, v) in enumerate(elem.children):
-            span += float(self.getSpan(v))/groupLen
-            #print >>sys.stderr, span
-            newColor = get_item_color(span, depth, cola, colb)
-            v.fill = newColor.html
-        
-        for (j, v) in enumerate(elem.children):
-            
-            if v is not elem.children[0]:
-                # For all regular children
-                cola = barColor.fromHTML(elem.children[j-1].fill)
-                colb = barColor.fromHTML(v.fill)
-            else:
-               # For the last child
-                cola = barColor.fromHTML(v.parent.prevSibling().fill)
-                cola = barColor.fromHTML(v.fill)
-            
-            self.setChildColours(v, cola, colb, depth+1)
+        for (c, v) in k:
+            self.setChildColours(c, v, depth+1)
 
 if __name__ == '__main__':
     pass
