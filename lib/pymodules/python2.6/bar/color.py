@@ -125,7 +125,7 @@ class barColorIndexer(barIndexer):
     
     def setColors(self):
         brainRootElem = self.hierarchyRootElementName
-        b=self.groups[brainRootElem]
+        b=self.groups['HippFormation']
         
         # this is something like initialization step
         # Each child of root element has span of colours proportional to the
@@ -134,8 +134,8 @@ class barColorIndexer(barIndexer):
             map(lambda x:\
             (x.name, self.getSpan(x)), self.groups.itervalues()))
         
-        zc=0.1
-        ec=.9
+        zc=0.0
+        ec=2.0
         self.setChildColours(b, (zc, ec, 0.5), depth=0)
         
         # Define new color mapping and use it
@@ -162,7 +162,7 @@ class barColorIndexer(barIndexer):
         #ll = l
         nn = [self.groups[x] for x in n]
         k = zip(nn, zip(lk,ll,l))
-        
+        print k 
         for (c, v) in k:
             self.setChildColours(c, v, depth+1)
 
