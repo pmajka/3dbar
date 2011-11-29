@@ -1295,7 +1295,7 @@ class barIndexer(barIndexerObject):
                 for val in oldVals:
                     if val in newVals:
                         # ID is ambiguous
-                        print "ID = %d is ambigous, trying to fix it" % val
+                        print >>sys.stderr, "ID = %d is ambigous, trying to fix it" % val
                         raise KeyError
 
                     newVals[val] = idGenerator()

@@ -91,11 +91,11 @@ class barMbatLabel(object):
                 setattr(self, x, xmlElement.getAttribute(x)), self._elementAttributes)
         
         for optAttr in self._optionalAttributes:
-            try:
-                optAttrVal = xmlElement.getAttribute(optAttr)
-            except:
+            optAttrVal = xmlElement.getAttribute(optAttr)
+            if optAttrVal == "":
                 optAttrVal = None
-            if optAttrVal == "": optAttrVal = None
+            else:
+                optAttrVal = optAttrVal.strip().replace(' ','_')
             setattr(self, optAttr, optAttrVal)
         
         self.id = int(self.id)
@@ -238,15 +238,16 @@ class barMBATParser(barBitmapParser):
         return tracedSlide
     
     def reindex(self):
+        # Do the regular stuff
         barBitmapParser.reindex(self)
+        self.indexer.hierarchy       = self.parents
         
         # Append ontology references if such mapping exist
-        self.indexer.hierarchy       = self.parents
         groups = self.indexer.groups
         for (k,v) in groups.iteritems():
             ontologyId = self.ontologyMapping.get(k)
             v.__setattr__('ontologyid', ontologyId)
-     
+    
     def parseAll(self):
         barBitmapParser.parseAll(self)
         self.reindex()
