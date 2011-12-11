@@ -87,9 +87,8 @@ class AtlasParser(bar.barSBAParser):
         self.indexer.colorMapping = dict((v,k) for k, v in self._sbaImportData['rgb2acr'].iteritems())
         self.indexer.fullNameMapping = self._sbaImportData['acr2full'] 
 
-        # Ditry hack stripping all keys and values. It is requires as provided
+        # Ditry hack stripping all keys and values. It is required as provided
         # data seems to be leaky and inconsistent at some moments
-        #TODO: Ask to provide clean data
         self.indexer.hierarchy=dict(\
         ( self._cleanStructName(k),  self._cleanStructName(v) )\
         for k, v in self._sbaImportData['hierarchy'].iteritems())
