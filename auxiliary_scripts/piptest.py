@@ -1,3 +1,4 @@
+import subprocess
 import sys,os
 from bar.rec import pipeline
 
@@ -77,6 +78,15 @@ class edge(object):
     def __str__(self):
         return self.src.vtkclass + " -> " + self.dst.vtkclass+'\n'
 
+def plotGraph(pipeline, output_filename):
+    gr = graph(pipeline)
+    popen = subprocess.Popen(['dot', '-T', 'png', '-o', output_filename],
+                             stdin=subprocess.PIPE)
+    popen.communicate(str(gr))
+    popen.stdin.close()
+    popen.wait()
+    
+
 if __name__ == '__main__':
-    graph = graph(pipeline.barPipeline.fromXML(sys.argv[1]))
-    print graph
+    plotGraph(pipeline.barPipeline.fromXML(sys.argv[1]),
+              sys.argv[2])
