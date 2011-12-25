@@ -483,8 +483,12 @@ class barBitmapParser(barGenericParser):
         imageForTracing = self._createMask(sourceImage, imageColour)
         tracedImage = self._performTracing(imageForTracing)
         
-        # Generate html colour denotation:
-        htmlColour = self.RGBToHTMLColor(imageColour)
+        # Generate html colour denotation: Handle case, when indexed image was
+        # provided thus we have a sigle int instead of RGB tuple
+        if type(imageColour) == type(0):
+            htmlColour = imageColour
+        else:
+            htmlColour = self.RGBToHTMLColor(imageColour)
         
         # Append all paths
         return self._parseTracerOutput(tracedImage, htmlColour)

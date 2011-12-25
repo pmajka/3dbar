@@ -95,7 +95,15 @@ class barIndexerElement(barIndexerObject):
             if hasattr(self, attribName):
                 attribValue = getattr(self, attribName)
                 if attribValue != None:
-                    retElement.setAttribute(attribName, unicode(attribValue))
+                    # Sun Dec 25 12:11:33 CET 2011
+                    # TODO: If given argument is string, try to properly encode
+                    # it into unicode (still requires a lot of testing)
+                    # If type is other than string, just convert if to string
+                    # (regular string, not unicode)
+                    if isinstance(attribValue, basestring ):
+                       retElement.setAttribute(attribName, attribValue.decode("utf-8" ).encode("utf-8"))
+                    else:
+                         retElement.setAttribute(attribName, str(attribValue))
         
         return retElement
     
@@ -346,12 +354,12 @@ class barIndexerGroupElement(barIndexerElement):
     def __setFullname(self, newFullName):        
         """
         Set value of the 'fullname' attribute  of represented XML element.
-
+        
         @param newFullName: value of the 'fullname' attribute  of represented XML element
         @type newFullName: str
         """
         if newFullName:
-            self._fullname = unicode(newFullName)
+            self._fullname = newFullName
     
     def __getUID(self):
         """
