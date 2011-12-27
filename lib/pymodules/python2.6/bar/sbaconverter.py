@@ -144,8 +144,6 @@ class barSBAParser(barExternalParser):
         for structure in CurrentSlideStructures.keys():
             # TODO come up with idea how to do it better
             # Now two thing are passed structureID, and list of path indexes
-            if __debug__:
-                print >>sys.stderr, structure, CurrentSlideStructures[structure]
             
             # Create path definition
             map(tracedSlide.addPath,
@@ -246,15 +244,16 @@ class barSBAParser(barExternalParser):
         # compatibile with 3dBar naming convention. Here we process them so they
         # can pass 3dBAR name validataion.
         structName =  self._sbaImportData['rgb2acr'][structureIDbyFill].strip()
+        cleanName = self._cleanStructName(structName)
+        
         if __debug__:
-            print >>sys.stderr, structName, self._cleanStructName(structName)
-        return self._cleanStructName(structName)
+            print >>sys.stderr, "\t\tCleaning structure name '%s' -> '%s'" % (structName, cleanName)
+        return cleanName
    
     def _cleanStructName(self, structName):
         """
         An alias to C{L{cleanStructName}(structName)}.
         """
-        print structName
         return cleanStructName(structName)
     
     def _saveTransformationAsMetadata(self, transformation, bregma):
