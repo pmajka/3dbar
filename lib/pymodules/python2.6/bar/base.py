@@ -3390,11 +3390,15 @@ class barTracedSlide(barSlideRenderer):
         except:
             pass
         
-        #TODO: order of elements!!!
-        for structureElement in self._structures.values():
-            if not structureElement.name == 'vBrain':
-                for pathElement in structureElement.getXMLelement():
-                    svgGroupDataset.appendChild(pathElement)
+        for pathElementId in sorted(self.pathIndex):
+            pathElement = self.pathIndex[pathElementId]
+            if not pathElement.structName == 'vBrain':
+                svgGroupDataset.appendChild(pathElement.getXMLelement())
+        #TODO: Remove after passing all tests.
+        #for structureElement in sorted(self._structures.values()):
+        #    if not structureElement.name == 'vBrain':
+        #        for pathElement in structureElement.getXMLelement():
+        #            svgGroupDataset.appendChild(pathElement)
         
         for labelElement in self.labels:
             svgGroupDataset.appendChild(labelElement.getXMLelement())
