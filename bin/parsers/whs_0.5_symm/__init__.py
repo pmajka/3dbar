@@ -155,5 +155,5 @@ if __name__=='__main__':
         outputDirectory = 'atlases/whs_0.5_symm/caf/'
     
     ap = AtlasParser(inputDirectory, outputDirectory)
-    #ap.parseAll()
+    ap.parseAll()
     ap.reindex()
