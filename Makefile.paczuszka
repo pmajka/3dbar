@@ -21,9 +21,9 @@ all: clean ${PARSERS} doc
 	echo "Done"
 
 doc_clean:
-	rm -rfv doc/api doc/gui/ doc/service
+	rm -rfv doc/api doc/gui/
 
-doc: doc_api doc_gui doc_service
+doc: doc_api doc_gui
 	echo "Done doc"
 
 doc_api:
@@ -34,10 +34,6 @@ doc_api:
 doc_gui:
 	mkdir -p doc/gui/html
 	epydoc bin/reconstructor -v --graph all  --output doc/gui/html
-
-doc_service:
-	mkdir -p doc/service/html
-	epydoc bin/sql -v --graph all   --output doc/service/html
 
 parsers: ${PARSERS}
 
