@@ -17,6 +17,9 @@ rm -rfv /tmp/3dbar/bin/parsers/tem
 rm -rfv /tmp/3dbar/bin/parsers/vector-test 
 rm -rfv /tmp/3dbar/bin/parsers/whs_0.6.1
 
+#remove unnecessary atlas data
+rm -rf /tmp/3dbar/atlases/tem
+
 #backup pipelines...
 mv /tmp/3dbar/auxiliary_scripts/pipelines /tmp/3dbar/
 #...and remove auxilary scripts
