@@ -4705,7 +4705,14 @@ def validateStructureName(structureName):
     
     @rtype: str or bool
     @return: L{structureName} if structure name if correct, C{Flase} otherwise.
+
+    @note: Name is validated only when debug mode is not disabled. It means that
+    reconstruction modules can have disabled __debug__ mode while parsers should
+    always run WITHOUT python -OO switch.
     """
+    if not __debug__:
+        return  structureName
+     
     return (len(structureName) <= 40 # length is within proper range
         and not structureName.startswith("-") and not structureName.endswith("-") # no bordering hyphens
         and CONF_ALOWED_STRUCTURE_CHARACTERS.search(structureName) and structureName) # contains only legal characters
