@@ -21,6 +21,7 @@
 #                                                                             #
 ###############################################################################
 set -xe
+export DISPLAY=:0.0;
 
 WORKING_DIR=`pwd`/relase_candidate_volume_testing_`date +"%Y-%m-%d_%H-%M"`/
 REF_VOL_DIR=${WORKING_DIR}/reference_volumes/
@@ -38,6 +39,7 @@ EXECUTION_COMMAND="parallel -j 16 -k"
 DATASET_NAMES=(aba sba_DB08 sba_LPBA40_on_SRI24 sba_PHT00 sba_RM_on_F99 sba_WHS09 sba_WHS10 tem whs_0.5 whs_0.51 whs_0.5_symm whs_0.6.1)
 DATASET_HROOT=(Brain Br Brain Brain Brain Brain Brain Brain Brain Brain Brain Brain)
 
+mkdir -p ${RELASE_VOL_DIR} ${REF_VOL_DIR}
 rm -rvf ${JOB_TEMP_REFERENCE} ${JOB_TEMP_RC}
 
 for element in $(seq 0 $((${#DATASET_NAMES[@]} - 1)))
