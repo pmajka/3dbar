@@ -250,6 +250,7 @@ In order to generate documentation execute:
 
 ::
 
+$ source setbarenv.sh
 $ make doc
 
 The documentation for API can be viewed by opening *doc/api/html/index.html*
