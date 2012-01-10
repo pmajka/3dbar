@@ -17,7 +17,7 @@ ic	fibres
 sp5	fibres
 cc	fibres
 cp	fibres #MB
-Fnx fibres
+Fnx	fibres
 
 Cx	FB
 Hc	FB

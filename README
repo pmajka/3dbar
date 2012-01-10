@@ -136,11 +136,13 @@ the following parsers:
     delineation
     (http://software.incf.org/software/waxholm-space/waxholm-space/LabeledAtlas0.5.1/file_download?file_field=file)
 
-9.  Paxinos and Watson "The Rat Brain in Stereotaxic Coordinates" atlas
+9.  Symmetrical Waxholm Space Atlas (the source mouse brain volumetric dataset)
 
-10. Franklin and Paxinos "The Mouse Brain in Stereotaxic Coordinates" atlas
+10. Paxinos and Watson "The Rat Brain in Stereotaxic Coordinates" atlas
 
-11. The Allen Mouse Brain Atlas
+11. Franklin and Paxinos "The Mouse Brain in Stereotaxic Coordinates" atlas
+
+12. The Allen Mouse Brain Atlas
     (http://mouse.brain-map.org/atlas/index.html)
 
 To generate CAF dataset for data from ScalableBrainAtlas DB08 template execute
@@ -159,7 +161,8 @@ You can also generate that way CAF dataset for any of following SBA templates:
 ``DB08`` with the name of the source template.
 
 In order to generate that way CAF dataset for the Waxholm Space Atlas replace
-``sba_DB08`` with ``whs_0.5`` or ``whs_0.51`` (for another WHS delineation).
+``sba_DB08`` with ``whs_0.5``, ``whs_0.51`` (for another WHS delineation)
+or ```whs_0.5_symm`` (for symmetrical WHS).
 
 
 To generate CAF dataset from Paxinos and Watson atlas (Paxinos, G. and Watson, C. (2007).
@@ -188,6 +191,7 @@ $ make -f make_pw_rbisc.mk
 
 to reparse the edited slides.
 
+
 Similarly for Paxinos and Frnklin atlas (Paxinos, G. and Franklin, K. B. J. (2008).
 The Mouse Brain In Stereotaxic Coordinates. Elsevier, 3rd edition.) you have to execute:
 
@@ -205,6 +209,7 @@ To reparse the edited slides execute:
 $ make -f make_pf_mbisc.mk
 
 in the root directory of the software.
+
 
 Generation of CAF dataset for The Allen Mouse Brain Atlas requires the Advanced Normalization Tools
 (ANTS; http://picsl.upenn.edu/ANTS/) installed. ANTS have to be availiable as shell
