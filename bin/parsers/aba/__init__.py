@@ -146,8 +146,14 @@ class AtlasParser(bar.barBitmapParser):
         return image
     
     def _getZCoord(self, slideNumber):
-        zVoxelIndex = self.slideRange[slideNumber] 
-        return self._volumeSrc.vx2s((0, 0, zVoxelIndex))[2]
+        zVoxelIndex = self.slideRange[slideNumber]
+        if self._volumeSrc.header['sform_code']:
+            return self._volumeSrc.vx2s((0, 0, zVoxelIndex))[2]
+
+        if self._volumeSrc.header['qform_code']:
+            return self._volumeSrc.vx2q((0, 0, zVoxelIndex))[2]
+
+        raise NotImplementedError, "unable to fetch zVoxelIndex via any known method"
     
     def _getSpatialTransfMatrix(self, slideNumber):
         # The spatial transformation matrix does not depend on slideNumber in
