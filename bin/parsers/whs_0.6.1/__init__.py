@@ -63,19 +63,20 @@ class AtlasParser(barMBATParser):
         indexerProperties['RefCords'] = ",".join(map(str,self._getIndexerRefMatrix()))
         self.indexer.updateProperties(indexerProperties)
     
+    def _getSpatialCoordinate(self, voxelIndexTuple):
+        if self._volumeSrc.header['sform_code']: spFunct = self._volumeSrc.vx2s
+        if self._volumeSrc.header['qform_code']: spFunct = self._volumeSrc.vx2q
+        try:
+            return spFunct(voxelIndexTuple)
+        except:
+            raise NotImplementedError, "unable to fetch zVoxelIndex via any known method"
+    
     def _getZCoord(self, slideNumber):
         zVoxelIndex = self.slideRange[slideNumber]
-        if self._volumeSrc.header['sform_code']:
-            return self._volumeSrc.vx2s((0, zVoxelIndex, 0))[1]
-
-        if self._volumeSrc.header['qform_code']:
-            return self._volumeSrc.vx2q((0, zVoxelIndex, 0))[1]
-
-        raise NotImplementedError, "unable to fetch zVoxelIndex via any known method"
+        return self._getSpatialCoordinate((0, zVoxelIndex, 0))[1]
     
     def _getSpatialTransfMatrix(self, slideNumber):
-        #cc : cornerCoords
-        cc = self._volumeSrc.vx2s((0, 0, 511))
+        cc = self._getSpatialCoordinate((0, 0, 511))
         return (self._voxelSize, cc[0], -self._voxelSize, cc[2])
     
     def _defineSlideRange(self, antPostAxis = 2):
