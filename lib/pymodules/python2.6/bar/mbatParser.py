@@ -231,10 +231,14 @@ class barMBATParser(barBitmapParser):
                 dict(map(lambda x:\
                 ("#%02x%02x%02x" % (x.id,x.id,x.id), x.abbreviation), structures))
     
-    def parse(self, slideNumber, generateLabels=True, useIndexer=False):
+    def parse(self, slideNumber, 
+                    generateLabels=True, 
+                    useIndexer=False,
+                    writeSlide = True):
         tracedSlide = barBitmapParser.parse(self, slideNumber,\
-                                                 generateLabels,
-                                                 useIndexer)
+                              generateLabels = generateLabels,
+                              useIndexer = useIndexer,
+                              writeSlide = writeSlide)
         return tracedSlide
     
     def reindex(self):

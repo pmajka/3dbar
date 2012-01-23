@@ -91,7 +91,16 @@ class AtlasParser(barMBATParser):
     def parse(self, slideNumber):
         tracedSlide = barMBATParser.parse(self, slideNumber,\
                                                  generateLabels = True,
-                                                 useIndexer = False)
+                                                 useIndexer = False,
+                                                 writeSlide = False)
+        
+        # Natalia wants labels to have smaller font size as (in her opinion)
+        # they are hard to decipher. 
+        map(lambda x: \
+                x._attributes.update({'font-size':'10px'}),\
+                tracedSlide.labels)
+        tracedSlide.writeXMLtoFile(self._getOutputFilename(slideNumber))
+        
         return tracedSlide
     
     def reindex(self): 

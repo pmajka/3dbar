@@ -78,7 +78,7 @@ class AtlasParser(bar.barBitmapParser):
         
     def parse(self, slideNumber):
         tracedSlide = bar.barBitmapParser.parse(self, slideNumber,\
-                                                 generateLabels = False,
+                                                 generateLabels = True,
                                                  useIndexer = False)
         return tracedSlide
     
