@@ -31,7 +31,7 @@
 
 import datetime
 
-CONF_PARSER_COMMENT = 'CAF dataset (Regional Map from Kotter and Wanke 2005) based on: \
+CONF_PARSER_COMMENT = 'CAF dataset (Macaque - Felleman and Van Essen 1991) based on: \
 Scalable Brain Atlas \
 <a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=FVE91_on_F99" target="_blank">\
 FVE91_on_F99</a> template.'
@@ -50,11 +50,11 @@ filenameTempates = dict(traced='%d_traced_v%d.svg')
 # This sba template requires shifting whole brain away from image edges, thus it
 # has two sets of transformation matrices: original, calculated from config.json
 # file and corrected by shifting.
-
-#transformationMatrix =\
-#        [-32.00204875, 26.9571721009, 0.0488130308296, -0.0488132485575]
+transformationMatrix =\
+        [-31.916593508, 26.9716188048, 0.0488616855558, -0.0488132485575]
 shiftedTransformationMatrix=\
-        [-36.883351833, 31.838475184, 0.0488130308296, -0.0488132485575]
+        [-41.764654915960001, 36.719778266959999, 0.0488130308296, -0.0488132485575]
+
 
 potraceProperties    = {}
 potraceProperties['potrace_accuracy_parameter']   ='0.001'

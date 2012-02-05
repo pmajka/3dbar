@@ -12,7 +12,7 @@
 PARSERS_DIR  = bin/parsers/
 ATLASES_DIR  = atlases/
 
-SBA_PARSERS  = sba_DB08 sba_PHT00 sba_WHS09 sba_WHS10 sba_LPBA40_on_SRI24 sba_RM_on_F99
+SBA_PARSERS  = sba_DB08 sba_PHT00 sba_WHS09 sba_WHS10 sba_LPBA40_on_SRI24 sba_RM_on_F99 sba_FVE91_on_F99
 FAST_PARSERS = nl_olek ${SBA_PARSERS} tem
 WHS          = whs_0.5 whs_0.51 whs_0.5_symm whs_0.6.1
 PARSERS      = vector-test aba ${FAST_PARSERS} ${WHS}
@@ -126,6 +126,12 @@ sba_RM_on_F99:
 	python ${PARSERS_DIR}sba_RM_on_F99/__init__.py
 	if [ -e ${ATLASES_DIR}sba_RM_on_F99/caf-reference ]; then diff -r ${ATLASES_DIR}sba_RM_on_F99/caf ${ATLASES_DIR}sba_RM_on_F99/caf-reference > diff_sba_RM_on_F99.txt; fi
 
+sba_FVE91_on_F99:
+	mkdir -p ${ATLASES_DIR}sba_FVE91_on_F99/src
+	mkdir -p ${ATLASES_DIR}sba_FVE91_on_F99/caf
+	python ${PARSERS_DIR}sba_FVE91_on_F99/__init__.py
+	if [ -e ${ATLASES_DIR}sba_FVE91_on_F99/caf-reference ]; then diff -r ${ATLASES_DIR}sba_FVE91_on_F99/caf ${ATLASES_DIR}sba_FVE91_on_F99/caf-reference > diff_sba_FVE91_on_F99.txt; fi
+
 aba:
 	mkdir -p ${ATLASES_DIR}aba/src
 	mkdir -p ${ATLASES_DIR}aba/caf
@@ -147,6 +153,7 @@ clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}sba_WHS10/caf ${ATLASES_DIR}sba_WHS10/src
 	rm -rfv ${ATLASES_DIR}sba_LPBA40_on_SRI24/caf ${ATLASES_DIR}sba_LPBA40_on_SRI24/src
 	rm -rfv ${ATLASES_DIR}sba_RM_on_F99/caf ${ATLASES_DIR}sba_RM_on_F99/src
+	rm -rfv ${ATLASES_DIR}sba_FVE91_on_F99/caf ${ATLASES_DIR}sba_FVE91_on_F99/src
 	rm -rfv ${ATLASES_DIR}whs_0.51/caf
 	rm -rfv ${ATLASES_DIR}whs_0.6.1/caf
 	rm -rfv ${ATLASES_DIR}whs_0.5/caf 
@@ -169,6 +176,7 @@ reference_datasets:
 	rm -rf ${ATLASES_DIR}sba_WHS10/caf-reference; cp -r ${ATLASES_DIR}sba_WHS10/caf ${ATLASES_DIR}sba_WHS10/caf-reference
 	rm -rf ${ATLASES_DIR}sba_LPBA40_on_SRI24/caf-reference; cp -r ${ATLASES_DIR}sba_LPBA40_on_SRI24/caf ${ATLASES_DIR}sba_LPBA40_on_SRI24/caf-reference
 	rm -rf ${ATLASES_DIR}sba_RM_on_F99/caf-reference; cp -r ${ATLASES_DIR}sba_RM_on_F99/caf ${ATLASES_DIR}sba_RM_on_F99/caf-reference
+	rm -rf ${ATLASES_DIR}sba_FVE91_on_F99/caf-reference; cp -r ${ATLASES_DIR}sba_FVE91_on_F99/caf ${ATLASES_DIR}sba_FVE91_on_F99/caf-reference
 	rm -rf ${ATLASES_DIR}aba/caf-reference; cp -r ${ATLASES_DIR}aba/caf ${ATLASES_DIR}aba/caf-reference
 	rm -rf ${ATLASES_DIR}tem/caf-reference; cp -r ${ATLASES_DIR}tem/caf ${ATLASES_DIR}tem/caf-reference
 
@@ -176,4 +184,6 @@ clean_diff:
 	rm -rfv diff_neurolucidaXML.txt diff_vector-test.txt\
 		    diff_whs_0.51.txt diff_whs_0.5.txt diff_sba_PHT00.txt diff_sba_DB08.txt\
 			diff_sba_WHS09.txt diff_sba_WHS10.txt diff_sba_LPBA40_on_SRI24.txt\
-			diff_sba_RM_on_F99.txt diff_aba.txt diff_tem.txt diff_whs_0.6.1.txt
+			diff_sba_RM_on_F99.txt diff_aba.txt diff_tem.txt diff_whs_0.6.1.txt\
+			diff_sba_FVE91_on_F99.txt
+

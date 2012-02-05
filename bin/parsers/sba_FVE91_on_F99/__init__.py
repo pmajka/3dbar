@@ -76,15 +76,11 @@ class AtlasParser(bar.barSBAParser):
     
     def parse(self, slideNumber):
         tracedSlide = bar.barSBAParser.parse(self, slideNumber,\
-                generateLabels = False,\
+                generateLabels = True,\
                 useIndexer     = False,\
                 writeSlide     = False)
         
         # We need to shift whole image, see data.py for details
-        #shift=np.diag((1,1,1))
-        #shift[0,2]=100
-        #shift[1,2]=100
-        #tracedSlide.affineTransform(shift)
         stm = shiftedTransformationMatrix
         tracedSlide.alignToRefMatrix((stm[2], stm[0], stm[3], stm[1]))
         tracedSlide.writeXMLtoFile(self._getOutputFilename(slideNumber))
