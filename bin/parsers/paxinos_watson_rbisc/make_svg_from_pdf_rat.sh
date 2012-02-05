@@ -55,7 +55,7 @@ fi
 for pageNo in `seq -s ' ' $CONF_CORONAL_PAGE_START 1 $CONF_CORONAL_PAGE_END`
 do
 	fpn=`printf "%03d" $pageNo`
-	apstoedit \
+	pstoedit \
 		-f plot-svg\
 		-v\
 		-mergetext\
