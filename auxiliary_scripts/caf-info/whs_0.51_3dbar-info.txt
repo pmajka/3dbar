@@ -1,9 +1,23 @@
-This model was created using 3d Brain Atlas Reconstructor – software dedicated to reconstructing three-dimensional reconstruction from 2D slides.
+This model was created using 3d Brain Atlas Reconstructor – software dedicated
+to reconstructing three-dimensional reconstruction from 2D slides.
 
-Reconstruction and structure hierarchy is based on the Waxholm Space Atlas available via INCF website athttp://software.incf.org/software/waxholm-space/waxholm-space/LabeledAtlas0.5.1/file_download?file_field=file
+Reconstruction and structure hierarchy is based on the Waxholm Space Atlas available via INCF website at
+http://software.incf.org/software/waxholm-space/waxholm-space/LabeledAtlas0.5.1/file_download?file_field=file
 
-Offline version of 3dBAR allows customizable generation of three-dimensional structures (ie. with different resolutions or various mesh processing filters). Final reconstructions may be exported as polygonal meshes (VRML, X3D) as well as volumetric data (NIfTI, vtk).
+Offline version of 3dBAR allows customizable generation of three-dimensional
+structures (ie. with different resolutions or various mesh processing filters).
+Final reconstructions may be exported as polygonal meshes (VRML, X3D) as well as
+volumetric data (NIfTI, vtk).
 
-Visit http://www.3dbar.org for more information about the software and relase notifications.
+Visit http://www.3dbar.org for more information about the software and relase
+notifications. Project is supported by an infrastructural grant from the Polish
+Ministry of Regional Development, POIG.02.03.00-00-003/09.
 
-Supported by an infrastructural grant from the Polish Ministry of Regional Development, POIG.02.03.00-00-003/09.
+=== Licencing infortmation: ===
+
+This work is licensed under a Creative Commons
+Attribution-NonCommercial-ShareAlike 3.0 Unported License
+(http://creativecommons.org/licenses/by-nc-sa/3.0/)
+
+Licencing information for the source dataset is available at:
+http://software.incf.org/software/waxholm-space

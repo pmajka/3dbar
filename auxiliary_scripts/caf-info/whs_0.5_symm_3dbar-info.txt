@@ -1,7 +1,7 @@
 This model was created using 3d Brain Atlas Reconstructor – software dedicated
 to reconstructing three-dimensional reconstruction from 2D slides.
 
-CAF dataset is based on:
+This CAF dataset is based on:
 http://civmvoxport.duhs.duke.edu/voxbase/downloaddataset.php?stackID=20494
 Symmetrical Waxholm Space - A symmetrical Waxholm canonical mouse brain for
 NeuroMaps.  Bowden DM, et. al., J Neurosci Methods. 2011 Feb 15;195(2):170-5.
@@ -16,8 +16,17 @@ Jonathan Nissanov NeuroImage 53 (2) 365-372, 2010 .
 Offline version of 3dBAR allows customizable generation of three-dimensional
 structures (ie. with different resolutions or various mesh processing filters).
 Final reconstructions may be exported as polygonal meshes (VRML, X3D) as well as
-volumetric data (NIfTI, vtk). Visit http://www.3dbar.org for more information
-about the software and relase notifications.
+volumetric data (NIfTI, vtk).
 
-Project is supported by an infrastructural grant from the Polish Ministry of Regional
-Development, POIG.02.03.00-00-003/09.
+Visit http://www.3dbar.org for more information about the software and relase
+notifications. Project is supported by an infrastructural grant from the Polish
+Ministry of Regional Development, POIG.02.03.00-00-003/09.
+
+=== Licencing infortmation: ===
+
+This work is licensed under a Creative Commons
+Attribution-NonCommercial-ShareAlike 3.0 Unported License
+(http://creativecommons.org/licenses/by-nc-sa/3.0/)
+
+Licencing information for the source dataset is available at:
+http://software.incf.org/software/waxholm-space
