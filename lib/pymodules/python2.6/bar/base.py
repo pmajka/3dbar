@@ -110,6 +110,7 @@ BAR_CORONAL_MARKER_TEMPLATE = 'Bregma:%f'
 BAR_REGULAR_LABEL_PREFIX    = ''
 BAR_COMMENT_LABEL_PREFIX    = ','
 BAR_SPOT_LABEL_PREFIX       = '.'
+BAR_LABEL_MAX_LENGTH        = 200
 BAR_REGULAR_LABEL_COLOUR    = '#232323'
 BAR_COMMENT_LABEL_COLOUR    = '#FF0000'
 BAR_SPOT_LABEL_COLOUR       = '#FF0000'
@@ -551,7 +552,7 @@ class barStructureLabel(barAtlasSlideElement):
         
         # Public
         self.Location = labelLocation 
-        self.Caption  = self.__validateCaption(strip(labelCaption))
+        self.Caption  = self._validateCaption(strip(labelCaption))
         self.ID = labelID
         
     @classmethod
@@ -664,18 +665,20 @@ class barStructureLabel(barAtlasSlideElement):
         return barAtlasSlideElement._getTextNodeXMLelement(\
                 self, self._prefix + self.Caption)
     
-    def __validateCaption(self, caption):
+    def _validateCaption(self, caption):
         """
-        Validate given text as structure name. Raise ValueError if invalid.
-
+        Validate given caption. Raise ValueError if invalid.
+        
         @param caption: text to be validated
         @type caption: str
-
+        
         @rtype: str
         @return: L{caption}
         """
-        if not validateStructureName(caption):
-            raise ValueError, "Incorrect label caption: '%s'." % caption
+        if len(caption) > BAR_LABEL_MAX_LENGTH:
+            raise ValueError, \
+            "Length of the caption: '%s' larger than allowed %d." % \
+            (caption, BAR_LABEL_MAX_LENGTH)
         else: return caption
     
     #TODO: add assertion
@@ -729,7 +732,7 @@ class barStructureLabel(barAtlasSlideElement):
         @type newCaption: str
         @param newCaption: new caption value
         """
-        self.__caption = self.__validateCaption(newCaption)
+        self.__caption = self._validateCaption(newCaption)
     
     def __getID(self):
         """
@@ -802,6 +805,11 @@ class barRegularLabel(barStructureLabel):
     """
     _prefix = BAR_REGULAR_LABEL_PREFIX
     _color  = BAR_REGULAR_LABEL_COLOUR
+    
+    def _validateCaption(self, caption):
+        if not validateStructureName(caption):
+            raise ValueError, "Incorrect label caption: '%s'." % caption
+        else: return caption
 
 
 class barSpotLabel(barStructureLabel):
@@ -4172,15 +4180,6 @@ class barPretracedSlideRenderer(barPretracedSlide):
             if area.count(None)>0: area = area[0:area.index(None)]
             
             # Determine BestGrowLevel using provied BestFillAlgorithm
-            #TODO: obsolete: BestGrowLevel = self._tracingConf['BestFillAlgorithm'](area)
-            #TODO: Lines below should be obsolete after patching
-            # Sometime it 'selectBestGapFillingLevel' routine crashes,
-            # in such case just put BestGrowLevel = 0; The crach happens ie.
-            # when 2 elements list is provided
-            #try:
-            #    BestGrowLevel = selectBestGapFillingLevel(area)
-            #except:
-            #    BestGrowLevel = 0
             BestGrowLevel = selectBestGapFillingLevel(area)
             imageToTrace  = imgs[BestGrowLevel]
             seedLabel.growlevel = BestGrowLevel
