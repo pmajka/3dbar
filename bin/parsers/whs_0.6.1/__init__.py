@@ -115,7 +115,7 @@ if __name__=='__main__':
         outputDirectory = sys.argv[2]
     except:
         inputDirectory  =\
-        '/home/pmajka/3dbrainatlases/atlases/whs_0.6.1/src/WHS_0.6.1_delineations/WHS_Hi_res.atlas'
+        'atlases/whs_0.6.1/src/WHS_0.6.1_delineations/WHS_Hi_res.atlas'
         outputDirectory = 'atlases/whs_0.6.1/caf/'
     
     ap = AtlasParser(inputDirectory, outputDirectory)
