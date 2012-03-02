@@ -17,18 +17,41 @@ http://service.3dbar.org/downloadForm . Thanks a lot.
 Installing required packages (Ubuntu)
 =====================================
 
-* Installation in Ubuntu 9.10
+
+* Installation in Kubuntu 11.10
 
   1. Install the Visualization Toolkit and other graphics libraries::
 
-       sudo apt-get install libvtk5.2 libvtk5-dev libvtk5.2-qt4 \
+       sudo apt-get install libvtk5.6 libvtk5-dev libvtk5.6-qt4 \
        libvtk5-qt4-dev tk8.5 tk8.5-dev python-vtk libgtkgl2.0-1 \
        libgtkgl2.0-dev libgtkglext1 librsvg2-2 python-nifti
 
   2. Install python related packages::
 
        sudo apt-get install python-gtkglext1 python-rsvg python-opengl \
-       python-numpy python-scipy python-wxgtk2.6
+       python-numpy python-scipy python-wxgtk2.8
+       
+  3. Other packages::
+
+       sudo apt-get install potrace pstoedit python-setuptools python-epydoc
+
+  4. Install Sphinx::
+
+       sudo easy_install -U Sphinx
+
+
+* Installation in Ubuntu 10.10 and Ubuntu 11.04
+
+  1. Install the Visualization Toolkit and other graphics libraries::
+
+       sudo apt-get install libvtk5.4 libvtk5-dev libvtk5.4-qt4 \
+       libvtk5-qt4-dev tk8.5 tk8.5-dev python-vtk libgtkgl2.0-1 \
+       libgtkgl2.0-dev libgtkglext1 librsvg2-2 python-nifti
+
+  2. Install python related packages::
+
+       sudo apt-get install python-gtkglext1 python-rsvg python-opengl \
+       python-numpy python-scipy python-wxgtk2.8
 
   3. Other packages::
 
@@ -61,18 +84,18 @@ Installing required packages (Ubuntu)
        sudo easy_install -U Sphinx
 
 
-* Installation in Ubuntu 10.10 and Ubuntu 11.04
+* Installation in Ubuntu 9.10
 
   1. Install the Visualization Toolkit and other graphics libraries::
 
-       sudo apt-get install libvtk5.4 libvtk5-dev libvtk5.4-qt4 \
+       sudo apt-get install libvtk5.2 libvtk5-dev libvtk5.2-qt4 \
        libvtk5-qt4-dev tk8.5 tk8.5-dev python-vtk libgtkgl2.0-1 \
        libgtkgl2.0-dev libgtkglext1 librsvg2-2 python-nifti
 
   2. Install python related packages::
 
        sudo apt-get install python-gtkglext1 python-rsvg python-opengl \
-       python-numpy python-scipy python-wxgtk2.8
+       python-numpy python-scipy python-wxgtk2.6
 
   3. Other packages::
 
@@ -82,27 +105,6 @@ Installing required packages (Ubuntu)
 
        sudo easy_install -U Sphinx
 
-
-* Installation in Kubuntu 11.10
-
-  1. Install the Visualization Toolkit and other graphics libraries::
-
-       sudo apt-get install libvtk5.6 libvtk5-dev libvtk5.6-qt4 \
-       libvtk5-qt4-dev tk8.5 tk8.5-dev python-vtk libgtkgl2.0-1 \
-       libgtkgl2.0-dev libgtkglext1 librsvg2-2 python-nifti
-
-  2. Install python related packages::
-
-       sudo apt-get install python-gtkglext1 python-rsvg python-opengl \
-       python-numpy python-scipy python-wxgtk2.8
-       
-  3. Other packages::
-
-       sudo apt-get install potrace pstoedit python-setuptools python-epydoc
-
-  4. Install Sphinx::
-
-       sudo easy_install -U Sphinx
 
 
 Generating CAF datasets
