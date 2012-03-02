@@ -28,9 +28,12 @@ The module provides classes necessary to handle basic structure colour processin
 G{importgraph}
 """
 import sys
+import os
 import colorsys
 import numpy as np
-from base import flatten
+from math import sqrt, ceil
+from random import seed, shuffle
+from base import flatten, barCafSlide
 from atlas_indexer import barIndexer
 
 def intColourToFloat(colour, maxValue = 255.):
@@ -93,14 +96,11 @@ class barColor():
 BAR_HIERARHY_ROOT_ELEM_COLOUR = barColor((0.4, 0.4, 0.4))
 BAR_MAX_DEPTH = 6
 
-def get_item_color(ic,d, depth):
+def get_item_color(h, s, v, depth):
     if depth == 0:
         return BAR_HIERARHY_ROOT_ELEM_COLOUR
-    else:
-        h = ic
-        s = 0.3+0.7*d#1. - (depth -1)*.5 / BAR_MAX_DEPTH 
-        v = 0.5 + 0.5*float(depth) / 8
-        return barColor(colorsys.hsv_to_rgb(h,s,v))
+    
+    return barColor(colorsys.hsv_to_rgb(h,s,v))
 
 #-----------------------------------------------------
 # Experimental version of automatic color assgnment
@@ -113,58 +113,214 @@ class barColorIndexer(barIndexer):
     """
     def getSpan(self, elem):
         """
-        @return: number of nodes in elem tree
+        Estimate span of spectrum required by hierarchy element.
+
+        @param elem: hierarchy element for which spectrum span is estimated
+        @type elem: C{self.{L{_groupElement}}
+
+        @return: estimated spectrum span for element L{elem}.
+        @rtype: float
         """
-        return len(flatten(elem.getChildList(depth=1)))
+        if elem.children == []:
+            return 0.
+
+        result = sum(self.getSpan(x) for x in elem.children)
+        if any(x.uid for x in elem.children): #elem.uid:
+            result += 1
+
+        return result
     
     def recolor(self):
         """
-        Function invoking customizable recoloring procedure.
+        Recolor CAF slides.
         """
-        pass
+        pattern = self.properties['FilenameTemplate'].value
+                               
+        for i in self.slides:
+            # assumed version == 0
+            version = 0
+            filename = os.path.join(self.cafDirectory,
+                                    pattern % (i, version))
+
+            barCafSlide.fromXML(filename).recolor(self.colorMapping).writeXMLtoFile(filename)
     
     def setColors(self):
+        """
+        Assign colours to the hierarchy groups elements automatically.
+        """
         brainRootElem = self.hierarchyRootElementName
-        b=self.groups['HippFormation']
+        b = self.groups[brainRootElem]
         
         # this is something like initialization step
-        # Each child of root element has span of colours proportional to the
-        # number of structures that it covers.
-        self.ccmap =  dict(\
-            map(lambda x:\
-            (x.name, self.getSpan(x)), self.groups.itervalues()))
+        # Each descedant of root element has span of sprctrum somehow related
+        # to the structures it covers.
+        self.ccmap = dict((x.name, self.getSpan(x))\
+                          for x in self.groups.itervalues()\
+                          if x.uidList != [])
         
-        zc=0.0
-        ec=2.0
-        self.setChildColours(b, (zc, ec, 0.5), depth=0)
+        # hue circle is now complete
+        zc = 0.0
+        ec = 1.0
+        self.setChildColours(b, (zc, ec), 0, 0)
         
-        # Define new color mapping and use it
-        newColorMap =\
-         dict(map(lambda x: (x.name, x.fill), self.groups.values()))
+    def setChildColours(self, elem, span, es, ev, depth = 0):
+        """
+        Assign colours to elements of hierarchy tree.
+
+        @param elem: hierarchy tree
+        @type elem: C{self.{L{_groupElement}}
+
+        @param span: beginningg (included) and end (excluded) of the spectrum
+                     (hue) span
+        @type span: (float, float)
+
+        @param es: saturation of colour assigned to L{elem} root node
+        @type ev: float
+
+        @param ev: value of colour assigned to L{elem} root node
+        @type ev: float
+
+        @param depth: DO NOT TOUCH
+
+        @note: Colours are defined in HSV colourspace. Range of accepted
+               values is 0-1.
+        """
+        # colour the root element
+        eh = (span[0] + span[1]) / 2. #put the root hue in the middle of
+                                      #a spectrum span
+        elem.fill = get_item_color(eh, es, ev, depth).html
+        
+        if elem.children == []:
+            # no children - nothing to do
+            return
+
+
+        # set all alements without spectrum span assigned white
+        for x in elem.children:
+            if x.name not in self.ccmap:
+                # no span -> no colour
+                # and it propagates to children because span propagates
+                # to parents (so if parent has no span assigned nor have its
+                # children)
+                self.setChildColours(x, (0,0),0,1, depth - 1)
+
+        # the code below needs some initiations
+        if depth == 0:
+            # at the beginning there was a word...
+            # ...and the word initized the random number generator
+            seed(elem.name)
+
+        # use is a fraction of spectrum span inherited by root node children
+        use = 0.9
+
+        # r is hierarchy tree spectrum span size
+        r = span[1] - span[0] #
+
+        # sorted names of hierarchy groups elements of significant spectrum span
+        names = sorted(x.name for x in elem.children if self.ccmap.get(x.name))
+
+        # sorted names of hierarchy groups elements of insignificant spectrum
+        # span (OMG)
+        childless = sorted((x for x in elem.children if self.ccmap.get(x.name) == 0),
+                           key = lambda x: x.name)
+
+        # l is normalised spectrum span estimation vector for hierarchy groups
+        # in names
+        l = np.array([sqrt(self.ccmap[x]) for x in names])
+
+        # sl is normalisation divisor for l
+        sl = float(sum(l))
+
+        if sl != 0:
+            if childless != []:
+                # if any children of insignificant spectrum span estimation
+                # is present, some spectrum span is reserved for them by
+                # incrementation of the normalisation divisor
+                sl += 1
+
+            l = l / sl
+
+        else: #l == []
+            sl = 1.
+
+        # if any group has significant spectrum span assigned...
+        n = len(names)
+        if n > 0:
+
+            # ll is normalised vector of spectrum span beginning for hierarchy
+            # groups in names
+            ll = np.cumsum(l) - l
+
+            # lhb and lhr are (respectively) vectors of beginning and end of
+            # spectrum span for hierarchy groups in names
+            lhb = span[0] + ll * r
+            lht = lhb + l * r * use
+
+            # list of hierarchy nodes and spectrum span assigned to them...
+            groups = zip([self.groups[x] for x in names],
+                         lhb,
+                         lht)
+            # ...shuffled in order to break h:s and h:v corelation in s while
+            # s and v values distribution
+            shuffle(groups)
+
+            # minimum s and v values (it might happen that v < v0, so keep
+            # v0 large enough for that case)
+            s0 = 0.3
+            v0 = 0.5
+
+            # steps computed in a magic way that covers almost half of
+            # s:v area
+            stepV = (0.5 / ceil(sqrt(n))) * (1.0 - v0)
+            stepS = (1. / ceil(n / ceil(sqrt(n)))) * (1.0 - s0)
+
+            # initial s and v values
+            v = 1.
+            s = 1.
+
+            for (c, hb, ht) in groups:
+                if v < v0:
+                    # debug message
+                    print "v < v0! : %f < %f" % (v, v0)
+
+                self.setChildColours(c, (hb, ht), s, v, depth - 1)
     
-    def setChildColours(self, elem, span, depth = 0):
-        d = span[2]
-        s = span[0:2]
-        ic = sum(list(s))/2.
-        #ic = s[1]
-        print elem.name, s,ic, depth
-        elem.fill = get_item_color(ic, d, depth).html
-        
-        if elem.children==[]: return
-       
-        n = sorted([x.name for x in elem.children])
-        l = np.array(map(lambda x: self.ccmap[x], n))
-        l = np.cumsum(l/float(sum(l)))
-        r = abs(s[1]-s[0])
-        #print r, s[0]
-        lk = (l-l[0])*r+s[0]
-        ll = l*r + s[0]
-        #ll = l
-        nn = [self.groups[x] for x in n]
-        k = zip(nn, zip(lk,ll,l))
-        print k 
-        for (c, v) in k:
-            self.setChildColours(c, v, depth+1)
+                s -= stepS / v # the lower v, the greater s distance
+                               # is necessary to keep the chroma distance
+                if s < s0:
+                    v -= stepV
+                    s = 1.
+
+        # ...and if any has insignificant span assigned
+        n = len(childless)
+        if n > 0:
+            # redundant code - see comments in the if above
+            s0 = 0.3
+            v0 = 0.5
+
+            stepV = (0.5 / ceil(sqrt(n))) * (1.0 - v0)
+            stepS = (1. / ceil(n / ceil(sqrt(n)))) * (1.0 - s0)
+
+            # distribute spectrum span reserved for hierarchy groups of
+            # insignificant span
+            childlessH = [span[0] + r * (sl - 1.) / sl + r * use / sl * (2. * i + 1.) / 2 / n for i in xrange(n)]
+            groups = zip(childless, childlessH)
+            shuffle(groups)
+
+            v = 1.
+            s = 1.
+            for c, h in groups:
+                if v < v0:
+                    # debug message
+                    print "v < v0! : %f < %f" % (v, v0)
+
+                c.fill = get_item_color(h, s, v, depth - 1).html
+    
+                s -= stepS / v
+                if s < s0:
+                    v -= stepV
+                    s = 1.
+
 
 if __name__ == '__main__':
     pass
