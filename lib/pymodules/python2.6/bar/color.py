@@ -44,9 +44,9 @@ def floatColourToInt(colour, maxValue = 255):
 
 class barColor():
     def __init__(self, (r, g, b)):
-        self.r=r
-        self.g=g
-        self.b=b
+        self.r = r
+        self.g = g
+        self.b = b
     
     @classmethod
     def fromInt(barColor, (rInt, bInt, gInt)):
@@ -92,15 +92,30 @@ class barColor():
     html= property(__getHTMLcolor)
     hsv = property(__getHSVTuple)
 
+# hue circle is now complete
+BAR_DEFAULT_H_SPAN = (0., 1.)
+BAR_DEFAULT_S = 0.
+BAR_DEFAULT_V = 0.4
 
-BAR_HIERARHY_ROOT_ELEM_COLOUR = barColor((0.4, 0.4, 0.4))
-BAR_MAX_DEPTH = 6
+def get_item_color(h, s, v):
+    """
+    Convert colour from HSV colourspace to HTML format.
 
-def get_item_color(h, s, v, depth):
-    if depth == 0:
-        return BAR_HIERARHY_ROOT_ELEM_COLOUR
-    
-    return barColor(colorsys.hsv_to_rgb(h,s,v))
+    @param h: colour hue
+    @type h: float
+
+    @param s: colour saturation
+    @type s: float
+
+    @param v: colour value
+    @type v: float
+
+    @return: colour in HTML format
+    @rtype: str
+
+    @note: Range of accepted values in HSV colourspace is 0-1.
+    """
+    return barColor.fromHSVTuple((h, s, v)).html
 
 #-----------------------------------------------------
 # Experimental version of automatic color assgnment
@@ -133,6 +148,8 @@ class barColorIndexer(barIndexer):
     def recolor(self):
         """
         Recolor CAF slides.
+
+        @return: self
         """
         pattern = self.properties['FilenameTemplate'].value
                                
@@ -143,13 +160,41 @@ class barColorIndexer(barIndexer):
                                     pattern % (i, version))
 
             barCafSlide.fromXML(filename).recolor(self.colorMapping).writeXMLtoFile(filename)
+
+        return self
     
-    def setColors(self):
+    def setColors(self, name = None, hSpan = BAR_DEFAULT_H_SPAN,
+                                     s = BAR_DEFAULT_S,
+                                     v = BAR_DEFAULT_V):
         """
         Assign colours to the hierarchy groups elements automatically.
+
+        @param name: name of hierarchy tree root element; if not given assumed
+                     to be C{self.L{hierarchyRootElementName}}
+        @type name: str
+
+        @param hSpan: hue span assigned to the hierarchy tree
+        @type hSpan: (float, float)
+
+        @param s: saturation of the hierarchy tree root element
+        @type s: float
+
+        @param v: value of the hierarchy tree root element
+        @type v: float
+
+        @return: self
+
+        @note: Colours are defined in HSV colourspace. Range of accepted
+               values is 0-1.
         """
-        brainRootElem = self.hierarchyRootElementName
-        b = self.groups[brainRootElem]
+        if name == None:
+            name = self.hierarchyRootElementName
+
+        b = self.groups[name]
+
+        # at the beginning there was a word...
+        # ...and the word initialized the random number generator
+        seed(name)
         
         # this is something like initialization step
         # Each descedant of root element has span of sprctrum somehow related
@@ -158,12 +203,11 @@ class barColorIndexer(barIndexer):
                           for x in self.groups.itervalues()\
                           if x.uidList != [])
         
-        # hue circle is now complete
-        zc = 0.0
-        ec = 1.0
-        self.setChildColours(b, (zc, ec), 0, 0)
+        self.__setChildColours(b, hSpan, s, v)
+
+        return self
         
-    def setChildColours(self, elem, span, es, ev, depth = 0):
+    def __setChildColours(self, elem, span, es, ev):
         """
         Assign colours to elements of hierarchy tree.
 
@@ -180,15 +224,13 @@ class barColorIndexer(barIndexer):
         @param ev: value of colour assigned to L{elem} root node
         @type ev: float
 
-        @param depth: DO NOT TOUCH
-
         @note: Colours are defined in HSV colourspace. Range of accepted
                values is 0-1.
         """
         # colour the root element
         eh = (span[0] + span[1]) / 2. #put the root hue in the middle of
                                       #a spectrum span
-        elem.fill = get_item_color(eh, es, ev, depth).html
+        elem.fill = get_item_color(eh, es, ev)
         
         if elem.children == []:
             # no children - nothing to do
@@ -202,13 +244,9 @@ class barColorIndexer(barIndexer):
                 # and it propagates to children because span propagates
                 # to parents (so if parent has no span assigned nor have its
                 # children)
-                self.setChildColours(x, (0,0),0,1, depth - 1)
+                self.__setChildColours(x, (0., 0.), 0., 1.)
 
-        # the code below needs some initiations
-        if depth == 0:
-            # at the beginning there was a word...
-            # ...and the word initized the random number generator
-            seed(elem.name)
+
 
         # use is a fraction of spectrum span inherited by root node children
         use = 0.9
@@ -246,6 +284,8 @@ class barColorIndexer(barIndexer):
         # if any group has significant spectrum span assigned...
         n = len(names)
         if n > 0:
+            # the code below distributes groups in the s:v plane and
+            # independently assigns them the hue span
 
             # ll is normalised vector of spectrum span beginning for hierarchy
             # groups in names
@@ -269,8 +309,9 @@ class barColorIndexer(barIndexer):
             s0 = 0.3
             v0 = 0.5
 
-            # steps computed in a magic way that covers almost half of
-            # s:v area
+            # steps computed in a magic way that covers almost whole v:chroma
+            # space (the space is triangle since chroma value is limited by
+            # v value) when iterating over groups
             stepV = (0.5 / ceil(sqrt(n))) * (1.0 - v0)
             stepS = (1. / ceil(n / ceil(sqrt(n)))) * (1.0 - s0)
 
@@ -283,7 +324,7 @@ class barColorIndexer(barIndexer):
                     # debug message
                     print "v < v0! : %f < %f" % (v, v0)
 
-                self.setChildColours(c, (hb, ht), s, v, depth - 1)
+                self.__setChildColours(c, (hb, ht), s, v)
     
                 s -= stepS / v # the lower v, the greater s distance
                                # is necessary to keep the chroma distance
@@ -314,7 +355,7 @@ class barColorIndexer(barIndexer):
                     # debug message
                     print "v < v0! : %f < %f" % (v, v0)
 
-                c.fill = get_item_color(h, s, v, depth - 1).html
+                c.fill = get_item_color(h, s, v)
     
                 s -= stepS / v
                 if s < s0:
