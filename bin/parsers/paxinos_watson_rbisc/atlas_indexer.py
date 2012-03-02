@@ -304,7 +304,9 @@ class AtlasIndexer:
                  {'type':'CAFCreator','value':' '.join(CONF_CONTACT_COMMENT)},
                  {'type':'CAFCreatorEmail','value':''.join(CONF_CONTACT_EMAIL)},
                  {'type':'CAFCompilationTime',\
-                         'value':datetime.datetime.utcnow().strftime("%F %T")}]
+                         'value':datetime.datetime.utcnow().strftime("%F %T")},
+                 {'type':'CAFAxesOrientation', 'value':'LIA or RIA - symmetric'},
+                 {'type':'CAFFullName','value':'The rat brain in stereotaxic coordinates, 6th edition.'}]
 
         for entry in DataToInsert:
             newAtlasPropertiesElement = self.doc.createElement('property')
@@ -385,11 +387,13 @@ class AtlasIndexer:
 
         try:
             newHierarchyElem.setAttribute('fullname', self.fullNameDictionary[groupName.strip()])
+
         except:
             newHierarchyElem.setAttribute('fullname', groupName.strip())
         
         if self.globaIndex.has_key(groupName):
             newHierarchyElem.setAttribute('fill',"#"+ self.globaIndex[groupName]['attrubutes']['fill'] )
+
         else:
             newHierarchyElem.setAttribute('fill',"#777777")
 
@@ -400,6 +404,7 @@ class AtlasIndexer:
             # index
             uid = str(self.globaIndex[groupName]['attrubutes']['uid'])
             newHierarchyElem.setAttribute('uid', uid )
+
         except KeyError:
             self._printRed("Structure %s not found while generating hierarchy" % (groupName))
 
@@ -456,6 +461,7 @@ class AtlasIndexer:
                 if self.fullNameDictionary.has_key(abbrev):
                     self._printRed("Fullname for structure %s defined more than once. Skipping..."% abbrev)
                     continue
+
                 else:
                     self.fullNameDictionary[abbrev] = fullname
                     if self.globaIndex.has_key(abbrev):
