@@ -1489,14 +1489,14 @@ class barIndexer(barIndexerObject):
         """
         Assign colours to the hierarchy groups. Update cached hierarchy
         group name to colour mapping.
-
+        
         @param sourceDictionary: hierarchy group name to colour assignment
         @type sourceDictionary: {str : str}
-
+        
         @param dummyElementColor: colour assigned to groups not included in
                                  L{sourceDictionary}
         @type dummyElementColor: str
-
+        
         @note: Color mapping has to be assigned after creating strucutre
                hierarchy - either flat or structured.
         """
@@ -1515,7 +1515,7 @@ class barIndexer(barIndexerObject):
             else:
                 group.fill = "#" + newCol
     
-    def setColorMappingFromFile(self, colorFilename, nameCol = 0, colourCol = 1 ):
+    def setColorMappingFromFile(self, colorFilename, nameCol = 0, colourCol = 1):
         """
         Assign colours to the hierarchy groups. Update cached hierarchy
         group name to colour mapping.

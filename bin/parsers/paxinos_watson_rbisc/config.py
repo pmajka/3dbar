@@ -238,224 +238,148 @@ re_fontsizepx=re.compile(r'([0-9]+)px')
 """ Regexp for fontsize in pixels. """
 #}
 
-CONF_FILL_COLOURS=\
-{u'MA3': '5D8AA8', u'gr': 'F0F8FF', u'CPO': 'E32636', u'VMHDM': 'EFDECD',
-u'Su3C': 'E52B50', u'scc': 'CD2682', u'GrDG': '9F2B68', u'SIB': 'ED3CCA',
-u'7Cb': 'F19CBB', u'LPAG': 'AB274F', u'alv': 'FFBF00', u'SPa': 'FF7E00',
-u'5Sol': 'CC8899', u'scp': 'FF033E', u'VMHSh': '00DDDD', u'GiV': '9966CC',
-u'tz': 'A4C639', u'ts': '915C83', u'MedL': 'FAEBD7', u'LaDL': '91A3B0', u'GiA':
-'0000FF', u'SPO': '008000', u'VM': '00755E', u'InC': '8DB600', u'CPu': 'FBCEB1',
-u'SPF': '00FFFF', u'g7': '7FFFD0', u'Sp5O': 'F2F3F4', u'AHiAL': '3B444B',
-u'CGPn': 'E9D66B', u'vert': 'B2BEB5', u'GP': '87A96B', u'Sp5C': 'FF9966',
-u'SpV': '6D351A', u'Cir': 'FDEE00', u'SimA': '6E7F80', u'PSTh': 'FF2052',
-u'apmf': 'E9692C', u'LPMR': 'FFF5EE', u'AHC': '89CFF0', u'AHA': 'A1CAF1',
-u'LHb': 'F4C2C2', u'SNL': 'FAE7B5', u'AngT': '848482', u'AHP': '98777B',
-u'SuML': 'BCD4E6', u'SNR': '9F8170', u'Gl': 'F5F5DC', u'Gi': '3D2B1F', u'aci':
-'CB4154', u'VLi': 'FE6F5E', u'10n': 'FFEBCD', u'DTM': '318CE7', u'pms':
-'ACE5EE', u'3V': 'FAF0BE', u'me5': '0000FF', u'10Cb': '333399', u'M1': '0247FE',
-u'3N': 'A2A2D0', u'EPlA': '6699CC', u'M2': '00DDDD', u'E/OV': 'DE5D83', u'VLH':
-'79443B', u'LSD': '0095B6', u'10N': 'CC0000', u'VLL': '0070FF', u'CeCv':
-'B5A642', u'LSO': 'CB4154', u'REth': '1DACD6', u'EVe': '66FF00', u'VLG':
-'BF94E4', u'LSI': 'C32148', u'LSV': 'FF007F', u'PaLM': '08E8DE', u'LSS':
-'D19FE8', u'IOVL': 'F4BBFF', u'GrA': 'FF55A3', u'GrO': 'FB607F', u'LPBCr':
-'004225', u'ZL': 'CD7F32', u'ZI': '964B00', u'Sim': 'E34234', u'S1BF': 'A52A2A',
-u'BLV': 'FFC1CC', u'Mi': 'E7FEFF', u'BLP': 'F0DC82', u'VLPAG': '480607',
-u'PiSt': '800020', u'STMAL': 'DEB887', u'STMAM': 'CC5500', u'MiTg': 'E97451',
-u'Sp5I': '8A3324', u'IGL': 'BD33A4', u'BLA': '702963', u'Mx': '536872', u'VTAR':
-'5F9EA0', u'ME': '91A3B0', u'MD': '006B3C', u'Zo': 'F88379', u'mfba': 'EEE8AA',
-u'MM': 'FFF600', u'ML': '1E4D2B', u'31': 'A3C1AD', u'PBG': '0247FE', u'hbc':
-'78866B', u'MT': 'FFEF00', u'MV': 'FF0800', u'MS': 'E4717A', u'Su3': 'A2A2D0',
-u'PLH': '0FC0FC', u'MnM': '6699CC', u'SolRL': 'C41E3A', u'SolL': '00CC99',
-u'SolM': '960018', u'FV': 'EB4C42', u'9n': 'FF0038', u'S2': 'FFA6C9', u'S1':
-'B31B1B', u'SMT': '99BADD', u'SolC': 'ED9121', u'PnV': '92A1CF', u'FC':
-'ACE1AF', u'xicp': '4997D0', u'RIP': 'FADADD', u'PnO': 'EC3B83', u'MnA':
-'FF033E', u'SolV': '2A52BE', u'PnC': 'F7E7CE', u'EW': 'CF1020', u'V2MM':
-'DFFF00', u'V2ML': '7FFF00', u'PrCnF': 'FFB7C5', u'Fu': 'CD5C5C', u'MDL':
-'7B3F00', u'MDM': 'FFA700', u'MDC': '98817B', u'La': '734F96', u'LPBC':
-'D2691E', u'chp': 'E4D00A', u'4/5Cb': 'FBCCE7', u'5Cb': '00FF6F', u'AuV':
-'0047AB', u'AP': '08457E', u'Fl': '9BDDFF', u'APTD': '8FCFD1', u'SubV':
-'002E63', u'Stg': '8C92AC', u'RLi': 'B87333', u'4Sh': '996666', u'F': 'FF3800',
-u'Sp': 'FF7F50', u'8cn': 'F88379', u'aca': '0095B6', u'MdD': '893F45', u'Au1':
-'FBEC5D', u'SubG': 'B31B1B', u'pfs': 'FFD12A', u'SubB': 'FFF8DC', u'V':
-'FFF8E7', u'Sc': 'FFBCD9', u'MPB': 'CC0000', u'InG': 'DC143C', u'MdV': 'BE0032',
-u'SubI': '00FFFF', u'StA': '00B7EB', u'f': 'FFFF31', u'LPGiE': 'F0E130', u'ml':
-'00008B', u'LPGiA': '654321', u'DLEnt': 'E4D96F', u'ST': 'A40000', u'mt':
-'08457E', u'SO': 'C2B280', u'mp': '986960', u'LTe': 'DAA520', u'MoCb': '000000',
-u'VEn': '536878', u'SG': 'B8860B', u'LPtA': '013220', u'JPLH': '1A2421',
-u'SolIM': 'BDB76B', u'Ld': '483C32', u'ERS': 'E34234', u'mofr': '66FF00',
-u'CnFV': '003366', u'CAT': '556B2F', u'AcbSh': 'FF8C00', u'CnFI': '779ECB',
-u'BAC': '03C03C', u'AID': 'F28500', u'DPO': '966FD6', u'CnFD': 'C23B22', u'ic':
-'FFCC00', u'PMD': 'FFF600', u'gcc': '003399', u'OPC': 'FF6FFF', u'LC': '872657',
-u'LA': '8B0000', u'MiA': 'E9967A', u'LO': '560319', u'LM': '3C1414', u'IntPPC':
-'2F4F4F', u'MPT': 'FF007F', u's5': 'FF003F', u'1': 'FFA812', u'LT': '483C32',
-u'acp': '08E8DE', u'VPM': '00CED1', u'cst': '9400D3', u'JxO': '00693E', u'A':
-'5218FA', u'fr': 'DA9100', u'vsc': 'FFA6C9', u'sp5': 'DA3287', u'AHiPM':
-'FAD6A5', u'AHiPL': 'B94E48', u'aot': 'C154C1', u'fi': '004B49', u'a': 'CC00CC',
-u'LHbM': 'F4BBFF', u'PlPAG': 'FF1493', u'DMTg': 'FF9933', u'SimB': '00BFFF',
-u'D3V': '014421', u'CA2': 'C19A6B', u'CA1': 'EDC9AF', u'STh': '696969', u'st':
-'1E90FF', u'123': '77DD77', u'sm': 'D71868', u'InCSh': '85BB65', u'9a,bCb':
-'967117', u'sf': '00009C', u'Rt': 'E1A95F', u'rLL': 'C2B280', u'6Cb': '614051',
-u'SM': 'CD5B45', u'PRh': 'F0EAD6', u'Re': '1034A6', u'tth': '7DF9FF', u'csc':
-'918151', u'Ro': '00FF00', u'Rh': '6F00FF', u'SolVL': 'F4BBFF', u'cll':
-'CCFF00', u'LV': 'BF00FF', u'AOE': '3F00FF', u'AOD': '8F00FF', u'21': 'FFFF00',
-u'IPDM': '50C878', u'23': '96C8A2', u'lo': 'C19A6B', u'AOM': '801818', u'AOL':
-'B53389', u'iml': 'F400A1', u'SPTg': 'E5AA70', u'AOV': '4D5D53', u'STSL':
-'4F7942', u'GI': '007FFF', u'AOP': '6C541E', u'RL': 'B22222', u'RCh': 'E2725B',
-u'RI': 'E25822', u'ZIV': 'F7E98E', u'CeL': 'F08080', u'ZIR': 'FF004F', u'PrC':
-'228B22', u'PrL': 'A67B5B', u'L': '0072BB', u'IPl': '86608E', u'LPO': 'F64A8A',
-u'ZID': 'FF00FF', u'MEntR': 'FF77FF', u'icpx': 'E48400', u'ZIC': 'CC6666',
-u'PrS': 'DCDCDC', u'SFi': 'E49B0F', u'LPB': 'F8F8FF', u'Gr': '6082B6', u'SubCV':
-'D4AF37', u'IPC': 'FFD700', u'STMPM': '996515', u'STMPL': 'FCC200', u'IPF':
-'FFDF00', u'STMPI': 'A8E4A0', u'IPI': '808080', u'Sag': '465945', u'IPL':
-'00FF00', u'DpG': '008000', u'SFO': '00A550', u'SubCD': '66B032', u'SubCA':
-'ADFF2F', u'PeFLH': 'A99A86', u'MRe': '00FF7F', u'2bCb': '663854', u'MeAD':
-'F984EF', u'STD': '555555', u'APir': 'E9D66B', u'VA': '0ABAB5', u'DCGr':
-'C90016', u'PaPo': '00B7EB', u'ec': 'DF73FF', u'DLPAG': 'F0FFF0', u'HDB':
-'726631', u'sox': '800020', u'ICjM': 'D1E231', u'PoMn': 'DEB887', u'Sph':
-'71A6D2', u'BMA': 'FCF75E', u'LPLR': 'B2EC5D', u'rs': '138808', u'SuMM':
-'E3A857', u'BMP': '00416A', u'MCPC': '4B0082', u'BAOT': 'CC5500', u'5TT':
-'FF4F00', u'LPLC': '5A4FCF', u'E5': 'CD9575', u'dsc': '009000', u'MCPO':
-'FFFFF0', u'MVPO': '00A86B', u'asp': 'D73B3E', u'DLG': 'A50B5E', u'PVP':
-'B19CD9', u'LPBV': 'BDDA57', u'EF': '29AB87', u'EA': '4CBB17', u'LPBS':
-'C3B091', u'DLL': 'F0E68C', u'5Ma': '087830', u'RAPir': 'D6CADD', u'LPBI':
-'26619C', u'CST': 'FEFE22', u'LPBD': '36454F', u'LPBE': 'B57EDC', u'EP':
-'E6E6FA', u'VP': 'DEAA88', u'SolDM': 'C4C3D0', u'SolDL': '9457EB', u'MGD':
-'EE82EE', u'SHy': '008B8B', u'MGM': '967BB6', u'vtgx': 'FBA0E3', u'MGV':
-'7CFC00', u'MPtA': 'FFF700', u'PMCo': 'FFFACD', u'SHi': 'FDD5B1', u'SChDL':
-'FD0E35', u'CeC': 'ADD8E6', u'MeAV': 'B5651D', u'CeM': 'E66771', u'7ni':
-'EEDC82', u'ECu': 'E0FFFF', u'RMg': '446CCF', u'MoDG': 'FAFAD2', u'SChVM':
-'D99058', u'Eth': '536895', u'VPPC': '8B4513', u'ATg': 'FADA5E', u'FrA':
-'FFB6C1', u'PMnR': '7B3F00', u'LRtPC': 'FF5C5C', u'RMC': '87CEEB', u'1b':
-'778899', u'fmj': 'B38B6D', u'fmi': 'E68FAC', u'Post': 'FFFFED', u'VTA':
-'20B2AA', u'8Cb': '00FF00', u'B': '32CD32', u'IMD': 'FAF0E6', u'IMG': '534B4F',
-u'IntDM': 'E62020', u'VTM': 'FFBD88', u'PDR': 'FF00FF', u'Fr3': 'FF0090',
-u'RAmb': 'AAF0D1', u'ictd': 'F8F4FF', u'vlh': '4B5320', u'GrC': 'DE3163',
-u'Rbd': 'FBEC5D', u'tfp': '6050DC', u'Xi': '979AAA', u'CLi': 'FF8243', u'VMH':
-'800000', u'PLCo1': 'B03060', u'vBrain': 'E0B0FF', u'LAcbSh': '915F6D', u'CA3':
-'1560BD', u'r': '73C2FB', u'MPOL': 'E5B73B', u'GlA': 'ED872D', u'LMol':
-'0000CD', u'AmbC': 'A3C1AD', u'RtTg': 'E2062C', u'IMA': 'BFFF00', u'DM':
-'F3E5AB', u'DI': '1C352D', u'PoDG': 'DDA0DD', u'DG': '0067A5', u'DTgC':
-'9370DB', u'STMV': 'BB3385', u'LaVM': 'C19A6B', u'DA': 'C9DC87', u'RPa':
-'00FA9A', u'V1M': '48D1CC', u'V1B': 'FDBCB4', u'DTgP': '191970', u'DT':
-'004953', u'STMA': 'FFC40C', u'DR': '3EB489', u'DS': '98FF98', u'Pir1':
-'FFE4E1', u'ASt': 'FAEBD7', u'xscp': 'CCCCFF', u'PaS': '73A9C2', u'Dk':
-'AE0C00', u'PaV': 'ADDFAD', u'Unlabeled': '30BA8F', u'7L': '997A8D', u'PaXi':
-'C54B8C', u'BIC': 'FFDB58', u'RPC': '21421E', u'Ect': '006633', u'POH':
-'F6ADC6', u'VTT1': '2A8000', u'S1HL': 'FADA5E', u'PSol': '9955BB', u'DTT':
-'000080', u'LPGi': 'FFA343', u'pyx': 'A4DDED', u'IPACL': '01796F', u'PaAP':
-'008000', u'GrCb': '8A2BE2', u'Pa5': 'FDF5E6', u'Pa6': '796878', u'PS':
-'FFC0CB', u'IRtA': '674C47', u'TuLH': '808000', u'PoT': '6B8E23', u'PCom':
-'3C341F', u'M': '9AB973', u'VCP': 'B784A7', u'S1FL': 'FF7F00', u'PtPC':
-'FB9902', u'PtPD': 'FFA500', u'VCCap': 'FF9F00', u'PV': 'F78FA7', u'bsc':
-'DA70D6', u'2': 'FFD1DC', u'Aq': '779ECB', u'SLu': '654321', u'MCLH': '414A4C',
-u'p1PAG': '0F4D92', u'imvc': 'FF6E4A', u'VMPO': '002147', u'VTT': 'C04000',
-u'ArcLP': '273BE2', u'DCl': '682860', u'5MHy': 'DDBEC3', u'MoS': 'BCD4E6',
-u'DCMo': 'AFEEEE', u'12n': '987654', u'6RB': '21ABCD', u'PAG': '9BC4E2',
-u'STIA': 'DDADAF', u'AL': '654321', u'och': 'DA8A67', u'3ECIC': 'ABCDEF',
-u'mfbb': 'E6BE8A', u'eMC': 'E30022', u'ocb': 'F984E5', u'12N': 'DE3163', u'3Cb':
-'DDA0DD', u'MPBE': 'DB7093', u'5ADi': '96DED1', u'VCAGr': 'C9C0BB', u'3n':
-'BC987E', u'IAM': '78184A', u'MEE': '00CC99', u'pcuf': 'FFFF31', u'df':
-'50C878', u'IAD': 'AEC6CF', u'PLCo': 'CFCFC4', u'b': 'ECEBBD', u'3/4': 'F49AC2',
-u'hif': 'FFB347', u'X': '00FFFF', u'PH': 'FF6961', u'KF': 'CB99C9', u'bas':
-'FDFD96', u'PCRt': '40404F', u'eml': 'FFE5B4', u'PHA': 'FFCC99', u'IPAC':
-'EB4C42', u'mcer': 'FADFAD', u'PHD': 'FF69B4', u'dtgx': 'F0EAD6', u'4V':
-'00B7EB', u'8vn': 'E6E200', u'Pr': '1C39BB', u'DMC': '32127A', u'DMD': 'D3D3D3',
-u'Py': 'F77FBE', u'DMV': '701C1C', u'Pe': 'CC3333', u'Pk': 'FE28A2', u'Pi':
-'EC5800', u'Pn': '000F89', u'Po': '123524', u'PR': 'CC7722', u'IPACM': '673147',
-u'PP': 'FF9966', u'p1Rt': 'E7ACCF', u'Pr5VL': 'FF4500', u'PT': '93C572',
-u'6aCb': 'F4F0EC', u'dlo': '8E4585', u'RChL': 'DDA0DD', u'MedDL': 'FFA07A',
-u'PC': 'B0E0E6', u'3': 'FF8F00', u'PF': '003153', u'DIEnt': 'DD00FF', u'9cCb':
-'836953', u'ECIC3': '0F0F0F', u'PN': '800080', u'VG1': 'A020F0', u'PL':
-'69359C', u'PM': '9678B6', u'C': 'FE4EDA', u'CxA1': '50404D', u'P7': 'FDDDE6',
-u'P5': 'E5E4E2', u'asc7': 'E30B5D', u'MPOM': '66DDAA', u'S1Sh': '915F6D',
-u'APTV': 'E25098', u'MPOC': 'B3446C', u'azac': '826644', u'DCDp': 'FF33CC',
-u'Pr5DM': 'E3256B', u'OPT': 'FF0000', u'RR': 'EF3038', u'unx': 'FE2712', u'7SH':
-'A52A2A', u'IPDL': 'C71585', u'MHb': 'AB4E52', u'SPFPC': 'E25098', u'PeF':
-'FF7518', u'LDTg': 'F1A7FE', u'InfS': 'D70040', u'll': '0892D0', u'dsc/oc':
-'A76BCF', u'aa': '4997D0', u'MePD': 'B03060', u'Bo': 'FFA089', u'AcbC':
-'AF4035', u'cc': '00CCCC', u'ILL': 'FF007F', u'cg': 'F9429E', u'PCGS': '674846',
-u'LR4V': 'CA1F7B', u'prf': 'E32636', u'VRe': 'FF66CC', u'9Cb': 'AA98A9', u'cp':
-'905D5D', u'cu': 'AB4E52', u'S1DZO': '65000B', u'Lth': 'D40000', u'VMHC':
-'BC8F8F', u'Pir1a': '0038A8', u'DCIC': '002366', u'Sol': '014421', u'6bCb':
-'CA2C92', u'DCFu': '6B3FA0', u'pc': 'E0115F', u'VVL': 'FFFFFF', u'VIEnt':
-'FF0028', u'C3': 'BB6528', u'C2': 'E18E96', u'C1': 'A81C07', u'PCRtA': '80461B',
-u'4Cb': 'B7410E', u'Gem': '00563F', u'STSM': 'FF2800', u'6a': 'FF6700', u'6b':
-'F4C430', u'lofr': '23297A', u'IntA': 'FF8C69', u'CM': 'FF91A4', u'CL':
-'00A693', u'CC': '967117', u'CB': 'ECD540', u'CG': 'F4A460', u'6n': '967117',
-u'S1T': '92000A', u'S1J': '507D2A', u'PLd': '082567', u'IntP': 'CBA135', u'PLi':
-'FF2000', u'VLPO': 'ED1C24', u'PLV': '76FF7A', u'p1': '2E8B57', u'mlf':
-'321414', u'LatPC': 'F0FFFF', u'Ge5': 'FFBA00', u'Cl': '704214', u'7DI':
-'8A795D', u'MnPO': '009E60', u'7DL': '882D17', u'7DM': 'C0C0C0', u'6N':
-'CB410B', u'DMSp5': '87CEEB', u'Cx': 'CF71AF', u'LPMC': '708090', u'str':
-'FF355E', u'IEn': '003399', u'mlx': '933D41', u'5b': 'FFEF00', u'MO': '100C08',
-u'Cu': 'FFFAFA', u'Ct': '00BFFF', u'DpWh': 'FEFDFF', u'vesp': 'A7FC00', u'is':
-'00FF7F', u'AIV': '4682B4', u'AIP': 'FADA5E', u'CVL': '5D3954', u'7VI':
-'FFCC33', u'LOT': 'FAD6A5', u'7VM': 'D2B48C', u'ia': 'F94D00', u'Bar': 'F400A1',
-u'PPy': 'E75480', u'3PC': '483C32', u'5Pt': '8B8589', u'I8': 'D0F0C0', u'dhc':
-'F4C2C2', u'1Cb': '734F96', u'7n': '008080', u'V1': '367588', u'SOR': 'CD5700',
-u'InWh': 'CE2029', u'DP': 'D8BFD8', u'PPT': 'DE6FA1', u'ePC': 'FC89AC', u'Cop':
-'3FFF00', u'pcer': 'E08D3C', u'RSD': 'EF98AA', u'VG': 'DBD7D2', u'I': 'EEE600',
-u'IP': 'FF6347', u'IS': '746CC0', u'ANS': '004040', u'VL': '808080', u'PaR':
-'967117', u'VO': '417DC1', u'II': 'FFF0F5', u'VOLT': 'B57281', u'VS': '00FFEF',
-u'IM': '823535', u'IL': '8A496B', u'Y': '66023C', u'EAM': '00FF6F', u'PrEW':
-'F0E68C', u'IB': 'FFB300', u'Com': '3CD070', u'ID': 'FF9999', u'IG': '4166F5',
-u'IF': 'C8A2C8', u'Ve': '0BDA51', u'DPPn': '5B92E5', u'IRt': 'FFFF66', u'PDPO':
-'FF5A36', u'MTu': '7B1113', u'LVe': 'AE2029', u'costr': 'E1AD21', u'In':
-'990000', u'mfb': 'FFCC00', u'DLO': 'D3003F', u'AmbSC': 'F3E5AB', u'BL':
-'C5B358', u'5T': 'C80815', u'DTT1': 'C2B280', u'das': '43B3AE', u'DRV':
-'B39EB5', u'DRI': '8F00FF', u'V2L': 'FFD800', u'5N': '7F00FF', u'DRL': 'CCCCFF',
-u'RVRG': '990000', u'DRC': 'EE82EE', u'32': '40826D', u'DRD': '922724', u'PIL':
-'9F1D35', u'LRtS5': 'DA1D81', u'Tu1': 'E6E6FA', u'PIF': '9F00FF', u'RVL':
-'004242', u'C1/A1': '645452', u'EPl': 'F5DEB3', u'321': 'C08081', u'IOK':
-'F5F5F5', u'4': 'A2ADD0', u'SMV': 'FF43A4', u'5': '893F45', u'IOD': 'FC0FC0',
-u'IOC': 'FC8EAC', u'IOB': '007474', u'IOA': 'FFFF00', u'5a': '738678', u'opt':
-'FEFE33', u'PnR': '9ACD32', u'D': '0014A8', u'sumx': '2C1608', u'RPF': '5D8AA8',
-u'psf': 'F0F8FF', u'bic': 'FE59C2', u'IPA': 'EFDECD', u'T': 'E52B50', u'ReIC':
-'CD2682', u'IOBe': '9F2B68', u'scpd': 'FFDEAD', u'2Cb': 'F19CBB', u'Op':
-'AB274F', u'MePV': 'B76E79', u'PDTg': 'FF7E00', u'STLI': '9966CC', u'CEnt':
-'A4C639', u'STLJ': 'F2F3F4', u'StHy': 'CD9575', u'VCPO': '915C83', u'STLV':
-'FAEBD7', u'STLP': '0000FF', u'OV': '008000', u'Pir': '8DB600', u'OT': 'FBCEB1',
-u'B9': '00FFFF', u'ECIC': '7FFFD0', u'SCh': '4B5320', u'VCA': '3B444B', u'PTg':
-'E9D66B', u'ROb': 'B2BEB5', u'PtPR': '87A96B', u'VDB': 'FF9966', u'APT':
-'6D351A', u'STLD': 'FFBF00', u'Pa4': 'CFB53B', u'VDM': '6E7F80', u'2/3Cb':
-'0047AB', u'SuG': 'FF2052', u'IPR': '007FFF', u'SCO': '4169E1', u'LDDM':
-'89CFF0', u'6cCb': 'A1CAF1', u'olfa': 'F4C2C2', u'icf': '21ABCD', u'/':
-'FAE7B5', u'SuV': 'FFD12A', u'Arc': '848482', u'SuS': '98777B', u'DEn':
-'BCD4E6', u'VCl': 'A0785A', u'icp': 'F5F5DC', u'LOT1': 'F0E130', u'AMV':
-'FE6F5E', u'12GH': '000000', u'ArcMP': 'FFEBCD', u'PBP': '318CE7', u'12':
-'966FD6', u'veme': 'ACE5EE', u'MnR': 'FAF0BE', u'PFl': '0000FF', u'plf':
-'333399', u'Su5': 'C19A6B', u'Li': 'FAFEFD', u'LRt': '592720', u'dcw': '007BA7',
-u'dcs': '8A2BE2', u'AuD': 'DE5D83', u'SNCV': '79443B', u'IVF': 'FF4040',
-u'3/4Cb': 'FFFDD0', u'MPA': '0070FF', u'MPO': 'B5A642', u'DMPAG': 'DCD0FF',
-u'11N': '1DACD6', u'oc': '8B008B', u'PaMP': 'BF94E4', u'Me5': 'C32148', u'SNCD':
-'177245', u'PaMM': 'CC4E5C', u'LHbL': 'D19FE8', u'SNCM': 'FFCBA4', u'IntDL':
-'C9A0DC', u'IC': 'FF55A3', u'VPL': 'FB607F', u'py': '004225', u'ppf': 'CD7F32',
-u'RRe': '964B00', u'sol': 'A52A2A', u'ArcD': 'FFC1CC', u'IOPr': 'E7FEFF',
-u'DPGi': 'F0DC82', u'Rad': 'E32636', u'ArcL': '480607', u'ArcM': 'FF1DCE',
-u'PMn': '355E3B', u'Nv': '002FA7', u'Sub': 'E97451', u'm5': '8A3324', u'PMV':
-'BD33A4', u'CuR': '702963', u'CGO': '536872', u'CGA': '5F9EA0', u'RRF':
-'8601AF', u'CGB': '006B3C', u'ACo': 'ED872D', u'CGG': 'E30022', u'AmbL':
-'A9203E', u'SolCe': '1E4D2B', u'Obex': 'A0785A', u'AOVP': '3CB371', u'LaVL':
-'78866B', u'S1DZ': 'FFEF00', u'6': 'FF0800', u'A1/C1': 'E4717A', u'mcp':
-'00BFFF', u'IOM': '592720', u'Z': 'C41E3A', u'TS': 'FF7F50', u'cic': 'FFEFD5',
-u'LDTgV': '960018', u'ELm': 'FFDAB9', u'MEI': 'FF0038', u'un': '701C1C', u'azp':
-'B31B1B', u'pm': '99BADD', u'mtg': 'ED9121', u'vhc': '92A1CF', u'lfp': 'ACE1AF',
-u'CIC': 'B666D2', u'cbc': '414833', u'ac': 'EC3B83', u'v': '007BA7', u'Tz':
-'2A52BE', u'm': '30D5C8', u'Tu': 'F7E7CE', u'Tr': '36454F', u'CI': 'DFFF00',
-u'Al': 'FF8C00', u'MSO': '7FFF00', u'cbw': 'FFB7C5', u'LVPO': 'FDEE00', u'acer':
-'CD5C5C', u'Te': 'FFA700', u'SGe': '98817B', u'Or': 'ED3CCA', u'SolI': 'D2691E',
-u'EpP': 'E4D00A', u'VMHVL': 'FBCCE7', u'A11': '8878C3', u'SubP': '035096',
-u'RtTgP': '635147', u'PrBo': '002E63', u'MEnt': '8C92AC', u'MPL': 'B87333',
-u'EAC': '996666', u'mch': 'FF3800', u'AM': '00008B', u'MZMG': 'E34234', u'A1':
-'F88379', u'A2': 'FF4040', u'A5': 'FC6C85', u'A7': 'FBEC5D', u'Lat': 'B31B1B',
-u'TG': '6495ED', u'RtTgL': 'FFF8DC', u'ns': 'FFF8E7', u'AA': 'FFBCD9', u'E':
-'FFFDD0', u'AD': 'DC143C', u'VTg': 'BE0032', u'Med': '00FFFF', u'PaC': '120A8F',
-u'Crus1': '9F8170', u'Crus2': '3D2B1F', u'vscx': 'FBAED2', u'PaDC': 'F0FFFF',
-u'RtSt': '5D3954', u'4N': 'A40000', u'A13': '9BDDFF', u'AV': 'C2B280', u'ESO':
-'986960', u'SolG': 'CD5B45', u'RSGa': '008B8B', u'RSGb': '536878', u'RSGc':
-'B8860B', u'ICj': '013220', u'e': 'BDB76B', u'PrMC': '483C32', u'InM': '93CCEA',
-u'S1ULp': '8B008B', u'LDVL': '003366', u'IODM': '556B2F', u'SubD': '6495ED',
-u'4n': 'AF4035', u'Cg1': '03C03C', u'Cg2': '1A2421', u'SuM': 'C23B22'}
+CONF_FILL_COLOURS = {"MA3": "19A6D7", "Su3C": "2E00F2", "45Cb": "B2FFC3", "LPAG": "7678FF", "10Cb": "47DF72", "SPa": "FF8100", "Obex": "5917E1", "Pir-2": "DFE959", "Pir-1":
+"DAE900", "SPO": "B2EAFF", "SPF": "EFB12C", "CGPn": "B2FFBF", "GP": "FFF8B2", "LarPh": "777777", "GI": "C3C900", "LPMR": "FFC259", "Gr": "2CCF7C", "Sacc": "777777", "SNL":
+"1F00FF", "SNM": "6E59FF", "SNR": "BDB2FF", "Cb": "59FF80", "Gl": "D7FF59", "Gi": "85F2B2", "VLi": "DFB647", "10n": "CA00D4", "7DL": "3BDEFF", "me5": "A877F2", "LMol": "EEFF76",
+"RtTg": "85E5D8", "LSp": "777777", "VEn": "5F17D4", "LSD": "DEFFB2", "10N": "4CBCDF", "VLL": "2CFF95", "LSO": "7FDEFF", "EVe": "4CA8C7", "VLG": "CF9500", "EntCx": "D6FF00", "LSV":
+"92FF00", "AVVL": "FFE0B2", "PaLM": "FFB676", "LSS": "4700E5", "ZI": "FF8C00", "TSne": "777777", "AudC": "777777", "tz": "A16BE9", "Zo": "7E76E9", "Uvu": "47E977", "SolRL":
+"00FFE9", "9n": "E959E5", "apal": "777777", "Stap": "777777", "m5": "6017CB", "EpiG": "777777", "Stg": "FF6800", "RLi": "3BDFC3", "Str": "FFFAB2", "V": "9776CB", "SChL": "777777",
+"Sty": "777777", "gpal": "F247DE", "RLH": "59FFD6", "mm": "FF23DD", "ml": "00C0D8", "CVL": "99CDDF", "mt": "A082CB", "mp": "FFD9B2", "Ld": "B6FF59", "La": "E94100", "Li": "00FFB0",
+"DPO": "32CBFF", "NPh": "777777", "LD": "FFAE2C", "LC": "4CAECF", "LA": "8C5FF2", "LO": "DCDF8E", "LM": "FF7100", "LH": "FFCFB2", "LV": "FF005D", "LT": "6623FA", "LS": "95FF00",
+"LP": "DFAD59", "LZ": "DF5500", "A": "9877ED", "PaPo": "FF7700", "Subth": "FFB559", "8Cb": "00F446", "PlPAG": "7677E9", "DMTg": "00FDFF", "D3V": "FF0092", "9a,bCb": "967117",
+"OlfCx-1": "F7FFB2", "rLL": "670BE5", "6Cb": "76E98D", "Eye": "777777", "TPal": "777777", "PRh": "E6E98E", "C1-CVL": "777777", "cll": "3200FF", "POHy": "777777", "SNRDM": "777777",
+"iml": "6617DC", "InWh": "0A00FF", "Hil": "777777", "ZIV": "FFB659", "ZIR": "FFDCB2", "mxv": "777777", "ZID": "DF7900", "ZIC": "FF8900", "SNC": "1700FF", "APT": "0041FF", "PeFLH":
+"9B76E1", "MRe": "DF0078", "APF": "777777", "ExOrb": "777777", "DLPAG": "3B41E9", "LPLR": "FFA000", "rs": "7317F2", "rf": "777777", "LPLC": "FFE2B2", "6aCb": "59E975", "dsc":
+"7017FA", "MVPO": "9777DC", "DLG": "E9C76B", "ATg": "3BE9E9", "LPBV": "76FFC0", "DLO": "DADF47", "LPBS": "3BFFA4", "DLL": "6247F2", "LPBM": "777777", "3-4Cb": "23F45F", "LPBI":
+"B2FFDB", "LPBD": "00E97B", "LPBE": "3BE997", "LPBC": "00FF85", "LgsCa": "777777", "ScVe": "777777", "SHThC": "777777", "RAmb": "A982F2", "CeC": "FF3C00", "CeM": "FF8159", "CeL":
+"FFC4B2", "ECu": "B2FFCC", "RMg": "00FFD4", "RMC": "00FFC2", "1b": "778899", "RetroHippRegion": "F1FFB2", "B": "FFFBB2", "Fro-Par": "777777", "mRt": "777777", "BTel": "777777",
+"RVRG": "896BBF", "InCG": "A18EFF", "VMH": "FF6F00", "Sep": "ABFF3B", "5mx": "777777", "MPOL": "FFD2B2", "MPOM": "FF9E59", "MPOC": "FF6A00", "StrD": "FFEC00", "STMP": "C1E976",
+"STMV": "A3FF00", "ty9": "777777", "V1M": "FDFFB2", "V1B": "FBFF00", "STMA": "ADE93B", "IntDL": "00FF3D", "POH": "682FD8", "S1HL": "E8E93B", "PDTg": "3BFCFF", "VCA": "00F3FF",
+"PaAP": "E9AC76", "VLH": "8C53E9", "IRtA": "A082E5", "TuLH": "6F23ED", "IML": "777777", "VCP": "00ECFF", "S1FL": "FEFFB2", "bsc": "FF0F00", "VCl": "9F6BF6", "VMPO": "FF7C00",
+"PAP": "777777", "DCl": "FFDE00", "ectd": "D88ED0", "6RB": "00D7FF", "PAG": "7678FF", "LSI": "97FF00", "ASCC": "777777", "och": "5A0BCB", "occ": "777777", "ocb": "8153C3", "3Cb":
+"23DF59", "5ADi": "3BD2E9", "VCAGr": "00F3FF", "df": "57FF00", "PLCo": "FF4F00", "X": "4CCEFF", "KF": "59FFB7", "bas": "FF6BF0", "AReCa": "777777", "eml": "752FE1", "emv":
+"777777", "8vn": "F7B2FF", "DRL": "B2FFF0", "DMC": "FF5900", "DMD": "FFCEB2", "DMH": "FF9D59", "GeGl": "777777", "DMV": "FF6900", "Pr5VL": "B2FFE1", "HPtg": "777777", "DRD":
+"00FFCA", "PeF": "E99159", "CxA2": "777777", "C": "A98EED", "CxA1": "FF8F59", "azac": "E58EDD", "Pr5DM": "00FF99", "InfM": "777777", "VLPO": "E95C00", "unx": "A56BF2", "Subiculum":
+"F1FFB2", "MOB": "ECFFB2", "InfS": "7647E1", "prf": "23D458", "VRe": "FFAB00", "IRec": "777777", "12GH": "59DF99", "BCo": "777777", "VIEnt": "C3E900", "C3": "7FBBCF", "C2":
+"65D9FF", "C1": "00AEE7", "PCRtA": "6423E9", "CI": "59FFA9", "lofr": "F28EE4", "VeCb": "23FF64", "CM": "FFE0B2", "CL": "FF9900", "CC": "FF5989", "CB": "FFF000", "CA": "E0FF00",
+"1Cx": "777777", "CG": "85D892", "LSI-3": "BBFF59", "Utr": "777777", "1Cb": "00FF38", "IntP": "00FF3B", "LSI-1": "85DF00", "CV": "777777", "mcp": "8EF4AC", "CrP": "777777",
+"LatPC": "00FF40", "Cl": "FFDF00", "7DI": "76E8FF", "MnPO": "693BCB", "HSCCA": "777777", "Cg": "777777", "7DM": "00D3FF", "Ce": "D43200", "DMSp5": "B2FFFA", "Cx": "E5E976", "LPMC":
+"DF8C00", "Cu": "2CE569", "Ct": "00CF65", "tzx": "777777", "is": "B38EE9", "DLEnt": "D6FF00", "LOT": "F5FF59", "ia": "8F6BC7", "ic": "C559FF", "dhc": "4CFF00", "V1": "E7E959",
+"V2": "FAFF59", "VA": "FFE8B2", "VC": "00D7E5", "InPl": "777777", "VG": "DF9F00", "SChDL": "FF7900", "VL": "FFB500", "VM": "F4D98E", "VO": "D1D48E", "VP": "FFE900", "VS": "F1FFB2",
+"SplCa": "777777", "Y": "19BAF7", "PrEW": "733BDC", "NSpt": "777777", "TempS": "777777", "Ve": "9277BF", "ventricles": "FF0067", "CV2": "777777", "AmbSC": "00FF1F", "5T": "C80815",
+"DRV": "00E9BC", "DRI": "59E9CC", "5N": "59E7FF", "5VM": "777777", "DRC": "59FFDC", "IOb": "777777", "RVL": "AD8EE5", "IOM": "B2FFE3", "5n": "777777", "IOK": "00FFA4", "IOD":
+"00FFA9", "5a": "777777", "IOB": "B2FFE3", "IOA": "00E994", "5b": "FFEF00", "opt": "6300F2", "D": "777777", "Cxne": "777777", "ReIC": "FF0070", "STLD": "AAFF00", "Ary": "777777",
+"STLI": "B9E959", "CEnt": "E5FF59", "STLJ": "C6FF59", "VCPO": "B082FA", "Arc": "FFA559", "STLP": "E4FFB2", "SCh": "FFD7B2", "PTg": "B59AE9", "PTe": "955FFF", "HB": "76EFC9", "Pa5":
+"339FC7", "SCM": "777777", "SCO": "6A17FF", "Hy": "DF6000", "icf": "5E00ED", "Hi": "777777", "Hb": "777777", "icp": "B88EF6", "PBW": "B2FFDE", "PBP": "00FF92", "MPn": "B2FFE9",
+"plf": "6000E9", "PBG": "2900E5", "AuD": "FFFDB2", "SNCV": "B9B2FF", "ATh ": "FFC223", "MPB": "00FF8D", "MPA": "E99659", "MPO": "FF6A00", "DMPAG": "3B40FF", "SNCD": "1500FF",
+"SNCM": "1900DF", "ppf": "B88EF2", "7Gn": "777777", "sol": "00DFCD", "sox": "6517D0", "PrTh": "777777", "CuR": "00FF51", "LaDL": "FFC7B2", "iopha": "F223D7", "LaVM": "FF8859",
+"LaVL": "FF4700", "ADP": "FF9F59", "C1-RVL": "777777", "AuV": "FFFA00", "Z": "8047DC", "ptgpal": "777777", "LDTgV": "00FFFB", "ScTy": "777777", "S1T": "8647F6", "LTer": "777777",
+"azp": "E523D2", "mtg": "C09AF6", "Pre-Cb": "00FFAE", "Sim": "3BFF6F", "VMHVL": "E96700", "AOrb": "777777", "RtTgP": "00FFDE", "PrBo": "986BED", "MEnt": "F2FFB2", "EAC": "FFC5B2",
+"ne": "777777", "RtTgL": "B2FFF4", "ns": "8453CB", "fornix": "55FF00", "SRec": "777777", "E": "FF0045", "Crus1": "6BFF96", "Crus2": "8EE9A9", "RtSt": "A082D4", "ESO": "B69AFA",
+"Eyelid": "777777", "Cg1": "EFF447", "Cg2": "F7FF00", "VMHDM": "FF6F00", "GrDG": "E9FF59", "ECIC-1": "0038FF", "ECIC-3": "597AFF", "ECIC-2": "B2C2FF", "SalPh": "777777", "5Gn":
+"0097C7", "Oral": "777777", "5MHy": "00C9E9", "r1Rt": "777777", "5Gn-5n": "777777", "Cir": "E97400", "PSTh": "DFAE00", "StA": "CEB2FF", "LHb": "F4C2C2", "Int": "00FF3C", "4-5Cb":
+"6BF492", "StM": "777777", "SMGl": "777777", "pms": "6A00FF", "LPGiA": "008CFF", "iorb": "E547D0", "SObCa": "777777", "M1": "EFF46B", "M2": "ECF400", "ST": "96E900", "ophv":
+"777777", "GrC": "9782C7", "GrA": "EDFFB2", "opha": "777777", "GrO": "C2FF00", "Me": "E96F3B", "LTe": "996BFF", "Mc": "777777", "occv": "777777", "v": "9253E5", "Mi": "A1D400",
+"DCDp": "00CCFF", "PiSt": "AB8EE1", "MiTg": "76E8E9", "Lth": "6023E5", "Mx": "00DF6E", "LPal": "777777", "ME": "7847E5", "MD": "FFA300", "MG": "FFD485", "MB": "3B4CEF", "MM":
+"FFEDB2", "E-OV": "FFB2D0", "MO": "FBFF8E", "hbc": "78866B", "PC5": "66D1F7", "Corti": "777777", "MT": "3D00C3", "MV": "4E17C3", "SupM": "777777", "MS": "82E900", "MZ": "FFD3B2",
+"TyM": "777777", "V2MM": "FCFFB2", "V2ML": "F8FF00", "OvalW": "777777", "sphpl": "777777", "ial": "777777", "SubV": "FFB200", "Iris": "777777", "SubP": "7E53C7", "F": "FFAC59",
+"SubG": "985FFA", "SubD": "FFE7B2", "SubB": "6C3BBF", "SubC": "777777", "RRF-A8": "2600CB", "TyC": "777777", "SubI": "C5A6FA", "cav": "777777", "S1ULp": "D2D400", "MPL": "5F2FC7",
+"Min": "4B23FF", "AcbSh": "E9DA00", "BAC": "E94C00", "spa": "777777", "MiA": "D8FF59", "MPT": "9B8ED8", "s5": "7D47C7", "1": "777777", "VPM": "C99400", "VPL": "E9D18E", "STD":
+"9DFF00", "STL": "E5FFB2", "STM": "90DF00", "STI": "C9FF59", "AHiPM": "FAD6A5", "AHiPL": "FF3300", "aot": "B6FF00", "STS": "A0FF00", "10Gn": "777777", "OmHy": "777777", "STh":
+"696969", "st": "A782D8", "STr": "B4DF00", "sl": "777777", "AVDM": "FF9700", "PDig": "777777", "sf": "8C3BFA", "Rt": "E9B423", "Re": "DF9600", "tth": "9C5FED", "Rc": "777777",
+"Ro": "560BDC", "Rh": "F4BC23", "SolVL": "2CFFEE", "RR": "4923F2", "SPTg": "00D1D4", "RA": "59D8C1", "RC": "76DFCD", "RL": "A58ED0", "RI": "9E82D0", "AtOc": "777777", "STMPM":
+"E3FFB2", "STMPL": "96E900", "STMPI": "B9FF3B", "DpG": "7A76FF", "5Te": "B2F3FF", "DCGr": "59DDFF", "MVeMC": "B2FFD4", "ec": "CFFFB2", "5Tr": "5517F6", "PoMn": "D4B86B", "MCPC":
+"8E5FF6", "5TT": "3BE3FF", "MCPO": "FF9A59", "MPtg": "777777", "RAPir": "F8FFB2", "8Gn": "66B5CF", "SolDM": "59DFD1", "SolDL": "00EFD6", "IsoCx": "FCFF00", "MPtA": "DBDF6B",
+"StyMF": "777777", "FMag": "777777", "DTT-4": "EBFFB2", "DTT-2": "D5FF59", "DTT-3": "BEFF00", "DTT-1": "A7DF00", "PVP": "F4B200", "PVZ": "FF7800", "ATh": "777777", "PVA": "DFA300",
+"2": "777777", "fmj": "9DFF59", "PVG": "777777", "fmi": "6BFF00", "Post": "E0FF59", "1n": "777777", "IMA": "FFD66B", "IMD": "E9BD47", "IMG": "B19AE5", "IntDM": "B2FFC5", "PDR":
+"7447D0", "PDP": "FFD2B2", "SNRVL": "777777", "MRVL": "4CBFE7", "Rbd": "5B23BF", "CLi": "00EFC3", "OptF": "777777", "vBrain": "FF5961", "LAcbSh": "FFF459", "noradrenaline-cells":
+"FF59C8", "RSD": "F9FF6B", "r": "8C5FCB", "CA2": "E1FF00", "DM": "FF9459", "DH": "777777", "DI": "D8DF00", "DG": "F4FFB2", "LSI-4": "DFFFB2", "LSI-2": "97FF00", "DC": "00CBFF",
+"DA": "E9A159", "DT": "400BC3", "DR": "00FFCC", "DS": "E2FF59", "DP": "D1D46B", "Dk": "0005FF", "Di": "FF7E00", "Ect": "E4E947", "PSol": "0098CF", "PtPR": "E5E96B", "PtPC":
+"F7FF23", "PtPD": "C3C923", "dlg": "E500CC", "PaR": "4723E5", "Apir": "D44400", "MCLH": "FF5E00", "ArcLP": "FFA559", "r3Rt": "777777", "Tu-1": "FFFAB2", "PDPO": "886BC3", "eMC":
+"762FE5", "Pinna": "777777", "RIP": "00DFB8", "MEE": "6F2FFA", "sss": "777777", "hippocampal-white-matter": "CAFFB2", "Cornea": "777777", "ICjM": "FFEF00", "rmv": "777777",
+"Atlas": "777777", "IPACL": "FFF6B2", "IPACM": "FFE300", "STIL": "E6FFB2", "PPit": "777777", "EMi": "6147E5", "STIA": "ADFF00", "JugF": "777777", "3": "777777", "9cCb": "00FF36",
+"RGn": "777777", "arteries": "FF00DE", "21": "FFFF00", "ejugv": "777777", "SuVe": "66C9EF", "OlfCx": "F9FFB2", "ILG": "777777", "ILL": "A882FF", "LR4V": "FFB2D6", "ADig": "777777",
+"S1DZO": "E8E900", "VMHC": "FFD3B2", "VMHA": "E99859", "6bCb": "00FF32", "DCFu": "00B2DF", "GeHy": "777777", "VPPC": "DFAD23", "6a": "B2FFC1", "6b": "59FF79", "6n": "FF00FB",
+"P3V": "FFB2DA", "CGG": "00E924", "6N": "00C5E9", "Otic": "777777", "iala": "D823C2", "vesp": "783BC7", "AIV": "F1F48E", "ialn": "777777", "AIP": "E3E923", "7VI": "76D5E9", "7VM":
+"00C0E9", "AID": "CFD423", "I8": "9376D8", "I3": "5F47D8", "StyPh": "777777", "ePC": "AA8ED4", "PtgC": "777777", "I": "FFC6B2", "IP": "001AD4", "IS": "9D76F6", "OPC": "FFBE59",
+"II": "682FED", "VOLT": "B98EFF", "IM": "FF4300", "IL": "D8DF23", "IO": "00FFA6", "EAM": "FF4100", "IC": "3B58D4", "IB": "835FD8", "ID": "713BF2", "IG": "B2FF00", "IF": "4000D8",
+"VG-2": "FFD059", "DPPn": "00FFB7", "IAud": "777777", "IRt": "7C5FBF", "costr": "AA82E9", "In": "7FCCE7", "AOVP": "C7FF00", "IRe": "777777", "sphml": "777777", "Sp5OVL": "777777",
+"RCPMj": "777777", "CnF": "59CEE9", "EPl": "B2E900", "4": "777777", "mxa": "CB23B1", "sumx": "BE9AED", "psa": "777777", "psf": "956BD0", "A8": "FFB2EB", "RAPir-1": "F9FFB2",
+"RAPir-2": "EAFF00", "RAPir-3": "F1FF59", "Pig": "777777", "Pir": "CFDF00", "PPTg": "3BE9B9", "ECIC": "0035FF", "AA": "E98759", "MeA": "FF4A00", "LOT-1": "FAFFB2", "VDB": "8BFF00",
+"9Cb": "76FF93", "FrA": "5A2FC3", "Cx1": "777777", "PaDC": "FFD6B2", "isRt": "777777", "CxP": "777777", "ArcMP": "E96B00", "AVPO": "DF5E00", "CxA": "F2FF00", "VMHSh": "FFA259",
+"aca": "DBFFB2", "aci": "AFFF59", "oc": "7823F2", "Me5": "4323D8", "acp": "82FF00", "ox": "FF7059", "Na": "777777", "RRe": "540BD8", "ArcD": "FF7400", "DPGi": "19A1CF", "ArcL":
+"FFD5B2", "ArcM": "E99B59", "Nv": "916BE1", "RRF": "2300BF", "Pir-1b": "EDFF00", "Pir-1a": "F9FFB2", "ELS": "777777", "LScM": "777777", "IPAC": "DFC600", "vhc": "C8FFB2", "aa":
+"9677C7", "cbc": "6BDF8D", "ac": "DAFFB2", "af": "777777", "cbw": "23E95E", "acer": "FF8EF5", "cbx": "777777", "SGe": "7223FF", "MZMG": "FFC559", "StapM": "777777", "5": "777777",
+"Lat": "00E93B", "Lar": "777777", "ICM": "777777", "DpMe": "5C47CB", "PFl": "8EFFAF", "ICj": "FFF459", "masa": "FF47E4", "masn": "777777", "3-4": "F49AC2", "cpx": "777777", "masv":
+"777777", "ICx": "777777", "Unknown": "5100DF", "scc": "D1FFB2", "SIB": "FFE600", "7Cb": "47D470", "alv": "8CFF59", "MxB": "777777", "scp": "00D43B", "Gonial": "777777", "ts":
+"00EF7A", "Symp": "777777", "Sp5O": "00FFF5", "AHiAL": "FFC1B2", "AHiAM": "FF7A59", "vert": "9147F2", "Sp5I": "00DFD4", "AHi": "D45A3B", "Sp5C": "59FFF5", "SCGn": "777777", "AHC":
+"FF9C59", "AHA": "FFD1B2", "CCrus": "777777", "ri": "777777", "AngT": "F4CE6B", "AHP": "DF5A00", "9-10n": "777777", "HSCC": "777777", "IOVL": "B2FFE5", "LPBCr": "76E9B3", "5Sol":
+"FFB2BF", "BLV": "FF3700", "BLP": "FFC2B2", "SSp": "777777", "STMAL": "8AD400", "STMAM": "CFFF76", "BLA": "FF7B59", "VTAR": "76FCFF", "IODM": "00FFA6", "Cond": "777777", "pica":
+"777777", "LRtS5": "59FFCB", "Aud": "777777", "S2": "CCD400", "S1": "E8E900", "vc": "777777", "xicp": "9747FF", "Hyoid": "777777", "REn": "777777", "5Cb": "6BE98F", "6": "777777",
+"4Sh": "0050FF", "Sp": "6B2FD4", "MdD": "19C3FF", "Au1": "FFFB00", "InM": "85EFB9", "Au2": "FFFA00", "vn": "D0FF59", "Sc": "6823E1", "InG": "B5B2FF", "MdV": "00B7F7", "InC":
+"3B48FF", "LPGiE": "B2D6FF", "MasM": "777777", "ASph": "777777", "Ins": "777777", "SI": "FFE600", "SO": "FF6400", "SN": "4E3BE9", "SM": "885FD0", "MoCb": "5017C7", "SC": "7C76E9",
+"Inf": "47F479", "SG": "E9B759", "Inc": "777777", "SolIM": "59FFEF", "EthB": "777777", "pons": "2CCEF2", "CAT": "3900CB", "TyBu": "777777", "IntPPC": "00FF3B", "csc": "FFBAB2",
+"cst": "BCFFB2", "JxO": "5423C3", "fr": "BD9AF2", "MVePC": "00FF76", "vtgx": "B2FDFF", "fi": "813BED", "a": "D800C6", "SimB": "B2FFC7", "CA3": "F6FFB2", "GlA": "C5FF00", "CA1":
+"BCD400", "RSG": "FFFE00", "IOrC": "777777", "PSCCA": "777777", "Occ": "777777", "PCRt": "19ABDF", "VPPn": "00E9AA", "AOE": "D1E976", "AOD": "B9E900", "AOB": "C5FF00", "AOM":
+"D5FF3B", "AOL": "E2FF76", "AOV": "EEFFB2", "apmf": "4900BF", "AOP": "C4E93B", "MyHy": "777777", "Bar": "32AFD7", "LacG": "777777", "L": "4500E1", "IPl": "ECFFB2", "BTelne":
+"777777", "VG-3": "FFE9B2", "VG-1": "FFB700", "icpx": "9B6BE5", "SFi": "75D400", "SubCV": "4CB1D7", "IPC": "596FFF", "Rad": "E7FF3B", "IPA": "0024FF", "IPF": "500BED", "IPI":
+"0019D4", "IPL": "5969E9", "IPR": "B2BAFF", "SFO": "6C3BC3", "SubCD": "00AEEF", "SubCA": "65B8D7", "2n": "DF493B", "Ent": "777777", "HDB": "DDFFB2", "BMA": "FF3800", "EnO":
+"777777", "BMP": "FFC3B2", "E5": "BFA6FF", "asp": "F200DC", "EF": "5223C7", "EA": "FF6D3B", "mmp": "777777", "Mall": "777777", "EW": "816BF2", "EP": "440BD0", "MGD": "E99700",
+"SHy": "8C53F2", "MGM": "FFA500", "MGV": "FFE4B2", "PMCo": "FF5400", "SHi": "A8E959", "PSphW": "777777", "asc7": "5E00F6", "7ni": "C800FF", "Fro": "777777", "MoDG": "F4FFB2",
+"CVL-C1": "777777", "Eth": "E9AA00", "gpn": "777777", "LRtPC": "B2FFE6", "Sptne": "777777", "gpv": "777777", "VTA": "836BE5", "VTM": "D45400", "Fr3": "CFD447", "VTT": "EAFFB2",
+"Tongue": "777777", "tfp": "AF77FA", "b": "4D00C7", "VTg": "A16BFA", "PLCo3": "777777", "PLCo2": "777777", "PLCo1": "777777", "stv": "777777", "str": "9E77D4", "AcbC": "FFF9B2",
+"7n": "C900FF", "DTgC": "00FF5C", "AcbR": "FFED00", "dopamine-cells": "FFB2ED", "DTgP": "B2FFCF", "5Pt": "76EBFF", "A1-C1": "E959BD", "7N": "B2F1FF", "7L": "3BCBE9", "PaXi":
+"D4C18E", "RPC": "B2FFED", "LatC": "777777", "RPF": "8253D8", "scpd": "B2FFC7", "RPO": "1998C7", "GrCb": "5923D8", "Thy": "777777", "321": "C08081", "PCom": "BB9AFF", "Aty":
+"777777", "ThC": "777777", "DRGn": "777777", "DCMo": "B2EFFF", "OpD": "777777", "3ECIC": "ABCDEF", "CeAu": "777777", "IAM": "D49A00", "IAD": "D4AE47", "Xi": "FFCE47",
+"Medulla-oblongolata": "85CBA8", "hif": "6417D8", "TzM": "777777", "PHA": "8B5FE5", "mcer": "D847C3", "PHD": "590BF6", "dtgx": "F0EAD6", "ParB": "777777", "StrV": "FFFAB2", "ParP":
+"777777", "Acbne": "E9E059", "MedDL": "6BD489", "ECIC1": "777777", "ECIC3": "9076D0", "occs": "777777", "5oph": "777777", "BOcc": "777777", "Entne": "777777", "7SH": "B2F1FF",
+"MHb": "AB4E52", "SPFPC": "FFAE00", "ANS": "400BC7", "InCo": "9D8EE5", "TMJ": "777777", "py": "8600FF", "Plat": "777777", "pc": "896BFF", "4Cb": "00DF40", "pm": "722FD0", "DTT1":
+"777777", "Hipp": "DDFF00", "RPa": "3BEFD2", "p1": "6A0BF2", "mlf": "85DFB3", "Olf": "BDFF00", "PalGl": "777777", "Epith": "FFD759", "ML": "E96700", "mlx": "00E2FF", "IODMC":
+"B2FFE4", "RCh": "E99A59", "Cop": "00E943", "Cor": "777777", "Com": "7A6BCB", "PMnR": "B2FFF1", "Sol": "2CD8C9", "LVe": "2500D8", "IOPr": "00FFA6", "Rath": "777777", "SuspLig":
+"777777", "simf": "777777", "PIL": "FFE08E", "PIF": "470BBF", "SMV": "2CDF85", "r2Rt": "777777", "Pir-3": "C5D400", "SMT": "9053FA", "SpVe": "99DDF7", "bic": "9253F6", "5man":
+"777777", "Intralaminar-Th-nu": "FFBD59", "Or": "CDE900", "2Cb": "B2FFC0", "Op": "443BFF", "OO": "777777", "ON": "C6E959", "OF": "777777", "OB": "777777", "OV": "FF005A", "OT":
+"7D53D4", "PCTg": "00E7E9", "FF": "777777", "StHy": "6423D4", "LDDM": "FF9D00", "PSph": "777777", "DEn": "F4FF59", "AMV": "FF9500", "veme": "5F00DC", "O": "19B1E7", "IVF":
+"6A3BD4", "LReCa": "777777", "EpP": "510BFA", "Scap": "777777", "Mo5VM": "777777", "Mst": "777777", "SphPal": "777777", "IOrbF": "777777", "BAOT": "FFF500", "chp": "FFB2C5", "ACo":
+"E8FF00", "AmbL": "B2FFBB", "PaAM": "E96C00", "AmbC": "59FF69", "Mo5DL": "777777", "cic": "806BD8", "MEI": "510BE9", "infa": "FF00DE", "un": "9053E1", "Tz": "4CC8F7", "Apex":
+"777777", "m": "6E2FCB", "Tu": "FFFAB2", "Tr": "AE82F6", "Th": "FFA700", "Tg": "85FEFF", "Te": "FF6100", "PtgPal": "777777", "A14": "FF00C3", "A11": "DF00B4", "A13": "FF59DB",
+"TT": "ADE900", "TS": "865FC7", "A1": "E900A5", "A2": "FF59C9", "A5": "FF00A8", "A4": "777777", "A7": "FFB2E3", "TG": "9353FF", "Man": "777777", "LOT-3": "EFFF00", "LOT-2":
+"F5FF59", "AC": "777777", "AD": "F4C447", "Med": "8EDFA6", "AI": "777777", "AH": "FFD1B2", "PalPh": "777777", "AM": "DF952C", "AL": "A38ED8", "AO": "CBE959", "DMSp5V": "777777",
+"AP": "7FC2D7", "AV": "EFC485", "e": "AC82ED", "PrMC": "7847D4", "Al": "865FE9", "Aq": "DF0045", "Au": "FFFDB2", "LgCa": "777777", "olfa": "9677C3", "gr": "59EFA4", "CPO":
+"66C7E7", "DMPn": "00D498", "GiV": "B2FFD2", "SuV": "8447ED", "Sp5": "59E5DE", "MedL": "00C93B", "GiA": "00FF67", "CPu": "FFEC00", "g7": "B98EFA", "vlh": "903BFF", "PFlCv":
+"777777", "SpV": "590BE1", "P": "FFEF59", "SimA": "00FF43", "cctd": "CB00B6", "Spt": "777777", "Sph": "33B0DF", "SuMM": "FF6E00", "SuML": "FFD3B2", "STLV": "99E900", "trs":
+"777777", "CtdB": "777777", "DTM": "FFA959", "3V": "FFB2DC", "3N": "B2CEFF", "EPlA": "ADDF00", "DTT": "BEFF00", "CeCv": "5F23F6", "IPit": "777777", "REth": "A676FF", "DTg":
+"00F25A", "Alar": "777777", "3n": "FDB2FF", "DTr": "6D47CB", "StyGl": "777777", "S1Sh": "FEFF76", "HardG": "777777", "Clav": "777777", "IGL": "DFC98E", "32": "40826D", "Ahi":
+"BDA6F6", "cty": "777777", "ctg": "A28EF2", "TrLL": "777777", "MnM": "7B53D0", "SolL": "2CDFCF", "SolM": "85FFF4", "FV": "622FDC", "SolI": "59EFE0", "SolG": "85EFE4", "p1PAG":
+"B2B2FF", "PnR": "00FFB4", "SolC": "85DFD5", "PnV": "00FFB4", "FB": "F5FF3B", "FC": "DAFF00", "PnO": "76E9CA", "MnA": "99D8EF", "SolV": "2CEFDF", "PnC": "3BFFC9", "SMD": "777777",
+"PrCnF": "772FFF", "Fu": "4900FA", "MDL": "FFE3B2", "MDM": "FFA400", "MDC": "FFC259", "ERS": "98E5FF", "Lens": "777777", "Fl": "47FF7C", "APTD": "0045FF", "8cn": "DD00FF", "pfs":
+"00FF4B", "LPtg": "777777", "f": "CBFFB2", "ALD": "777777", "IObCa": "777777", "NasC": "777777", "MVe": "59CB8D", "LPtA": "EDF423", "JPLH": "886BCB", "11N": "00FF7A", "MRec":
+"777777", "CnFV": "00CEFF", "CnFI": "59DFFF", "CnFD": "B2F0FF", "CPune": "777777", "gcc": "5DFF00", "sig": "777777", "BHy": "777777", "pcuf": "802FF2", "S9Gn": "777777", "Acs5":
+"66AFC7", "Acs7": "33C1EF", "aopt": "DF0400", "EGL": "777777", "C1-A1": "645452", "DIEnt": "D2E959", "lc": "777777", "IPDM": "001EE9", "IPDL": "480BD4", "lo": "B8FF00", "ll":
+"85FFC3", "Pr5": "00CB7D", "STSL": "A1FF00", "STSM": "E2FFB2", "IOC": "59E9B6", "PrC": "4900D4", "PrL": "F8FF47", "LPS": "777777", "LPO": "FFD0B2", "MEntR": "4C17BF", "Tu-2":
+"E9DB00", "Tu-3": "E9E159", "PrS": "F0FFB2", "das": "00C7FF", "LPB": "B2FFDB", "cs-tract": "E0B2FF", "Sag": "3BD1D4", "2bCb": "00FF2E", "FVe": "66C0DF", "APit": "777777", "APir":
+"F0FF59", "9-10-11n": "777777", "S1Tr": "FDFF3B", "lfp": "E7B2FF", "I9Gn": "777777", "8n": "F6B2FF", "S1BF": "E9E976", "sp5": "AF8EDC", "5Ma": "00DBFF", "CST": "2CFF00", "Ctd":
+"777777", "Tu1": "8E5FDC", "BStap": "777777", "CGB": "59E96E", "ASt": "835FE1", "MeAD": "FFC8B2", "Amy": "FFC6B2", "AVPe": "DF6B00", "9bCb": "777777", "HMall": "777777", "R":
+"2CFFCD", "ictd": "E56BD6", "LEnt": "777777", "dsc-oc": "6A0BFF", "CxA-1": "F3FF00", "CxA-2": "FBFFB2", "CxA-3": "F6FF59", "LDTg": "00FFFB", "AAD": "777777", "PoDG": "DCFF00",
+"HippFormation": "CEE93B", "AAV": "777777", "Astr": "FFCBB2", "Pal": "777777", "Pir1": "777777", "xscp": "00FF47", "PaS": "D0FF00", "PaV": "E98D3B", "Unlabeled": "FF001B", "BIC":
+"002FFF", "PaC": "9C76E5", "LPGi": "76BBFF", "pyx": "8400FF", "Pa4": "5D17E5", "sm": "7947BF", "Pa6": "6E3BD0", "PoT": "FFA900", "InCSh": "0011FF", "VCCap": "7B3BE5", "MCM":
+"777777", "MedCM": "777777", "SLu": "D4E93B", "ijugv": "777777", "9a-bCb": "B2FFC2", "imvc": "6D17ED", "MoS": "D3FF00", "12n": "FA59FF", "PrLSp": "777777", "DLPn": "76FFD8", "12C":
+"777777", "mfbb": "6C17E9", "mfba": "6E23DC", "12N": "33BCE7", "MPBE": "00FF8C", "HyGl": "777777", "GPF": "777777", "GHHy": "777777", "MidM": "777777", "ELm": "3E23CB", "Mo5":
+"7FC6DF", "LRec": "777777", "VeGn": "777777", "Pr": "875FD4", "BSph": "777777", "SChVM": "FFD7B2", "Pt": "777777", "Py": "DBE976", "Pa": "FF7700", "Pe": "FFD7B2", "Pk": "9E76E9",
+"Pi": "FFC900", "Pn": "59FFD0", "Po": "EF9E00", "PR": "4CC4EF", "PS": "FF6C00", "PP": "7A3BF6", "p1Rt": "8347D8", "PV": "D4A423", "PT": "DFBF6B", "dlo": "B8FF00", "RChL": "916BD8",
+"HStap": "777777", "PB": "2CCB84", "PC": "DF8800", "PF": "FFBA00", "PH": "FFD4B2", "PN": "8ED4A3", "PL": "9882C3", "PM": "7FD7F7", "P7": "BFA6F2", "P5": "76D8E9", "AtAx": "777777",
+"S": "777777", "APTV": "B2C5FF", "dcw-ec-cc-gcc-fmi-fmj": "64FF00", "OPT": "7653BF", "AntCh": "777777", "dpal": "F26BE3", "VTT-1": "EBFFB2", "VTT-2": "BBFF00", "VTT-3": "D2FF59",
+"Axis": "777777", "MePD": "FF4C00", "cc": "69FF00", "cg": "3FFF00", "PCGS": "743BE9", "MePV": "8C6BD4", "Hem": "777777", "cp": "9C00FF", "cu": "B69AE1", "2-3Cb": "00D43C", "DCIC":
+"5974FF", "PLCo-3": "FF8D59", "PLCo-2": "FF4F00", "PLCo-1": "FFCAB2", "Gem": "3D00D0", "lgn": "777777", "lga": "CB47B9", "PLd": "5B23CB", "lgv": "777777", "PLi": "8153DC", "V2L":
+"FBFF59", "PLV": "5D23D0", "Ge5": "FFBA00", "Ant": "3BE962", "IEn": "9D82DC", "PSCC": "777777", "PLH": "5F2FBF", "SOb": "777777", "DpWh": "403BE9", "SOl": "777777", "VLPAG":
+"0000E9", "PPy": "8347FA", "3PC": "005EFF", "MeAV": "FF4A00", "SOR": "946BDC", "PPT": "7147C3", "pcer": "D86BC7", "MTu": "FF6100", "mfb": "7E3BE1", "BG": "FFF376", "BL": "FF9476",
+"BM": "E99176", "MEntV": "777777", "farfocle": "777777", "Bo": "33A8CF", "Fat": "777777", "T": "742FE9", "IOBe": "59FFC3", "VA-VL": "EFC359", "ptgcn": "777777", "B4": "19BBEF",
+"nerves": "D476DF", "B9": "76FFE6", "Sub": "DFC485", "ROb": "76EFDB", "vsc": "852FF6", "LVPO": "00A0D7", "SuG": "0C00E9", "6cCb": "00E92E", "SuM": "E96400", "9aCb": "777777",
+"SuS": "8C53ED", "MnR": "3BFFDC", "11n": "777777", "Su5": "99D2E7", "Su3": "6A47FF", "LRt": "B2FFE7", "dcw": "99FF59", "dcs": "2CEF8E", "Ptg": "777777", "Ptd": "777777", "mofr":
+"CB6BBC", "subcortical-white-matter": "CBFFB2", "PaMP": "FF973B", "PaMM": "713BD8", "SGl": "00BAFF", "LHbL": "D19FE8", "LHbM": "F4BBFF", "CGn": "777777", "SubVCx": "777777", "PMn":
+"00A4DF", "PMV": "D45F00", "CGO": "59FF73", "CGA": "00FF23", "DR3V": "FF59B5", "Amb": "59F26A", "Amg": "777777", "PMD": "FFA359", "SolCe": "00CFB9", "rcc": "777777", "TeA":
+"E1E900", "S1DZ": "FEFF00", "Tel": "E0FF59", "Acs6-7": "33C7F7", "7gp": "777777", "CIC": "B2BFFF", "StyHy": "777777", "TempM": "777777", "MSO": "7FD2EF", "TempP": "777777", "IntA":
+"59FF80", "DAx": "777777", "Brain": "666666", "mch": "8847E9", "other": "EF00B7", "Acb": "FFEE00", "Pi-3": "A382E1", "4V": "FF59A4", "LOT2": "777777", "LOT1": "7E5FC3", "mPAG":
+"777777", "4N": "0049E9", "CD": "777777", "RSGa": "FFFEB2", "RSGb": "FFFE59", "RSGc": "FFFE00", "S1J": "D3D43B", "LDVL": "FFE1B2", "4n": "E900E9"}
 
 CONF_STRUCTURES_LIMITED=[]
 

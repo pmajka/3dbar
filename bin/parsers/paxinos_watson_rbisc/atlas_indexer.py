@@ -404,7 +404,7 @@ class AtlasIndexer:
             # index
             uid = str(self.globaIndex[groupName]['attrubutes']['uid'])
             newHierarchyElem.setAttribute('uid', uid )
-
+        
         except KeyError:
             self._printRed("Structure %s not found while generating hierarchy" % (groupName))
 

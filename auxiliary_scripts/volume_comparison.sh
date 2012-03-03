@@ -3,7 +3,7 @@
 #                                                                             #
 #    This file is part of 3d Brain Atlas Reconstructor                        #
 #                                                                             #
-#    Copyright (C) 2010-2011 Piotr Majka, Jakub M. Kowalski                   #
+#    Copyright (C) 2010-2012 Piotr Majka, Jakub M. Kowalski                   #
 #                                                                             #
 #    3d Brain Atlas Reconstructor is free software: you can redistribute      #
 #    it and/or modify it under the terms of the GNU General Public License    #
@@ -34,7 +34,7 @@ JOB_TEMP_RC=${WORKING_DIR}/__temp__job__parallel__testing__comparison
 
 NUMBER_OF_CPUS=16
 EXECUTION_COMMAND="parallel -j 16 -k"
-#EXECUTION_COMMAND="bash" #TIP: Put bash if you don't have GNU parallel installed
+#EXECUTION_COMMAND="bash" #TIP: Put 'bash' if you don't have GNU parallel installed
 
 DATASET_NAMES=(aba sba_DB08 sba_LPBA40_on_SRI24 sba_PHT00 sba_RM_on_F99 sba_WHS09 sba_WHS10 tem whs_0.5 whs_0.51 whs_0.5_symm whs_0.6.1)
 DATASET_HROOT=(Brain Br Brain Brain Brain Brain Brain Brain Brain Brain Brain Brain)
