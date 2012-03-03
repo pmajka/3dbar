@@ -97,10 +97,10 @@ BAR_DEFAULT_H_SPAN = (0., 1.)
 BAR_DEFAULT_S = 0.
 BAR_DEFAULT_V = 0.4
 
-def get_item_color(h, s, v):
+def RGBtoHSVcolor(h, s, v):
     """
     Convert colour from HSV colourspace to HTML format.
-
+    
     @param h: colour hue
     @type h: float
 
@@ -128,27 +128,28 @@ class barColorIndexer(barIndexer):
     """
     def getSpan(self, elem):
         """
-        Estimate span of spectrum required by hierarchy element.
-
+        Estimate span of spectrum required by a hierarchy element.
+        
         @param elem: hierarchy element for which spectrum span is estimated
         @type elem: C{self.{L{_groupElement}}
-
+        
         @return: estimated spectrum span for element L{elem}.
         @rtype: float
         """
         if elem.children == []:
             return 0.
-
+        
         result = sum(self.getSpan(x) for x in elem.children)
         if any(x.uid for x in elem.children): #elem.uid:
             result += 1
-
+        
         return result
     
     def recolor(self):
         """
-        Recolor CAF slides.
-
+        Recolor CAF slides by loading and applying new color mapping to each
+        slice.
+        
         @return: self
         """
         pattern = self.properties['FilenameTemplate'].value
@@ -167,7 +168,7 @@ class barColorIndexer(barIndexer):
                                      s = BAR_DEFAULT_S,
                                      v = BAR_DEFAULT_V):
         """
-        Assign colours to the hierarchy groups elements automatically.
+        Automatically assign colours to the hierarchy groups elements.
         
         @param name: name of hierarchy tree root element; if not given assumed
                      to be C{self.L{hierarchyRootElementName}}
@@ -192,14 +193,14 @@ class barColorIndexer(barIndexer):
         
         b = self.groups[name]
         
-        # at the beginning there was a word...
+        # In the beginning there was a Word...
         # ...and the word initialized the random number generator
         seed(name)
         
         # this is something like initialization step
-        # Each descedant of root element has span of sprctrum somehow related
+        # Each descedant of root element has span of spretrum somehow related
         # to the structures it covers.
-        self.ccmap = dict((x.name, self.getSpan(x))\
+        self._ccmap = dict((x.name, self.getSpan(x))\
                           for x in self.groups.itervalues())
         
         self.__setChildColours(b, hSpan, s, v)
@@ -230,7 +231,7 @@ class barColorIndexer(barIndexer):
         # colour the root element
         eh = (span[0] + span[1]) / 2. #put the root hue in the middle of
                                       #a spectrum span
-        elem.fill = get_item_color(eh, es, ev)
+        elem.fill = RGBtoHSVcolor(eh, es, ev)
         
         if elem.children == []:
             # no children - nothing to do
@@ -238,7 +239,7 @@ class barColorIndexer(barIndexer):
         
         # set all alements without spectrum span assigned white
         for x in elem.children:
-            if x.name not in self.ccmap:
+            if x.name not in self._ccmap:
                 # no span -> no colour
                 # and it propagates to children because span propagates
                 # to parents (so if parent has no span assigned nor have its
@@ -249,19 +250,19 @@ class barColorIndexer(barIndexer):
         use = 0.9
         
         # r is hierarchy tree spectrum span size
-        r = span[1] - span[0] #
+        r = span[1] - span[0] 
         
         # sorted names of hierarchy groups elements of significant spectrum span
-        names = sorted(x.name for x in elem.children if self.ccmap.get(x.name))
+        names = sorted(x.name for x in elem.children if self._ccmap.get(x.name))
         
         # sorted names of hierarchy groups elements of insignificant spectrum
         # span (OMG)
-        childless = sorted((x for x in elem.children if self.ccmap.get(x.name) == 0),
+        childless = sorted((x for x in elem.children if self._ccmap.get(x.name) == 0),
                            key = lambda x: x.name)
         
         # l is normalised spectrum span estimation vector for hierarchy groups
         # in names
-        l = np.array([sqrt(self.ccmap[x]) for x in names])
+        l = np.array([sqrt(self._ccmap[x]) for x in names])
         
         # sl is normalisation divisor for l
         sl = float(sum(l))
@@ -352,7 +353,7 @@ class barColorIndexer(barIndexer):
                     # debug message
                     print "v < v0! : %f < %f" % (v, v0)
                 
-                c.fill = get_item_color(h, s, v)
+                c.fill = RGBtoHSVcolor(h, s, v)
                 
                 s -= stepS / v
                 if s < s0:
