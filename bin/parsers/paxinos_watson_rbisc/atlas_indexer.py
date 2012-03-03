@@ -305,8 +305,8 @@ class AtlasIndexer:
                  {'type':'CAFCreatorEmail','value':''.join(CONF_CONTACT_EMAIL)},
                  {'type':'CAFCompilationTime',\
                          'value':datetime.datetime.utcnow().strftime("%F %T")},
-                 {'type':'CAFAxesOrientation', 'value':'LIA or RIA - symmetric'},
-                 {'type':'CAFFullName','value':'The rat brain in stereotaxic coordinates, 6th edition.'}]
+                 {'type':'CAFAxesOrientation', 'value':'LIA or RIA - hemispheres are symmetrical'},
+                 {'type':'CAFFullName','value':'The rat brain in stereotaxic coordinates'}]
 
         for entry in DataToInsert:
             newAtlasPropertiesElement = self.doc.createElement('property')
