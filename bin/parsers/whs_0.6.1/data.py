@@ -25,10 +25,10 @@
 import datetime
 
 CONF_PARSER_COMMENT = 'CAF dataset based on: \
-<a href="http://software.incf.org/software/waxholm-space/home"\
+<a href="http://software.incf.org/software/waxholm-space/home" \
 target="_blank">Waxholm Space</a>, a coordinate-based reference space for the \
-mapping and registration of neuroanatomical data in the mouse brain.<br/>\
-See <a href="http://www.ncbi.nlm.nih.gov/pubmed/20600960" target="_blank">\
+mapping and registration of neuroanatomical data in the mouse brain.<br/> \
+See <a href="http://www.ncbi.nlm.nih.gov/pubmed/20600960" target="_blank"> \
 G.Johnson, et. al., NeuroImage 53 (2010) 365-372</a>, Delineation 0.6.1'
 CONF_PARSER_NAME    = 'whs_0.6.1'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology'
