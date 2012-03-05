@@ -542,6 +542,7 @@ class barBatchReconstructor(object):
         
         if not rgb:
             ct = list(intColourToFloat(ct))
+
         return ct
     
     def loadAtlas(self, indexDirectory, indexFile = BAR_ATLAS_INDEX_FILENAME):
@@ -568,8 +569,10 @@ class barBatchReconstructor(object):
             try:
                 os.mkdir(recDir)
                 self.exportDir = recDir
+
             except:
                 self.exportDir = self.__atlasDirectory
+
         else:
             self.exportDir = recDir
         
