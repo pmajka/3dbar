@@ -2150,17 +2150,17 @@ class barVectorSlide(barObject):
     def addLabel(self, newLabel):
         """
         Add label to the slide.
-
+        
         @type  newLabel: L{barStructureLabel}
         @param newLabel: label to be added to the slide
         """
-        if not self._labels.has_key(newLabel.ID):
-            self._labels[newLabel.ID] = newLabel
-        else:
-            self._labels[newLabel.ID+'_'] = newLabel
+        while self._labels.has_key(newLabel.ID):
             debugOutput(\
                "Label with ID %s already in the slide! Trying to fix.!\n"\
                 % (newLabel.ID,), error=False)
+            newLabel.ID += '_'
+        
+        self._labels[newLabel.ID] = newLabel
     
     #TODO: fix setter/getter type conflict
     def _getSlideTemplate(self):

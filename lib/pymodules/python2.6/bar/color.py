@@ -84,7 +84,7 @@ class barColor():
     
     def __getValues(self):
         return (self.r, self.g, self.b)
-
+    
     def __getHSVTuple(self):
         return colorsys.rgb_to_hsv(*self())
      
