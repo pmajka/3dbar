@@ -303,7 +303,15 @@ class AtlasIndexer:
                  {'type':'CAFCreator','value':' '.join(CONF_CONTACT_COMMENT)},
                  {'type':'CAFCreatorEmail','value':''.join(CONF_CONTACT_EMAIL)},
                  {'type':'CAFCompilationTime',\
-                         'value':datetime.datetime.utcnow().strftime("%F %T")}]
+                         'value':datetime.datetime.utcnow().strftime("%F %T")},
+                 {'type':'CAFAxesOrientation', 'value':'LIA or RIA -'},
+                 {'type':'CAFFullName','value':'The Mouse Brain in Stereotaxic Coordinates; G. Paxinos, K.B.J Franklin, 3rd ed.'},
+                 {'type':'Language', 'value':'En'},
+                 {'type':'Genus', 'value':'Mus'},
+                 {'type':'Species', 'value':'Mus Musculus'},
+                 {'type':'Strain', 'value':'C57BL/J6'},
+                 {'type':'Age', 'value':'3 months'},
+                 {'type':'Sex', 'value':'male'}]
 
         for entry in DataToInsert:
             newAtlasPropertiesElement = self.doc.createElement('property')

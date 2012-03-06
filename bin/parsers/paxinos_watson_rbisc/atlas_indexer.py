@@ -306,8 +306,14 @@ class AtlasIndexer:
                  {'type':'CAFCompilationTime',\
                          'value':datetime.datetime.utcnow().strftime("%F %T")},
                  {'type':'CAFAxesOrientation', 'value':'LIA or RIA - hemispheres are symmetrical'},
-                 {'type':'CAFFullName','value':'The rat brain in stereotaxic coordinates'}]
-
+                 {'type':'CAFFullName','value':'The Rat Brain in Stereotaxic Coordinates; G. Paxinos, C. Watson, 6th ed.'},
+                 {'type':'Language', 'value':'En'},
+                 {'type':'Genus', 'value':'Rattus'},
+                 {'type':'Species', 'value':'Rattus Norvegicus'},
+                 {'type':'Strain', 'value':'Wistar'},
+                 {'type':'Age', 'value':'N/A'},
+                 {'type':'Sex', 'value':'male'}]
+        
         for entry in DataToInsert:
             newAtlasPropertiesElement = self.doc.createElement('property')
             newAtlasPropertiesElement.setAttribute('type',entry['type'])
