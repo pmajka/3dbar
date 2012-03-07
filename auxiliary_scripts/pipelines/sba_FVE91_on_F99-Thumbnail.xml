@@ -71,7 +71,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="1">
+			<pipelineelement disable="False" displayable="True" on="True" order="1">
 				<vtkclass>
 					vtkImagePermute
 				</vtkclass>
@@ -79,7 +79,7 @@
 					libvtkImagingPython.vtkImagePermute
 				</desc>
 				<params>
-					<param display="False" hidden="False" order="0">
+					<param display="False" hidden="True" order="0">
 						<name>
 							SetFilteredAxes
 						</name>
@@ -88,10 +88,10 @@
 								0
 							</value>
 							<value order="1" type="int">
-								1
+								2
 							</value>
 							<value order="2" type="int">
-								2
+								1
 							</value>
 						</args>
 					</param>
@@ -329,7 +329,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="9">
+			<pipelineelement disable="False" displayable="True" on="True" order="9">
 				<vtkclass>
 					barVtkMirror
 				</vtkclass>

@@ -71,7 +71,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="1">
+			<pipelineelement disable="False" displayable="True" on="True" order="1">
 				<vtkclass>
 					vtkImagePermute
 				</vtkclass>
@@ -88,10 +88,10 @@
 								0
 							</value>
 							<value order="1" type="int">
-								1
+								2
 							</value>
 							<value order="2" type="int">
-								2
+								1
 							</value>
 						</args>
 					</param>
@@ -137,13 +137,13 @@
 						</name>
 						<args>
 							<value order="0" type="float">
-								1.0
+								2.0
 							</value>
 							<value order="1" type="float">
-								1.0
+								2.0
 							</value>
 							<value order="2" type="float">
-								1.0
+								2.0
 							</value>
 						</args>
 					</param>
@@ -186,7 +186,7 @@
 								0
 							</value>
 							<value order="1" type="int">
-								120
+								100
 							</value>
 						</args>
 					</param>
@@ -211,7 +211,7 @@
 				</desc>
 				<params/>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="6">
+			<pipelineelement disable="False" displayable="True" on="False" order="6">
 				<vtkclass>
 					vtkSmoothPolyDataFilter
 				</vtkclass>
@@ -225,7 +225,7 @@
 						</name>
 						<args>
 							<value order="0" type="float">
-								0.25
+								0.5
 							</value>
 						</args>
 					</param>
@@ -251,7 +251,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="7">
+			<pipelineelement disable="False" displayable="True" on="False" order="7">
 				<vtkclass>
 					vtkQuadricClustering
 				</vtkclass>
@@ -329,7 +329,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="9">
+			<pipelineelement disable="False" displayable="True" on="True" order="9">
 				<vtkclass>
 					barVtkMirror
 				</vtkclass>
