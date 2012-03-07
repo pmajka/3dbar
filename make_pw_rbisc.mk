@@ -11,7 +11,7 @@
 
 PARSER_NAME = paxinos_watson_rbisc
 PARSERS_DIR = bin/parsers/${PARSER_NAME}/
-ATLAS_DIR = atlases/atlases_separated/${PARSER_NAME}/
+ATLAS_DIR = atlases/${PARSER_NAME}/
 DATA_DIR  = ${ATLAS_DIR}caf-src/
 REGION_COMPARATOR = ${PARSERS_DIR}region_comparator.py
 
