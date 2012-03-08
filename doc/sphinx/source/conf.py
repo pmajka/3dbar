@@ -42,7 +42,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'3d Brain Atlas Reconstructor'
-copyright = u'2011, Piotr Majka, Jakub M. Kowalski'
+copyright = u'2012, Piotr Majka, Jakub M. Kowalski'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
