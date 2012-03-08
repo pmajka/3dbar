@@ -137,13 +137,13 @@
 						</name>
 						<args>
 							<value order="0" type="float">
-								2.0
+								1.0
 							</value>
 							<value order="1" type="float">
-								2.0
+								1.0
 							</value>
 							<value order="2" type="float">
-								2.0
+								1.0
 							</value>
 						</args>
 					</param>
@@ -186,7 +186,7 @@
 								0
 							</value>
 							<value order="1" type="int">
-								100
+								120
 							</value>
 						</args>
 					</param>
