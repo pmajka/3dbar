@@ -142,9 +142,9 @@ ArcLP	arcuate hypothalamic nucleus, lateroposterior part	FFA559
 ArcM	arcuate hypothalamic nucleus, medial part	E99B59
 ArcMP	arcuate hypothalamic nucleus, medial posterior part	FF7500
 Astr	-------	777777
-Au	-------	777777
+Au	auditory cortex	777777
 Au1	primary auditory cortex	FFFB00
-Au2	-------	777777
+Au2	secondary auditory cortex	777777
 AuD	secondary auditory cortex, dorsal area	FFFDB2
 AuV	secondary auditory cortex, ventral area	FFFA00
 B	basal nucleus (Meynert)	FFFBB2
@@ -152,7 +152,7 @@ B4	-------	777777
 B9	B9 serotonin cells	00FFD0
 BAC	bed nucleus of the anterior commissure	FF5200
 BAOT	bed nucleus of the accessory olfactory tract	FFF500
-BG	-------	777777
+BG	basal ganglia	777777
 BIC	nucleus of the brachium of the inferior colliculus	002FFF
 BL	basolateral amygdaloid nucleus	D45C3B
 BLA	basolateral amygdaloid nucleus, anterior part	FF3500
@@ -163,19 +163,19 @@ BMA	basomedial amygdaloid nucleus, anterior part	FF3800
 BMP	basomedial amygdaloid nucleus, posterior part	FFC3B2
 Bar	Barrington's nucleus	1DC1F5
 Bo	Botzinger complex	94D7EC
-Brain	-------	777777
+Brain	whole brain	777777
 C	-------	4E19D4
 C1	C1 adrenaline cells	76C2DA
 C2	C2 adrenaline cells	009ED1
 C3	C3 adrenaline cells	3BC1EC
-CA	-------	777777
+CA	hippocampus proper	777777
 CA1	field CA1 of the hippocampus	D5E93B
 CA2	field CA2 of the hippocampus	BBD400
 CA3	field CA3 of the hippocampus	F6FFB2
 CAT	nucleus of the central acoustic tract	4F19D8
 CB	cell bridges of the ventral striatum	FFF000
 CC	central canal	DF0040
-CEnt	caudomedial entothinal cortex	D3E959
+CEnt	caudomedial entorhinal cortex	D3E959
 CG	central gray	00D821
 CGA	central gray, alpha part	B2FFBD
 CGB	central gray, beta part	00E922
@@ -298,12 +298,12 @@ ESO	episupraoptic nucleus	BEA5FA
 EVe	nucleus of origin of efferents of the vestibular nerve	3BC7F5
 EW	Edinger-Westphal nucleus	2100CB
 Ect	ectorhinal cortex	DCDF8E
-EntCx	-------	777777
+EntCx	entorhinal cortex	777777
 EpP	epipeduncular nucleus	8159E5
-Epith	Epith	777777
+Epith	epith	777777
 Eth	ethmoid thalamic nucleus	FFC323
 F	nucleus of the fields of Forel	E97500
-FB	-------	777777
+FB	forebrain	777777
 FC	fasciola cinereum	DAFF00
 FV	-------	A48CE1
 FVe	F cell group of the vestibular complex	76B3C8
@@ -325,11 +325,11 @@ GrC	granule cell layer of cochlear nuclei	8566D0
 GrCb	granule cell layer of the cerebellum	6C32F6
 GrDG	granular layer of the dentate gyrus	DEFF00
 GrO	granular cell layer of the olfactory bulb	B1E900
-HB	-------	777777
+HB	hindbrain	777777
 HDB	nucleus of the horizontal limb of the diagonal band	B6FF59
-Hipp	-------	777777
-HippFormation	-------	777777
-Hy	-------	777777
+Hipp	hippocampus	777777
+HippFormation	hippocampal formation	777777
+Hy	hypothalamus	777777
 I	intercalated nuclei of the amygdala	FF9B76
 I3	-------	777777
 I8	interstitial nucleus of the vestibulocochlear nerve	653FBF
@@ -396,8 +396,8 @@ IntDL	interposed cerebellar nucleus, dorsolateral hump	00FF3D
 IntDM	interposed cerebellar nucleus, dorsomedial crest	59FF81
 IntP	interposed cerebellar nucleus, posterior part	00FF3B
 IntPPC	interposed cerebellar nucleus, posterior parvicellular part	00FF3B
-Intralaminar-Th-nu	-------	777777
-IsoCx	-------	777777
+Intralaminar-Th-nu	intralaminar thalamic nuclei	777777
+IsoCx	isocortex	777777
 JPLH	juxtaparaventricular part of lateral hypothalamus	693FC7
 JxO	juxtaolivary nucleus	8B72C3
 KF	Kolliker-Fuse nucleus	B2FFDE
@@ -470,7 +470,7 @@ Lth	lithoid nucleus	6626F6
 M1	primary motor cortex	C4C923
 M2	secondary motor cortex	F8FF47
 MA3	medial accessory oculomotor nucleus	3BA4C8
-MB	Midbrain	777777
+MB	midbrain	777777
 MCLH	magnocellular nucleus of the lateral hypothalamus	FF5E00
 MCPC	magnocellular nucleus of the posterior commissure	793FFA
 MCPO	magnocellular preoptic nucleus	E99159
@@ -490,7 +490,7 @@ MGV	medial geniculate nucleus, ventral part	FFC559
 ML	medial mammillary nucleus, lateral part	D45E00
 MM	medial mammillary nucleus, medial part	FFECB2
 MO	medial orbital cortex	D8DF23
-MOB	-------	777777
+MOB	main olfactory bulb	777777
 MPA	medial preoptic area	E99659
 MPB	medial parabrachial nucleus	00FF8D
 MPBE	medial parabrachial nucleus external part	00FF8C
@@ -508,7 +508,7 @@ MS	medial septal nucleus	DDFFB2
 MSO	medial superior olive	1DB0E3
 MT	medial terminal nucleus of the accessory optic tract	8159D8
 MTu	medial tuberal nucleus	FFCFB2
-MV	-------	9B7FD8
+MV	medial vestibular nucleus	9B7FD8
 MVPO	medioventral periolivary nucleus	8266BF
 MVe	medial vestibular nucleus	00E568
 MVeMC	medial vestibular nucleus, magnocellular part	00FF71
@@ -527,7 +527,7 @@ MePV	medial amygdaloid nucleus, posteroventral part	A18CD0
 Med	medial (fastigial) cerebellar nucleus	00E543
 MedDL	medial cerebellar nucleus, dorsolateral protuberance	6BE58E
 MedL	medial cerebellar nucleus, lateral part	47F279
-Medulla-oblongolata	Medulla-oblongolata	777777
+Medulla-oblongolata	medulla-oblongolata	777777
 Mi	mitral cell layer of the olfactory bulb	D6FF59
 MiA	mitral cell layer of the accessory olfactory bulb	ABDF00
 MiTg	microcellular tegmental nucleus	00D2D4
@@ -552,7 +552,7 @@ OT	nucleus of the optic tract	8966D4
 OV	olfactory ventricle (olfactory part of lateral ventricle)	FF005A
 Obex	obex	8D59FA
 Olf	-------	777777
-OlfCx	-------	EDFF00
+OlfCx	olfactory cortex	EDFF00
 OlfCx-1	-------	EFFF59
 Op	optic nerve layer of the superior colliculus	433BE9
 Or	oriens layer of the hippocampus	E7FF3B
@@ -710,7 +710,7 @@ Rad	radiatum layer of the hippocampus	DFFF00
 Rbd	rhabdoid nucleus	B28CF6
 Re	reuniens thalamic nucleus	FFAC00
 ReIC	recess of the inferior colliculus	FFB2D4
-RetroHippRegion	-------	777777
+RetroHippRegion	retrohippocampal region	777777
 Rh	rhomboid thalamic nucleus	D8C48E
 Ro	nucleus of Roller	A87FF2
 Rt	reticular thalamic nucleus	D8BB6B
@@ -749,7 +749,7 @@ SM	nucleus of the stria medullaris	7333E5
 SMT	submammillothalamic nucleus	C3A5F6
 SMV	superior medullary velum	59FFAB
 SN	substantia nigra	777777
-SNC	-------	777777
+SNC	substantia nigra, compact part	777777
 SNCD	substantia nigra, compact part, dorsal tier	B8B2FF
 SNCM	substantia nigra, compact part, medial tier	BBB2FF
 SNCV	substantia nigra, compacta part, ventral tier	1800FF
@@ -791,7 +791,7 @@ STSM	bed nucleus of stria terminalis, supracapsular division, lateralpart	E2FFB2
 STr	subiculum, transition area	CEFF00
 Sag	sagulum nucleus	00FAFF
 Sc	scaphoid thalamic nucleus	9672D4
-Sep	-------	777777
+Sep	Septum	777777
 Sim	simple lobule	76FF9B
 SimA	simple lobule A	B2FFC6
 SimB	simple lobule B	00FF44
@@ -809,7 +809,7 @@ SolRL	nucleus of the solitary tract, rostrolateral part	85EFE6
 SolV	solitary nucleus, ventral part	85FFF5
 SolVL	nucleus of the solitary tract, ventrolateral part	85DFD8
 Sp	-------	777777
-Sp5	-------	777777
+Sp5	spinal trigeminal nucleus	777777
 Sp5C	spinal trigeminal nucleus, caudal part	59FFF5
 Sp5I	spinal trigeminal nucleus, interpolar part	B2FFFB
 Sp5O	spinal trigeminal nucleus, oral part	00DFD6
@@ -820,9 +820,9 @@ Sph	sphenoid nucleus	59D2FF
 StA	strial part of the preoptic area	4E0CBF
 StHy	striohypothalamic nucleus	A88CD8
 Stg	stigmoid hypothalamic nucleus	FF9C59
-Str	Striatum	777777
-StrD	Dorsal striatum	777777
-StrV	Ventral striatum	777777
+Str	striatum	777777
+StrD	dorsal striatum	777777
+StrV	ventral striatum	777777
 Su3	supraoculomotor periaqueductal gray	9585D8
 Su3C	supraoculomotor cap	542CFF
 Su5	supratrigeminal nucleus	3BA9D1
@@ -831,7 +831,7 @@ SuM	supramammillary nucleus	FFD3B2
 SuML	supramammillary nucleus, lateral part	FF6D00
 SuMM	supramammillary nucleus, medial part	FFD3B2
 SuS	superior salivatory nucleus	9C72E5
-SuV	-------	9365E1
+SuV	superior vestibular nucleus	9365E1
 SuVe	superior vestibular nucleus	94DBF5
 Sub	submedius thalamic nucleus	EFB42C
 SubB	subbrachial nucleus	6B26E1
@@ -843,17 +843,17 @@ SubG	subgeniculate nucleus	AE7FFF
 SubI	subincertal nucleus	630CF6
 SubP	subpostrema area	7026ED
 SubV	submedius thalamic nucleus, ventral part	FFE7B2
-Subiculum	-------	777777
+Subiculum	Subiculum	777777
 Subth	Subth	777777
 T	-------	6519E5
 TG	tectal gray	7D32FA
 TS	triangular septal nucleus	9572D0
-TT	tensor tympani muscle	777777
+TT	tenia tecta	777777
 Te	terete hypothalamic nucleus	FF6100
 TeA	temporal associatin cortex	F6FF23
-Tel	Telencepahlon	777777
-Tg	Tegmentum	777777
-Th	-------	DF9200
+Tel	telencepahlon	777777
+Tg	tegmentum	777777
+Th	thalamus	DF9200
 Tr	-------	B899ED
 Tu	olfactory tubercle	FFEF00
 Tu-1	-------	E9E059
@@ -863,13 +863,13 @@ Tu1	olfactory tubercle, layer 1	777777
 TuLH	tuberal region of lateral hypothalamus	7F33FF
 Tz	nucleus of the trapezoid body	1DB4EC
 Unknown	Not done yet!	777777
-Unlabeled	-------	000000
+Unlabeled	Unlabeled areas	000000
 Uvu	-------	777777
 V	-------	777777
 V1	primary visual cortex	E7E959
 V1B	primary visual cortex, binocular area	FBFF00
 V1M	primary visual cortex, monocular area	FDFFB2
-V2	-------	777777
+V2	visual cortex	777777
 V2L	secondary visual cortex, lateral area	FDFFB2
 V2ML	secondary visual cortex, mediolateral area	F8FF00
 V2MM	secondary visual cortex, mediomedial area	FAFF59
@@ -944,7 +944,7 @@ alv	alveus of the hippocampus	CAFFB2
 aopt	-------	777777
 aot	accessory olfactory tract	B6FF00
 apmf	ansoparamedian fissure	9972D8
-arteries	-------	777777
+arteries	arteries	777777
 asc7	ascending fibers of the facial nerve	7D4CCB
 asp	anterior spinal artery	DF3BCE
 azac	azygous anterior cerebral artery	EF76E2
@@ -976,7 +976,7 @@ df	dorsal fornix	CCFFB2
 dhc	dorsal hippocampal commissure	8BFF59
 dlg	deep lingual artery and vein	777777
 dlo	dorsal lateral olfactory tract	B8FF00
-dopamine-cells	-------	777777
+dopamine-cells	dopamine cells	777777
 dpal	descending palatine artery	777777
 dsc	dorsal spinocerebellar tract	A07FD4
 dsc-oc	dorsal spinocerebellar tract and olivocerebellar tract	8D4CF2
@@ -990,14 +990,14 @@ f	fornix	54FF00
 fi	fimbria of the hippocampus	7A3FD4
 fmi	forceps minor of the corpus callosum	D2FFB2
 fmj	forceps major of the corpus callosum	9DFF59
-fornix	-------	777777
+fornix	fornix	777777
 fr	fasciculus retroflexus	9A7FC3
 g7	genu of the facial nerve	6400FF
 gcc	genu of the corpus callosum	96FF59
 gpal	greater palatine artery	777777
 gr	gracile fasciculus	00FF80
 hif	hippocampal fissure	9C7FC7
-hippocampal-white-matter	-------	777777
+hippocampal-white-matter	hippocampal white matter	777777
 ia	internal arcuate fibers	6B0CFA
 iala	inferior alveolar artery	777777
 ic	internal capsule	E4B2FF
@@ -1036,18 +1036,18 @@ mt	mammillothalamic tract	6D33C3
 mtg	mammillotegmental tract	5C0CD0
 mxa	maxillary artery	777777
 nerves	nerves	777777
-noradrenaline-cells	-------	777777
+noradrenaline-cells	noradrenaline cells	777777
 ns	nigrostriatal bundle	570CC3
 oc	olivocerebellar tract	853FE9
 ocb	olivocochlear bundle	B999E9
 och	optic chiasm	4F00C3
 olfa	-------	9459E9
 opt	optic tract	B28CE9
-other	-------	777777
+other	other	777777
 ox	-------	777777
-p1	-------	8E66C7
+p1	p1	8E66C7
 p1PAG	p1 periaqueductal gray	0100E9
-p1Rt	-------	B07FF6
+p1Rt	p1 reticular formation	B07FF6
 pc	posterior commissure	522CE5
 pcer	posterior cerebral artery	DF00BB
 pcuf	preculminate fissure	7E3FD8
@@ -1075,7 +1075,7 @@ sox	supraoptic decussation	7126D8
 sp5	spinal trigeminal tract	874CD8
 st	stria terminalis	844CD0
 str	superior thalamic radiation	7819FA
-subcortical-white-matter	-------	777777
+subcortical-white-matter	subcortical white matter	777777
 sumx	supramammillary decussation	BB8CFA
 tfp	transverse fibers of the pons	9159DC
 ts	tectospinal tract	85EFBB
@@ -1084,9 +1084,9 @@ tz	trapezoid body	620CD4
 un	uncinate fasciculus of the cerebellum	A272E1
 unx	uncinate fasciculus decussation	A066ED
 v	vein	6F19E1
-vBrain	-------	FF5961
+vBrain	vBrain	FF5961
 veme	vestibulomesencephalic tract	8E3FF6
-ventricles	-------	777777
+ventricles	ventricles	777777
 vert	vertebral artery	B999E5
 vesp	vestibulospinal tract	8A4CDC
 vhc	ventral hippocampal commissure	4AFF00
@@ -1436,4 +1436,4 @@ tzx	decussation of the trapezoid body	777777
 Utr	utricle	777777
 vc	ventral column of the spinal cord	777777
 VeGn	vestibular nerve ganglion	777777
-Vent	ventri
+Vent	ventri	777777
