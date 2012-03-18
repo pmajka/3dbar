@@ -3069,14 +3069,14 @@ class barTracedSlide(barSlideRenderer):
     def fromXML(cls, svgDocument, fixDrawing=False):
         """
         Create object representing given SVG slide.
-
+        
         @param svgDocument: SVG slide (DOM XML or filename or file handler)
         @type svgDocument: xml.dom.minidom.Document or str or file
-
+        
         @param fixDrawing: indicates if path definitions has to be redefined
                            with absolute coordinates
         @type fixDrawing: bool
-
+        
         @rtype: cls
         @return: created object
         """
@@ -3367,12 +3367,39 @@ class barTracedSlide(barSlideRenderer):
         """
         for newStructure in args:
             self.__setitem__(newStructure.name, newStructure)
+   
+    def __validateBoundingBoxes(self):
+        """
+        Validate bounding boxes. For some datasets it may happen that bounding
+        boxes are calculated incorrectly due to data corruption.
+        
+        @rtype: None
+        """
+        # Define the broadest allowed bounding box.
+        maxBbx = (0, 0, self.size[0], self.size[1])
+        
+        # Iterate over all structures checking if all of them are correct:
+        for structure in self.structures:
+            testBbx = structure.bbx
+            
+            if (maxBbx[0] > testBbx[0]) or (maxBbx[1] > testBbx[1]) \
+                or (maxBbx[2] < testBbx[2]) or (maxBbx[3] < testBbx[3]):
+                _printRed("Invalid bounding box for structure %s detected. The \
+                        bounding box %s is not within allowed boundaries: %s. \
+                        Manual investigation is required. Parser will now \
+                        continue but probably the slide is corrupted." % \
+                        (structure.name, str(testBbx), str(maxBbx)) )
+                raw_input("Press any Key")
     
     def getXMLelement(self):
         """
         @return: XML representation of the slide
         @rtype: xml.dom.minidom.Document
         """
+        # Validate bounding boxes: check if all of them are withing slide's
+        # area.
+        self.__validateBoundingBoxes()
+        
         # Save tracing and rendering properties as metadata entries:
         self._setMetadata(\
                 self._clsMetadataElement('tracingConf', repr(self._tracingConf)))
