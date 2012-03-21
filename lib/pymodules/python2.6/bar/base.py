@@ -3405,7 +3405,6 @@ class barTracedSlide(barSlideRenderer):
                 self._clsMetadataElement('tracingConf', repr(self._tracingConf)))
         self._setMetadata(\
                 self._clsMetadataElement('rendererConf', repr(self._rendererConf)))
-        
         slide = self._getSlideTemplate().cloneNode(True)
         
         svgElement = slide.getElementsByTagName('svg')[0]
@@ -3774,13 +3773,18 @@ class barTracedSlideRenderer(barTracedSlide):
         # Create temporary slide
         tempSlide = self.__class__(\
                 self.slideTemplate.toxml(),
-                self.slideNumber)
+                slideNumber = self.slideNumber,
+                rendererConfiguration = self._rendererConf,
+                tracingConfiguration  = self._tracingConf)
         
         # Copy structures that we want to render into new slide
         slideStructNames = map(lambda x: getattr(x,'name'), self.values())
         existingStructures = list(set(structureNameList) & set(slideStructNames))
         for structureName in existingStructures:
             tempSlide[structureName] = self[structureName]
+        
+        # Also, remember to copy metadata
+        tempSlide._metadata = self._metadata
         
         return tempSlide
     
