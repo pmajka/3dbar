@@ -120,7 +120,7 @@ class batchInterface(object):
                           default=floatColourToInt(BAR_RENDERER_BACKGROUND),
                           help='RGB background colourcomponents (within 0.0-255.0 range)')
         
-        formatOptions = OptionGroup(parser, 'Output Format Options')
+        formatOptions = OptionGroup(parser, 'Output Format Switches')
         for (keyword, description) in self.output_format:
             formatOptions.add_option('--'+keyword, action='append_const',
                                      const=keyword, dest='format', help=description)
