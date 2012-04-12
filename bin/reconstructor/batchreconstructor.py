@@ -344,7 +344,7 @@ class barBatchReconstructor(object):
             components = self.sh.ih.unfoldSubtrees(structureNames, self.depth, leavesOnly=True)
 
             # combine their names into reconstruction name
-            name = 'composite_%d_structures_of_hash_%X' % (len(components),
+            name = 'composite_%d_structures_%X' % (len(components),
                                                         crc32('_'.join(sorted(list(components)))) & 0xffffffff)
             
             # and request the reconstruction
