@@ -45,6 +45,7 @@ from bar.rec.barreconstructor import barReconstructionModule, HTMLColorToRGB,\
                              barPipeline, BAR_DEFAULT_RECONSTRUCTION_DIR,\
                              BAR_TEMPLATE, BAR_ATLAS_INDEX_FILENAME,\
                              BAR_BRAIN_OUTLINE_PROPS, SCENE_EXPORT_FORMAT_MASK
+from zlib import crc32
 
 def rotateY(a, (x, y, z)):
     return (math.sin(a) * z + math.cos(a) * x,
@@ -277,6 +278,7 @@ class barBatchReconstructor(object):
         """
         if formats == None:
             requestedFormats = self.formats
+
         else:
             requestedFormats = set(formats)
         
@@ -342,7 +344,8 @@ class barBatchReconstructor(object):
             components = self.sh.ih.unfoldSubtrees(structureNames, self.depth, leavesOnly=True)
 
             # combine their names into reconstruction name
-            name = '_'.join(sorted(list(components)))
+            name = 'composite_%d_structures_of_hash_%X' % (len(components),
+                                                        crc32('_'.join(sorted(list(components)))) & 0xffffffff)
             
             # and request the reconstruction
             self.prepareCompositeLoop(name, components)
@@ -362,6 +365,7 @@ class barBatchReconstructor(object):
         
         if formats==None:
             requestedFormats = frozenset(self.formats)
+
         else:
             requestedFormats = frozenset(formats)
         
@@ -387,6 +391,7 @@ class barBatchReconstructor(object):
         
         if formats==None:
             requestedFormats = frozenset(self.formats)
+
         else:
             requestedFormats = frozenset(formats)
 
