@@ -18,7 +18,7 @@ Installing required packages (Ubuntu)
 =====================================
 
 
-* Installation in Kubuntu 11.10
+* Installation in Ubuntu/Kubuntu 11.10
 
   1. Install the Visualization Toolkit and other graphics libraries::
 
@@ -276,9 +276,10 @@ Troubleshooting (Ubuntu)
 
   $ ./3dbar.sh
   ./3dbar.sh: line 17:  2296 Segmentation fault      python bin/reconstructor/gui.py
-
-  the reason can be a bug in one of (third party) VTK packages already installed
-  in your system. You have to fix it manually:
+  
+  the reason can be a bug in the 'python-vtk' package installed
+  in your system. Unfortunately there is no automated way to fix it - you have
+  to do it manually:
 
   1. Find a file named 'wxVTKRenderWindowInteractor.py'. It can be located
      in '/usr/share/pyshared/vtk/wx/' directory or in similar location:
@@ -302,7 +303,7 @@ Troubleshooting (Ubuntu)
 
                      d = '_%s_%s' % (d[2:], 'void_p')
 
-  4. Add '\0' characters to the line to make it:
+  4. Add '\0' characters to the line to make it like below:
 
      ::
 
@@ -310,4 +311,5 @@ Troubleshooting (Ubuntu)
 
   5. Save the modified file.
 
-  6. The bug should be fixed for now.
+  6. The bug should be fixed for now. Try running 3dBAR again. If this solution
+     doesn't work - let us know.
