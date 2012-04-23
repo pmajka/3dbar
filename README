@@ -264,3 +264,50 @@ The documentation for API can be viewed by opening *doc/api/html/index.html*
 and the documentation for 3dBAR graphic interface can be viewed by opening
 *doc/gui/html/index.html*.
 
+
+Troubleshooting (Ubuntu)
+=====================================
+
+* Segmentation fault in Ubuntu 11.10
+
+  If the reconstructor crashes like that (numbers can vary):
+
+  ::
+
+  $ ./3dbar.sh
+  ./3dbar.sh: line 17:  2296 Segmentation fault      python bin/reconstructor/gui.py
+
+  the reason can be a bug in one of (third party) VTK packages already installed
+  in your system. You have to fix it manually:
+
+  1. Find a file named 'wxVTKRenderWindowInteractor.py'. It can be located
+     in '/usr/share/pyshared/vtk/wx/' directory or in similar location:
+ 
+     ::
+
+     $ find / -name 'wxVTKRenderWindowInteractor.py'
+
+
+  2. Edit the file with your favourite ASCII editor. In the example editor 'vim'
+     is used and it is assumed that the path to the file is
+     '/usr/share/pyshared/vtk/wx/wxVTKRenderWindowInteractor.py':
+ 
+     ::
+
+     $ sudo vim /usr/share/pyshared/vtk/wx/wxVTKRenderWindowInteractor.py
+
+  3. Near 350th line of the file find a following line:
+ 
+     ::
+
+                     d = '_%s_%s' % (d[2:], 'void_p')
+
+  4. Add '\0' characters to the line to make it:
+
+     ::
+
+                     d = '_%s_%s\0' % (d[2:], 'void_p')
+
+  5. Save the modified file.
+
+  6. The bug should be fixed for now.
