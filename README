@@ -297,11 +297,13 @@ Troubleshooting (Ubuntu)
 
      $ sudo vim /usr/share/pyshared/vtk/wx/wxVTKRenderWindowInteractor.py
 
+
   3. Near 350th line of the file find a following line:
  
      ::
 
                      d = '_%s_%s' % (d[2:], 'void_p')
+
 
   4. Add '\0' characters to the line to make it like below:
 
@@ -309,7 +311,9 @@ Troubleshooting (Ubuntu)
 
                      d = '_%s_%s\0' % (d[2:], 'void_p')
 
+
   5. Save the modified file.
+
 
   6. The bug should be fixed for now. Try running 3dBAR again. If this solution
      doesn't work - let us know.
