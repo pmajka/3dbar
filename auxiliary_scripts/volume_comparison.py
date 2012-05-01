@@ -58,11 +58,12 @@ diff -r ${REF_VOL_DIR} ${RELASE_VOL_DIR} > $WORKING_DIR/comparison.diff
 
 def cafLines(cafName, dir3dbar):
     result = """#BEGIN %(cafName)s
+
 testdir=${REF_VOL_DIR}/%(cafName)s/
 echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh -g 999 %(dir3dbar)s/atlases/%(cafName)s/caf-reference/index.xml --exportToNiftii -e $testdir %(rootElement)s" >> ${JOB_TEMP_REFERENCE}
 
 testdir=${RELASE_VOL_DIR}/%(cafName)s/
-echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh -g  999 %(dir3dbar)s/atlases/%(cafName)s/caf/index.xml -e $testdir %(rootElement)s" >> ${JOB_TEMP_RC}
+echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh -g  999 %(dir3dbar)s/atlases/%(cafName)s/caf/index.xml --exportToNiftii -e $testdir %(rootElement)s" >> ${JOB_TEMP_RC}
 
 #END %(cafName)s"""
     indexer = bar.barIndexer.fromXML(os.path.join(dir3dbar,
@@ -76,15 +77,17 @@ echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh -g  999 %(dir3dbar)s/atl
 def cafLines2(cafName, dir3dbar):
     #TODO: filtrowac index.groups.values() po uidList
     result = """#BEGIN %(cafName)s
+
 testdir=${REF_VOL_DIR}/%(cafName)s/
-echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh -g 999 %(dir3dbar)s/atlases/%(cafName)s/caf-reference/index.xml --exportToNiftii -e $testdir %(rootElement)s" >> ${JOB_TEMP_REFERENCE}
+%(cafGroupLines)s
 
 testdir=${RELASE_VOL_DIR}/%(cafName)s/
-echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh -g  999 %(dir3dbar)s/atlases/%(cafName)s/caf/index.xml -e $testdir %(rootElement)s" >> ${JOB_TEMP_RC}
+%(refGroupLines)s
 
 #END %(cafName)s"""
-    cafLinePattern = 'echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh %(dir3dbar)s/atlases/%(cafName)s/caf-reference/index.xml --exportToNiftii -e $testdir %(group)s" >> ${JOB_TEMP_REFERENCE}'
-    refLinePattern = 'echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh %(dir3dbar)s/atlases/%(cafName)s/caf/index.xml -e $testdir %(group)s" >> ${JOB_TEMP_RC}'
+
+    cafLinePattern = 'echo "mkdir -p $testdir; %%(dir3dbar)s/batchinterface.sh %%(dir3dbar)s/atlases/%%(cafName)s/caf-reference/index.xml --exportToNiftii -e $testdir %s" >> ${JOB_TEMP_REFERENCE}'
+    refLinePattern = 'echo "mkdir -p $testdir; %%(dir3dbar)s/batchinterface.sh %%(dir3dbar)s/atlases/%%(cafName)s/caf/index.xml --exportToNiftii -e $testdir %s" >> ${JOB_TEMP_RC}'
 
     refIndexer = bar.barIndexer.fromXML(os.path.join(dir3dbar,
                                                      'atlases',
@@ -96,10 +99,18 @@ echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh -g  999 %(dir3dbar)s/atl
                                                      cafName,
                                                      'caf/index.xml'))
 
+    cafGroups = [x.name for x in cafIndexer.groups.values() if x.uidList != []]
+    refGroups = [x.name for x in refIndexer.groups.values() if x.uidList != []]
+    
+    cafGroupLines = '\n'.join(cafLinePattern % x for x in cafGroups)
+
+    refGroupLines = '\n'.join(cafLinePattern % x for x in refGroups)    
+
 
     return result % {'cafName': cafName,
                      'dir3dbar': dir3dbar,
-                     'rootElement': indexer.hierarchyRootElementName}
+                     'cafGroupLines': cafGroupLines,
+                     'refGroupLines': refGroupLines}
 
 
 if __name__ == '__main__':
@@ -117,7 +128,7 @@ if __name__ == '__main__':
     if nCpus <= 1:
         executionCommand = 'bash'
 
-    cafDependent = '\n\n'.join(cafLines(cafName, dir3dbar) for cafName in sys.argv[3:])
+    cafDependent = '\n\n'.join(cafLines2(cafName, dir3dbar) for cafName in sys.argv[3:])
 
     print SCRIPT_TEMPLATE % {'dir3dbar': dir3dbar,
                              'cafDependent': cafDependent,
