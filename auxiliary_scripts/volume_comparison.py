@@ -33,13 +33,13 @@ export DISPLAY=:0.0;
 source %(dir3dbar)s/setbarenv.sh
 
 WORKING_DIR=%(dir3dbar)s/relase_candidate_volume_testing_`date +"%%Y-%%m-%%d_%%H-%%M"`/
-REF_VOL_DIR=${WORKING_DIR}/reference_volumes/
-RELASE_VOL_DIR=${WORKING_DIR}/relase_candidate_volumes/
+REF_VOL_DIR=${WORKING_DIR}reference_volumes/
+RELASE_VOL_DIR=${WORKING_DIR}relase_candidate_volumes/
 
-LOG_FILENAME=${WORKING_DIR}/vol_comparison.log
+LOG_FILENAME=${WORKING_DIR}vol_comparison.log
 
-JOB_TEMP_REFERENCE=${WORKING_DIR}/__temp__job__parallel__reference__comparison.sh
-JOB_TEMP_RC=${WORKING_DIR}/__temp__job__parallel__testing__comparison
+JOB_TEMP_REFERENCE=${WORKING_DIR}__temp__job__parallel__reference__comparison.sh
+JOB_TEMP_RC=${WORKING_DIR}__temp__job__parallel__testing__comparison.sh
 
 mkdir -p ${RELASE_VOL_DIR} ${REF_VOL_DIR}
 rm -rvf ${JOB_TEMP_REFERENCE} ${JOB_TEMP_RC}
@@ -76,15 +76,15 @@ echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh -g  999 %(dir3dbar)s/atl
 
 def cafLines2(cafName, dir3dbar):
     #TODO: filtrowac index.groups.values() po uidList
-    result = """#BEGIN %(cafName)s
+    resultTemplate = """#BEGIN %%(cafName)s
 
-testdir=${REF_VOL_DIR}/%(cafName)s/
+testdir=${REF_VOL_DIR}/%%(cafName)s/
 %(cafGroupLines)s
 
-testdir=${RELASE_VOL_DIR}/%(cafName)s/
+testdir=${RELASE_VOL_DIR}/%%(cafName)s/
 %(refGroupLines)s
 
-#END %(cafName)s"""
+#END %%(cafName)s"""
 
     cafLinePattern = 'echo "mkdir -p $testdir; %%(dir3dbar)s/batchinterface.sh %%(dir3dbar)s/atlases/%%(cafName)s/caf-reference/index.xml --exportToNiftii -e $testdir %s" >> ${JOB_TEMP_REFERENCE}'
     refLinePattern = 'echo "mkdir -p $testdir; %%(dir3dbar)s/batchinterface.sh %%(dir3dbar)s/atlases/%%(cafName)s/caf/index.xml --exportToNiftii -e $testdir %s" >> ${JOB_TEMP_RC}'
@@ -103,14 +103,13 @@ testdir=${RELASE_VOL_DIR}/%(cafName)s/
     refGroups = [x.name for x in refIndexer.groups.values() if x.uidList != []]
     
     cafGroupLines = '\n'.join(cafLinePattern % x for x in cafGroups)
+    refGroupLines = '\n'.join(refLinePattern % x for x in refGroups)    
 
-    refGroupLines = '\n'.join(cafLinePattern % x for x in refGroups)    
-
+    result = resultTemplate % {'cafGroupLines': cafGroupLines,
+                               'refGroupLines': refGroupLines}
 
     return result % {'cafName': cafName,
-                     'dir3dbar': dir3dbar,
-                     'cafGroupLines': cafGroupLines,
-                     'refGroupLines': refGroupLines}
+                     'dir3dbar': dir3dbar}
 
 
 if __name__ == '__main__':
