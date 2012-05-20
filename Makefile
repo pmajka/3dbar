@@ -132,6 +132,15 @@ sba_FVE91_on_F99:
 	python ${PARSERS_DIR}sba_FVE91_on_F99/__init__.py
 	if [ -e ${ATLASES_DIR}sba_FVE91_on_F99/caf-reference ]; then diff -r ${ATLASES_DIR}sba_FVE91_on_F99/caf ${ATLASES_DIR}sba_FVE91_on_F99/caf-reference > diff_sba_FVE91_on_F99.txt; fi
 
+sba_MM11_on_F99:
+	mkdir -p ${ATLASES_DIR}sba_MM11_on_F99/src
+	mkdir -p ${ATLASES_DIR}sba_MM11_on_F99/caf
+	wget -O ${ATLASES_DIR}sba_MM11_on_F99/src/Human_Conte69_L_brodmann_paint_to_volume.nii.gz "http://sba.incf.org/B05_on_Conte69/source/Human_Conte69_L_brodmann_paint_to_volume.nii.gz"
+	wget -O ${ATLASES_DIR}sba_MM11_on_F99/src/index2acr_Human_Conte69_L_brodmann_paint_to_volume.json "http://sba.incf.org/B05_on_Conte69/source/index2acr_Human_Conte69_L_brodmann_paint_to_volume.json"
+	python ${PARSERS_DIR}sba_MM11_on_F99/__init__.py
+	python ${PARSERS_DIR}sba_MM11_on_F99/__init__volume.py
+	if [ -e ${ATLASES_DIR}sba_MM11_on_F99/caf-reference ]; then diff -r ${ATLASES_DIR}sba_MM11_on_F99/caf ${ATLASES_DIR}sba_MM11_on_F99/caf-reference > diff_sba_MM11_on_F99.txt; fi
+
 aba:
 	mkdir -p ${ATLASES_DIR}aba/src
 	mkdir -p ${ATLASES_DIR}aba/caf
@@ -154,6 +163,7 @@ clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}sba_LPBA40_on_SRI24/caf ${ATLASES_DIR}sba_LPBA40_on_SRI24/src
 	rm -rfv ${ATLASES_DIR}sba_RM_on_F99/caf ${ATLASES_DIR}sba_RM_on_F99/src
 	rm -rfv ${ATLASES_DIR}sba_FVE91_on_F99/caf ${ATLASES_DIR}sba_FVE91_on_F99/src
+	rm -rfv ${ATLASES_DIR}sba_MM11_on_F99/caf ${ATLASES_DIR}sba_MM11_on_F99/src
 	rm -rfv ${ATLASES_DIR}whs_0.51/caf
 	rm -rfv ${ATLASES_DIR}whs_0.6.1/caf
 	rm -rfv ${ATLASES_DIR}whs_0.5/caf 
@@ -177,6 +187,7 @@ reference_datasets:
 	rm -rf ${ATLASES_DIR}sba_LPBA40_on_SRI24/caf-reference; cp -r ${ATLASES_DIR}sba_LPBA40_on_SRI24/caf ${ATLASES_DIR}sba_LPBA40_on_SRI24/caf-reference
 	rm -rf ${ATLASES_DIR}sba_RM_on_F99/caf-reference; cp -r ${ATLASES_DIR}sba_RM_on_F99/caf ${ATLASES_DIR}sba_RM_on_F99/caf-reference
 	rm -rf ${ATLASES_DIR}sba_FVE91_on_F99/caf-reference; cp -r ${ATLASES_DIR}sba_FVE91_on_F99/caf ${ATLASES_DIR}sba_FVE91_on_F99/caf-reference
+	rm -rf ${ATLASES_DIR}sba_MM11_on_F99/caf-reference; cp -r ${ATLASES_DIR}sba_MM11_on_F99/caf ${ATLASES_DIR}sba_MM11_on_F99/caf-reference
 	rm -rf ${ATLASES_DIR}aba/caf-reference; cp -r ${ATLASES_DIR}aba/caf ${ATLASES_DIR}aba/caf-reference
 	rm -rf ${ATLASES_DIR}tem/caf-reference; cp -r ${ATLASES_DIR}tem/caf ${ATLASES_DIR}tem/caf-reference
 
@@ -185,5 +196,5 @@ clean_diff:
 		    diff_whs_0.51.txt diff_whs_0.5.txt diff_sba_PHT00.txt diff_sba_DB08.txt\
 			diff_sba_WHS09.txt diff_sba_WHS10.txt diff_sba_LPBA40_on_SRI24.txt\
 			diff_sba_RM_on_F99.txt diff_aba.txt diff_tem.txt diff_whs_0.6.1.txt\
-			diff_sba_FVE91_on_F99.txt
+			diff_sba_FVE91_on_F99.txt 
 

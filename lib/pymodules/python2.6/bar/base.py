@@ -1282,7 +1282,7 @@ class barPath(barAtlasSlideElement):
                         BAR_XML_NAMESPACE, 'type')
 
             retPath.type = strType
-
+        
         except:
             pass
         
@@ -3128,7 +3128,7 @@ class barTracedSlide(barSlideRenderer):
             except ValueError:
                 _printRed("Error while reading labels: %s\nSkipping." %\
                         (labelElement.toxml(),))
-        
+               
         # remove all paths, labels, etc. leaving slide template
         for element in ['text', 'path','bar:data']:
             for elementToDelete in svgdom.getElementsByTagName(element):
@@ -3407,7 +3407,7 @@ class barTracedSlide(barSlideRenderer):
                 self._clsMetadataElement('rendererConf', repr(self._rendererConf)))
         slide = self._getSlideTemplate().cloneNode(True)
         
-        svgElement = slide.getElementsByTagName('svg')[0]
+        #TODO: Unnecessary?? svgElement = slide.getElementsByTagName('svg')[0]
         metadataDataset =\
                 slide.getElementsByTagName(BAR_DATA_LOCATION_ELEMENT)[0]
         svgGroupDataset = slide.getElementsByTagName('g')[0]

@@ -35,7 +35,7 @@ import os, sys
 import xml.dom.minidom as dom
 from string import *
 
-from base import barPath, barTracedSlideRenderer, barTracedSlide,barBregmaMetadataElement, barTransfMatrixMetadataElement
+from base import barPath, barTracedSlideRenderer, barTracedSlide, barBregmaMetadataElement, barTransfMatrixMetadataElement
 from parsers import barExternalParser
 STRUCTURE_NAME_TEMPLATE = "structure%d_label%d_%s"
 
