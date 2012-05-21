@@ -65,11 +65,12 @@ jsonFilelist=\
          'bregma':'slicepos.json', 'config':'config.json', 
          'acr2full' : 'acr2full.json'}
 
-# Just for the SBA part of the parser
+# Just to meed formal SBA parser requirements. Slide range is not used in
+# any calculations
 slideRange = range(0,160)
 
 origTransformationMatrix =\
-        [-91., 109., 1., -1.]
+        [-91., 110., 1., -1.]
 
 tracedSlideTemplate = """<?xml version="1.0" ?><svg baseProfile="full"
 height="%f"
@@ -119,7 +120,7 @@ tracerSettings['NewPathIdTemplate'] = 'structure%d_%s_%s'
 renderingProperties = {}
 renderingProperties['ReferenceWidth']  = REFERENCE_WIDTH
 renderingProperties['ReferenceHeight'] = REFERENCE_HEIGHT
-renderingProperties['imageSize']       = (REFERENCE_WIDTH * 5, REFERENCE_HEIGHT * 5)
+renderingProperties['imageSize']       = (REFERENCE_WIDTH * 10, REFERENCE_HEIGHT * 10)
 
 indexerProps = dict([\
         ('Source','http://scalablebrainatlas.incf.org/main/coronal3d.php?template=B05_on_Conte69'),

@@ -17,6 +17,12 @@ IMAGE_TO_STRUCTURE_FN = 'imagecol2structname.txt'
 COLOR_MAPPING_FN = 'fullnames.txt'
 FULLNAME_MAPPING_FN = 'fullnames.txt'
 
+# Code used to generate colormap:
+# import colorsys
+# for i in range(256):
+#    r,g,b = colorsys.hsv_to_rgb( float(i)/256, 0.85, 95)
+#    print '%d\t%d\t%02X%02X%02X' % (i,i,r,g,b)
+
 # Dimensions of voxel in-plane
 voxelSize = 1.38312586445
 
