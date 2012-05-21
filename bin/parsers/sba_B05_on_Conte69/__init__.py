@@ -117,7 +117,7 @@ class AtlasParser(bar.barSBAParser):
     
     def reindex(self):
         pass
-
+    
     def _writeDictionaryToFile(self, dictionaryToStore, outputFilename):
         # Iterate over dictionary's values and then store
         outputString = ""

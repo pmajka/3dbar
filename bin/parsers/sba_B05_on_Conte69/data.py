@@ -24,7 +24,7 @@
 ###############################################################################
 ##                                                                           ##
 ##                  Configuration for B05_on_Conte69 template                ##
-##         Macaque - parcellation from Markov, Misery, et al. (2011)         ##
+##                 Brodmann 05 mapped onto the Conte69 (2012)                ##
 ## template src: http://scalablebrainatlas.incf.org/B05_on_Conte69/template/ ##
 ##                                                                           ##
 ###############################################################################
@@ -35,7 +35,7 @@ CONF_PARSER_NAME = 'sba_B05_on_Conte69'
 CONF_PARSER_COMMENT = 'CAF dataset (Macaque - Brodmann 05 mapped onto the Conte69) based on: \
 Scalable Brain Atlas \
 <a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=B05_on_Conte69" target="_blank">\
-B05_on_Conte69</a> template.'
+B05_on_Conte69</a> template. <a href="http://brainvis.wustl.edu/wiki/index.php//Caret:Atlases/Conte69_Atlas">See template details</a>.'
 CONF_CONTACT_COMMENT = 'Piotr Majka, Nencki Institute of Experimental Biology.'
 CONF_CONTACT_EMAIL = 'pmajka@nencki.gov.pl'
 CONF_CAF_COMPIL_TIME = datetime.datetime.utcnow().strftime("%F %T")
@@ -123,7 +123,11 @@ renderingProperties['ReferenceHeight'] = REFERENCE_HEIGHT
 renderingProperties['imageSize']       = (REFERENCE_WIDTH * 10, REFERENCE_HEIGHT * 10)
 
 indexerProps = dict([\
-        ('Source','http://scalablebrainatlas.incf.org/main/coronal3d.php?template=B05_on_Conte69'),
+        ('Source','http://sba.incf.org/B05_on_Conte69/source/Human_Conte69_L_brodmann_paint_to_volume.nii.gz'),
+        ('Genus', 'Homo'),
+        ('Species', 'Homo sapiens'),
+        ('Age', 'Adult'),
+        ('Language', 'En'),
         ('ReferenceWidth', str(REFERENCE_WIDTH)),
         ('ReferenceHeight', str(REFERENCE_HEIGHT)),
         ('FilenameTemplate', str(filenameTempates['traced'])),
@@ -136,7 +140,7 @@ indexerProps = dict([\
         ('CAFCompilationTime', CONF_CAF_COMPIL_TIME),
         ('CAFCreator', CONF_CONTACT_COMMENT),
         ('CAFCreatorEmail', CONF_CONTACT_EMAIL),
-        ('CAFAxesOrientation', 'LSA')])
+        ('CAFAxesOrientation', 'RSP')])
 
 atlasparserProperties=(
 ('backgroundColor', 0),
