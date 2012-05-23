@@ -3802,7 +3802,14 @@ class barTracedSlideRenderer(barTracedSlide):
         @return: rendered image
         """
         # Generate temporary slide that will hold only the pathObject path.
-        tempSlide = barTracedSlide(self.slideTemplate.toxml(), self.slideNumber)
+        tempSlide = self.__class__(\
+                self.slideTemplate.toxml(),
+                slideNumber = self.slideNumber,
+                rendererConfiguration = self._rendererConf,
+                tracingConfiguration  = self._tracingConf)
+        
+        # Also, remember to copy metadata
+        tempSlide._metadata = self._metadata
         
         # Unfortunately, we need to create xml document and append path in th
         # 'dom' manner :(

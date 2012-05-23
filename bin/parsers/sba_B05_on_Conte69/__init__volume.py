@@ -131,8 +131,16 @@ class AtlasParser(bar.barBitmapParser):
     
     def parse(self, slideNumber):
         tracedSlide = bar.barBitmapParser.parse(self, slideNumber,\
-                                                 generateLabels = False,
-                                                 useIndexer = False)
+                                                 generateLabels = True,
+                                                 useIndexer = False,
+                                                 writeSlide = False)
+        
+        # Make the label's font smaller so they do not cover each other
+        map(lambda x: \
+                x._attributes.update({'font-size':'8px'}),\
+                tracedSlide.labels)
+        tracedSlide.writeXMLtoFile(self._getOutputFilename(slideNumber))
+        
         return tracedSlide
     
     def parseAll(self):

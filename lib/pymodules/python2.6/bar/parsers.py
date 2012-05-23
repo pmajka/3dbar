@@ -438,6 +438,7 @@ class barBitmapParser(barGenericParser):
             customSlideTemplate = self.slideTemplate
         except: 
             customSlideTemplate = None
+        
         retSlide = barTracedSlideRenderer(\
                     slideTemplate = customSlideTemplate,\
                     rendererConfiguration = self.renderingProperties,\
