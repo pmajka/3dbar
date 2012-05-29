@@ -27,7 +27,36 @@ import sys
 import datetime
 import bar
 
-SCRIPT_TEMPLATE = """#!/bin/bash
+
+class structureLines(object):
+    _linePattern = None
+    _indexPath = None
+
+    def __init__(self, dir3dbar, cafName):
+        self.__indexer = bar.barIndexer.fromXML(os.path.join(dir3dbar,
+                                                             'atlases',
+                                                             cafName,
+                                                             self._indexPath))
+        self.__linePattern = self._linePattern % {'dir3dbar': dir3dbar,
+                                                  'cafName': cafName}
+
+    def __str__(self):
+        groups = [k for (k, v) in self.__indexer.groups.items() if v.uidList != []]
+        return '\n'.join(self.__linePattern % x for x in groups)
+
+
+class cafStructureLines(structureLines):
+    _linePattern = 'echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh %(dir3dbar)s/atlases/%(cafName)s/caf/index.xml --exportToNiftii -e $testdir %%s" >> ${JOB_TEMP_RC}'
+    _indexPath = 'caf/index.xml'
+
+
+class refStructureLines(structureLines):
+    _linePattern = 'echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh %(dir3dbar)s/atlases/%(cafName)s/caf-reference/index.xml --exportToNiftii -e $testdir %%s" >> ${JOB_TEMP_REFERENCE}'
+    _indexPath = 'caf-reference/index.xml'
+
+
+class scriptGenerator(object):
+    __scriptTemplate = """#!/bin/bash
 set -xe
 export DISPLAY=:0.0;
 source %(dir3dbar)s/setbarenv.sh
@@ -56,79 +85,45 @@ rm -rvf ${JOB_TEMP_REFERENCE} ${JOB_TEMP_RC}
 diff -r ${REF_VOL_DIR} ${RELASE_VOL_DIR} > $WORKING_DIR/comparison.diff
 """
 
-def cafLines(cafName, dir3dbar):
-    result = """#BEGIN %(cafName)s
+    __linePattern = """#BEGIN %(cafName)s
 
 testdir=${REF_VOL_DIR}/%(cafName)s/
-echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh -g 999 %(dir3dbar)s/atlases/%(cafName)s/caf-reference/index.xml --exportToNiftii -e $testdir %(rootElement)s" >> ${JOB_TEMP_REFERENCE}
-
-testdir=${RELASE_VOL_DIR}/%(cafName)s/
-echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh -g  999 %(dir3dbar)s/atlases/%(cafName)s/caf/index.xml --exportToNiftii -e $testdir %(rootElement)s" >> ${JOB_TEMP_RC}
-
-#END %(cafName)s"""
-    indexer = bar.barIndexer.fromXML(os.path.join(dir3dbar,
-                                                  'atlases',
-                                                  cafName,
-                                                  'caf-reference/index.xml'))
-    return result % {'cafName': cafName,
-                     'dir3dbar': dir3dbar,
-                     'rootElement': indexer.hierarchyRootElementName}
-
-def cafLines2(cafName, dir3dbar):
-    #TODO: filtrowac index.groups.values() po uidList
-    resultTemplate = """#BEGIN %%(cafName)s
-
-testdir=${REF_VOL_DIR}/%%(cafName)s/
 %(cafGroupLines)s
 
-testdir=${RELASE_VOL_DIR}/%%(cafName)s/
+testdir=${RELASE_VOL_DIR}/%(cafName)s/
 %(refGroupLines)s
 
-#END %%(cafName)s"""
+#END %(cafName)s"""
 
-    cafLinePattern = 'echo "mkdir -p $testdir; %%(dir3dbar)s/batchinterface.sh %%(dir3dbar)s/atlases/%%(cafName)s/caf-reference/index.xml --exportToNiftii -e $testdir %s" >> ${JOB_TEMP_REFERENCE}'
-    refLinePattern = 'echo "mkdir -p $testdir; %%(dir3dbar)s/batchinterface.sh %%(dir3dbar)s/atlases/%%(cafName)s/caf/index.xml --exportToNiftii -e $testdir %s" >> ${JOB_TEMP_RC}'
+    def __init__(self, dir3dbar, cafNames = [], nCpus = 1):
+        self.__cafNames = cafNames
+        self.__dir3dbar = dir3dbar
+        self.__nCpus = nCpus
 
-    refIndexer = bar.barIndexer.fromXML(os.path.join(dir3dbar,
-                                                     'atlases',
-                                                     cafName,
-                                                     'caf-reference/index.xml'))
+    def __str__(self):
+        def cafLine(cafName):
+            return self.__linePattern % {'cafName': cafName,
+                                         'cafGroupLines': cafStructureLines(self.__dir3dbar,
+                                                                            cafName),
+                                         'refGroupLines': refStructureLines(self.__dir3dbar,
+                                                                            cafName)}
 
-    cafIndexer = bar.barIndexer.fromXML(os.path.join(dir3dbar,
-                                                     'atlases',
-                                                     cafName,
-                                                     'caf/index.xml'))
+        cafDependent = '\n\n'.join(cafLine(x) for x in self.__cafNames)
 
-    cafGroups = [x.name for x in cafIndexer.groups.values() if x.uidList != []]
-    refGroups = [x.name for x in refIndexer.groups.values() if x.uidList != []]
-    
-    cafGroupLines = '\n'.join(cafLinePattern % x for x in cafGroups)
-    refGroupLines = '\n'.join(refLinePattern % x for x in refGroups)    
+        executionCommand = 'bash'
+        if self.__nCpus > 1:
+            executionCommand = 'parallel -j %d -k' % self.__nCpus
 
-    result = resultTemplate % {'cafGroupLines': cafGroupLines,
-                               'refGroupLines': refGroupLines}
-
-    return result % {'cafName': cafName,
-                     'dir3dbar': dir3dbar}
-
+        return self.__scriptTemplate % {'dir3dbar': self.__dir3dbar,
+                                        'cafDependent': cafDependent,
+                                        'executionCommand': executionCommand}
 
 if __name__ == '__main__':
     if len(sys.argv) < 4:
         print "Usage: %s <3dbar directory> <# cpus> <caf name> [<caf name> ...]" % sys.argv[0]
         sys.exit()
 
-    #workingDir = os.path.join(sys.argv[0],
-    #                          datetime.datetime.now().strftime('relase_candidate_volume_testing_%Y-%m-%d_%H-%M'))
-
     dir3dbar = sys.argv[1]
     nCpus = int(sys.argv[2])
 
-    executionCommand = 'parallel -j %d -k' % nCpus
-    if nCpus <= 1:
-        executionCommand = 'bash'
-
-    cafDependent = '\n\n'.join(cafLines2(cafName, dir3dbar) for cafName in sys.argv[3:])
-
-    print SCRIPT_TEMPLATE % {'dir3dbar': dir3dbar,
-                             'cafDependent': cafDependent,
-                             'executionCommand': executionCommand}
+    print scriptGenerator(dir3dbar, sys.argv[3:], nCpus)
