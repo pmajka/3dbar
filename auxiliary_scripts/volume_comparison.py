@@ -29,10 +29,39 @@ import bar
 
 
 class structureLines(object):
+    """
+    An virtual class for generation commandlines performing volume
+    reconstructions of all available structures in the CAF hierarchy tree.
+
+    @cvar _linePattern: pattern of a pattern of the commandline associated
+                        to the structure
+    @type _linePattern: str
+
+    @cvar _indexPath: path to the index file of the CAF in the directory
+                      subtree mentioned in the note
+    @type _indexPath: str
+
+    @ivar __indexer: indexer of the CAF
+    @type __indexer: L{bar.atlasIndexer}
+
+    @ivar __linePattern: pattern of the commandline associated to the structure
+    @type __linePattern: str
+
+    @note: It is assumed that the CAF is stored in a subtree of a common 3dBAR
+           atlas directory rooted in its child subdirectory of the same name as
+           the CAF.
+    """
     _linePattern = None
     _indexPath = None
 
     def __init__(self, dir3dbar, cafName):
+        """
+        @param dir3dbar: absolute path to the main 3dBAR directory
+        @type dir3dbar: str
+
+        @param cafName: name of the CAF
+        @type cafName: str
+        """
         self.__indexer = bar.barIndexer.fromXML(os.path.join(dir3dbar,
                                                              'atlases',
                                                              cafName,
@@ -41,21 +70,53 @@ class structureLines(object):
                                                   'cafName': cafName}
 
     def __str__(self):
+        """
+        @return: commandlines performing volume reconstruction for every
+                 structure available in the CAF hierarchy tree
+        @rtype: str
+        """
         groups = [k for (k, v) in self.__indexer.groups.items() if v.uidList != []]
         return '\n'.join(self.__linePattern % x for x in groups)
 
 
 class cafStructureLines(structureLines):
+    """
+    A subclass of L{structureLines} for generation volumes of structures in the
+    main CAF.
+    """
     _linePattern = 'echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh %(dir3dbar)s/atlases/%(cafName)s/caf/index.xml --exportToNiftii -e $testdir %%s" >> ${JOB_TEMP_RC}'
     _indexPath = 'caf/index.xml'
 
 
 class refStructureLines(structureLines):
+    """
+    A subclass of L{structureLines} for generation volumes of structures in the
+    reference CAF.
+    """
     _linePattern = 'echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh %(dir3dbar)s/atlases/%(cafName)s/caf-reference/index.xml --exportToNiftii -e $testdir %%s" >> ${JOB_TEMP_REFERENCE}'
     _indexPath = 'caf-reference/index.xml'
 
 
 class scriptGenerator(object):
+    """
+    A class for generation a volume comparision script for structures
+    reconstructed from current and reference CAFs.
+
+    @cvar __scriptTemplate: template of the script
+    @type __scriptTemplate: str
+
+    @cvar __linePattern: template of the CAF-related part of the script
+    @type __linePattern: str
+
+    @ivar __cafNames: names of CAFs to be compared
+    @type __cafNames: [str, ...]
+
+    @ivar __dir3dbar: absolute path to the main 3dBAR directory
+    @type __dir3dbar: str
+
+    @ivar __nCpus: number of CPU cores to be engaged
+    @type __nCpus: int
+    """
     __scriptTemplate = """#!/bin/bash
 set -xe
 export DISPLAY=:0.0;
@@ -96,11 +157,26 @@ testdir=${RELASE_VOL_DIR}/%(cafName)s/
 #END %(cafName)s"""
 
     def __init__(self, dir3dbar, cafNames = [], nCpus = 1):
+        """
+        @param dir3dbar: absolute path to the main 3dBAR directory
+        @type dir3dbar: str
+
+        @param cafNames: names of CAFs to be compared
+        @type cafNames: [str, ...]
+
+        @param nCpus: number of CPU cores to be engaged
+        @type nCpus: int
+        """
         self.__cafNames = cafNames
         self.__dir3dbar = dir3dbar
         self.__nCpus = nCpus
 
     def __str__(self):
+        """
+        @return: volume comparision script for structures reconstructed from
+                 current and reference CAFs
+        @rtype: str
+        """
         def cafLine(cafName):
             return self.__linePattern % {'cafName': cafName,
                                          'cafGroupLines': cafStructureLines(self.__dir3dbar,
