@@ -82,7 +82,7 @@ class batchInterface(object):
                      ('exportToPOVRay', 'exports to POV-Ray'),
                      ('exportToVTKPolydata', 'exports as VTKpolyMesh'),
                      ('exportToVolume', 'exports as VTKstructGrid'),
-                     ('exportToNiftii', 'exports as Niftii file'),
+                     ('exportToNiftii', 'exports as NIfTI I file'),
                      ('exportToNumpy', 'exports as Numpy array'),
                      ('exportScreenshot', 'saves screenshot as an PNG image'),
                      ('exportThumbnail', 'saves scaled screenshot as an PNG image')]
