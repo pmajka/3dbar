@@ -84,7 +84,7 @@ class cafStructureLines(structureLines):
     A subclass of L{structureLines} for generation volumes of structures in the
     main CAF.
     """
-    _linePattern = 'echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh %(dir3dbar)s/atlases/%(cafName)s/caf/index.xml --exportToNiftii -e $testdir %%s" >> ${JOB_TEMP_RC}'
+    _linePattern = 'echo "%(dir3dbar)s/batchinterface.sh %(dir3dbar)s/atlases/%(cafName)s/caf/index.xml --exportToNiftii -e $testdir %%s" >> ${JOB_TEMP_RC}'
     _indexPath = 'caf/index.xml'
 
 
@@ -93,7 +93,7 @@ class refStructureLines(structureLines):
     A subclass of L{structureLines} for generation volumes of structures in the
     reference CAF.
     """
-    _linePattern = 'echo "mkdir -p $testdir; %(dir3dbar)s/batchinterface.sh %(dir3dbar)s/atlases/%(cafName)s/caf-reference/index.xml --exportToNiftii -e $testdir %%s" >> ${JOB_TEMP_REFERENCE}'
+    _linePattern = 'echo "%(dir3dbar)s/batchinterface.sh %(dir3dbar)s/atlases/%(cafName)s/caf-reference/index.xml --exportToNiftii -e $testdir %%s" >> ${JOB_TEMP_REFERENCE}'
     _indexPath = 'caf-reference/index.xml'
 
 
@@ -149,9 +149,11 @@ diff -r ${REF_VOL_DIR} ${RELASE_VOL_DIR} > $WORKING_DIR/comparison.diff
     __linePattern = """#BEGIN %(cafName)s
 
 testdir=${REF_VOL_DIR}/%(cafName)s/
+mkdir -p $testdir
 %(cafGroupLines)s
 
 testdir=${RELASE_VOL_DIR}/%(cafName)s/
+mkdir -p $testdir
 %(refGroupLines)s
 
 #END %(cafName)s"""
