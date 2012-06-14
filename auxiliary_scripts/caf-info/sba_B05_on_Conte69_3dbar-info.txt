@@ -3,6 +3,11 @@ for creating three-dimensional reconstructions from 2D slides.
 
 Reconstruction is based on ScalableBrainAtlas B05_on_Conte69 template available
 at http://scalablebrainatlas.incf.org/main/coronal3d.php?template=B05_on_Conte69
+which contains the Brodmann regions projected onto the Conte69 surface, and then
+turned into volume data by assuming 3mm uniform cortical thickness. Brodmann
+cytoarchitectonic areas (Brodmann 1909). Registered to atlas by visual alignment
+of sulcal/gyral landmarks, using Brodmann's lateral and medial views (cf.
+Polyak, 1957).  
 
 Offline version of 3dBAR allows customizable generation of three-dimensional
 structures (ie. with different resolutions or various mesh processing filters).

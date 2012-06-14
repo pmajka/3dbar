@@ -15,7 +15,7 @@ ATLASES_DIR  = atlases/
 SBA_PARSERS  = sba_DB08 sba_PHT00 sba_WHS09 sba_WHS10 sba_LPBA40_on_SRI24 sba_RM_on_F99 sba_FVE91_on_F99
 FAST_PARSERS = nl_olek ${SBA_PARSERS} tem
 WHS          = whs_0.5 whs_0.51 whs_0.5_symm whs_0.6.1
-PARSERS      = vector-test aba ${FAST_PARSERS} ${WHS}
+PARSERS      = aba ${FAST_PARSERS} ${WHS}
 
 all: clean ${PARSERS} doc
 	echo "Done"
@@ -44,6 +44,8 @@ parsers: ${PARSERS}
 parsers_fast: ${FAST_PARSERS}
 	echo "Done"
 
+parsers_sba: ${SBA_PARSERS}
+	echo "Done"
 	
 whs_0.5:
 	mkdir -p ${ATLASES_DIR}whs_0.5/src

@@ -32,14 +32,19 @@
 import datetime
 
 CONF_PARSER_NAME = 'sba_B05_on_Conte69'
-CONF_PARSER_COMMENT = 'CAF dataset (Macaque - Brodmann 05 mapped onto the Conte69) based on: \
-Scalable Brain Atlas \
-<a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=B05_on_Conte69" target="_blank">\
-B05_on_Conte69</a> template. <a href="http://brainvis.wustl.edu/wiki/index.php//Caret:Atlases/Conte69_Atlas">See template details</a>.'
+CONF_PARSER_COMMENT = """CAF dataset (Human - Brodmann 05 mapped onto the
+Conte69) based on: Scalable Brain Atlas <a href="http://scalablebrainatlas.incf.org/main/coronal3d.php?template=B05_on_Conte69" target="_blank">
+B05_on_Conte69</a> template.
+The template contains the Brodmann regions projected onto the Conte69 surface, and then turned into volume
+data by assuming 3mm uniform cortical thickness.  Brodmann cytoarchitectonic
+areas (Brodmann 1909). Registered to atlas by visual alignment of sulcal/gyral
+landmarks, using Brodmann's lateral and medial views (cf. Polyak, 1957). 
+<a href="http://brainvis.wustl.edu/wiki/index.php//Caret:Atlases/Conte69_Atlas" target="_blank">
+See source data details</a>."""
 CONF_CONTACT_COMMENT = 'Piotr Majka, Nencki Institute of Experimental Biology.'
 CONF_CONTACT_EMAIL = 'pmajka@nencki.gov.pl'
 CONF_CAF_COMPIL_TIME = datetime.datetime.utcnow().strftime("%F %T")
-CONF_CAF_FULL_NAME = 'ScalableBrainAtlas: Macaque - Brodmann 05 mapped onto the Conte69 (2012)'
+CONF_CAF_FULL_NAME = 'ScalableBrainAtlas: Human - Brodmann 05 mapped onto the Conte69 (2012)'
 
 REFERENCE_WIDTH = 182.
 REFERENCE_HEIGHT = 182.
