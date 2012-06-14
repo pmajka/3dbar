@@ -15,7 +15,7 @@ ATLASES_DIR  = atlases/
 SBA_PARSERS  = sba_DB08 sba_PHT00 sba_WHS09 sba_WHS10 sba_LPBA40_on_SRI24 sba_RM_on_F99 sba_FVE91_on_F99
 FAST_PARSERS = nl_olek ${SBA_PARSERS} tem
 WHS          = whs_0.5 whs_0.51 whs_0.5_symm whs_0.6.1
-PARSERS      = aba ${FAST_PARSERS} ${WHS}
+PARSERS      = aba aba2011 ${FAST_PARSERS} ${WHS}
 
 all: clean ${PARSERS} doc
 	echo "Done"
@@ -150,6 +150,12 @@ aba:
 	python   ${PARSERS_DIR}aba/__init__.py
 	if [ -e ${ATLASES_DIR}aba/caf-reference ]; then diff -r  ${ATLASES_DIR}aba/caf ${ATLASES_DIR}aba/caf-reference > diff_aba.txt; fi
 
+aba2011:
+	mkdir -p ${ATLASES_DIR}aba2011/src
+	mkdir -p ${ATLASES_DIR}aba2011/caf
+	python   ${PARSERS_DIR}aba2011/__init__.py
+	if [ -e ${ATLASES_DIR}aba2011/caf-reference ]; then diff -r  ${ATLASES_DIR}aba2011/caf ${ATLASES_DIR}2011/caf-reference > diff_aba2011.txt; fi
+
 tem:
 	mkdir -p ${ATLASES_DIR}tem/src
 	mkdir -p ${ATLASES_DIR}tem/caf
@@ -173,6 +179,7 @@ clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}vector-test/caf
 	rm -rfv ${ATLASES_DIR}nl_olek/caf
 	rm -rfv ${ATLASES_DIR}aba/caf ${ATLASES_DIR}aba/src
+	rm -rfv ${ATLASES_DIR}aba2011/caf ${ATLASES_DIR}aba2011/src
 	rm -rfv ${ATLASES_DIR}tem/caf ${ATLASES_DIR}tem/src
 
 reference_datasets:
@@ -191,6 +198,7 @@ reference_datasets:
 	rm -rf ${ATLASES_DIR}sba_FVE91_on_F99/caf-reference; cp -r ${ATLASES_DIR}sba_FVE91_on_F99/caf ${ATLASES_DIR}sba_FVE91_on_F99/caf-reference
 	rm -rf ${ATLASES_DIR}sba_B05_on_Conte69/caf-reference; cp -r ${ATLASES_DIR}sba_B05_on_Conte69/caf ${ATLASES_DIR}sba_B05_on_Conte69/caf-reference
 	rm -rf ${ATLASES_DIR}aba/caf-reference; cp -r ${ATLASES_DIR}aba/caf ${ATLASES_DIR}aba/caf-reference
+	rm -rf ${ATLASES_DIR}aba2011/caf-reference; cp -r ${ATLASES_DIR}aba2011/caf ${ATLASES_DIR}aba2011/caf-reference
 	rm -rf ${ATLASES_DIR}tem/caf-reference; cp -r ${ATLASES_DIR}tem/caf ${ATLASES_DIR}tem/caf-reference
 
 clean_diff:
@@ -198,5 +206,5 @@ clean_diff:
 		    diff_whs_0.51.txt diff_whs_0.5.txt diff_sba_PHT00.txt diff_sba_DB08.txt\
 			diff_sba_WHS09.txt diff_sba_WHS10.txt diff_sba_LPBA40_on_SRI24.txt\
 			diff_sba_RM_on_F99.txt diff_aba.txt diff_tem.txt diff_whs_0.6.1.txt\
-			diff_sba_FVE91_on_F99.txt 
+			diff_sba_FVE91_on_F99.txt diff_aba2011.txt diff_sba_B05_on_Conte69.txt
 

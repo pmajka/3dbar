@@ -751,7 +751,7 @@ class barIndexerSlideElement(barIndexerElement):
         slideElement.setAttribute('transformationmatrix',
                                    ','.join(map(str, self.transformationmatrix)))
         return slideElement
- 
+
     @classmethod
     def fromXML(cls, domXMLElement, indexer=None):
         """

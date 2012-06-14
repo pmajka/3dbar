@@ -20,6 +20,7 @@ Contents:
    test_feature-type
    test_slide-size
    test_markers
+   test_slide-size.rst
 
 Indices and tables
 ==================

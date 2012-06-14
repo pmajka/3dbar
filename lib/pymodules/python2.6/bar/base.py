@@ -569,7 +569,7 @@ class barStructureLabel(barAtlasSlideElement):
         @return: created label object
         @rtype: L{barStructureLabel}
         """
-        # Check if given element is text element:
+        # Check if given element is a 'text' element:
         if not svgTextElement.tagName == 'text': 
             raise TypeError, "Invalid SVG element provided"
         
@@ -580,7 +580,14 @@ class barStructureLabel(barAtlasSlideElement):
         # Extract label's coordinates, caption and id which will be used in
         # label's constructor.
         x, y = map(lambda x: float(propertiesDict[x]), ['x','y'])
-        labelCaption = strip(svgTextElement.firstChild.nodeValue)
+        
+        # Now it's a bit tricky. Text elements may contain a number of nested
+        # tspan tags. We will check if such tags exist and, it they are,
+        # text will be extcracted from all of them and merged after all.
+        #tspans = svgTextElement.getElementsByTagName('tspan')
+        labelCaption = _recurseTextNodeExtract(svgTextElement)
+        
+        #labelCaption = strip(svgTextElement.firstChild.nodeValue)
         labelID = propertiesDict['id']
         
         # Extract growlevel attribute
@@ -591,7 +598,7 @@ class barStructureLabel(barAtlasSlideElement):
             _printRed('Invalid or empty growlevel provided. Using growlevel=0.\
                     Don\'t worry, it may happen.')
             growlevel = 0
-         
+        
         # Try to extract label font size. If it is impossible default value of
         # font size will be used
         try:
@@ -616,6 +623,8 @@ class barStructureLabel(barAtlasSlideElement):
         retLabel.growlevel = growlevel 
         
         return retLabel
+    
+     
     
     @classmethod
     def castToCommentLabel(cls, sourceLabel):
@@ -1282,7 +1291,7 @@ class barPath(barAtlasSlideElement):
                         BAR_XML_NAMESPACE, 'type')
 
             retPath.type = strType
-        
+
         except:
             pass
         
@@ -2434,6 +2443,118 @@ class barVectorSlide(barObject):
         """
         labelIndexByID = dict(map(lambda lab: (lab.ID, lab), self.labels))
         return labelIndexByID
+
+    @classmethod
+    def _fromXML_ParseXML(cls, svgDocument, fixDrawing):
+        """
+        Part of XML parsing subroutine responsible for parsing given SVG
+        document into xml.dom.minidom object. This method may be overriden
+        in subclasses if more features are required.
+        
+        @param svgDocument: SVG slide (DOM XML or filename or file handler)
+        @type svgDocument: xml.dom.minidom.Document or str or file
+        
+        @param fixDrawing: indicates if path definitions has to be redefined
+                           with absolute coordinates
+        @type fixDrawing: bool
+        
+        @rtype: xml.dom.minidom.Document
+        @return: xml.dom.minidom.Document
+        """
+        # Parse source SVG file if it is string, leave it otherwise
+        if not svgDocument.__class__.__name__ == 'Document':
+            svgdom = dom.parse(svgDocument)
+        else:
+            svgdom = svgDocument
+        _removeWhitespacesXML(svgdom)
+        
+        # Redefine path definitions using absolute coordinates
+        if fixDrawing:
+            svgfix.fixSvgImage(svgdom, pagenumber=0, fixHeader=False)
+        
+        svgElement = svgdom.getElementsByTagName('svg')[0]
+        # In case, when 3dBAR namespace is not defined, we declare it.
+        svgElement.setAttribute('xmlns:bar', BAR_XML_NAMESPACE)
+        
+        return  svgdom     
+
+    @classmethod
+    def _fromXML_BeforeCleanUpHook(cls, slide, svgdom):
+        """
+        Customization hook allowing the developers implementing additional
+        methods or features during parsing of XML document. This hook is
+        executed after parsing whole slide, just before cleaning all unnecessary
+        elements and extracting slide template.
+        """
+        pass
+    
+    @classmethod
+    def _fromXML_AfterCleanUpHook(cls, slide, svgdom):
+        """
+        Customization hook allowing the developers implementing additional
+        methods or features during parsing of XML document. This hook is
+        executed just after removing all unnecessary elements and before
+        assigning slide's template.
+        """
+        pass    
+
+    @classmethod
+    def _fromXML_LoadMetadata(cls, slide, svgdom):
+        """
+        Part of XML parsing subroutine responsible for extracting metadata
+        from provided XML element corresponding to CAF slide.
+        This method can be overriden in subclasses if more features are
+        required.
+        
+        @type  slide: L{barVectorSlide}
+        @param slide: Slide to which metadata extracted from C{svgdom} will be
+                      assigned
+        
+        @param svgdom: SVG slide (DOM XML or filename or file handler)
+        @type svgdom: xml.dom.minidom.Document or str or file
+        
+        @rtype: None
+        @return: None
+        """
+        
+        # Get metadata element and extract all metadata
+        # then iterate over all metadata elements and extract values
+        metadataDataset =\
+                svgdom.getElementsByTagName(BAR_DATA_LOCATION_ELEMENT)[0]
+        
+        for metadataEntry in metadataDataset.childNodes:
+            ### Debug it !!!
+            try:
+                metadata = cls._clsMetadataElement.fromXML(metadataEntry)
+                slide._setMetadata(metadata)
+            except:
+                pass
+        
+        # Use extracted metadata elements to define tracing and rendering
+        # properties:
+        slide._tracingConf  = eval(slide._metadata['tracingConf'].value)
+        slide._rendererConf = eval(slide._metadata['rendererConf'].value)
+    
+    @classmethod
+    def _fromXML_Cleanup(cls, slide, svgdom):
+        """
+        Part of XML parsing subroutine responsible for preparing XML template
+        for given slide. This method can be overriden in subclasses
+        if more features are required.
+        
+        @type  slide: L{barVectorSlide}
+        @param slide: Currently processed slide.
+        
+        @param svgdom: SVG slide (DOM XML or filename or file handler)
+        @type svgdom: xml.dom.minidom.Document or str or file
+        
+        @rtype: None
+        @return: None
+        """
+        # remove all paths, labels, etc. leaving slide template
+        for element in ['text', 'path', 'bar:data', 'image']:
+            for elementToDelete in svgdom.getElementsByTagName(element):
+                elementToDelete.parentNode.removeChild(elementToDelete)
     
     slideTemplate=property(_getSlideTemplate, _setSlideTemplate)
     """
@@ -2861,38 +2982,59 @@ class barPretracedSlide(barSlideRenderer):
         # Initialize empty slide with dummy tracing and rendering configuration,
         # slide number empty
         slide = cls()
+        svgdom = cls._fromXML_ParseXML(svgDocument, fixDrawing = fixDrawing)
         
-        # Parse source SVG file if it is string, leave it otherwise
-        if not svgDocument.__class__.__name__ == 'Document':
-            svgdom = dom.parse(svgDocument)
-        else:
-            svgdom = svgDocument
-        _removeWhitespacesXML(svgdom)
+        cls._fromXML_LoadMetadata(slide, svgdom)
+        cls._fromXML_LoadPaths(slide, svgdom)
+        cls._fromXML_LoadLabels(slide, svgdom)
+        cls._fromXML_BeforeCleanUpHook(slide, svgdom)
+        cls._fromXML_Cleanup(slide, svgdom)
+        cls._fromXML_AfterCleanUpHook(slide, svgdom)
         
-        # Redefine path definitions using absolute coordinates
-        if fixDrawing:
-            svgfix.fixSvgImage(svgdom, pagenumber=0, fixHeader=False)
+        slide._setSlideTemplate(svgdom.toxml())
         
-        svgElement = svgdom.getElementsByTagName('svg')[0]
-        # In case, when 3dBAR namespace is not defined, we declare it.
-        svgElement.setAttribute('xmlns:bar', BAR_XML_NAMESPACE)
+        return slide  
+
+    @classmethod    
+    def _fromXML_LoadPaths(cls, slide, svgdom):
+        """
+        Part of XML parsing subroutine responsible for extracting SVG paths from
+        provided XML element. This method should be overriden in subclasses if
+        more features are required.
         
-        # Information about stereotectic coordinate system may be presented in
+        @type  slide: L{barVectorSlide}
+        @param slide: Slide to which paths extracted from C{svgdom} will be
+                      assigned
+        
+        @param svgdom: SVG slide (DOM XML or filename or file handler)
+        @type svgdom: xml.dom.minidom.Document or str or file
+        
+        @rtype: None
+        @return: None
+        """
+        for pathElement in svgdom.getElementsByTagName('path'):
+            slide._svgPaths.append(pathElement)
+    
+    @classmethod
+    def _fromXML_LoadLabels(cls, slide, svgdom):
+        """
+        Part of XML parsing subroutine responsible for extracting labels and
+        markers from provided XML element. This method can be overriden in
+        subclasses if more features are required.
+        
+        @type  slide: L{barVectorSlide}
+        @param slide: Slide to which labels extracted from C{svgdom} will be
+                      assigned
+        
+        @param svgdom: SVG slide (DOM XML or filename or file handler)
+        @type svgdom: xml.dom.minidom.Document or str or file
+        
+        @rtype: None
+        @return: None
+        """
+        # Information about spatial coordinate system may be presented in
         # form of markers or as metadata elements. Markers elements has priority
         # over metadata elements. If found, markers are processed first.
-        
-        # Get metadata element and extract all metadata
-        # then iterate over all metadata elements and extract values.
-        # If there is no metadata elements defined, the loop will not execute.
-        metadataDataset =\
-                svgdom.getElementsByTagName(BAR_DATA_LOCATION_ELEMENT)[0]
-        
-        for metadataEntry in metadataDataset.childNodes:
-            try:
-                metadata = cls._clsMetadataElement.fromXML(metadataEntry)
-                slide._setMetadata(metadata)
-            except:
-                pass
         
         # Then extract all text elements and separate them between labels 
         # and markers. Labels are parsed at first as they are more probable
@@ -2903,28 +3045,6 @@ class barPretracedSlide(barSlideRenderer):
             except:
                 marker = barMarker.fromXML(labelElement)
                 slide.markers.append(marker)
-        
-        for pathElement in svgdom.getElementsByTagName('path'):
-            slide._svgPaths.append(pathElement)
-        
-        # remove all paths, labels, etc. leaving slide template
-        for element in ['text', 'path','bar:data']:
-            for elementToDelete in svgdom.getElementsByTagName(element):
-                elementToDelete.parentNode.removeChild(elementToDelete)
-         
-        # Use extracted metadata elements to define tracing and rendering
-        # properties:
-        # TODO: Handle try/except with better way
-        # TODO: Use json.parse instead of eval
-        try:
-            slide._tracingConf  = eval(slide._metadata['tracingConf'].value)
-            slide._rendererConf = eval(slide._metadata['rendererConf'].value)
-        except:
-            pass
-        
-        slide._setSlideTemplate(svgdom.toxml())
-        
-        return slide
     
     def affineTransform(self, M):
         """
@@ -2988,9 +3108,10 @@ class barPretracedSlide(barSlideRenderer):
         svgElement = slide.getElementsByTagName('svg')[0]
         metadataDataset =\
                 slide.getElementsByTagName(BAR_DATA_LOCATION_ELEMENT)[0]
-        svgGroupDataset = slide.getElementsByTagName('g')[0]
-        if svgGroupDataset.hasAttribute('xml:space'):
-            svgGroupDataset.removeAttribute('xml:space')
+        
+        for svgGroupDataset in slide.getElementsByTagName('g'):
+            if svgGroupDataset.hasAttribute('xml:space'):
+                svgGroupDataset.removeAttribute('xml:space')
         
         for metadataElement in self._metadata.values():
             metadataDataset.appendChild(metadataElement.getXMLelement())
@@ -3080,33 +3201,40 @@ class barTracedSlide(barSlideRenderer):
         @rtype: cls
         @return: created object
         """
-        # Initialize empty slide
+        
+        # Initialize empty slide with dummy tracing and rendering configuration,
+        # slide number empty
         slide = cls()
+        svgdom = cls._fromXML_ParseXML(svgDocument, fixDrawing=fixDrawing)
         
-        # Parse source SVG file if it is string, leave it otherwise
-        #if not svgDocument.__class__.__name__ == 'Document':
-        svgdom = dom.parse(svgDocument)
-        _removeWhitespacesXML(svgdom)
+        cls._fromXML_LoadMetadata(slide, svgdom)
+        slide._fromXML_LoadStructures(slide, svgdom)
+        slide._fromXML_LoadLabels(slide, svgdom)
+        slide._fromXML_BeforeCleanUpHook(slide, svgdom)
+        slide._fromXML_Cleanup(slide, svgdom)
+        slide._fromXML_AfterCleanUpHook(slide, svgdom)
         
-        # Redefine path definitions using absolute coordinates
-        if fixDrawing:
-            svgfix.fixSvgImage(svgdom, pagenumber=0, fixHeader=False)
+        slide._setSlideTemplate(svgdom.toxml())
         
-        svgElement = svgdom.getElementsByTagName('svg')[0]
+        return slide  
+    
+    @classmethod    
+    def _fromXML_LoadStructures(cls, slide, svgdom):
+        """
+        Part of XML parsing subroutine responsible for extracting 'structure'
+        objects from provided XML element. This method may be overriden
+        in subclasses if more features are required.
         
-        # Get metadata element and extract all metadata
-        # then iterate over all metadata elements and extract values
-        metadataDataset =\
-                svgdom.getElementsByTagName(BAR_DATA_LOCATION_ELEMENT)[0]
+        @type  slide: L{barVectorSlide}
+        @param slide: Slide to which structures extracted from C{svgdom} will be
+                      assigned
         
-        for metadataEntry in metadataDataset.childNodes:
-            ### Debug it !!!
-            try:
-                metadata = cls._clsMetadataElement.fromXML(metadataEntry)
-                slide._setMetadata(metadata)
-            except:
-                pass
+        @param svgdom: SVG slide (DOM XML or filename or file handler)
+        @type svgdom: xml.dom.minidom.Document or str or file
         
+        @rtype: None
+        @return: None
+        """
         for pathElement in svgdom.getElementsByTagName('path'):
             newPath = cls._clsPath.fromXML(pathElement)
             
@@ -3119,8 +3247,24 @@ class barTracedSlide(barSlideRenderer):
                 
                 newStrc = cls._clsGenericStructure(strName, strColor, [newPath])
                 slide.addStructures(newStrc)
+    
+    @classmethod
+    def _fromXML_LoadLabels(cls, slide, svgdom):
+        """
+        Part of XML parsing subroutine responsible for extracting labels and
+        markers from provided XML element. This method can be overriden in
+        subclasses if more features are required.
         
-        # Then extract all labels
+        @type  slide: L{barVectorSlide}
+        @param slide: Slide to which labels extracted from C{svgdom} will be
+                      assigned
+        
+        @param svgdom: SVG slide (DOM XML or filename or file handler)
+        @type svgdom: xml.dom.minidom.Document or str or file
+        
+        @rtype: None
+        @return: None
+        """
         for labelElement in svgdom.getElementsByTagName('text'):
             try:
                 label = cls._clsStructureLabel.fromXML(labelElement)
@@ -3128,22 +3272,6 @@ class barTracedSlide(barSlideRenderer):
             except ValueError:
                 _printRed("Error while reading labels: %s\nSkipping." %\
                         (labelElement.toxml(),))
-               
-        # remove all paths, labels, etc. leaving slide template
-        for element in ['text', 'path','bar:data']:
-            for elementToDelete in svgdom.getElementsByTagName(element):
-                elementToDelete.parentNode.removeChild(elementToDelete)
-        
-        # Use extracted metadata elements to define tracing and rendering
-        # properties:
-        try:
-            slide._tracingConf  = eval(slide._metadata['tracingConf'].value)
-            slide._rendererConf = eval(slide._metadata['rendererConf'].value)
-        except:
-            pass
-       
-        slide._setSlideTemplate(svgdom.toxml())
-        return slide
     
     def __setitem__(self, key, newStructure):
         """
@@ -3389,7 +3517,8 @@ class barTracedSlide(barSlideRenderer):
                         Manual investigation is required. Parser will now \
                         continue but probably the slide is corrupted." % \
                         (structure.name, str(testBbx), str(maxBbx)) )
-                raw_input("Press any Key")
+                # Ehh... sometimes it raises false alerts
+                #raw_input("Press any Key")
     
     def getXMLelement(self):
         """
@@ -3407,12 +3536,13 @@ class barTracedSlide(barSlideRenderer):
                 self._clsMetadataElement('rendererConf', repr(self._rendererConf)))
         slide = self._getSlideTemplate().cloneNode(True)
         
-        #TODO: Unnecessary?? svgElement = slide.getElementsByTagName('svg')[0]
+        svgElement = slide.getElementsByTagName('svg')[0]
         metadataDataset =\
                 slide.getElementsByTagName(BAR_DATA_LOCATION_ELEMENT)[0]
-        svgGroupDataset = slide.getElementsByTagName('g')[0]
-        if svgGroupDataset.hasAttribute('xml:space'):
-            svgGroupDataset.removeAttribute('xml:space')
+        
+        for svgGroupDataset in slide.getElementsByTagName('g'):
+            if svgGroupDataset.hasAttribute('xml:space'):
+                svgGroupDataset.removeAttribute('xml:space')
         
         for metadataElement in sorted(self._metadata.itervalues(), key=lambda x: x.name):
             metadataDataset.appendChild(metadataElement.getXMLelement())
@@ -3717,6 +3847,7 @@ class barTracedSlideRenderer(barTracedSlide):
         
         # Get path index from original slide
         pathIndex = self.pathIndex
+        print pathIndex 
         
         # Iterate over all paths and generating new regular label for each
         # path
@@ -3724,16 +3855,14 @@ class barTracedSlideRenderer(barTracedSlide):
         for path in pathIndex.values():
             newLabelID      = path.relLabelID 
             newLabelCaption = path.structName 
-            
+            print newLabelID,newLabelCaption
             # Skip processing this label if requested
             if newLabelCaption in skipLabels: continue
-            try:
-                newLabelCoords = self.__generateLabelLocation(path)
-                # Generate new label and append it into the slide
-                newLabel = self._clsRegularLabel(newLabelCoords, newLabelCaption, newLabelID)
-                self.addLabel(newLabel)
-            except:
-                pass
+            newLabelCoords = self.__generateLabelLocation(path)
+            print newLabelCoords
+            # Generate new label and append it into the slide
+            newLabel = self._clsRegularLabel(newLabelCoords, newLabelCaption, newLabelID)
+            self.addLabel(newLabel)
         
         return self
     
@@ -3772,7 +3901,7 @@ class barTracedSlideRenderer(barTracedSlide):
         
         # Create temporary slide
         tempSlide = self.__class__(\
-                self.slideTemplate.toxml(),
+                slideTemplate = self.slideTemplate.toxml(),
                 slideNumber = self.slideNumber,
                 rendererConfiguration = self._rendererConf,
                 tracingConfiguration  = self._tracingConf)
@@ -3824,7 +3953,10 @@ class barTracedSlideRenderer(barTracedSlide):
         pe.setAttribute('style', formatStyle(styleDict))
         
         # Append path to empty slide template
-        singlePathDocument.getElementsByTagName('g')[0].appendChild(pe)
+        for layer in singlePathDocument.getElementsByTagName('g'):
+            if layer.getAttribute('id') == 'content':
+                layer.appendChild(pe)       
+        #singlePathDocument.getElementsByTagName('g')[0].appendChild(pe)
         
         # return prepared slide and return resulting image
         return self._renderSvgDrawing(singlePathDocument)
@@ -3909,7 +4041,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
         # Extract regular labels - seeds for tracing
         self.__labelCache = self._labels
         self.__labelsLeft = self.getRegularLabels() # Holds labels yet unprocessed
-               
+        
         # Extract vBrain labels in order to create brain outline
         self.__vBrainLabels = self.getLabelByName('vBrain', oType = 'ref',\
                                                 labelType=self._clsRegularLabel)
@@ -4827,3 +4959,12 @@ def _removeWhitespacesXML(domNode, unlink=True):
         domNode.removeChild(child)
         if unlink:
             child.unlink()
+    
+def _recurseTextNodeExtract(tspanElement):
+    retval = ""
+    for t in tspanElement.childNodes:
+        if t.nodeType == t.TEXT_NODE:
+            retval += strip(t.nodeValue)
+        retval += strip(_recurseTextNodeExtract(t))
+    return retval              
+
