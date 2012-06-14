@@ -25,7 +25,7 @@
 						</name>
 						<args>
 							<value order="0" type="bool">
-								False
+								True
 							</value>
 						</args>
 					</param>
@@ -65,7 +65,7 @@
 						</name>
 						<args>
 							<value order="0" type="bool">
-								False
+								True
 							</value>
 						</args>
 					</param>
