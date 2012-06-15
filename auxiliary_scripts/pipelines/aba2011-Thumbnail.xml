@@ -123,6 +123,32 @@
 					</param>
 				</params>
 			</pipelineelement>
+			<pipelineelement disable="False" displayable="True" on="True" order="3">
+				<vtkclass>
+					vtkImageGaussianSmooth
+				</vtkclass>
+				<desc>
+					libvtkImagingPython.vtkImageGaussianSmooth
+				</desc>
+				<params>
+					<param display="False" hidden="False" order="0">
+						<name>
+							SetStandardDeviation
+						</name>
+						<args>
+							<value order="0" type="float">
+								1.0
+							</value>
+							<value order="1" type="float">
+								1.0
+							</value>
+							<value order="2" type="float">
+								1.5
+							</value>
+						</args>
+					</param>
+				</params>
+			</pipelineelement>
 			<pipelineelement disable="False" displayable="True" on="True" order="4">
 				<vtkclass>
 					vtkMarchingCubes
@@ -185,7 +211,47 @@
 				</desc>
 				<params/>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="7">
+			<pipelineelement disable="False" displayable="True" on="False" order="6">
+				<vtkclass>
+					vtkSmoothPolyDataFilter
+				</vtkclass>
+				<desc>
+					libvtkGraphicsPython.vtkSmoothPolyDataFilter
+				</desc>
+				<params>
+					<param display="False" hidden="False" order="0">
+						<name>
+							SetRelaxationFactor
+						</name>
+						<args>
+							<value order="0" type="float">
+								0.5
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="False" order="1">
+						<name>
+							SetNumberOfIterations
+						</name>
+						<args>
+							<value order="0" type="int">
+								20
+							</value>
+						</args>
+					</param>
+					<param display="False" hidden="False" order="2">
+						<name>
+							FeatureEdgeSmoothing
+						</name>
+						<args>
+							<value order="0" type="bool">
+								True
+							</value>
+						</args>
+					</param>
+				</params>
+			</pipelineelement>
+			<pipelineelement disable="False" displayable="True" on="False" order="7">
 				<vtkclass>
 					vtkQuadricClustering
 				</vtkclass>
@@ -262,6 +328,15 @@
 						</args>
 					</param>
 				</params>
+			</pipelineelement>
+			<pipelineelement disable="False" displayable="True" on="False" order="9">
+				<vtkclass>
+					barVtkMirror
+				</vtkclass>
+				<desc>
+					bar.rec.pipeline.barVtkMirror
+				</desc>
+				<params/>
 			</pipelineelement>
 			<pipelineelement disable="False" displayable="False" on="True" order="10">
 				<vtkclass>
