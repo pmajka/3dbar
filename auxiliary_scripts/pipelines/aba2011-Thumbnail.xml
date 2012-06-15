@@ -263,5 +263,25 @@
 					</param>
 				</params>
 			</pipelineelement>
+			<pipelineelement disable="False" displayable="False" on="True" order="10">
+				<vtkclass>
+					vtkPolyDataMapper
+				</vtkclass>
+				<desc>
+					libvtkRenderingPython.vtkPolyDataMapper
+				</desc>
+				<params>
+					<param display="False" hidden="False" order="0">
+						<name>
+							ScalarVisibility
+						</name>
+						<args>
+							<value order="0" type="bool">
+								False
+							</value>
+						</args>
+					</param>
+				</params>
+			</pipelineelement>
 		</elements>
 	</pipeline>
