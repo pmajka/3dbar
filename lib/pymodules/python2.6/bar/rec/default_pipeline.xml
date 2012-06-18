@@ -384,7 +384,12 @@ along x,y and z axes
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="False" on="True" order="6">
+            <pipelineelement disable="False" displayable="True"  on="True" order="6">
+                <vtkclass>vtkCleanPolyData</vtkclass>
+                <desc>libvtkGraphicsPython.vtkCleanPolyData</desc>
+                <params/>
+            </pipelineelement>
+			<pipelineelement disable="False" displayable="False" on="True" order="7">
 				<vtkclass>
 					vtkPolyDataNormals
 				</vtkclass>
@@ -416,13 +421,13 @@ along x,y and z axes
 						</name>
 						<args>
 							<value order="0" type="bool">
-								True
+								False
 							</value>
 						</args>
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="False" order="7">
+			<pipelineelement disable="False" displayable="True" on="False" order="8">
 				<vtkclass>
 					barVtkMirror
 				</vtkclass>
@@ -432,7 +437,7 @@ hemisphere
 				</desc>
 				<params/>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="False" on="True" order="8">
+			<pipelineelement disable="False" displayable="False" on="True" order="9">
 				<vtkclass>
 					vtkPolyDataMapper
 				</vtkclass>
