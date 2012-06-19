@@ -37,9 +37,14 @@ CONF_ALIGNER_REFERENCE_COORDS = ( 1.0, -6.0, 0.01, -0.01)
 
 import os
 import sys
+import unicodedata
 import xml.dom.minidom as dom
 import base
 from string import *
+
+def remove_accents(input_str):
+    nkfd_form = unicodedata.normalize('NFKD', unicode(input_str))
+    return u"".join([c for c in nkfd_form if not unicodedata.combining(c)])
 
 class barIndexerObject(base.barObject):
     """
@@ -100,10 +105,14 @@ class barIndexerElement(barIndexerObject):
                     # it into unicode (still requires a lot of testing)
                     # If type is other than string, just convert if to string
                     # (regular string, not unicode)
-                    if isinstance(attribValue, basestring ):
-                       retElement.setAttribute(attribName, attribValue.decode("utf-8" ).encode("utf-8"))
+                    if isinstance(attribValue, basestring):
+                        try:
+                            retElement.setAttribute(attribName, attribValue.decode("utf-8" ).encode("utf-8"))
+                        except:
+                            print >>sys.stderr, "An serialization error has been encountered. Replacing utf8 data with ascii characters."
+                            retElement.setAttribute(attribName, remove_accents(attribValue))
                     else:
-                         retElement.setAttribute(attribName, str(attribValue))
+                        retElement.setAttribute(attribName, str(attribValue))
         
         return retElement
     

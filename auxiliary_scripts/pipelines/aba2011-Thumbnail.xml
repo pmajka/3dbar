@@ -123,7 +123,7 @@
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="3">
+			<pipelineelement disable="False" displayable="True" on="False" order="3">
 				<vtkclass>
 					vtkImageGaussianSmooth
 				</vtkclass>
