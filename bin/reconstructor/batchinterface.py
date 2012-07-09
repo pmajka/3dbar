@@ -38,8 +38,8 @@ from optparse import OptionParser, OptionGroup
 from bar.color import floatColourToInt
 from bar.rec.barreconstructor import barReconstructionModule, SCENE_EXPORT_FORMAT_MASK,\
                                      BAR_RECONSTRUCTOR_VERSION, BAR_RENDERER_BACKGROUND
-
-BAR_DESCRIPTION = "3d Brain Atlas Reconstructor ver." + BAR_RECONSTRUCTOR_VERSION + " Batch reconstruction interface\n"
+#TODO
+BAR_DESCRIPTION = "3d Brain Atlas Reconstructor " + BAR_RECONSTRUCTOR_VERSION + " Batch reconstruction interface v.02 \n"
 
 class batchInterface(object):
     """
@@ -88,7 +88,7 @@ class batchInterface(object):
                      ('exportThumbnail', 'saves scaled screenshot as an PNG image')]
 
     description = BAR_DESCRIPTION
-    usage = "./batchinterface.sh [options] <CAF index> [<structure 1> [<structure 2> ...]]"
+    usage = "./batchinterface.sh [options] <CAF index> <structure 1> [<structure 2> ...]"
     version = BAR_RECONSTRUCTOR_VERSION
     
     # Determines, how many second script waits before launching the reconstruction
@@ -116,6 +116,10 @@ class batchInterface(object):
         parser.add_option('--cameraMovementAngles', '-a', type='float', nargs=3, dest='cameraMovementAngles',
                           default=(0.0, 0.0, 0.0),
                           help='camera movement angles (azimuth, elevation, roll)')
+        #TODO
+        parser.add_option('--parallelProjection', action='store_const',
+                          const=True, dest ='parallel', default=False, 
+                          help='Changes the projection from perspective to parallel')
         parser.add_option('--background', '-b', type='float', nargs=3, dest='background',
                           default=floatColourToInt(BAR_RENDERER_BACKGROUND),
                           help='RGB background colourcomponents (within 0.0-255.0 range)')
@@ -134,6 +138,10 @@ class batchInterface(object):
         parser.add_option('--includeBrainOutline', action='store_const',
                           const=True, dest='brainoutline', default=False,
                           help='Includes additional translucent brain outline to the reconstructions. Applies only when exporting to VRML, X3D or thumbnail.')
+        #TODO
+        parser.add_option('--addOutline', action='append',
+                          type='string', dest='outline',
+                         help='Includes specified translucent outlines to the reconstructions. Applies only when exporting to VRML, X3D or thumbnail.')
         parser.add_option('--ignoreBoundingBox', action='store_const',
                           const=True, dest='ignoreBoundingBox', default=False,
                           help='Overrides bounding box calculation - bounding\
@@ -154,9 +162,13 @@ class batchInterface(object):
         @note: The method exits if parse failed or requested to display help.
         """
         (options, args) = self.parser.parse_args()
-        if len(args) == 0:
+        
+        #TODO
+        if len(args) < 2:
             self.parser.print_help()
             exit()
+        
+        
         return (options, args)
     
     def printParameters(self):
@@ -174,7 +186,9 @@ class batchInterface(object):
             print "  --usePipeline:", self.options.pipeline
         else:
             print "    DEFAULT PIPELINE"
+        #TODO
         print "  --cameraMovementAngles: %f %f %f" % self.rm.cameraMovementAngles
+        print "  --parallelProjection: %s" %str(self.rm.parallel)
         print "Output:"
         for (keyword, description) in self.output_format:
             if keyword in self.rm.formats:
@@ -185,7 +199,11 @@ class batchInterface(object):
             print "  --composite"
         if self.rm.brainoutline:
             print "  --includeBrainOutline"
-        print
+        
+        #TODO
+        print " --addOutline "
+        for x in self.rm.outline:
+            print x
     
     def setup(self):
         """

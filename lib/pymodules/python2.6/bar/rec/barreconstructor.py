@@ -52,7 +52,7 @@ from bar.rec.formats import BAR_SCENE_TEMPLATE, BAR_VOLUME_TEMPLATE,\
 from bar.rec.thumbnail import Thumbnail
 
 #TODO: documentation
-BAR_RECONSTRUCTOR_VERSION = "ver. 0.1"
+BAR_RECONSTRUCTOR_VERSION = "ver. 0.2"
 
 BAR_DEFAULT_RECONSTRUCTION_DIR = '../reconstructions'
 BAR_ATLAS_INDEX_FILENAME = 'index.xml'
@@ -386,7 +386,22 @@ class barReconstructionModule(object):
         """
         self.renderer.RemoveActor(self.__contextActors[name])
         del self.__contextActors[name]
-    
+
+    #TODO
+    def getContextActorOpacity(self, name):
+        if not self.hasContextActor(name):
+            return None     
+        return self.__contextActors[name].GetProperty().GetOpacity() 
+
+    def setContextActorTransparent(self, name):
+        if not self.hasContextActor(name):
+            return None     
+        
+        prop = self.__contextActors[name].GetProperty()
+
+        for k, v in BAR_BRAIN_OUTLINE_PROPS.items():
+            getattr(prop, k)(v) 
+
     def hasContextActor(self, name):
         """
         Check if the context actor is in the scene.
@@ -594,7 +609,7 @@ class barReconstructionModule(object):
 #}
 
 #{ Property access methods
-    
+
     def __getCameraPosition(self):
         """
         The L{cameraPosition} property getter.
@@ -625,7 +640,22 @@ class barReconstructionModule(object):
         """
         camera = self.renderer.GetActiveCamera()
         return tuple(camera.GetViewUp())
-    
+
+    #TODO
+    def __setCameraProjection(self, flag):      
+        """
+        The L{cameraProjection} property getter.
+        """
+        camera = self.renderer.GetActiveCamera()
+        camera.SetParallelProjection(1 if flag else 0)
+        
+    def __getCameraProjection(self):
+        """
+        The L{cameraProjection} property setter.
+        """
+        camera = self.renderer.GetActiveCamera()
+        return camera.GetParallelProjection() != 0
+
     def __getPipeline(self):
         """
         The L{pipeline} property getter.
@@ -727,7 +757,13 @@ class barReconstructionModule(object):
     """
     The "up" direction.
     """
-    
+
+    #TODO
+    cameraProjection = property(__getCameraProjection, __setCameraProjection) 
+    """
+    Weather the projection is parallel.
+    """
+ 
     vtkVolume = property(__getVtkVolume, __setVtkVolume)
     """
     The result of execution of the volume processing part of the L{pipeline}

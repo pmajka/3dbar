@@ -29,7 +29,8 @@ G{importgraph}
 """
 
 from time import time
-import random, sys, os, glob
+#TODO
+import random, sys, os, glob, re
 
 #import wxversion        # Force using wxPython in version 2.6 
 #wxversion.select('2.6') # as 2.8 causes blinking in rendering window
@@ -64,6 +65,12 @@ BAR_GUI_NODEFEXPDIR  = "No default model directory selected. Please choose direc
 BAR_GUI_NOTEBOOK_MODEL_TITLE = "Model customization"
 BAR_GUI_NOTEBOOK_STRC_SEL_TITLE = "Structure selection"
 BAR_GUI_FRAME_TITLE = "3d Brain Atlas Reconstructor " + BAR_RECONSTRUCTOR_VERSION
+
+#TODO
+BAR_GUI_FOUND_COLOR = wx.Colour(80,0,0)
+BAR_GUI_FOUND_SHORT_COLOR = wx.Colour(80,0,0)
+BAR_GUI_SEARCH_COLOR = wx.Colour(150,64,0)
+BAR_GUI_FS_COLOR = wx.Colour(120,64,0)
 
 
 class vtkParamCtrl(wx.TextCtrl):
@@ -802,7 +809,7 @@ class structureTree(wx.gizmos.TreeListCtrl):
         # Save reference to the frame
         self.frame = frame
         
-        # Add columts to the tree ans add them some properties as width
+        # Add columns to the tree ans add them some properties as width
         # also, bind some functions
         self.AddColumn("Abbreviation")
         self.AddColumn("Full name of the structure")
@@ -816,7 +823,7 @@ class structureTree(wx.gizmos.TreeListCtrl):
         # Initialize dictionary holding references to the tree elements
         # Such reference is important as we want to manipulate tree elements
         # during runtime and iterating and searching elements trought the tree
-        # is inconviniente.
+        # is inconvenient.
         self.treeItemsRefs = {}
     
     def __addTreeNodes(self, parentItem, items):
@@ -839,17 +846,13 @@ class structureTree(wx.gizmos.TreeListCtrl):
         """
         # Iterate trough all elements on root level adding them to ontology tree
         # If root element has children, invoke this function recursively.
+        #TODO
         for item in items:
-            # When root element does not have children
-            if len(item) == 1:
-                newItem = self.AppendItem(parentItem, item[0][0])
-                self.SetItemText(newItem, item[0][1], 1)
-                self.treeItemsRefs[item[0][0]] = newItem
+            newItem = self.AppendItem(parentItem, item[0][0])
+            self.SetItemText(newItem, item[0][1], 1)
+            self.treeItemsRefs[item[0][0]] = newItem
             # Otherwise:
-            else:
-                newItem = self.AppendItem(parentItem, item[0][0])
-                self.SetItemText(newItem, item[0][1], 1)
-                self.treeItemsRefs[item[0][0]] = newItem
+            if not len(item) == 1:
                 self.__addTreeNodes(newItem, item[1])
         
     def prepareStructureTree(self):
@@ -996,7 +999,9 @@ class structureTree(wx.gizmos.TreeListCtrl):
         """
         
         # Select font colour depending on the passed status
-        if status: colour = wx.Colour(255, 0, 0)
+        #TODO
+        if status == None: colour = wx.Colour(100,100,100)
+        elif status: colour = wx.Colour(255, 0, 0)
         else: colour = wx.Colour(0, 0, 0)
         self.SetItemTextColour(self.treeItemsRefs[str(groupName)], colour)
     
@@ -1044,16 +1049,79 @@ class treeAndSearchPanel(wx.Panel):
         self.sizer.Add(self.structureTree, flag = wx.EXPAND|wx.ALL, proportion = 10)
         self.sizer.Add(self.searchCtrl, flag = wx.EXPAND|wx.ALL, proportion = 0)
     
-    def OnSearch(self, event):
+    def OnSearch(self, even):
         """
+        @parm even: Not used in this function
+
+        @return: None
         """
+        
         searchStructureName = self.searchCtrl.GetValue()
-        if self.structureTree.treeItemsRefs.has_key(searchStructureName):
-            terrItemId = self.structureTree.treeItemsRefs[searchStructureName]
-            self.structureTree.EnsureVisible(terrItemId)
-            self.structureTree.SelectItem(terrItemId)
+        #TODO
+        i = self.frameRef.sh.ih
+        root = i.groups[i.hierarchyRootElementName]
+        
+        if len(searchStructureName) > 0:
+            searchStructureName = re.sub("\s+" , "\\s+", searchStructureName)
+            sSN = re.compile(searchStructureName, re.IGNORECASE)
+            bla = self.__dfs(root, sSN)
+        
+            if self.structureTree.treeItemsRefs.has_key(searchStructureName):
+                 terrItemId = self.structureTree.treeItemsRefs[searchStructureName]
+                 self.structureTree.SelectItem(terrItemId)
+        else: 
+            self.__dfs(root, None)
 
+    #TODO
+    def __dfs(self, v, check):
+        """
+        @param v: Current node of tree of named elements
+        @type v: L{bar.barIndexerGroupElement}
+        
+        @param check: The re.compiled string that we are trying to find
+        @type check: sre.SRE_Pattern
+        
+        @return: The result shows wheater or not the result has been found 
+                 in current node or his children
+        @rtype: bool
+        """
+        tree = self.structureTree
+        x2 = v.name
+        x1 = v.fullname
+         
+        flag = reduce(lambda a, b: a or b,
+                      (self.__dfs(x,check) for x in v.children),
+                      False)
+    
+        x = tree.treeItemsRefs.get(x2)
+         
+        if x == None:
+            return False
+         
+        if check == None:
+            tree.SetItemBackgroundColour(x, None)
+            return False
+    
+        if re.search(check, x2):
+            if flag:
+                tree.SetItemBackgroundColour(x, BAR_GUI_FS_COLOR)
+            else:
+                tree.SetItemBackgroundColour(x, BAR_GUI_FOUND_SHORT_COLOR)
+            return True
+        if re.search(check, x1):
+            if flag:
+                tree.SetItemBackgroundColour(x, BAR_GUI_FS_COLOR)
+            else:
+                tree.SetItemBackgroundColour(x, BAR_GUI_FOUND_COLOR)
+            return True
+        
+        if flag:
+            tree.SetItemBackgroundColour(x, BAR_GUI_SEARCH_COLOR)
+            return True
+        tree.SetItemBackgroundColour(x, None)
+        return False
 
+                
 class mainGuiFrame(wx.Frame):
     def __init__(self, vtkapp):
         """
@@ -1216,8 +1284,16 @@ class mainGuiFrame(wx.Frame):
         # tree.
         # If model is not loaded, just load it.
         if self.vtkapp.hasContextActor(name):
-            self.__removeContextActor(name)
-            tree.setContextSelecttion(name, False)
+            #TODO
+            opacity = self.vtkapp.getContextActorOpacity(name)
+            if opacity < 1:
+                self.__removeContextActor(name)
+                tree.setContextSelecttion(name, False)
+            else:
+                self.vtkapp.setContextActorTransparent(name)
+                #self.loadTransparentContextActor(name)
+                self.vtkapp.refreshRenderWindow()
+                tree.setContextSelecttion(name, None)
         else:
             # When loading context model is successfull,
             # set selection in ontology tree

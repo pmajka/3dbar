@@ -217,11 +217,23 @@ class barBatchReconstructor(object):
         
         if options.exportDir != None:
             self.exportDir = options.exportDir
-        
-        if options.brainoutline:
-            self.brainoutline = options.brainoutline
+       
+        #TODO
+        if options.outline:
+            self.outline = set(options.outline) 
+            validGroups = set(self.sh.ih.groups)
+            if not self.outline <= validGroups:
+                 for name in self.outline - validGroups:
+                     debugOutput("Structure %s not found." %name, error = True) 
+                 self.outline &= validGroups
         else:
-            self.brainoutline = False
+            self.outline = set()
+        
+        self.parallel = options.parallel
+
+        if options.brainoutline:
+            self.outline.add(self.sh.ih.hierarchyRootElementName)
+        self.brainoutline = False
         
         self.depth = options.generateSubstructures
         
@@ -331,22 +343,28 @@ class barBatchReconstructor(object):
         @param structureNames: roots of hierarchy subtrees
         @type structureNames: [str, ...]
         """
+        #TODO
+        validNames = set(name for name in structureNames if name in self.sh.ih.groups)
+        for name in set(structureNames) - validNames:
+             debugOutput("Structure %s not found." %name, error = True) 
+
         # get names of hierarchy subtrees nodes
-        uniqueNames = self.sh.ih.unfoldSubtrees(structureNames, self.depth, leavesOnly=False)
+        uniqueNames = self.sh.ih.unfoldSubtrees(validNames, self.depth, leavesOnly=False)
         
         # and request performing of their simple reconstructions
+
         for name in uniqueNames:
             self.prepareSimpleLoop(name)
 
         # if composite reconstruction is requested
         if self.composite:
             # get names of hierarchy subtrees leaf nodes
-            components = self.sh.ih.unfoldSubtrees(structureNames, self.depth, leavesOnly=True)
+            components = self.sh.ih.unfoldSubtrees(validNames, self.depth, leavesOnly=True)
 
             # combine their names into reconstruction name
             name = 'composite_%d_structures_%X' % (len(components),
                                                         crc32('_'.join(sorted(list(components)))) & 0xffffffff)
-            
+
             # and request the reconstruction
             self.prepareCompositeLoop(name, components)
     
@@ -404,15 +422,19 @@ class barBatchReconstructor(object):
         """
         Perform requested reconstructions.
         """
-        if self.brainoutline:
-            self._prepareBrainOutlineActor()
-        
+
         # perform simple reconstructions
+        # TODO
+        for name in self.outline:
+        
+            self.generateModel(name)
+                
+            self._exportToFormats(name, ['exportToVTKPolydata'])
+            
         for name, formats in self._simpleQueue:
             self.generateModel(name)
-            
-            if self.brainoutline:
-                self._appendBrainOutlineActor()
+            #TODO
+            self._appendOutlineActors()
             
             self._exportToFormats(name, formats)
             
@@ -428,9 +450,8 @@ class barBatchReconstructor(object):
             self.vtkapp.clearVolume()
             
             self._compositeReconstruction(name, structures)
-            
-            if self.brainoutline:
-                self._appendBrainOutlineActor()
+            #TODO
+            self._appendOutlineActors()
             #-----------------
             
             self._exportToFormats(name, formats)
@@ -465,31 +486,22 @@ class barBatchReconstructor(object):
             self.vtkapp.appendContextActor(structureName, filename, ct)
         self.vtkapp.refreshRenderWindow()
     
-    def _prepareBrainOutlineActor(self):
+    #TODO
+    def _appendOutlineActors(self):
         """
-        Request the generation of the whole brain outline if necessary.
-        """
-        
-        rootElemName = self.sh.ih.hierarchyRootElementName
-        filename = self.__getFileName(rootElemName, 'exportToVTKPolydata')
-        if not os.path.exists(filename):
-            self._simpleQueue[:0] = [(rootElemName, frozenset(['exportToVTKPolydata']))] 
-    
-    def _appendBrainOutlineActor(self):
-        """
-        Loads the vtkPolyData file with the outline of the whole brain and
-        appends it as translucent context actor.
+        Loads the vtkPolyData files with the outline of the elements and
+        appends them as translucent context actors.
         """
         
-        rootElemName = self.sh.ih.hierarchyRootElementName
-        filename = self.__getFileName(rootElemName, 'exportToVTKPolydata')
-        if os.path.exists(filename):
-            self.vtkapp.appendContextActor(\
-                    rootElemName,\
-                    filename,\
-                    (0,0,0),\
-                    BAR_BRAIN_OUTLINE_PROPS)
-            self.vtkapp.refreshRenderWindow() 
+        for name in self.outline:
+            filename = self.__getFileName(name, 'exportToVTKPolydata')
+            if os.path.exists(filename):
+                self.vtkapp.appendContextActor(\
+                       name,\
+                       filename,\
+                       (0,0,0), # to be overwritten ;)
+                       BAR_BRAIN_OUTLINE_PROPS)
+        self.vtkapp.refreshRenderWindow() 
     
     def _generateVolume(self, structureName):
         """
@@ -642,6 +654,14 @@ class barBatchReconstructor(object):
         return tuple(x * 180 / math.pi for x in (a, b, c))
 
     cameraMovementAngles = property(__getCameraMovementAngles, __setCameraMovementAngles)
+    #TODO
+    def __setCameraProjection(self, flag):
+        self.vtkapp.cameraProjection = flag
+    
+    def __getCameraProjection(self):
+        return self.vtkapp.cameraProjection
+
+    parallel = property(__getCameraProjection, __setCameraProjection)
 
 
 if __name__ == '__main__':
