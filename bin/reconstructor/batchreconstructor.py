@@ -205,7 +205,6 @@ class barBatchReconstructor(object):
                             values encoded as camera movement angles,
                           - C{parallel} - C{self.L{vtkapp}.L{parallelProjection<barReconstructionModule.parallelProjection>}} value,
                           - C{background} - C{self.L{vtkapp}.L{background<barReconstructionModule.background>}},
-                          - C{pipeline} - C{self.L{vtkapp}.L{pipeline<barReconstructionModule.pipeline>}} value,
                           - C{voxelDimensions} - C{(self.L{xyres}, self.L{zres})} value,
                           - C{exportDir} - C{self.L{exportDir}} value,
                           - C{generateSubstructures} - C{self.L{depth}} value,
@@ -449,11 +448,8 @@ class barBatchReconstructor(object):
         """
         Perform requested reconstructions.
         """
-        # perform reconstruction of outlines
-        for name in self.outline:
-            self.generateModel(name)
-            self._exportToFormats(name, ['exportToVTKPolydata'])
-            
+        self._generateOutlineActors()
+
         # perform simple reconstructions
         for name, formats in self._simpleQueue:
             self.generateModel(name)
@@ -505,8 +501,17 @@ class barBatchReconstructor(object):
             ct = self.getStructureColor(structureName)
             filename = self.__getFileName(structureName, 'exportToVTKPolydata')
             self.vtkapp.appendContextActor(structureName, filename, ct)
+
         self.vtkapp.refreshRenderWindow()
-    
+
+    def _generateOutlineActors(self):
+        """
+        Perform reconstruction of outline actors.
+        """
+        for name in self.outline:
+            self.generateModel(name)
+            self._exportToFormats(name, ['exportToVTKPolydata'])
+            
     def _appendOutlineActors(self):
         """
         Load pregenerated models of structures from C{self.L{outline<barBatchReconstructor.outline>}}
@@ -524,8 +529,8 @@ class barBatchReconstructor(object):
             else:
                 debugOutput("File %s not found." % filename, error = True)
 
-        self.vtkapp.refreshRenderWindow() 
-    
+        self.vtkapp.refreshRenderWindow()
+
     def _generateVolume(self, structureName):
         """
         @param structureName: the name of requested structure
