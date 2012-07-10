@@ -379,7 +379,7 @@ class barReconstructionModule(object):
         """
         Remove the context actor from the scene.
         
-        @param name: the name of the actor to be removed.
+        @param name: name of the actor to be removed.
         @type name: str
         
         @note: the method DOES NOT trigger the scene to render
@@ -387,20 +387,43 @@ class barReconstructionModule(object):
         self.renderer.RemoveActor(self.__contextActors[name])
         del self.__contextActors[name]
 
-    #TODO
     def getContextActorOpacity(self, name):
+        """
+        @param name: name of the context actor
+        @type name: str
+
+        @return: actors opacity; None if actor not found in the scene
+        @rtype: float or None
+        """
         if not self.hasContextActor(name):
-            return None     
+            return None
+
         return self.__contextActors[name].GetProperty().GetOpacity() 
 
     def setContextActorTransparent(self, name):
+        """
+        Make the context actor transparent.
+
+        @param name: name of the context actor
+        @type name: str
+
+        @return: False if actor not found in the scene, otherwise True
+        @rtype: bool
+        """
         if not self.hasContextActor(name):
-            return None     
-        
+            return False
+
+        # get the actor properties interface
         prop = self.__contextActors[name].GetProperty()
 
+        # set the actor properties to values defined for transparent outline
+        # - it's a kind of pythonic magic: each property has a getter (named
+        # as a key in the dictionary) that is called with value of that key
+        # as an argument.
         for k, v in BAR_BRAIN_OUTLINE_PROPS.items():
-            getattr(prop, k)(v) 
+            getattr(prop, k)(v)
+
+        return True
 
     def hasContextActor(self, name):
         """
@@ -641,17 +664,20 @@ class barReconstructionModule(object):
         camera = self.renderer.GetActiveCamera()
         return tuple(camera.GetViewUp())
 
-    #TODO
-    def __setCameraProjection(self, flag):      
+    def __setProjectionParallel(self, parallel):      
         """
-        The L{cameraProjection} property getter.
+        The L{parallelProjection} property setter.
         """
         camera = self.renderer.GetActiveCamera()
-        camera.SetParallelProjection(1 if flag else 0)
+        if parallel:
+            camera.ParallelProjectionOn()
+
+        else:
+            camera.ParallelProjectionOff()
         
-    def __getCameraProjection(self):
+    def __getProjectionParallel(self):
         """
-        The L{cameraProjection} property setter.
+        The L{parallelProjection} property getter.
         """
         camera = self.renderer.GetActiveCamera()
         return camera.GetParallelProjection() != 0
@@ -758,10 +784,9 @@ class barReconstructionModule(object):
     The "up" direction.
     """
 
-    #TODO
-    cameraProjection = property(__getCameraProjection, __setCameraProjection) 
+    parallelProjection = property(__getProjectionParallel, __setProjectionParallel) 
     """
-    Weather the projection is parallel.
+    True if the camera projection is parallel, False if perspective.
     """
  
     vtkVolume = property(__getVtkVolume, __setVtkVolume)

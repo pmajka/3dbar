@@ -109,16 +109,16 @@ class barBatchReconstructor(object):
                      level L{depth}), False otherwise.
     @type composite: bool
     
-    @ivar brainoutline: Indicates if during reconstruction additional
-                        translucent brain outline will be generated and appended
-                        to the reguler reconstructions. Such outline may be
-                        exported only to scene formats as VRML, X3D or into
-                        thumbnails. The color and transparency of the outline
-                        is defined by L{BAR_BRAIN_OUTLINE_PROPS} dictionary and
-                        currently cannot be customized using command line
-                        options. This option requires generated brain mesh to be
-                        present in given output dir.
-    @type brainoutline: bool
+    @ivar outline: List of structures which translucent brain outlines are
+                   generated and appended to the regular reconstructions.
+                   The outlines can be exported only to scene formats as VRML,
+                   X3D or scene snapshot images (like thumbnails). The color
+                   and transparency of the outline is defined by
+                   L{BAR_BRAIN_OUTLINE_PROPS} dictionary and currently cannot
+                   be customized using command line options.
+                   The generated outline meshes are stored in C{self.{exportDir}}
+                   directory.
+    @type outline: set([str, ...])
     
     @ivar _simpleQueue: the queue of simple reconstructions to perform; each queue
                         element is a pair of structure name and a set of export
@@ -144,6 +144,7 @@ class barBatchReconstructor(object):
                           - C{cameraMovementAngles} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}}
                             and C{self.L{vtkapp}.L{cameraViewUp<barReconstructionModule.cameraViewUp>}}
                             values encoded as camera movement angles,
+                          - C{parallel} - C{self.L{vtkapp}.L{parallelProjection<barReconstructionModule.parallelProjection>}} value,
                           - C{background} - C{self.L{vtkapp}.L{background<barReconstructionModule.background>}},
                           - C{pipeline} - C{self.L{vtkapp}.L{pipeline<barReconstructionModule.pipeline>}} value,
                           - C{voxelDimensions} - C{(self.L{xyres}, self.L{zres})} value,
@@ -151,14 +152,22 @@ class barBatchReconstructor(object):
                           - C{generateSubstructures} - C{self.L{depth}} value,
                           - C{format} - C{self.L{formats}} members list,
                           - C{show} - C{self.L{show}} value,
-                          - C{brainoutline} - C{self.L{brainoutline}} value,
-                          - C{composite} - C{self.L{composite}} value; if True forces C{'exportToVTKPolydata' in self.L{formats}}
-                          - C{ignoreBoundingBox} - C{self.L{ignoreBoundingBox}}
-                            Overrides bounding box calculation - bounding box
-                            will be always equal to hierarchy root element
-                            bounding box. Volumes for all structures will always
-                            have the same size and origin. This feature
-                            increases memory usage and reconstruction time.
+                          - C{brainoutline} - legacy option, indicates if the root
+                                              structure of the hierarchy tree has
+                                              to be appended to C{self.L{outline}},
+                          - C{outline} - structures to be included in C{self.L{outline}},
+                          - C{composite} - C{self.L{composite}} value; if True
+                                           forces C{'exportToVTKPolydata' in self.L{formats}},
+                          - C{ignoreBoundingBox} - C{self.L{ignoreBoundingBox}}.
+                                                   Overrides bounding box
+                                                   calculation - bounding box
+                                                   will be always equal to
+                                                   hierarchy root element bounding
+                                                   box. Volumes for all structures
+                                                   will always have the same size
+                                                   and origin. This feature
+                                                   increases memory usage and
+                                                   reconstruction time.
         
         @type options: optparse.Values object
         
@@ -194,6 +203,7 @@ class barBatchReconstructor(object):
                           - C{cameraMovementAngles} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}}
                             and C{self.L{vtkapp}.L{cameraViewUp<barReconstructionModule.cameraViewUp>}}
                             values encoded as camera movement angles,
+                          - C{parallel} - C{self.L{vtkapp}.L{parallelProjection<barReconstructionModule.parallelProjection>}} value,
                           - C{background} - C{self.L{vtkapp}.L{background<barReconstructionModule.background>}},
                           - C{pipeline} - C{self.L{vtkapp}.L{pipeline<barReconstructionModule.pipeline>}} value,
                           - C{voxelDimensions} - C{(self.L{xyres}, self.L{zres})} value,
@@ -201,8 +211,22 @@ class barBatchReconstructor(object):
                           - C{generateSubstructures} - C{self.L{depth}} value,
                           - C{format} - C{self.L{formats}} members list,
                           - C{show} - C{self.L{show}} value,
-                          - C{brainoutline} - C{self.L{brainoutline}} value,
-                          - C{composite} - C{self.L{composite}} value; if True forces C{'exportToVTKPolydata' in self.L{formats}}
+                          - C{brainoutline} - legacy option, indicates if the root
+                                              structure of the hierarchy tree has
+                                              to be appended to C{self.L{outline}},
+                          - C{outline} - structures to be included in C{self.L{outline}},
+                          - C{composite} - C{self.L{composite}} value; if True
+                                           forces C{'exportToVTKPolydata' in self.L{formats}},
+                          - C{ignoreBoundingBox} - C{self.L{ignoreBoundingBox}}.
+                                                   Overrides bounding box
+                                                   calculation - bounding box
+                                                   will be always equal to
+                                                   hierarchy root element bounding
+                                                   box. Volumes for all structures
+                                                   will always have the same size
+                                                   and origin. This feature
+                                                   increases memory usage and
+                                                   reconstruction time.
         
         @type options: optparse.Values object
         """
@@ -211,6 +235,7 @@ class barBatchReconstructor(object):
         # Process options
         self.vtkapp.background = intColourToFloat(options.background)
         self.cameraMovementAngles = options.cameraMovementAngles
+        self.parallel = options.parallel
 
         if options.voxelDimensions != None:
             self.xyres, self.zres = options.voxelDimensions
@@ -218,23 +243,24 @@ class barBatchReconstructor(object):
         if options.exportDir != None:
             self.exportDir = options.exportDir
        
-        #TODO
         if options.outline:
+            # check whether every group requested as an outline exists
             self.outline = set(options.outline) 
-            validGroups = set(self.sh.ih.groups)
-            if not self.outline <= validGroups:
-                 for name in self.outline - validGroups:
-                     debugOutput("Structure %s not found." %name, error = True) 
-                 self.outline &= validGroups
+            invalidGroups = self.outline - set(self.sh.ih.groups)
+
+            if len(invalidGroups) > 0:
+                # if not - report it and try to fix
+                for name in invalidGroups:
+                    debugOutput("Structure %s not found." % name, error = True)
+
+                self.outline -= validGroups
+
         else:
             self.outline = set()
-        
-        self.parallel = options.parallel
 
         if options.brainoutline:
             self.outline.add(self.sh.ih.hierarchyRootElementName)
-        self.brainoutline = False
-        
+
         self.depth = options.generateSubstructures
         
         self.formats = set()
@@ -311,8 +337,8 @@ class barBatchReconstructor(object):
         """
         # distinct reconstructions with and without brain outline
         exportName = name
-        if self.brainoutline and outputFormat in SCENE_EXPORT_FORMAT_MASK:
-            exportName = self.sh.ih.hierarchyRootElementName + '__' + name
+        if len(self.outline) > 0 and outputFormat in SCENE_EXPORT_FORMAT_MASK:
+            exportName = '_'.join(sorted(self.outline)) + '__' + name
 
         filename = self.__getFileName(exportName, outputFormat)
         getattr(self.vtkapp, outputFormat)(filename)
@@ -343,10 +369,11 @@ class barBatchReconstructor(object):
         @param structureNames: roots of hierarchy subtrees
         @type structureNames: [str, ...]
         """
-        #TODO
+        # filter requested structures to preserve existing ones
         validNames = set(name for name in structureNames if name in self.sh.ih.groups)
+        # if any of requested structures does not exist
         for name in set(structureNames) - validNames:
-             debugOutput("Structure %s not found." %name, error = True) 
+            debugOutput("Structure %s not found." %name, error = True) 
 
         # get names of hierarchy subtrees nodes
         uniqueNames = self.sh.ih.unfoldSubtrees(validNames, self.depth, leavesOnly=False)
@@ -422,26 +449,21 @@ class barBatchReconstructor(object):
         """
         Perform requested reconstructions.
         """
-
-        # perform simple reconstructions
-        # TODO
+        # perform reconstruction of outlines
         for name in self.outline:
-        
             self.generateModel(name)
-                
             self._exportToFormats(name, ['exportToVTKPolydata'])
             
+        # perform simple reconstructions
         for name, formats in self._simpleQueue:
             self.generateModel(name)
-            #TODO
             self._appendOutlineActors()
-            
             self._exportToFormats(name, formats)
             
             if self.show:
                 self.exportToWindow()
         
-        # Clean the quque. 
+        # flush the quque. 
         self._simpleQueue = []
         
         # perform composite reconstructions
@@ -450,7 +472,6 @@ class barBatchReconstructor(object):
             self.vtkapp.clearVolume()
             
             self._compositeReconstruction(name, structures)
-            #TODO
             self._appendOutlineActors()
             #-----------------
             
@@ -459,7 +480,7 @@ class barBatchReconstructor(object):
             if self.show:
                 self.exportToWindow()
         
-        # flush the loop queue
+        # flush the queue
         self._compositeQueue = []
     
     def _compositeReconstruction(self, name, structures):
@@ -486,13 +507,11 @@ class barBatchReconstructor(object):
             self.vtkapp.appendContextActor(structureName, filename, ct)
         self.vtkapp.refreshRenderWindow()
     
-    #TODO
     def _appendOutlineActors(self):
         """
-        Loads the vtkPolyData files with the outline of the elements and
-        appends them as translucent context actors.
+        Load pregenerated models of structures from C{self.L{outline<barBatchReconstructor.outline>}}
+        and append them to the scene as translucent context actors.
         """
-        
         for name in self.outline:
             filename = self.__getFileName(name, 'exportToVTKPolydata')
             if os.path.exists(filename):
@@ -501,6 +520,10 @@ class barBatchReconstructor(object):
                        filename,\
                        (0,0,0), # to be overwritten ;)
                        BAR_BRAIN_OUTLINE_PROPS)
+
+            else:
+                debugOutput("File %s not found." % filename, error = True)
+
         self.vtkapp.refreshRenderWindow() 
     
     def _generateVolume(self, structureName):
@@ -654,14 +677,23 @@ class barBatchReconstructor(object):
         return tuple(x * 180 / math.pi for x in (a, b, c))
 
     cameraMovementAngles = property(__getCameraMovementAngles, __setCameraMovementAngles)
-    #TODO
-    def __setCameraProjection(self, flag):
-        self.vtkapp.cameraProjection = flag
-    
-    def __getCameraProjection(self):
-        return self.vtkapp.cameraProjection
 
-    parallel = property(__getCameraProjection, __setCameraProjection)
+    def __setProjectionParallel(self, parallel):
+        """
+        C{self.L{parallel}} property setter.
+        """
+        self.vtkapp.parallelProjection = parallel
+    
+    def __getProjectionParallel(self):
+        """
+        C{self.L{parallel}} property getter.
+        """
+        return self.vtkapp.parallelProjection
+
+    parallel = property(__getProjectionParallel, __setProjectionParallel)
+    """
+    An alias for C{self.L{vtkapp}.L{parallelProjection<barReconstructionModule.parallelProjection>}}
+    """
 
 
 if __name__ == '__main__':

@@ -29,8 +29,11 @@ G{importgraph}
 """
 
 from time import time
-#TODO
-import random, sys, os, glob, re
+import random
+import sys
+import os
+import glob
+import re
 
 #import wxversion        # Force using wxPython in version 2.6 
 #wxversion.select('2.6') # as 2.8 causes blinking in rendering window
@@ -826,33 +829,30 @@ class structureTree(wx.gizmos.TreeListCtrl):
         # is inconvenient.
         self.treeItemsRefs = {}
     
-    def __addTreeNodes(self, parentItem, items):
+    def __addTreeNodes(self, parentItem, sibling):
         """
         @type  parentItem: reference to wxTree element 
         @param parentItem: parent tree element that will hold appended items
         
-        @type  items: Dictionary
-        @param items: dictionary holding all hierarchy elements and their
-                      properties.
-        
+        @type  sibling: sequence([tuple, ...])
+        @param sibling: wood of descendants of parentItem in a hierarchy tree
+
         Recursively travels across the data structures adding tree nodes to the
-        ontology tree. Dictionary of items has form of tree. Single element has
-        following form:
-        
-            - item[0] - holds data about top structure
-            - item[1] - holds data about substructures (list)
-            - item[0][0] - name(abbreviation) of root element
+        ontology tree. Single tree in a sibling wood has the following form:
+
+            - item[0] - holds data about root structure
+            - item[1] - holds data about root structure children (wood)
+            - item[0][0] - name (abbreviation) of root structure
             - item[0][1] - full name of root structure
         """
-        # Iterate trough all elements on root level adding them to ontology tree
-        # If root element has children, invoke this function recursively.
-        #TODO
-        for item in items:
+        # Create node and append it to the structure selection menu tree for
+        # every child of parentItem
+        for item in sibling:
             newItem = self.AppendItem(parentItem, item[0][0])
             self.SetItemText(newItem, item[0][1], 1)
             self.treeItemsRefs[item[0][0]] = newItem
-            # Otherwise:
-            if not len(item) == 1:
+            # if the child has its own children - invoke the method recursively
+            if len(item) > 1:
                 self.__addTreeNodes(newItem, item[1])
         
     def prepareStructureTree(self):
@@ -1049,79 +1049,110 @@ class treeAndSearchPanel(wx.Panel):
         self.sizer.Add(self.structureTree, flag = wx.EXPAND|wx.ALL, proportion = 10)
         self.sizer.Add(self.searchCtrl, flag = wx.EXPAND|wx.ALL, proportion = 0)
     
-    def OnSearch(self, even):
+    def OnSearch(self, event):
         """
-        @parm even: Not used in this function
+        @parm event: dummy (not used in this function)
 
         @return: None
         """
         
         searchStructureName = self.searchCtrl.GetValue()
         #TODO
-        i = self.frameRef.sh.ih
-        root = i.groups[i.hierarchyRootElementName]
-        
-        if len(searchStructureName) > 0:
-            searchStructureName = re.sub("\s+" , "\\s+", searchStructureName)
-            sSN = re.compile(searchStructureName, re.IGNORECASE)
-            bla = self.__dfs(root, sSN)
-        
-            if self.structureTree.treeItemsRefs.has_key(searchStructureName):
-                 terrItemId = self.structureTree.treeItemsRefs[searchStructureName]
-                 self.structureTree.SelectItem(terrItemId)
-        else: 
-            self.__dfs(root, None)
+        index = self.frameRef.sh.ih
+        rootElement = index.groups[index.hierarchyRootElementName]
 
-    #TODO
-    def __dfs(self, v, check):
+        # if search regexp is not empty
+        if len(searchStructureName) > 0:
+            # replace any sequence of white characters with white character sequence
+            # regexp, then compile it and mark matching structure menu nodes
+            searchStructureName = re.sub("\s+" , "\\s+", searchStructureName)
+            targetRegexp = re.compile(searchStructureName, re.IGNORECASE)
+            self.__dfs(rootElement, targetRegexp)
+
+            # # if exact match (not regexp) with structure name abbreviation found
+            # # select related structure tree menu node
+            # if self.structureTree.treeItemsRefs.has_key(searchStructureName):
+            #    terrItemId = self.structureTree.treeItemsRefs[searchStructureName]
+            #    self.structureTree.EnsureVisible(terrItemId)
+            #    self.structureTree.SelectItem(terrItemId)
+
+        else:
+            # unmark all nodes of the structure tree menu 
+            self.__dfs(rootElement, None)
+
+    def __dfs(self, node, check):
         """
-        @param v: Current node of tree of named elements
-        @type v: L{bar.barIndexerGroupElement}
+        Mark L{node} and its children related structure selection menu tree nodes
+        if their name of fullname matches L{check} regexp.
+
+        @param node: hierarchy group element being visited
+        @type node: L{bar.barIndexerGroupElement}
         
-        @param check: The re.compiled string that we are trying to find
-        @type check: sre.SRE_Pattern
+        @param check: regexp for which we are looking for match; if None it is
+                      assumed no string matches it - therefore no menu tree node
+                      is selected
+        @type check: _sre.SRE_Pattern
         
-        @return: The result shows wheater or not the result has been found 
-                 in current node or his children
+        @return: True if match found for the node or any of its descednants,
+                 False otherwise
         @rtype: bool
         """
         tree = self.structureTree
-        x2 = v.name
-        x1 = v.fullname
-         
-        flag = reduce(lambda a, b: a or b,
-                      (self.__dfs(x,check) for x in v.children),
-                      False)
-    
-        x = tree.treeItemsRefs.get(x2)
-         
-        if x == None:
-            return False
-         
+        name = node.name
+        fullname = node.fullname
+
+        # another kind of pythonic magic - check if self.__dfs for any child
+        # of node can found match
+        inSubtree = reduce(lambda a, b: a or b,
+                           (self.__dfs(x, check) for x in node.children),
+                           False)
+
+        # node of menu tree related to the node
+        menuNode = tree.treeItemsRefs[name] #.get(name)
+
+        #if menuNode == None:
+        #    # oops! no related menu item found?
+        #    return False
+
         if check == None:
-            tree.SetItemBackgroundColour(x, None)
+            # nothing can match it - unmark the node and exit
+            tree.SetItemBackgroundColour(menuNode, None)
             return False
     
-        if re.search(check, x2):
-            if flag:
-                tree.SetItemBackgroundColour(x, BAR_GUI_FS_COLOR)
+        if re.search(check, name):
+            # name (abbreviation) match found
+            if inSubtree:
+                # there is also a match in node descendants
+                tree.SetItemBackgroundColour(menuNode, BAR_GUI_FS_COLOR)
+
             else:
-                tree.SetItemBackgroundColour(x, BAR_GUI_FOUND_SHORT_COLOR)
+                # no descendant matches
+                tree.SetItemBackgroundColour(menuNode, BAR_GUI_FOUND_SHORT_COLOR)
+
             return True
-        if re.search(check, x1):
-            if flag:
-                tree.SetItemBackgroundColour(x, BAR_GUI_FS_COLOR)
+
+        if re.search(check, fullname):
+            # fullname match found
+            if inSubtree:
+                # there is also a match in node descendants
+                tree.SetItemBackgroundColour(menuNode, BAR_GUI_FS_COLOR)
+
             else:
-                tree.SetItemBackgroundColour(x, BAR_GUI_FOUND_COLOR)
+                # no descendant matches
+                tree.SetItemBackgroundColour(menuNode, BAR_GUI_FOUND_COLOR)
+
             return True
         
-        if flag:
-            tree.SetItemBackgroundColour(x, BAR_GUI_SEARCH_COLOR)
+        if inSubtree:
+            # node does not match, but one of its descendants does
+            tree.SetItemBackgroundColour(menuNode, BAR_GUI_SEARCH_COLOR)
             return True
-        tree.SetItemBackgroundColour(x, None)
+
+        # no match found in whole tree
+        tree.SetItemBackgroundColour(menuNode, None)
         return False
 
-                
+
 class mainGuiFrame(wx.Frame):
     def __init__(self, vtkapp):
         """
@@ -1279,21 +1310,22 @@ class mainGuiFrame(wx.Frame):
         tree = self.structureTree
         name = tree.GetItemText(event.GetItem())
         
-        # If model is already loaded, unload the context model
-        # and change way how the name of the model is dispalyed in the ontology
-        # tree.
-        # If model is not loaded, just load it.
+        # If model is already loaded and transparent, unload the context model,
+        # if is not transparent - make it so, if is not loaded - load it as
+        # not transparent. Also update the ontology tree node.
         if self.vtkapp.hasContextActor(name):
             #TODO
             opacity = self.vtkapp.getContextActorOpacity(name)
             if opacity < 1:
                 self.__removeContextActor(name)
                 tree.setContextSelecttion(name, False)
+
             else:
                 self.vtkapp.setContextActorTransparent(name)
                 #self.loadTransparentContextActor(name)
                 self.vtkapp.refreshRenderWindow()
                 tree.setContextSelecttion(name, None)
+
         else:
             # When loading context model is successfull,
             # set selection in ontology tree
