@@ -18,11 +18,11 @@ Visit http://www.3dbar.org for more information about the software and relase
 notifications. Project is supported by an infrastructural grant from the Polish
 Ministry of Regional Development, POIG.02.03.00-00-003/09.
 
-=== Licencing infortmation: ===
+=== Licensing infortmation: ===
 
 This work is licensed under a Creative Commons
-Attribution-NonCommercial-ShareAlike 3.0 Unported License
-(http://creativecommons.org/licenses/by-nc-sa/3.0/)
+Attribution-NonCommercial 3.0 Unported License.
+(http://creativecommons.org/licenses/by-nc/3.0/)
 
 More detailed information (including licencing) is available at:
 http://brainvis.wustl.edu/wiki/index.php//Caret:Atlases/Conte69_Atlas

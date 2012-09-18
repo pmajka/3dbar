@@ -112,6 +112,8 @@ jsonFilelist=\
 
 indexerProps = dict([\
         ('Source','http://scalablebrainatlas.incf.org/main/coronal3d.php?template=DB08'),
+        ('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
+        ('SourceLicencing', '<a rel="license" href="http://creativecommons.org/licenses/by/3.0/" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/80x15.png" /></a> (<a href="http://braininfo.rprc.washington.edu/copyright.aspx" target="_blank">see details</a>)'),
         ('ReferenceWidth', str(REFERENCE_WIDTH)),
         ('ReferenceHeight', str(REFERENCE_HEIGHT)),
         ('FilenameTemplate', str('%d_traced_v%d.svg')),
