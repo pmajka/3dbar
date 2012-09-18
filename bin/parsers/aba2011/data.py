@@ -24,9 +24,9 @@
 
 import datetime
 
-CONF_PARSER_COMMENT = """CAF dataset based on Allen Mouse Brain Atlas [Internet]. Seattle (WA): Allen Institute for Brain \
+CONF_PARSER_COMMENT = 'CAF dataset based on Allen Mouse Brain Atlas [Internet]. Seattle (WA): Allen Institute for Brain \
 Science. (c) 2009. Available from: \
-<a href="http://mouse.brain-map.org/atlas/index.html" target="_blank">http://mouse.brain-map.org</a>."""
+<a href="http://mouse.brain-map.org/static/atlas" target="_blank">http://mouse.brain-map.org/static/atlas</a>.'
 
 CONF_PARSER_NAME = 'aba2011'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology.'
@@ -79,7 +79,7 @@ filenameTempates = dict(traced='%03d_traced_v%d.svg')
 renderingProperties = {}
 renderingProperties['ReferenceWidth']  = REFERENCE_WIDTH
 renderingProperties['ReferenceHeight'] = REFERENCE_HEIGHT
-renderingProperties['imageSize']  = (REFERENCE_WIDTH*20, REFERENCE_HEIGHT*20)
+renderingProperties['imageSize']  = (REFERENCE_WIDTH*5, REFERENCE_HEIGHT*5)
 
 potraceProperties    = {}
 potraceProperties['potrace_accuracy_parameter']   ='0.001'
@@ -119,6 +119,8 @@ indexerProperties = dict([
 ('Body weight', '25.19 +/- 1.59 g'),
 ('Source','http://www.brain-map.org/BrainExplorer2/Atlases/Mouse_Brain_2.zip'),
 ('Language', 'En'),
+('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
+('SourceLicencing', 'See the Allen Institute <a href="http://www.alleninstitute.org/about_us/terms_of_use.html" target="_blank">terms of use</a> and <a href="http://www.alleninstitute.org/about_us/citation_policy.html" target="_blank">citation policy</a>.'),
 ('SRSCode', 'N/A'),
 ('SRSName', 'N/A'),
 ('ReferenceWidth', str(CORR_REFERENCE_WIDTH)),

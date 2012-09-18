@@ -26,7 +26,7 @@ import datetime
 
 CONF_PARSER_COMMENT = 'CAF dataset based on Allen Mouse Brain Atlas [Internet]. Seattle (WA): Allen Institute for Brain \
 Science. (c) 2009. Available from: \
-<a href="http://mouse.brain-map.org/atlas/index.html" target="_blank">http://mouse.brain-map.org</a>.'
+<a href="http://mouse.brain-map.org/static/atlas" target="_blank">http://mouse.brain-map.org/static/atlas</a>.'
 
 CONF_PARSER_NAME = 'aba'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology. Lukasz Walejko'
@@ -324,6 +324,8 @@ indexerProperties = dict([
 ('Body weight', '25.19 +/- 1.59 g'),
 ('Source','http://community.brain-map.org/confluence/download/attachments/525267/data.zip?version=1'),
 ('Language', 'En'),
+('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
+('SourceLicencing', 'See the Allen Institute <a href="http://www.alleninstitute.org/about_us/terms_of_use.html" target="_blank">terms of use</a> and <a href="http://www.alleninstitute.org/about_us/citation_policy.html" target="_blank">citation policy</a>.'),
 ('SRSCode', 'INCF:0101'),
 ('SRSName', 'Mouse_ABAreference_1.0'),
 ('ReferenceWidth', str(REFERENCE_WIDTH)),

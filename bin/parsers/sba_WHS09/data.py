@@ -120,6 +120,8 @@ indexerProps = dict([\
         ('Sex', 'male'),
         ('Source','http://scalablebrainatlas.incf.org/main/coronal3d.php?template=WHS09'),
         ('Language', 'En'),
+        ('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
+        ('SourceLicencing', 'CC-BY (<a href="http://software.incf.org/software/waxholm-space/home" target="_blank">see details</a>)'),
         ('SRSCode', 'INCF:0002'),
         ('FilenameTemplate', str('%d_traced_v%d.svg')),
         ('RefCords', '-5.4770870759, 4.7801952164, 0.007118290, -0.007118225'),

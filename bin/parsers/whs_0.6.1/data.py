@@ -100,6 +100,8 @@ indexerProperties = dict([
 ('Sex', 'male'),
 ('Source', 'http://www.sciencedirect.com/science/article/pii/S1053811910009274'),
 ('Language', 'En'),
+('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
+('SourceLicencing', ' CC-BY (<a href="http://software.incf.org/software/waxholm-space/home" target="_blank">see details</a>)'),
 ('SRSCode', 'INCF:0002'),
 ('ReferenceWidth', str(REFERENCE_WIDTH)),
 ('ReferenceHeight', str(REFERENCE_HEIGHT)),
