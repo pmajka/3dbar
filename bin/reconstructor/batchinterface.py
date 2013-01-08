@@ -79,6 +79,7 @@ class batchInterface(object):
     """
     output_format = [('exportToX3d', 'exports as X3D scene'),
                      ('exportToVRML', 'exports as VRML scene'),
+                     ('exportToSTL', 'exports as STereoLithography .stl file'),
                      ('exportToPOVRay', 'exports to POV-Ray'),
                      ('exportToVTKPolydata', 'exports as VTKpolyMesh'),
                      ('exportToVolume', 'exports as VTKstructGrid'),
@@ -90,11 +91,11 @@ class batchInterface(object):
     description = BAR_DESCRIPTION
     usage = "./batchinterface.sh [options] <CAF index> <structure 1> [<structure 2> ...]"
     version = BAR_RECONSTRUCTOR_VERSION
-    
+
     # Determines, how many second script waits before launching the reconstruction
     # process
     delay = 1
-    
+
     def __init__(self, reconstructorClass):
         self.structures = None
         self.rm = None
@@ -117,12 +118,12 @@ class batchInterface(object):
                           default=(0.0, 0.0, 0.0),
                           help='camera movement angles (azimuth, elevation, roll)')
         parser.add_option('--parallelProjection', action='store_const',
-                          const=True, dest ='parallel', default=False, 
+                          const=True, dest ='parallel', default=False,
                           help='change the projection from perspective to parallel')
         parser.add_option('--background', '-b', type='float', nargs=3, dest='background',
                           default=floatColourToInt(BAR_RENDERER_BACKGROUND),
                           help='RGB background colourcomponents (within 0.0-255.0 range)')
-        
+
         formatOptions = OptionGroup(parser, 'Output Format Switches')
         for (keyword, description) in self.output_format:
             formatOptions.add_option('--'+keyword, action='append_const',
@@ -159,15 +160,15 @@ class batchInterface(object):
         @note: The method exits if parse failed or requested to display help.
         """
         (options, args) = self.parser.parse_args()
-        
+
         # check if at least CAF index and one structure are given
         if len(args) < 2:
             self.parser.print_help()
             exit()
-        
-        
+
+
         return (options, args)
-    
+
     def printParameters(self):
         """
         Print the parameters of the reconstruction.
@@ -178,7 +179,7 @@ class batchInterface(object):
         print "Outlines:"
         for x in sorted(self.rm.outline):
             print "  --addOutline %s" % x
-        print 
+        print
         print "Options:"
         print "  --generateSubstructures:", self.rm.depth
         print "  --voxelDimensions:", self.rm.xyres, self.rm.zres
@@ -202,7 +203,7 @@ class batchInterface(object):
             print "  --exportToWindow"
         if self.rm.composite:
             print "  --composite"
-        
+
 
     def setup(self):
         """
@@ -213,22 +214,22 @@ class batchInterface(object):
         vtkapp = barReconstructionModule()
         self.index = args[0]
         self.structures = args[1:]
-        
+
         # create the reconstructor
         self.rm = self.reconstructorClass(vtkapp, self.index, self.options)
 
         self.printParameters()
-    
+
     def waitDelay(self):
         """
         Wait L{delay} seconds allowing user to review reconstruction settings
         and, if needed, stop the process before it starts.
-        
+
         @note: assumed call to the function just before the reconstruction starts.
         """
         print "Reconstruction is starting in %d seconds. Press Ctrl-C to stop." % self.delay
         print "To reconstruction start:",
-        
+
         for toGo in reversed(xrange(1, self.delay + 1)):
             print toGo,
             sys.stdout.flush()

@@ -36,12 +36,14 @@ G{importgraph}
 
 BAR_SCENE_TEMPLATE = 'scene_%s'
 BAR_VOLUME_TEMPLATE = 'volume_%s'
+BAR_MESH_TEMPLATE = 'model_%s'
 
 BAR_EXPORT_FORMATS = [('exportToVRML', 'VRML files', '.wrl', BAR_SCENE_TEMPLATE),
                       ('exportToX3d', 'X3D files', '.x3d', BAR_SCENE_TEMPLATE),
                       ('exportToPOVRay', 'POV-Ray files', '.pov', BAR_SCENE_TEMPLATE),
                       ('exportToNiftii', 'NIfTI I files', '.nii.gz', BAR_VOLUME_TEMPLATE),
-                      ('exportToVTKPolydata', 'vtk polydata files', '.vtk', 'model_%s'),
+                      ('exportToVTKPolydata', 'vtk polydata files', '.vtk', BAR_MESH_TEMPLATE),
+                      ('exportToSTL', 'STL (STereoLithography) file format', '.stl', BAR_MESH_TEMPLATE),
                       ('exportToNumpy', 'NumPy array files', '.npy', BAR_VOLUME_TEMPLATE),
                       ('exportToVolume', 'vtk structured grid files', '.vtk', BAR_VOLUME_TEMPLATE),
                       ('exportScreenshot', 'PNG images', '.png', 'screenshot_%s'),
@@ -90,7 +92,7 @@ SCENE_EXPORT_FORMAT_MASK = frozenset(['exportToVRML',
                                       'exportToX3d',
                                       'exportToPOVRay',
                                       'exportThumbnail',
-                                      'exportScreenshot']) 
+                                      'exportScreenshot'])
 
 IMAGE_EXPORT_FORMAT_MASK = frozenset(['exportThumbnail',
                                       'exportScreenshot'])
