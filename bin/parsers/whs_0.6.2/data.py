@@ -24,12 +24,12 @@
 
 import datetime
 
-CONF_PARSER_COMMENT = 'CAF dataset based <a href="http://software.incf.org/software/waxholm-space/waxholm-space/mbat-ready-label-volume-v0.6.2/file_download?file_field=file" target="_blank">MBAT (Mouse BIRN Atlasing Toolkit)-ready \
+CONF_PARSER_COMMENT = 'CAF dataset based on <a href="http://software.incf.org/software/waxholm-space/waxholm-space/mbat-ready-label-volume-v0.6.2/file_download?file_field=file" target="_blank">MBAT (Mouse BIRN Atlasing Toolkit)-ready \
         label volume</a> which contains 50 manually segmented brain regions, version 0.6.2. For more information about the Waxholm space check out: \
         Waxholm Space, a coordinate-based reference space for the \
-        mapping and registration of neuroanatomical data in the mouse brain.<br/> \
-See <a href="http://www.ncbi.nlm.nih.gov/pubmed/20600960" target="_blank"> \
-G.Johnson, et. al., NeuroImage 53 (2010) 365-372</a> or <a href="http://atlasing.incf.org/wiki/Main_Page" target="_blank">The INCF Digital Atlasing Program wiki</a>.'
+        mapping and registration of neuroanatomical data in the mouse brain  \
+(<a href="http://www.ncbi.nlm.nih.gov/pubmed/20600960" target="_blank"> \
+G.Johnson, et. al., NeuroImage 53 (2010) 365-372</a>) or <a href="http://atlasing.incf.org/wiki/Main_Page" target="_blank">The INCF Digital Atlasing Program wiki</a>.'
 CONF_PARSER_NAME    = 'whs_0.6.2'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology'
 CONF_CONTACT_EMAIL  = 'pmajka@nencki.gov.pl'

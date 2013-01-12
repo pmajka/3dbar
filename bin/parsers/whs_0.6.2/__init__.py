@@ -119,4 +119,5 @@ if __name__=='__main__':
         outputDirectory = 'atlases/whs_0.6.2/caf/'
     
     ap = AtlasParser(inputDirectory, outputDirectory)
-    ap.parseAll()
+    #ap.parseAll()
+    ap.reindex()
