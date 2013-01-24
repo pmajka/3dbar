@@ -80,15 +80,15 @@ def cleanSVG(root, doc, gVisible = False):
                     node.unlink()
                     continue
 
-                # remove bregma plane indicator - TODO fix color s11
-                elif tag == 'line' and .53 < h and h < .54\
+                # remove bregma plane indicator
+                elif tag == 'line' and .52 < h and h < .54\
                   and .82 < s and s < .84 and .83 < v and v < .84 and\
                   all(node.hasAttribute(a) for a in ['x1', 'x2', 'y1', 'y2']):
                     x1 = float(node.getAttribute('x1'))
                     x2 = float(node.getAttribute('x2'))
                     y1 = float(node.getAttribute('y1'))
                     y2 = float(node.getAttribute('y2'))
-                    dy = y2 - x2
+                    dy = y2 - y1
                     if x1 == x2 and x1 > 360 and dy > 100 and dy < 102:
                         root.removeChild(node)
                         node.unlink()
@@ -267,8 +267,11 @@ def parseSVG(srcFilename, dstPattern):
             node.unlink()
 
     for i, node in enumerate(slideNodes):
-        meta = cleanSlide(node)
-        print meta
+        (left, labelLeft), (top, labelTop) = cleanSlide(node)
+        nId = node.getAttribute('id').split('_')
+        bregma = float(nId[2]) * (-1 if nId[1] == 'x2D' else 1)
+        # id == '_x2D_' + bregma [+ '_' + ...]
+        print "slide %d (bregma %f, Y axis labeled %d at %fpx, X axis labeled %d at%fpx)" % (i, bregma, labelTop, top, labelLeft, left)
         fName = dstPattern % i
         fh = open(fName, 'w')
         print 'writing %s' % fName
