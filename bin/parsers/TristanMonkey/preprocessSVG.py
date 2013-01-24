@@ -49,16 +49,17 @@ def cleanSVG(root, doc, gVisible = False):
     visible = False
     for node in list(root.childNodes):
         if node.nodeType == node.ELEMENT_NODE:
-            if node.tagName.lower() == 'g':
-                if cleanSVG(node, doc, gVisible = gVisible or node.hasAttribute('stroke')):
-                    visible = True
-
-                else:
+            tag = node.tagName.lower()
+            if tag == 'g':
+                if not cleanSVG(node, doc,
+                                gVisible = gVisible or node.hasAttribute('stroke')):
                     root.removeChild(node)
                     node.unlink()
-                    
+                    continue
 
-            elif node.tagName.lower() == 'text':
+                visible = True
+
+            elif tag == 'text':
                 text = reapTEXT(node)
                 if text.strip() != '':
                     visible = True
@@ -67,29 +68,64 @@ def cleanSVG(root, doc, gVisible = False):
                 else:
                     root.removeChild(node)
                     node.unlink()
-
+                    continue
 
             elif node.hasAttribute('stroke'):
-                if barColor.fromHTML(node.getAttribute('stroke')).hsv[2] < .35\
-                   or node.hasAttribute('fill')\
-                      and node.getAttribute('fill').lower() != 'none':#0.4 shall be finne
+                h, s, v = barColor.fromHTML(node.getAttribute('stroke')).hsv
+                # remove to dark elements - 0.4 shall be finne
+                if v < .35 \
+                      or node.hasAttribute('fill')\
+                      and node.getAttribute('fill').lower() != 'none':
                     root.removeChild(node)
                     node.unlink()
+                    continue
 
-                else:
-                    visible = True
+                # remove bregma plane indicator
+                elif tag == 'line' and .53 < h and h < .54\
+                  and .82 < s and s < .84 and .83 < v and v < .84 and\
+                  all(node.hasAttribute(a) for a in ['x1', 'x2', 'y1', 'y2']):
+                    x1 = float(node.getAttribute('x1'))
+                    x2 = float(node.getAttribute('x2'))
+                    y1 = float(node.getAttribute('y1'))
+                    y2 = float(node.getAttribute('y2'))
+                    dy = y2 - x2
+                    if x1 == x2 and x1 > 360 and dy > 100 and dy < 102:
+                        root.removeChild(node)
+                        node.unlink()
+                        continue
+
+                visible = True
 
             elif node.hasAttribute('fill'):
                 if node.getAttribute('fill').lower() == 'none'\
                    or barColor.fromHTML(node.getAttribute('fill')).hsv[2] > 0.9:
                     root.removeChild(node)
                     node.unlink()
+                    continue
 
-                else:
-                    visible = True
+                visible = True
 
             elif gVisible: #there is something left that can be visible if group is visible
                 visible = True
+
+            #if tag == 'line' and all(node.hasAttribute(a) for a in ['stroke',
+            #                                                       'x1', 'x2',
+            #                                                       'y1', 'y2',
+            #                                                       'stroke-dasharray']):
+            #    col = barColor.fromHTML(node.getAttribute('stroke'))
+            #    x1 = float(node.getAttribute('x1'))
+            #    x2 = float(node.getAttribute('x2'))
+            #    y1 = float(node.getAttribute('y1'))
+            #    y2 = float(node.getAttribute('y2'))
+            #    dy = y2 - y1
+            #    dx = x2 - x1
+
+            #    # recognize grid line
+            #    if (dx == 0 and dy > 400 or dy == 0 and dx > 500)\
+            #       and all(.39 < x and x < .404 for x in col()):
+            #        node.setAttribute('stroke', '#00FF00')
+            #        node.setAttribute('stroke-width', '10')
+
 
         elif node.nodeType == node.TEXT_NODE: #remove empty text nodes
             if node.nodeValue.strip() == '':
@@ -128,7 +164,77 @@ def cleanSlide(slide):
             node.unlink()
             #node.setAttribute('stroke', '#FF0000')
 
-    return slide
+    x1X = float('inf')
+    x2X = x1X
+    yX = x1X
+    xY = x1X
+    y1Y = x1X
+    y2Y = x1X
+    grid = []
+    top = ''
+    topR = x1X
+    left = ''
+    leftR = x1X
+    for line in slide.getElementsByTagName('line'):
+        if all(line.hasAttribute(a) for a in ['stroke', 'x1', 'x2',
+                                              'y1', 'y2', 'stroke-dasharray']):
+            col = barColor.fromHTML(line.getAttribute('stroke'))
+            x1 = float(line.getAttribute('x1'))
+            x2 = float(line.getAttribute('x2'))
+            y1 = float(line.getAttribute('y1'))
+            y2 = float(line.getAttribute('y2'))
+            dy = y2 - y1
+            dx = x2 - x1
+            if all(.39 < x and x < .404 for x in col()):
+                if dx == 0 and dy > 400: # Y grid
+                    grid.append(line)
+                    if x1 < xY: # find the lefttest line
+                         y1Y = y1
+                         y2Y = y2
+                         xY = x1
+
+
+                elif dy == 0 and dx > 500: # X grid
+                    grid.append(line)
+                    if y1 < yX: # find the toppest line
+                        yX = y1
+                        x1X = x1
+                        x2X = x2
+
+                else:
+                    line.setAttribute('stroke', '#00FF00')
+                    line.setAttribute('stroke-width', '10')
+
+            else:
+                line.setAttribute('stroke', '#FF0000')
+                line.setAttribute('stroke-width', '10')
+
+    for text in slide.getElementsByTagName('text'):
+        if text.hasAttribute('x') and text.hasAttribute('y'):
+            x = float(text.getAttribute('x'))
+            y = float(text.getAttribute('y'))
+            r = (x - xY) ** 2 + (y - y1Y) ** 2
+            if r < leftR: #find text closest to begining of lefttest Y grid line
+                leftR = r
+                left = u''.join(t.data for t in text.childNodes if t.nodeType == t.TEXT_NODE) #XXX ???
+
+            r = (x - x1X) ** 2 + (y - yX) ** 2
+            if r < topR: #find text closest to begining of toppest X grid line
+                topR = r
+                top = u''.join(t.data for t in text.childNodes if t.nodeType == t.TEXT_NODE) #XXX ???
+
+            if x < x1X + 5 or x > x2X - 5 or y < y1Y + 5 or y > y2Y - 5:
+                grid.append(text)
+
+    # remove grid
+    for node in grid:
+        parent = node.parentNode
+        parent.removeChild(node)
+        node.unlink()
+
+    grid = []
+
+    return ((xY, int(left)), (yX, int(top)))
                 
 
 def parseSVG(srcFilename, dstPattern):
@@ -144,12 +250,14 @@ def parseSVG(srcFilename, dstPattern):
         svgNode.removeChild(node)
 
         if node.nodeType == node.ELEMENT_NODE and node.tagName.lower() == 'g':
-            slideNodes.append(cleanSlide(node))
+            slideNodes.append(node)
 
         else:
             node.unlink()
 
     for i, node in enumerate(slideNodes):
+        meta = cleanSlide(node)
+        print meta
         fName = dstPattern % i
         fh = open(fName, 'w')
         print 'writing %s' % fName
