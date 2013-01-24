@@ -80,7 +80,7 @@ def cleanSVG(root, doc, gVisible = False):
                     node.unlink()
                     continue
 
-                # remove bregma plane indicator
+                # remove bregma plane indicator - TODO fix color s11
                 elif tag == 'line' and .53 < h and h < .54\
                   and .82 < s and s < .84 and .83 < v and v < .84 and\
                   all(node.hasAttribute(a) for a in ['x1', 'x2', 'y1', 'y2']):
@@ -170,6 +170,8 @@ def cleanSlide(slide):
     xY = x1X
     y1Y = x1X
     y2Y = x1X
+#    xTics = []
+#    yTics = []
     grid = []
     top = ''
     topR = x1X
@@ -188,6 +190,7 @@ def cleanSlide(slide):
             if all(.39 < x and x < .404 for x in col()):
                 if dx == 0 and dy > 400: # Y grid
                     grid.append(line)
+#                    xTics.append(x1)
                     if x1 < xY: # find the lefttest line
                          y1Y = y1
                          y2Y = y2
@@ -196,18 +199,27 @@ def cleanSlide(slide):
 
                 elif dy == 0 and dx > 500: # X grid
                     grid.append(line)
+#                    yTics.append(y1)
                     if y1 < yX: # find the toppest line
                         yX = y1
                         x1X = x1
                         x2X = x2
 
-                else:
-                    line.setAttribute('stroke', '#00FF00')
-                    line.setAttribute('stroke-width', '10')
+#                else:
+#                    line.setAttribute('stroke', '#00FF00')
+#                    line.setAttribute('stroke-width', '10')
+#
+#            else:
+#                line.setAttribute('stroke', '#FF0000')
+#                line.setAttribute('stroke-width', '10')
 
-            else:
-                line.setAttribute('stroke', '#FF0000')
-                line.setAttribute('stroke-width', '10')
+    # remove grid
+    #for node in grid:
+    #    parent = node.parentNode
+    #    parent.removeChild(node)
+    #    node.unlink()
+
+    #grid = []
 
     for text in slide.getElementsByTagName('text'):
         if text.hasAttribute('x') and text.hasAttribute('y'):
@@ -223,16 +235,15 @@ def cleanSlide(slide):
                 topR = r
                 top = u''.join(t.data for t in text.childNodes if t.nodeType == t.TEXT_NODE) #XXX ???
 
-            if x < x1X + 5 or x > x2X - 5 or y < y1Y + 5 or y > y2Y - 5:
+            if x < x1X or x > x2X - 11 or y < y1Y + 6 or y > y2Y and y < y2Y + 2:
                 grid.append(text)
 
     # remove grid
     for node in grid:
+    #    node.setAttribute('stroke', '#FF8800')
         parent = node.parentNode
         parent.removeChild(node)
         node.unlink()
-
-    grid = []
 
     return ((xY, int(left)), (yX, int(top)))
                 
