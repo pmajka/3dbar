@@ -89,7 +89,7 @@ def cleanSVG(root, doc, gVisible = False):
                     y1 = float(node.getAttribute('y1'))
                     y2 = float(node.getAttribute('y2'))
                     dy = y2 - y1
-                    if x1 == x2 and x1 > 360 and dy > 100 and dy < 102:
+                    if x1 == x2 and x1 > 360 and dy > 100 and dy < 103:
                         root.removeChild(node)
                         node.unlink()
                         continue
@@ -97,8 +97,17 @@ def cleanSVG(root, doc, gVisible = False):
                 visible = True
 
             elif node.hasAttribute('fill'):
-                if node.getAttribute('fill').lower() == 'none'\
-                   or barColor.fromHTML(node.getAttribute('fill')).hsv[2] > 0.9:
+                fill = node.getAttribute('fill').lower()
+                if fill == 'none':
+                    root.removeChild(node)
+                    node.unlink()
+                    continue
+
+                col = barColor.fromHTML(fill)
+
+                if .13 < col.r and col.r < .14 and .12 < col.g\
+                   and col.g < .125 and .12 < col.b and col.b < .129\
+                   or col.hsv[2] > 0.9:
                     root.removeChild(node)
                     node.unlink()
                     continue
@@ -110,6 +119,9 @@ def cleanSVG(root, doc, gVisible = False):
 
             if node.hasAttribute('opacity'):
                 node.removeAttribute('opacity')
+
+            if node.hasAttribute('stroke-dasharray'):
+                node.removeAttribute('stroke-dasharray')
 
             #if tag == 'line' and all(node.hasAttribute(a) for a in ['stroke',
             #                                                       'x1', 'x2',
@@ -173,16 +185,24 @@ def cleanSlide(slide):
     xY = x1X
     y1Y = x1X
     y2Y = x1X
-#    xTics = []
-#    yTics = []
+    xX_ = -x1X
+    yX_ = -x1X
+    xY_ = -x1X
+    yY_ = -x1X
+    xTics = []
+    yTics = []
     grid = []
-    top = ''
+    top = None
     topR = x1X
-    left = ''
+    left = None
     leftR = x1X
+    bottom = None
+    bottomR = x1X
+    right = None
+    rightR = x1X
     for line in slide.getElementsByTagName('line'):
         if all(line.hasAttribute(a) for a in ['stroke', 'x1', 'x2',
-                                              'y1', 'y2', 'stroke-dasharray']):
+                                              'y1', 'y2']):
             col = barColor.fromHTML(line.getAttribute('stroke'))
             x1 = float(line.getAttribute('x1'))
             x2 = float(line.getAttribute('x2'))
@@ -191,27 +211,37 @@ def cleanSlide(slide):
             dy = y2 - y1
             dx = x2 - x1
             if all(.39 < x and x < .404 for x in col()):
+                grid.append(line)
+
                 if dx == 0 and dy > 400: # Y grid
-                    grid.append(line)
-#                    xTics.append(x1)
+#                    grid.append(line)
+                    xTics.append(x1)
                     if x1 < xY: # find the lefttest line
-                         y1Y = y1
-                         y2Y = y2
-                         xY = x1
+                        y1Y = y1
+                        y2Y = y2
+                        xY = x1
+
+                    if x1 > xY_: # find the rightest line
+                        xY_ = x1
+                        yY_ = y1
 
 
                 elif dy == 0 and dx > 500: # X grid
-                    grid.append(line)
-#                    yTics.append(y1)
+#                    grid.append(line)
+                    yTics.append(y1)
                     if y1 < yX: # find the toppest line
                         yX = y1
                         x1X = x1
                         x2X = x2
 
+                    if y1 > yX_: # find the bottomest line
+                        yX_ = y1
+                        xX_ = x1
+
 #                else:
 #                    line.setAttribute('stroke', '#00FF00')
 #                    line.setAttribute('stroke-width', '10')
-#
+
 #            else:
 #                line.setAttribute('stroke', '#FF0000')
 #                line.setAttribute('stroke-width', '10')
@@ -224,31 +254,76 @@ def cleanSlide(slide):
 
     #grid = []
 
+    # filter grid line tics (OMG... why there are unnumbered grid lines???)
+    xTics = [x for x in xTics if x1X < x and x < x2X]
+    yTics = [y for y in yTics if y1Y < y and y < y2Y]
+    xY = min(xTics)
+    xY_ = max(xTics)
+    yX = min(yTics)
+    yX_ = max(yTics)
+
+
     for text in slide.getElementsByTagName('text'):
         if text.hasAttribute('x') and text.hasAttribute('y'):
             x = float(text.getAttribute('x'))
             y = float(text.getAttribute('y'))
-            r = (x - xY) ** 2 + (y - y1Y) ** 2
-            if r < leftR: #find text closest to begining of lefttest Y grid line
-                leftR = r
-                left = u''.join(t.data for t in text.childNodes if t.nodeType == t.TEXT_NODE) #XXX ???
+            
+            r = None
 
-            r = (x - x1X) ** 2 + (y - yX) ** 2
-            if r < topR: #find text closest to begining of toppest X grid line
-                topR = r
-                top = u''.join(t.data for t in text.childNodes if t.nodeType == t.TEXT_NODE) #XXX ???
+            if y < y1Y + 6:
+                #find text closest to the begining of the lefttest Y grid line
+                r = (x - xY) ** 2 + (y - y1Y) ** 2
+                if r < leftR:
+                    leftR = r
+                    left = u''.join(t.data for t in text.childNodes\
+                                    if t.nodeType == t.TEXT_NODE)
 
-            if x < x1X or x > x2X - 11 or y < y1Y + 6 or y > y2Y and y < y2Y + 2:
+                #find text closest to the begining of the righttest Y grid line
+                r = (x - xY_) ** 2 + (y - yY_) ** 2
+                if r < rightR:
+                    rightR = r
+                    right = u''.join(t.data for t in text.childNodes\
+                                     if t.nodeType == t.TEXT_NODE)
+
+            if x < x1X:
+                #find text closest to the begining of the toppest X grid line
+                r = (x - x1X) ** 2 + (y - yX) ** 2
+                if r < topR:
+                    topR = r
+                    top = u''.join(t.data for t in text.childNodes\
+                                   if t.nodeType == t.TEXT_NODE)
+
+                #find text closest to the begining of the bottomest X grid line
+                r = (x - xX_) ** 2 + (y - yX_) ** 2
+                if r < bottomR:
+                    bottomR = r
+                    bottom = u''.join(t.data for t in text.childNodes\
+                                      if t.nodeType == t.TEXT_NODE)
+
+            #if x < x1X or x > x2X - 11 or y < y1Y + 6 or y > y2Y and y < y2Y + 12:
+            if r != None or x > x2X - 11 or y > y2Y and y < y2Y + 12:
                 grid.append(text)
 
     # remove grid
     for node in grid:
-    #    node.setAttribute('stroke', '#FF8800')
+        #node.setAttribute('stroke', '#FF8800')
         parent = node.parentNode
         parent.removeChild(node)
         node.unlink()
 
-    return ((xY, int(left)), (yX, int(top)))
+    left = float(left)
+    right = float(right)
+    top = float(top)
+    bottom = float(bottom)
+    # xY = a * left + b; xY_ = a * right + b
+    a = (xY - xY_) / (left - right)
+    b = xY - a * left
+    # yX = c * top + d; yX_ = c * bottom + d
+    c = (yX - yX_) / (top - bottom)
+    d = yX - c * top
+    #print left, right, top, left
+    #print xY, xY_, yX, yX_
+    return a, b, c, d
                 
 
 def parseSVG(srcFilename, dstPattern):
@@ -270,14 +345,15 @@ def parseSVG(srcFilename, dstPattern):
             node.unlink()
 
     for i, node in enumerate(slideNodes):
-        (left, labelLeft), (top, labelTop) = cleanSlide(node)
+        a, b, c, d = cleanSlide(node)
         nId = node.getAttribute('id').split('_')
         bregma = float(nId[2]) * (-1 if nId[1] == 'x2D' else 1)
         # id == '_x2D_' + bregma [+ '_' + ...]
-        print "slide %d (bregma %f, Y axis labeled %d at %fpx, X axis labeled %d at%fpx)" % (i, bregma, labelTop, top, labelLeft, left)
+        print "slide %d (AP = %f, LR = %f*x + %f , DV = %f * y + %f)"\
+               % (i, bregma, a, b, c, d)
         fName = dstPattern % i
         fh = open(fName, 'w')
-        print 'writing %s' % fName
+        #print 'writing %s' % fName
         svgNode.appendChild(node)
         # there is an unicode encoding bug in writexml -_-
         #slideTemplate.writexml(fh, addindent=' ', newl='\n', encoding='utf-8')
