@@ -72,8 +72,8 @@ def cleanSVG(root, doc, gVisible = False):
 
             elif node.hasAttribute('stroke'):
                 h, s, v = barColor.fromHTML(node.getAttribute('stroke')).hsv
-                # remove to dark elements - 0.4 shall be finne
-                if v < .35 \
+                # remove too dark elements - 0.4 shall be finne
+                if v < .35 or v > .9 and s < 0.1\
                       or node.hasAttribute('fill')\
                       and node.getAttribute('fill').lower() != 'none':
                     root.removeChild(node)
@@ -107,6 +107,9 @@ def cleanSVG(root, doc, gVisible = False):
 
             elif gVisible: #there is something left that can be visible if group is visible
                 visible = True
+
+            if node.hasAttribute('opacity'):
+                node.removeAttribute('opacity')
 
             #if tag == 'line' and all(node.hasAttribute(a) for a in ['stroke',
             #                                                       'x1', 'x2',
