@@ -60,8 +60,8 @@ def cleanSVG(root, doc, gVisible = False):
                 visible = True
 
             elif tag == 'text':
-                text = reapTEXT(node)
-                if text.strip() not in ('', '+'):
+                text = reapTEXT(node).strip()
+                if text not in ('', '+', '-'):
                     visible = True
                     node.appendChild(doc.createTextNode(text))
 
@@ -122,25 +122,6 @@ def cleanSVG(root, doc, gVisible = False):
 
             if node.hasAttribute('stroke-dasharray'):
                 node.removeAttribute('stroke-dasharray')
-
-            #if tag == 'line' and all(node.hasAttribute(a) for a in ['stroke',
-            #                                                       'x1', 'x2',
-            #                                                       'y1', 'y2',
-            #                                                       'stroke-dasharray']):
-            #    col = barColor.fromHTML(node.getAttribute('stroke'))
-            #    x1 = float(node.getAttribute('x1'))
-            #    x2 = float(node.getAttribute('x2'))
-            #    y1 = float(node.getAttribute('y1'))
-            #    y2 = float(node.getAttribute('y2'))
-            #    dy = y2 - y1
-            #    dx = x2 - x1
-
-            #    # recognize grid line
-            #    if (dx == 0 and dy > 400 or dy == 0 and dx > 500)\
-            #       and all(.39 < x and x < .404 for x in col()):
-            #        node.setAttribute('stroke', '#00FF00')
-            #        node.setAttribute('stroke-width', '10')
-
 
         elif node.nodeType == node.TEXT_NODE: #remove empty text nodes
             if node.nodeValue.strip() == '':
@@ -214,7 +195,6 @@ def cleanSlide(slide, doc):
                 grid.append(line)
 
                 if dx == 0 and dy > 400: # Y grid
-#                    grid.append(line)
                     xTics.append(x1)
                     if x1 < xY: # find the lefttest line
                         y1Y = y1
@@ -227,7 +207,6 @@ def cleanSlide(slide, doc):
 
 
                 elif dy == 0 and dx > 500: # X grid
-#                    grid.append(line)
                     yTics.append(y1)
                     if y1 < yX: # find the toppest line
                         yX = y1
@@ -237,22 +216,6 @@ def cleanSlide(slide, doc):
                     if y1 > yX_: # find the bottomest line
                         yX_ = y1
                         xX_ = x1
-
-#                else:
-#                    line.setAttribute('stroke', '#00FF00')
-#                    line.setAttribute('stroke-width', '10')
-
-#            else:
-#                line.setAttribute('stroke', '#FF0000')
-#                line.setAttribute('stroke-width', '10')
-
-    # remove grid
-    #for node in grid:
-    #    parent = node.parentNode
-    #    parent.removeChild(node)
-    #    node.unlink()
-
-    #grid = []
 
     # filter grid line tics (OMG... why there are unnumbered grid lines???)
     xTics = [x for x in xTics if x1X < x and x < x2X]
@@ -310,31 +273,22 @@ def cleanSlide(slide, doc):
         parent.removeChild(node)
         node.unlink()
 
-
-
-
-    #for node in slide.getElementsByTagName('polygon'):
-        #if node.hasAttribute('stroke'):
-        #    points = node.getAttribute('points').split()
-        #    d = 'M ' + ' L '.join(points) + 'Z'
-        #    path = doc.createElement('path')
-        #    path.setAttribute('d', d)
-        #    for a in ['fill', 'id', 'stroke']:
-        #        path.setAttribute(a, node.getAttribute(a))
-
-        #node.setAttribute('stroke', '#00FF00')
-        #node.setAttribute('stroke-width', '10')
-
     left = float(left)
     right = float(right)
     top = float(top)
     bottom = float(bottom)
-    # xY = a * left + b; xY_ = a * right + b
-    a = (xY - xY_) / (left - right)
-    b = xY - a * left
-    # yX = c * top + d; yX_ = c * bottom + d
-    c = (yX - yX_) / (top - bottom)
-    d = yX - c * top
+    # left = a * xY + b; right = a * xY_ + b
+    a = (left - right) / (xY - xY_)
+    b = left - a * xY
+    # top = c * yX + d; bottom = c * yX_ + d
+    c = (top - bottom) / (yX - yX_)
+    d = top - c * yX
+    ## xY = a * left + b; xY_ = a * right + b
+    #a = (xY - xY_) / (left - right)
+    #b = xY - a * left
+    ## yX = c * top + d; yX_ = c * bottom + d
+    #c = (yX - yX_) / (top - bottom)
+    #d = yX - c * top
     #print left, right, top, left
     #print xY, xY_, yX, yX_
     return a, b, c, d
@@ -393,6 +347,10 @@ def parseSVG(srcFilename, dstPattern):
 
         # fetch only text, path and line elements
         content = list(node.getElementsByTagName('path'))
+        for path in content:
+            if path.hasAttribute('clip-path'):
+                path.removeAttribute('clip-path')
+
         paths = []
 
         for line in node.getElementsByTagName('line'):
@@ -415,8 +373,12 @@ def parseSVG(srcFilename, dstPattern):
             parent = n.parentNode
             parent.removeChild(n)
 
+        g = slideTemplate.createElement('g')
+        g.setAttribute('id', 'content')
         for n in content + paths:
-            svgNode.appendChild(n)
+            g.appendChild(n)
+
+        svgNode.appendChild(g)
         
         node.unlink()
 
@@ -427,9 +389,8 @@ def parseSVG(srcFilename, dstPattern):
         #slideTemplate.writexml(fh, addindent=' ', newl='\n', encoding='utf-8')
         fh.write(slideTemplate.toprettyxml(indent=" ", newl="\n", encoding='utf-8'))
         fh.close()
-        for n in content + paths:
-            svgNode.removeChild(n)
-            n.unlink()
+        svgNode.removeChild(g)
+        g.unlink()
 
 
 if __name__=='__main__':
