@@ -61,7 +61,7 @@ def cleanSVG(root, doc, gVisible = False):
 
             elif tag == 'text':
                 text = reapTEXT(node)
-                if text.strip() != '':
+                if text.strip() not in ('', '+'):
                     visible = True
                     node.appendChild(doc.createTextNode(text))
 
@@ -170,7 +170,7 @@ def textOnlyGroup(root):
     return True
 
 
-def cleanSlide(slide):
+def cleanSlide(slide, doc):
     for node in list(slide.childNodes):
         if node.nodeType == node.ELEMENT_NODE \
            and node.tagName.lower() == 'g'\
@@ -306,10 +306,24 @@ def cleanSlide(slide):
 
     # remove grid
     for node in grid:
-        #node.setAttribute('stroke', '#FF8800')
         parent = node.parentNode
         parent.removeChild(node)
         node.unlink()
+
+
+
+
+    #for node in slide.getElementsByTagName('polygon'):
+        #if node.hasAttribute('stroke'):
+        #    points = node.getAttribute('points').split()
+        #    d = 'M ' + ' L '.join(points) + 'Z'
+        #    path = doc.createElement('path')
+        #    path.setAttribute('d', d)
+        #    for a in ['fill', 'id', 'stroke']:
+        #        path.setAttribute(a, node.getAttribute(a))
+
+        #node.setAttribute('stroke', '#00FF00')
+        #node.setAttribute('stroke-width', '10')
 
     left = float(left)
     right = float(right)
@@ -326,10 +340,34 @@ def cleanSlide(slide):
     return a, b, c, d
                 
 
+tags = {}
+
+def getTags(root, slide):
+    if root.nodeType == root.ELEMENT_NODE:
+        tag = root.tagName.lower()
+        slides = tags.get(tag, set())
+        slides.add(slide)
+        tags[tag] = slides
+        for node in root.childNodes:
+            getTags(node, slide)
+
+
 def parseSVG(srcFilename, dstPattern):
     srcFh = open(srcFilename)
     slideTemplate = xml.dom.minidom.parse(srcFh)
     srcFh.close()
+
+    for tag in ['rect', 'defs', 'use', 'polygon']:
+        for node in slideTemplate.getElementsByTagName(tag):
+            parent = node.parentNode
+            parent.removeChild(node)
+            node.unlink()
+
+    for node in slideTemplate.getElementsByTagNameNS('http://www.w3.org/2000/svg',
+                                                     'clipPath'):
+        parent = node.parentNode
+        parent.removeChild(node)
+        node.unlink()
 
     svgNode = slideTemplate.getElementsByTagName('svg')[0]
     cleanSVG(svgNode, slideTemplate)
@@ -345,21 +383,53 @@ def parseSVG(srcFilename, dstPattern):
             node.unlink()
 
     for i, node in enumerate(slideNodes):
-        a, b, c, d = cleanSlide(node)
+        a, b, c, d = cleanSlide(node, slideTemplate)
+        #getTags(node, i)
         nId = node.getAttribute('id').split('_')
         bregma = float(nId[2]) * (-1 if nId[1] == 'x2D' else 1)
         # id == '_x2D_' + bregma [+ '_' + ...]
         print "slide %d (AP = %f, LR = %f*x + %f , DV = %f * y + %f)"\
                % (i, bregma, a, b, c, d)
+
+        # fetch only text, path and line elements
+        content = list(node.getElementsByTagName('path'))
+        paths = []
+
+        for line in node.getElementsByTagName('line'):
+            path = slideTemplate.createElement('path')
+            d = 'M ' + line.getAttribute('x1') + ',' + line.getAttribute('y1')\
+                + ' L ' + line.getAttribute('x2') + ',' + line.getAttribute('y2')\
+                + ' Z'
+            path.setAttribute('d', d)
+            for a in ['id', 'stroke-width']:
+                path.setAttribute(a, line.getAttribute(a))
+
+            paths.append(path)
+
+        for path in content + paths:
+            path.setAttribute('fill', 'none')
+            path.setAttribute('stroke', '#23b5d5')
+
+        content.extend(node.getElementsByTagName('text'))
+        for n in content:
+            parent = n.parentNode
+            parent.removeChild(n)
+
+        for n in content + paths:
+            svgNode.appendChild(n)
+        
+        node.unlink()
+
         fName = dstPattern % i
         fh = open(fName, 'w')
         #print 'writing %s' % fName
-        svgNode.appendChild(node)
         # there is an unicode encoding bug in writexml -_-
         #slideTemplate.writexml(fh, addindent=' ', newl='\n', encoding='utf-8')
         fh.write(slideTemplate.toprettyxml(indent=" ", newl="\n", encoding='utf-8'))
         fh.close()
-        svgNode.removeChild(node)
+        for n in content + paths:
+            svgNode.removeChild(n)
+            n.unlink()
 
 
 if __name__=='__main__':
@@ -368,3 +438,5 @@ if __name__=='__main__':
         sys.exit(1)
 
     parseSVG(sys.argv[1], sys.argv[2])
+    for tag in sorted(tags):
+        print tag, sorted(tags[tag])
