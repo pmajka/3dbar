@@ -387,7 +387,8 @@ def parseSVG(srcFilename, dstPattern):
         #print 'writing %s' % fName
         # there is an unicode encoding bug in writexml -_-
         #slideTemplate.writexml(fh, addindent=' ', newl='\n', encoding='utf-8')
-        fh.write(slideTemplate.toprettyxml(indent=" ", newl="\n", encoding='utf-8'))
+        fh.write(slideTemplate.toprettyxml(indent="", newl="", encoding='utf-8'))
+        #slideTemplate.writexml(fh, indent="\t", addindent="\t", newl="\n", encoding='utf-8')
         fh.close()
         svgNode.removeChild(g)
         g.unlink()
