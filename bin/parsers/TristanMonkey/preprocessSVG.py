@@ -324,10 +324,11 @@ def parseSVG(srcFilename, dstPattern):
         node.unlink()
 
     svgNode = slideTemplate.getElementsByTagName('svg')[0]
+
     cleanSVG(svgNode, slideTemplate)
     fixSvgImage(slideTemplate, fixHeader=False)
     slideNodes = []
-    for node in list(svgNode.childNodes): # maybe make a copy of childNodes???
+    for node in list(svgNode.childNodes):
         svgNode.removeChild(node)
 
         if node.nodeType == node.ELEMENT_NODE and node.tagName.lower() == 'g':
@@ -336,12 +337,27 @@ def parseSVG(srcFilename, dstPattern):
         else:
             node.unlink()
 
+    slideNodes.reverse() # now in rostral-caudal order
+
+    metadata = slideTemplate.createElement('defs')
+    transformationNode = slideTemplate.createElement('bar:data')
+    transformationNode.setAttribute('name', 'transformationmatrix')
+    metadata.appendChild(transformationNode)
+    bregmaNode = slideTemplate.createElement('bar:data')
+    bregmaNode.setAttribute('name', 'coronalcoord')
+    metadata.appendChild(bregmaNode)
+    svgNode.appendChild(metadata)
+    svgNode.setAttribute('xmlns:bar',"http://www.3dbar.org")
+
     for i, node in enumerate(slideNodes):
         a, b, c, d = cleanSlide(node, slideTemplate)
+        transformationNode.setAttribute('content', ', '.join(str(x) for x in (a, b, c, d)))
         #getTags(node, i)
+
         nId = node.getAttribute('id').split('_')
-        bregma = float(nId[2]) * (-1 if nId[1] == 'x2D' else 1)
         # id == '_x2D_' + bregma [+ '_' + ...]
+        bregma = float(nId[2]) * (-1 if nId[1] == 'x2D' else 1)
+        bregmaNode.setAttribute('content', str(bregma))
         print "slide %d (AP = %f, LR = %f*x + %f , DV = %f * y + %f)"\
                % (i, bregma, a, b, c, d)
 
@@ -359,16 +375,24 @@ def parseSVG(srcFilename, dstPattern):
                 + ' L ' + line.getAttribute('x2') + ',' + line.getAttribute('y2')\
                 + ' Z'
             path.setAttribute('d', d)
-            for a in ['id', 'stroke-width']:
+            for a in ['stroke-width']:
                 path.setAttribute(a, line.getAttribute(a))
 
             paths.append(path)
 
-        for path in content + paths:
+        for j, path in enumerate(content + paths):
+            path.setAttribute('id', 'path%d' % j)
             path.setAttribute('fill', 'none')
             path.setAttribute('stroke', '#23b5d5')
 
-        content.extend(node.getElementsByTagName('text'))
+        texts = list(node.getElementsByTagName('text'))
+        for j, text in enumerate(texts):
+            text.setAttribute('id', 'label%d' % j)
+            text.setAttribute('font-size', '9px')
+            text.setAttribute('font-family', 'Helvetica,sans-serif')
+            text.setAttribute('stroke', 'none')
+
+        content.extend(texts)
         for n in content:
             parent = n.parentNode
             parent.removeChild(n)
@@ -387,8 +411,9 @@ def parseSVG(srcFilename, dstPattern):
         #print 'writing %s' % fName
         # there is an unicode encoding bug in writexml -_-
         #slideTemplate.writexml(fh, addindent=' ', newl='\n', encoding='utf-8')
+        # and there is problem with some older xml.dom libraries and indents
+        # of text elements
         fh.write(slideTemplate.toprettyxml(indent="", newl="", encoding='utf-8'))
-        #slideTemplate.writexml(fh, indent="\t", addindent="\t", newl="\n", encoding='utf-8')
         fh.close()
         svgNode.removeChild(g)
         g.unlink()
