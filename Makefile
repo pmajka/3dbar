@@ -172,6 +172,11 @@ tem:
 	python ${PARSERS_DIR}tem/__init__.py
 	if [ -e ${ATLASES_DIR}tem/caf-reference ]; then diff -r  ${ATLASES_DIR}tem/caf ${ATLASES_DIR}tem/caf-reference > diff_tem.txt; fi
 
+mbisc_11:
+	mkdir -p ${ATLASES_DIR}mbisc_11/src
+	mkdir -p ${ATLASES_DIR}mbisc_11/caf
+	python ${PARSERS_DIR}/mbisc_11/preprocessSVG.py ${ATLASES_DIR}mbisc_11/src/src_atlas.svg "${ATLASES_DIR}mbisc_11/src/%03d_v1.svg"
+
 clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}sba_DB08/caf ${ATLASES_DIR}sba_DB08/src
 	rm -rfv ${ATLASES_DIR}sba_PHT00/caf ${ATLASES_DIR}sba_PHT00/src

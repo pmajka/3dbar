@@ -12,14 +12,15 @@ from user_data import renderingProperties, potraceProperties, tracerSettings,\
                       colorMappingFilename, fullNameMappingFilename,\
                       hierarchyFilename, renMultiplier
 
-filenameTempates = dict(traced='%d_traced_v%03d.svg',\
+filenameTempates = dict(traced='%02d_traced_v%d.svg',\
                         pretraced='%03d_v%d.svg')
+
 
 indexerProps = userMetadata
 indexerProps.update({\
         'ReferenceWidth':  str(renderingProperties['ReferenceWidth']),
         'ReferenceHeight': str(renderingProperties['ReferenceHeight']),
-        'FilenameTemplate': str('%d_traced_v%d.svg'),
+        'FilenameTemplate': str('%02d_traced_v%d.svg'),
         'CAFCompilationTime': datetime.datetime.utcnow().strftime("%F %T")})
 
 
@@ -37,6 +38,9 @@ class AtlasParser(bar.barVectorParser):
         
         bar.barVectorParser.__init__(self, **props)
         
+        self._tracingConf = tracerSettings
+        self._rendererConf = renderingProperties
+        
         self.indexer.updateProperties(indexerProps)
     
     def _getInputFilename(self, slideNumber):
@@ -45,6 +49,17 @@ class AtlasParser(bar.barVectorParser):
     def parseAll(self):
         bar.barVectorParser.parseAll(self)
         self.reindex()
+
+    def parse(self, slideNumber):
+        tracedSlide = bar.barVectorParser.parse(self, slideNumber,\
+                                                 useIndexer = False,
+                                                 writeSlide = False)
+        map(lambda x: \
+                x._attributes.update({'font-size':'10px'}),\
+                tracedSlide.labels)
+        tracedSlide.writeXMLtoFile(self._getOutputFilename(slideNumber))
+        
+        return tracedSlide
         
     def reindex(self):
         bar.barVectorParser.reindex(self)
@@ -65,7 +80,9 @@ if __name__=='__main__':
         outputDirectory = sys.argv[2]
     except:
         inputDirectory  = 'atlases/mbisc_11/src/'
-        outputDirectory = 'atlases/mbisc_11/src/'
+        outputDirectory = 'atlases/mbisc_11/caf/'
     
     ap = AtlasParser(inputDirectory, outputDirectory)
-    ap.parseAll()
+    #ap.parseAll()
+    ap.reindex()
+    #ap.parse(32)

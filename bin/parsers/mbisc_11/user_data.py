@@ -5,7 +5,7 @@
 # of the parser.
 
 # The number of slides creating the atlas
-slideNumber = 51
+slideNumber = 50
 
 # slideRange determines numbers of consecutive slides.
 # Usually having n slides one may to enumerate them starting from 0 to n-1 or
@@ -26,7 +26,7 @@ renderingProperties = {}
 # has to be the same on all slides.
 renderingProperties['ReferenceWidth']  = 842
 renderingProperties['ReferenceHeight'] = 1191
-renMultiplier = 5
+renMultiplier = 3
 
 renderingProperties['imageSize'] =\
 	(renderingProperties['ReferenceWidth'] * renMultiplier,\
@@ -48,22 +48,22 @@ tracerSettings['DumpDirectory']            = '.'
 
 # Determines if PNG image containing binary bitmap (just before tracing) will be
 # saved.
-tracerSettings['DumpEachStepPNG']          = True
+tracerSettings['DumpEachStepPNG']          = False
 
 # Determines, if SVG drawing with each single traced path will be saved.
-tracerSettings['DumpEachStepSVG']          = True
+tracerSettings['DumpEachStepSVG']          = False
 
 # Determines, if regions created by floodfilling areas pointed by
 # labels placed above the contours or outside the brain outline
 # will be dumped.
-tracerSettings['DumpWrongSeed']            = True 
+tracerSettings['DumpWrongSeed']            = False 
 
 # Turns on/off detection of unlabelled areas.
 tracerSettings['DetectUnlabelled']         = True
 
 # Sets minimal area (in pixels) of the region to be considered as 'unlabelled'.
 # Please modify according to specific needs.
-tracerSettings['UnlabelledTreshold']       = 10
+tracerSettings['UnlabelledTreshold']       = 100
 
 # Select number of border expansions in gap filling algorithm. If set to 0, gap
 # filling algorithm idf turned off. If larger than 0 - gap filling is on.
@@ -110,10 +110,12 @@ tracerSettings['NewPathIdTemplate'] = 'structure%d_%s_%s'
 # CAFCreatorEmail: CAF authors email
 userMetadata = dict([
         ('CAFName', 'mbisc_11'),
+        ('CAFFullName', 'mbisc_11'),
         ('CAFSlideOrientation', 'coronal'),
         ('CAFSlideUnits', 'mm'),
         ('CAFComment', 'please provide description'),
-        ('RefCords', '0.0235184448749,-0.0235184496638,-1.09904044745,19.1636693709'),
+        ('RefCords', '-1.09904044745,19.1636693709,0.0235184448749,-0.0235184496638'),
+        ('CAFAxesOrientation', 'RAS'),
         ('CAFCreator', 'pmajka@nencki.gov.pl'),
         ('CAFCreatorEmail','pmajka@nencki.gov.pl')])
 

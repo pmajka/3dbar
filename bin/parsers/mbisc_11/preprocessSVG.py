@@ -386,6 +386,7 @@ def parseSVG(srcFilename, dstPattern):
     metadata.appendChild(dataNode)
 
     svgNode.appendChild(metadata)
+    svgNode.removeAttribute("xml:space")
     svgNode.setAttribute('xmlns:bar',"http://www.3dbar.org")
     svgNode.setAttribute('viewBox', '0 0 842 1191')
     svgNode.setAttribute('width', '842')
@@ -462,7 +463,7 @@ def parseSVG(srcFilename, dstPattern):
         #slideTemplate.writexml(fh, addindent=' ', newl='\n', encoding='utf-8')
         # and there is problem with some older xml.dom libraries and indents
         # of text elements
-        fh.write(slideTemplate.toprettyxml(indent="", newl="", encoding='utf-8'))
+        fh.write(slideTemplate.toprettyxml(indent="", newl="\n", encoding='utf-8'))
         fh.close()
         svgNode.removeChild(g)
         g.unlink()
