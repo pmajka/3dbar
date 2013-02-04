@@ -61,7 +61,7 @@ def cleanSVG(root, doc, gVisible = False):
 
             elif tag == 'text':
                 text = reapTEXT(node).strip()
-                if text not in ('', '+', '-'):
+                if text not in ('', '+', '-', 'vBrain'):
                     visible = True
                     node.appendChild(doc.createTextNode(text))
 
@@ -428,16 +428,23 @@ def parseSVG(srcFilename, dstPattern):
             path.setAttribute('stroke', '#23b5d5')
 
         texts = list(node.getElementsByTagName('text'))
+
+        for n in content + texts:
+            parent = n.parentNode
+            parent.removeChild(n)
+
+        vBrainLabel = slideTemplate.createElement('text')
+        vBrainLabel.appendChild(slideTemplate.createTextNode('vBrain'))
+        vBrainLabel.setAttribute('x', '800')
+        vBrainLabel.setAttribute('y', '800')
+        texts = [vBrainLabel] + texts
+        content.extend(texts)
+
         for j, text in enumerate(texts):
             text.setAttribute('id', 'label%d' % j)
             text.setAttribute('font-size', '9px')
             text.setAttribute('font-family', 'Helvetica,sans-serif')
             text.setAttribute('stroke', 'none')
-
-        content.extend(texts)
-        for n in content:
-            parent = n.parentNode
-            parent.removeChild(n)
 
         g = slideTemplate.createElement('g')
         g.setAttribute('id', 'content')
