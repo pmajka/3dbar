@@ -343,11 +343,53 @@ def parseSVG(srcFilename, dstPattern):
     transformationNode = slideTemplate.createElement('bar:data')
     transformationNode.setAttribute('name', 'transformationmatrix')
     metadata.appendChild(transformationNode)
+
     bregmaNode = slideTemplate.createElement('bar:data')
     bregmaNode.setAttribute('name', 'coronalcoord')
     metadata.appendChild(bregmaNode)
+
+    dataNode = slideTemplate.createElement('bar:data')
+    dataNode.setAttribute('name', 'tracingConf')
+    dataNode.setAttribute('content',
+    """
+    {
+      'DumpEachStepSVG': True,
+      'DumpEachStepPNG': True,
+      'PoTraceConf': {'potrace_accuracy_parameter': '0.001',
+                      'potrace_width_string': '842pt',
+                      'potrace_svg_resolution_string': '300x300',
+                      'potrace_height_string': '1191pt'},
+      'CacheLevel': 0,
+      'DetectUnlabelled': True,
+      'DumpVBrain': False,
+      'DumpWrongSeed': True,
+      'NewPathIdTemplate': 'structure%d_%s_%s',
+      'DumpDirectory': '.',
+      'MinFiterTimesApplication': 3,
+      'GrowDefaultBoundaryColor': 200,
+      'RegionAlreadyTraced': 100,
+      'UnlabelledTreshold': 10
+    }
+    """)
+    metadata.appendChild(dataNode)
+
+    dataNode = slideTemplate.createElement('bar:data')
+    dataNode.setAttribute('name', 'rendererConf')
+    dataNode.setAttribute('content',
+    """
+    {
+      'ReferenceHeight': 1191,
+      'ReferenceWidth': 842,
+      'imageSize': (4210, 5955)
+    }
+    """)
+    metadata.appendChild(dataNode)
+
     svgNode.appendChild(metadata)
     svgNode.setAttribute('xmlns:bar',"http://www.3dbar.org")
+    svgNode.setAttribute('viewBox', '0 0 842 1191')
+    svgNode.setAttribute('width', '842')
+    svgNode.setAttribute('height', '1191')
 
     for i, node in enumerate(slideNodes):
         a, b, c, d = cleanSlide(node, slideTemplate)
