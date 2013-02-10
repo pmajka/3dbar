@@ -501,7 +501,7 @@ class barBatchReconstructor(object):
             ct = self.getStructureColor(structureName)
             filename = self.__getFileName(structureName, 'exportToVTKPolydata')
             self.vtkapp.appendContextActor(structureName, filename, ct)
-
+        
         self.vtkapp.refreshRenderWindow()
 
     def _generateOutlineActors(self):

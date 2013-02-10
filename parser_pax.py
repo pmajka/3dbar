@@ -51,7 +51,7 @@ def printRed(str):
     @type  str: string
     @param str: String to print to stderr in red.
     @return   : Nothing, just prints the string.
-    
+
     Prints given string to stderr using red color.
     """
     print >>sys.stderr, '\033[0;31m%s\033[m' % str
@@ -65,7 +65,7 @@ def createOptionParser():
 
     parser.add_option("-p", "--parsingModule", dest="parsingModule",
             action="store", help="Atlas parser for dedicated atlas", metavar="parsingModule")
-    parser.add_option("-s", "--startpage", dest="startpage", action="store", 
+    parser.add_option("-s", "--startpage", dest="startpage", action="store",
             help="First page of parsing sequence", metavar="page_number", type="int")
     parser.add_option("-e", "--endpage", dest="endpage", action="store",
             help="Last page of parsing sequence", metavar="page_number", type="int")
@@ -82,58 +82,58 @@ def validateOptions(opts):
     @type  opts: parsed OptionParsed object
     @param opts: Set of options extracted and parsed by OptionParser
     @return    : True when options set passes all validation rules, False otherwise.
-    
+
     Validates provided options formally and logicaly.
     Detail of validation process are explained in comments.
     """
-    
+
     # Check, if name of parsing module is correct:
     if opts.parsingModule == "":
         printRed("Pasing module defined incorrectly!")
         return False
-    
+
     # Check, if the arguments are defined
     if opts.endpage<0 or opts.startpage<0 or opts.outputDir=="":
         printRed("Some arguments are not provided or has incorrect values.")
         return False
-    
+
     # Check, if ending page is equal or greater than starting page
     if not opts.endpage>=opts.startpage:
         printRed("Endpage page should be greater or equal than startpage.")
         return False
-    
+
     # Check, if provided output directory exists
     if not os.path.isdir(opts.outputDir):
         printRed("Provided directory is not a valid directory.")
         return False
     return True
 
- 
+
 if __name__=='__main__':
     # Create OptionParser object and parse provided command-line arguments.
     parser=createOptionParser()
     (options, args) = parser.parse_args()
-    
+
     # Validate command line arguments
     # When arguments turns out invalid, print notification and quit script
     if not validateOptions(options):
         printRed("Invalid command line arguments. Please correct.")
         parser.print_help()
         exit(1)
-    
+
     # Import atlas parsing module
     sys.path.append('bin/parsers')
     atlasparser = __import__(options.parsingModule, globals(), locals(), [], -1)
-    
+
     # Define page range ('+1' is added due to pythonic way of indexing lists)
     pagesRange = range(options.startpage, options.endpage+1)
     ap = atlasparser.AtlasParser(options.sourceDir,  options.outputDir)
-    
+
     #If only index should be created, od it and then exit the program:
     if options.only_index:
         printRed("Creating index file now.")
         ap.parseAll()
         exit(0)
-    
+
     for slide in pagesRange:
         ap.parse(slide)
