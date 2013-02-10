@@ -4,6 +4,27 @@
 # Module in which the user configures behaviour
 # of the parser.
 
+legitimateStructures = ['ProCeph', 'TelCeph', 'Pal', 'DPal', 'VPal', 'PalAmyg', 'DLP', 'VLP', 'MPC',
+ 'ACC', 'OFC', 'PRM', 'SSC', 'AUD', 'INS', 'LIT', 'VTC', 'PPC', 'PCR', 'VIS',
+ 'PirC', 'LatPal', 'A10', 'A46D', 'A46V', 'A8aD', 'A8aV', 'A8b', 'A9', 'A45',
+ 'A47L', 'A47M', 'A47O', 'ProM', 'A32', 'A32V', 'A14R', 'A14C', 'A25', 'A24a',
+ 'A24b', 'A24c', 'A24d', 'A11', 'A13a', 'A13b', 'A13L', 'A13M', 'OPAl', 'OPro',
+ 'Gu', 'A4ab', 'A4c', 'A6DC', 'A6DR', 'A6M', 'A6Va', 'A6Vb', 'A8C', 'A1-2',
+ 'A3a', 'A3b', 'S2E', 'S2I', 'S2PR', 'S2PV', 'AuA1', 'AuAL', 'AuCL', 'AuCM',
+ 'AuCPB', 'AuML', 'AuR', 'AuRM', 'AuRPB', 'AuRTL', 'AuRTM', 'AuRT', 'STR',
+ 'TPt', 'AI', 'DI', 'GI', 'IPro', 'PaIL', 'PaIM', 'ReI', 'TPro', 'PGa-IPa',
+ 'TE1', 'TE2', 'TE3', 'TEO', 'TPO', 'TPPro', 'A35', 'A36', 'Ent', 'TF', 'TFO',
+ 'TH', 'TL', 'TLO', 'AIP', 'LIP', 'MIP', 'OPt', 'PE', 'PEC', 'PF', 'PFG', 'PG',
+ 'VIP', 'A29a-c', 'A29d', 'A30', 'A23a', 'A23b', 'A23c', 'A23V', 'A31', 'PGM',
+ 'ProSt', 'A19DI', 'A19M', 'FST', 'MST', 'V1', 'V2', 'V3', 'V3A', 'V4', 'V4T',
+ 'V5', 'V6', 'V6A', 'Pir', 'APir']
+
+legitimateCommentLabels = ['(12L)', '(12M)', '(DA)', '(DM)', 'fovea', '(FSTv)',
+                           '(MT)', '(MTC)', '(PPM)', '(PrCO)', '(STP)', '(VLA)',
+                           '(VLP)']
+
+legitimateSpotLabels = ['orbs', 'fovea', 'rf', 'lf', 'hif', 'sts']
+
 # The number of slides creating the atlas
 slideNumber = 50
 
@@ -56,14 +77,14 @@ tracerSettings['DumpEachStepSVG']          = False
 # Determines, if regions created by floodfilling areas pointed by
 # labels placed above the contours or outside the brain outline
 # will be dumped.
-tracerSettings['DumpWrongSeed']            = False 
+tracerSettings['DumpWrongSeed']            = False
 
 # Turns on/off detection of unlabelled areas.
 tracerSettings['DetectUnlabelled']         = True
 
 # Sets minimal area (in pixels) of the region to be considered as 'unlabelled'.
 # Please modify according to specific needs.
-tracerSettings['UnlabelledTreshold']       = 100
+tracerSettings['UnlabelledTreshold']       = 500
 
 # Select number of border expansions in gap filling algorithm. If set to 0, gap
 # filling algorithm idf turned off. If larger than 0 - gap filling is on.
@@ -76,7 +97,7 @@ potraceProperties['potrace_width_string']   =\
 potraceProperties['potrace_height_string']  =\
 	'%dpt' % int(renderingProperties['ReferenceHeight'])
 
-tracerSettings['DumpVBrain']               = False 
+tracerSettings['DumpVBrain']               = False
 tracerSettings['MinFiterTimesApplication'] = 3
 tracerSettings['GrowDefaultBoundaryColor'] = 200
 tracerSettings['RegionAlreadyTraced']      = 100
