@@ -49,13 +49,13 @@ G{importgraph}
 @type CONF_POTRACE_WIDTH_STRING: str
 @var  CONF_POTRACE_WIDTH_STRING: reference image width for potrace
 
-@type CONF_POTRACE_SVG_RESOLUTION_STRING: str 
+@type CONF_POTRACE_SVG_RESOLUTION_STRING: str
 @var  CONF_POTRACE_SVG_RESOLUTION_STRING: reference resolution for potrace (eg.
       C{'300x300'}); provides resolution in dpi; final image will be scaled using
       this reference resolution so setting it porperly is very important;
-      consult potrace manual for details 
+      consult potrace manual for details
 
-@type BAR_TRACER_DEFAULT_SETTINGS: {str : ... } 
+@type BAR_TRACER_DEFAULT_SETTINGS: {str : ... }
 @var  BAR_TRACER_DEFAULT_SETTINGS: all settings used by L{barPretracedSlideRenderer}
                                    to perform conversion from contour slide to CAF slide; requires providing
                                    following elements:
@@ -102,7 +102,7 @@ from image_process import performTracing, getBestLabelLocation, massCentre,\
         floodFillScanlineStack, selectBestGapFillingLevel
 
 
-BAR_XML_NAMESPACE = 'http://www.3dbar.org' 
+BAR_XML_NAMESPACE = 'http://www.3dbar.org'
 BAR_XML_NAMESPACE_PREFIX    = 'bar:'
 BAR_DEFAULT_GROWLEVEL      = 0
 BAR_COORDINATE_MARKER_TEMPLATE = '(%f,%f)'
@@ -146,7 +146,7 @@ DEFAULT_MARKER_ATTRIBUTES={
     'id':None,
     'stroke':"none",
     'x':None,'y':None}
-    
+
 CONF_ALOWED_STRUCTURE_CHARACTERS = re.compile("^[a-z0-9A-Z-]*$", re.IGNORECASE)
 
 #{ Default widht and height of the slide renderer class
@@ -159,7 +159,7 @@ height="%(width)s"
 width="%(height)s"
 viewBox="0 0 %(height)s %(width)s"
 preserveAspectRatio="none"
-version="1.1" 
+version="1.1"
 xmlns="http://www.w3.org/2000/svg"
 xmlns:ev="http://www.w3.org/2001/xml-events"
 xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -174,7 +174,7 @@ xmlns:bar="http://www.3dbar.org">
 """
 
 def getSlideTemplate(valuesDict):
-    return CONF_SLIDE_TEMPLATE % valuesDict 
+    return CONF_SLIDE_TEMPLATE % valuesDict
 
 CONF_DEFAULT_SLIDE_TEMPLATE = getSlideTemplate(\
         {'height': CONF_DEFAULT_RENDER_WIDTH,
@@ -202,10 +202,10 @@ CONF_DEFAULT_POTRACE_PROPERTIES['potrace_height_string']  =      CONF_POTRACE_HE
 #{ Tracing properties
 # Debugging settings
 BAR_TRACER_DEFAULT_SETTINGS={}
-BAR_TRACER_DEFAULT_SETTINGS['DumpEachStepSVG']          = False 
+BAR_TRACER_DEFAULT_SETTINGS['DumpEachStepSVG']          = False
 BAR_TRACER_DEFAULT_SETTINGS['DumpEachStepPNG']          = False
-BAR_TRACER_DEFAULT_SETTINGS['DumpWrongSeed']            = True 
-BAR_TRACER_DEFAULT_SETTINGS['DumpVBrain']               = False 
+BAR_TRACER_DEFAULT_SETTINGS['DumpWrongSeed']            = True
+BAR_TRACER_DEFAULT_SETTINGS['DumpVBrain']               = False
 BAR_TRACER_DEFAULT_SETTINGS['DumpDirectory']            = '.'
 BAR_TRACER_DEFAULT_SETTINGS['DetectUnlabelled']         = True
 
@@ -228,30 +228,30 @@ def getDictionaryFromFile(fileName, keyColumn=0, valueColumn=1):
     """
     @type fileName: str
     @param fileName: location of the file
-    
+
     @type keyColumn: int
     @param keyColumn: column containing keys
-    
+
     @type valueColumn: int
     @param valueColumn: column containing values
-    
+
     @return: dictionary read from file
     @rtype: {str : str, ...}
     """
     returnDictionary = {}
-    
+
     sourceFile = open(fileName)
     for sourceLine in sourceFile:
         if strip(sourceLine).startswith('#') or strip(sourceLine) == "":
             continue
         line = split(strip(split(sourceLine,"#")[0]),'\t')
-        
-        # Validate line 
+
+        # Validate line
         if max(keyColumn, valueColumn)+1 > len(line):
             _printRed("Wrong number of fields (%d). Expected %d. Skipping line..."\
                        % (len(line), 1 + max(keyColumn, valueColumn)))
             continue
-            
+
         key = line[keyColumn]
         value = line[valueColumn]
         # Check, if there is only one child -> parent definition for
@@ -261,56 +261,56 @@ def getDictionaryFromFile(fileName, keyColumn=0, valueColumn=1):
             continue
         returnDictionary[key] = value
     sourceFile.close()
-     
+
     return returnDictionary
 
 class barObject(object):
     """
     Parental class for BAR elements.
-    
+
     The general assumption is that every BAR element should have XML
     representation thus this class holds placeholdes for XML import / export
     methods but they are not always implemented in subclasses. Every element
     should also implement the __str__ method, but (again) some subclases do not
-    have this function implemented.    
-    
+    have this function implemented.
+
     This class have aslo some supplementary function as _getAttributesDict and
     getElementById which appears to be useful.
-    
+
     @cvar _clsBoundingBox: bounding box representation class used by the class
                            objects
     @type _clsBoundingBox: class
-    
+
     @cvar _clsPath: path representation class used by the class objects
     @type _clsPath: class
-    
+
     @cvar _clsGenericStructure: structure (set of paths) representation class
                                 used by the class objects
     @type _clsGenericStructure: class
-    
+
     @cvar _clsStructureLabel: generic label representation class used by
                               the class objects
     @type _clsStructureLabel: class
-    
+
     @cvar _clsRegularLabel: regular label representation used by the class
                             objects
     @type _clsRegularLabel: class
-    
+
     @cvar _clsSpotLabel: spot label representation used by the class objects
     @type _clsSpotLabel:  class
-    
+
     @cvar _clsCommentLabel: comment label representation used by the class
                             objects
     @type _clsCommentLabel: class
-    
+
     @cvar _clsMetadataElement: meta data element representation class used by
                                the class objects
     @type _clsMetadataElement: class
-    
+
     @cvar _clsBregmaMetadataElement: bregma meta data element representation
                                      class used by the class objects
     @type _clsBregmaMetadataElement: class
-    
+
     @cvar _clsTransfMatrixMetadataElement: transformation matrix meta data
                                            element representation class used by
                                            the class objects
@@ -326,47 +326,47 @@ class barObject(object):
     _clsMetadataElement = None
     _clsBregmaMetadataElement = None
     _clsTransfMatrixMetadataElement = None
-    
+
     def __str__(self):
         """
         An alias for C{self.L{getXMLelement}().toxml()}
         """
         return self.getXMLelement().toxml(encoding = BAR_XML_ENCODING)
-    
+
     def getXMLelement(self):
         """
         A stub of method. Raise NotImplementedError.
         """
         raise NotImplementedError, "Virtual method executed."
-    
+
     def writeXMLtoFile(self, outputFilename,
             indent="\t", addindent="\t", newl="\n",
             encoding=BAR_XML_ENCODING):
         """
         Write XML representation of the object to file.
-        
+
         @type  outputFilename: str
         @param outputFilename: filename to save the file
-        
+
         @type indent: str
         @param indent: indentation delimiter
-        
+
         @type addindent: str
         @param addindent: additional indentation delimiter
-        
+
         @type newl: str
         @param newl: newline delimiter
-        
+
         @type encoding:
         @param encoding: output xml file encoding
-        
+
         @return      : None
         """
         f=open(outputFilename,'w')
         self.getXMLelement().writexml(f, indent, addindent, newl, encoding)
         print >>sys.stderr, "Saved to: ", outputFilename
         f.close()
-    
+
     @staticmethod
     def _getAttributesDict(xmlElement):
         """
@@ -374,25 +374,25 @@ class barObject(object):
 
         @type  xmlElement: xml.dom.minidom.Node
         @param xmlElement: svg from which all attributes will be extrated
-        
+
         @return: attribute to value mapping
         @rtype: {str : str, ...}
         """
         return dict(xmlElement.attributes.items())
-    
+
     #TODO: can be staticmethod
     def getElementById(self, domElement, tagName, id):
         """
         Stupid walkaround of faulty DOM getElementById.
-        
+
         @attention: Do not use until there is not other way.
-        
+
         @type domElement: xml.dom.minidom.Node
         @param domElement: XML element
-        
+
         @type tagName: str
         @param tagName: requested XML element name
-        
+
         @type id: str
         @param id: requested XML element id
         """
@@ -406,11 +406,11 @@ class barAtlasSlideElement(barObject):
     General class describing all elements that are part of slide. E.g. markers,
     paths, labels and metadata. Provides XML export and virtual XML import
     method.
-    
+
     @type _attributes: {str : ?, ...}
     @cvar _attributes: regular attribute (exported without namespace prefix)
                        name to value mapping
-    
+
     @type _attributesNS: {str : ?, ...}
     @cvar _attributesNS: namespace attributes (exported with
                          L{BAR_XML_NAMESPACE_PREFIX} prefix) name to value
@@ -418,11 +418,11 @@ class barAtlasSlideElement(barObject):
     @type _elementName: str
     @cvar _elementName: name of the represented XML element
     """
-    
+
     _attributes = {}
     _attributesNS = {}
     _elementName = 'text'
-    
+
     @classmethod
     def fromXML(cls, sourceXMLElement):
         """
@@ -432,14 +432,14 @@ class barAtlasSlideElement(barObject):
         @param sourceXMLElement: XML representation of the element
         """
         raise NotImplementedError, "Virtual method executed."
-    
+
     def getXMLelement(self, useBarNS = False):
         """
         Generate XML DOM representation of the object.
 
         @type  useBarNS: bool
         @param useBarNS: determines, if element uses 3dBAR XML namespace
-        
+
         @rtype: xml.dom.minidom.Node
         @return: XML representation of the object
         """
@@ -455,39 +455,39 @@ class barAtlasSlideElement(barObject):
         for (attribName, attribValue) in self._attributes.items():
             if not attribValue == None:
                 retElement.setAttribute(attribName, str(attribValue))
-        
+
         # Additionally put attributes belonging to 3dBAR namespace
         for (attribName, attribValue) in self._attributesNS.items():
             if not attribValue == None:
                 retElement.setAttributeNS(\
                         BAR_XML_NAMESPACE,
-                        BAR_XML_NAMESPACE_PREFIX + attribName, 
+                        BAR_XML_NAMESPACE_PREFIX + attribName,
                         str(attribValue))
-        
+
         return retElement
-    
+
     def _getTextNodeXMLelement(self, textNodeCaption):
         """
         Generate XML DOM representation of the object. Used when given XML
         element has textnode child (ie. labels).
-        
+
         @type  textNodeCaption: str
         @param textNodeCaption: value of the textnode
-        
+
         @return: XML representation of the object
         @rtype: dom.xml.Node
         """
         # Generate XML DOM element:
         retDocument= dom.Document()
         retElement = barAtlasSlideElement.getXMLelement(self)
-        
-        # Create text node carrying structure name 
+
+        # Create text node carrying structure name
         newTextNode = retDocument.createTextNode(textNodeCaption)
-       
+
         # Put all the nodes in xml DOM structure
         retElement.appendChild(newTextNode)
         return retElement
-    
+
     def affineTransform(self, M):
         """
         A stub of method. Raise NotImplementedError.
@@ -496,7 +496,7 @@ class barAtlasSlideElement(barObject):
         @param M: transformation matrix
         """
         raise NotImplementedError, "Virtual method executed."
-    
+
 #-------------------------------------------------
 # Labels
 #-------------------------------------------------
@@ -504,42 +504,42 @@ class barAtlasSlideElement(barObject):
 class barStructureLabel(barAtlasSlideElement):
     """
     Parental class for all classes representing slide labels.
-    
+
     @note: The class should not be used itself but rather its customized
            subclasses (L{barRegularLabel}, L{barSpotLabel}, L{barCommentLabel})
            as there are three basic types of labels.
-     
+
     @cvar _color: color of label
-    @type _color: str 
-    
+    @type _color: str
+
     @cvar _prefix: prefix that is added to the label when XML element
                    is generated
     @type _prefix: str
     """
-    
+
     # Label types are distinguished by prefix and color thus generic label
     # has no particular color and prefix assigned.
     _color  = None
     _prefix = None
     _elementName = 'text'
-    
+
     def __init__(self, labelLocation, labelCaption, labelID,
                        properties = None, growlevel = BAR_DEFAULT_GROWLEVEL):
         """
         @type  labelLocation: (int, int)
         @param labelLocation: point in which label is anchored
-        
+
         @type  labelCaption: str
         @param labelCaption: text (name of the structure)
-        
+
         @type  labelID: str
         @param labelID: uniqe ID assigned to this label
-        
+
         @type  properties: {str : ?, ...}
         @param properties: custom XML attributes overriding default XML text
                            element settings
         """
-        
+
         if properties:
             # if custom text element attributes are given use them:
             self._attributes = dict(properties)
@@ -547,18 +547,18 @@ class barStructureLabel(barAtlasSlideElement):
             # Load default SVG properties from configuration file:
             self._attributes = dict(DEFAULT_TEXT_ELEMENTS_ATTRIBUTES)
         self._attributesNS = dict(CONF_DEFAULT_TEXT_ATTRIBUTES_NS)
-        
+
         self.growlevel = growlevel
-        
+
         # Public
-        self.Location = labelLocation 
+        self.Location = labelLocation
         self.Caption  = self._validateCaption(strip(labelCaption))
         self.ID = labelID
-        
+
     @classmethod
     def fromXML(cls, svgTextElement):
         """
-        Create label object from its XML representation. 
+        Create label object from its XML representation.
 
         @note: The method returns object of the proper class (according to
                the type of the given label representation).
@@ -570,26 +570,26 @@ class barStructureLabel(barAtlasSlideElement):
         @rtype: L{barStructureLabel}
         """
         # Check if given element is a 'text' element:
-        if not svgTextElement.tagName == 'text': 
+        if not svgTextElement.tagName == 'text':
             raise TypeError, "Invalid SVG element provided"
-        
+
         # Extract all attributes from given element:
         propertiesDict =\
         cls._getAttributesDict(svgTextElement)
-        
+
         # Extract label's coordinates, caption and id which will be used in
         # label's constructor.
         x, y = map(lambda x: float(propertiesDict[x]), ['x','y'])
-        
+
         # Now it's a bit tricky. Text elements may contain a number of nested
         # tspan tags. We will check if such tags exist and, it they are,
         # text will be extcracted from all of them and merged after all.
         #tspans = svgTextElement.getElementsByTagName('tspan')
         labelCaption = _recurseTextNodeExtract(svgTextElement)
-        
+
         #labelCaption = strip(svgTextElement.firstChild.nodeValue)
         labelID = propertiesDict['id']
-        
+
         # Extract growlevel attribute
         try:
             growlevel=\
@@ -598,59 +598,59 @@ class barStructureLabel(barAtlasSlideElement):
             _printRed('Invalid or empty growlevel provided. Using growlevel=0.\
                     Don\'t worry, it may happen.')
             growlevel = 0
-        
+
         # Try to extract label font size. If it is impossible default value of
         # font size will be used
         try:
             labelFontSize = propertiesDict['font-size']
         except:
             labelFontSize = None
-        
+
         # Return label with proer type depending on label's prefix
         labelPrefix = labelCaption[0]
-        
+
         # Create label
         if labelPrefix == BAR_COMMENT_LABEL_PREFIX:
             retLabel = cls._clsCommentLabel( (x, y), labelCaption[1:].replace(',',''), labelID)
         elif labelPrefix == BAR_SPOT_LABEL_PREFIX:
             retLabel = cls._clsSpotLabel( (x, y), labelCaption[1:].replace('.',''), labelID)
         else:
-            retLabel = cls._clsRegularLabel( (x, y), labelCaption, labelID ) 
+            retLabel = cls._clsRegularLabel( (x, y), labelCaption, labelID )
 
         # Customize label properties
         if labelFontSize: retLabel._attributes['font-size'] = labelFontSize
         else: pass
-        retLabel.growlevel = growlevel 
-        
+        retLabel.growlevel = growlevel
+
         return retLabel
-    
-     
-    
+
+
+
     @classmethod
     def castToCommentLabel(cls, sourceLabel):
         """
         An alias for C{L{castLabelType}(sourceLabel, barCommentLabel)}.
         """
         return cls.castLabelType(sourceLabel, cls._clsCommentLabel)
-    
+
     @classmethod
     def castToSpotLabel(cls, sourceLabel):
         """
         An alias for C{L{castLabelType}(sourceLabel, barSpotLabel)}.
         """
         return cls.castLabelType(sourceLabel, cls._clsSpotLabel)
-    
+
     @classmethod
     def castLabelType(cls, sourceLabel, targetLabelType):
         """
         Converts label type from one to another.
-        
+
         @type  sourceLabel: L{barStructureLabel}
         @param sourceLabel: label to be converted
-        
+
         @type  targetLabelType: class
         @param targetLabelType: class of the resulting label.
-        
+
         @return: converted label
         @rtype: L{targetLabelType}
         """
@@ -659,28 +659,28 @@ class barStructureLabel(barAtlasSlideElement):
         labelCaption = sourceLabel.Caption
         labelID = sourceLabel.ID
         properties = sourceLabel._attributes
-        
+
         # and put them into new label
         retLabel = targetLabelType( (x, y), labelCaption, labelID, properties)
         return retLabel
-    
+
     def getXMLelement(self):
         # Customize SVG element properties dictionary:
         (x,y) = self.Location
         self._attributes['id']   = str(self.ID)
         self._attributes['fill'] = str(self._color)
         self._attributesNS['growlevel'] = str(self.growlevel)
-       
+
         return barAtlasSlideElement._getTextNodeXMLelement(\
                 self, self._prefix + self.Caption)
-    
+
     def _validateCaption(self, caption):
         """
         Validate given caption. Raise ValueError if invalid.
-        
+
         @param caption: text to be validated
         @type caption: str
-        
+
         @rtype: str
         @return: L{caption}
         """
@@ -689,7 +689,7 @@ class barStructureLabel(barAtlasSlideElement):
             "Length of the caption: '%s' larger than allowed %d." % \
             (caption, BAR_LABEL_MAX_LENGTH)
         else: return caption
-    
+
     #TODO: add assertion
     def __getLocation(self):
         """
@@ -697,7 +697,7 @@ class barStructureLabel(barAtlasSlideElement):
         @rtype: (float, float)
         """
         return tuple(map(lambda x: float(self._attributes[x]), ['x','y']))
-    
+
     def __setLocation(self, newLocation):
         """
         Assign the location of the label.
@@ -710,7 +710,7 @@ class barStructureLabel(barAtlasSlideElement):
         (x, y) = tuple(map(float, newLocation))
         self._attributes['x'] = str(x)
         self._attributes['y'] = str(y)
-    
+
     def __affineTransform(self, M):
         """
         Transform the location of the label.
@@ -719,20 +719,20 @@ class barStructureLabel(barAtlasSlideElement):
         @type M: numpy 3x3 array
         """
         self.Location = tuple(svgfix.transformPoint(self.Location, M))
-        
+
     def affineTransform(self, M):
         """
         An alias for C{self.L{__affineTransform}(M)}.
         """
         return self.__affineTransform(M)
-    
+
     def __getCaption(self):
         """
         @return: the label caption
         @rtype: str
         """
         return self.__caption
-    
+
     def __setCaption(self, newCaption):
         """
         Assign the label caption if is a valid structure name. Otherwise raise
@@ -742,14 +742,14 @@ class barStructureLabel(barAtlasSlideElement):
         @param newCaption: new caption value
         """
         self.__caption = self._validateCaption(newCaption)
-    
+
     def __getID(self):
         """
         @return: the label identifier
         @rtype: str
         """
         return self._attributes['id']
-    
+
     def __setID(self, newID):
         """
         Assign the label identifier.
@@ -758,7 +758,7 @@ class barStructureLabel(barAtlasSlideElement):
         @param newID: new label identifier
         """
         self._attributes['id'] = newID
-    
+
     def __setGrowlevel(self, newGrowlevel):
         """
         Assign the label grow level.
@@ -767,14 +767,14 @@ class barStructureLabel(barAtlasSlideElement):
         @type  newGrowlevel: convertable to int
         """
         self._growlevel = int(newGrowlevel)
-    
+
     def __getGrowlevel(self):
         """
         @return: grow level of the label
         @rtype: int
         """
         return self._growlevel
-    
+
     Location = property(__getLocation, __setLocation)
     """
     Location of the label.
@@ -808,13 +808,13 @@ class barRegularLabel(barStructureLabel):
     """
     Regular label is used to indicate area corresponding to ordinary brain
     structure.
-    
+
     Regular label has no prefix and the fill color is #232323. This value is
-    hardcoded as it is constant across all templates. 
+    hardcoded as it is constant across all templates.
     """
     _prefix = BAR_REGULAR_LABEL_PREFIX
     _color  = BAR_REGULAR_LABEL_COLOUR
-    
+
     def _validateCaption(self, caption):
         if not validateStructureName(caption):
             raise ValueError, "Incorrect label caption: '%s'." % caption
@@ -826,7 +826,7 @@ class barSpotLabel(barStructureLabel):
     Spot label is used to indicate point (spot). This kind of label is not
     traceable. The sense of spotlabel is: 'Point and small surroundings are
     described by this label'. There may be many spotlabels in enclosed area.
-    
+
     Spot labels has a red color and '.' prefix. Dot character corresponds with
     spot behaviour of the label.
     """
@@ -839,7 +839,7 @@ class barCommentLabel(barStructureLabel):
     Comment labels are not related to brain structures. Their purpose is to
     convey additional information, comment or any other custom information.
     Consider comment labels as comments in programming languages.
-    
+
     Comment labels are denoted by ',' (comma - comment) character as well as
     red font color.
     """
@@ -855,45 +855,45 @@ class barMetadataElement(barAtlasSlideElement):
     Basic class representing metadata objects.
     """
     _elementName = 'data'
-    
+
     def __init__(self, name, value):
         """
         @type  name: str
         @param name: name of given metadata element
-        
+
         @param value: content of metadata
         """
         self._value = value
         self._name  = name
-   
+
     @classmethod
     def fromXML(cls, svgMetadataElement):
-        """        
+        """
         Create metadata element from XML representation of 3dBAR metadata
         element. Determine which type of metadata is parsed and return proper
         subclass for L{barMetadataElement}.
-        
+
         @type  svgMetadataElement: xml.dom.minidom.Node
         @param svgMetadataElement: XML representation of 3dBAR metadata element
 
         @return: created metadata element
         @rtype: L{barMetadataElement}
         """
-        
+
         # Extract all attributes from given element:
         propertiesDict =\
           cls._clsStructureLabel._getAttributesDict(svgMetadataElement)
         metadataElType    = propertiesDict['name']
         metadataElContent = propertiesDict['content']
-        
+
         if metadataElType == BAR_BREGMA_METADATA_TAGNAME:
             bregmaValue = float(metadataElContent)
             return cls._clsBregmaMetadataElement(bregmaValue)
-        
+
         if metadataElType == BAR_TRAMAT_METADATA_TAGNAME:
             transfMat = map(float, metadataElContent.split(','))
             return cls._clsTransfMatrixMetadataElement(transfMat)
-        
+
         # If none of above:
         return cls(metadataElType,metadataElContent)
 
@@ -902,15 +902,15 @@ class barMetadataElement(barAtlasSlideElement):
         Generate string representation of content of metadata. Such
         representation may by used in XML element as is required because
         metadata content may be not only string but also list, dictionary, etc.
-        
+
         Default string represenataion is str() but, in general, it is overided
         by subclases.
-        
+
         @return: string representation of metadata content
         @rtype: str
         """
         return str(self._value)
-    
+
     def _validateValue(self, NewValue):
         """
         Validates given value. Should be overriden and reimplemented in every
@@ -919,13 +919,13 @@ class barMetadataElement(barAtlasSlideElement):
         @param NewValue: value to be validated
         """
         return True
-    
+
     def _getValue(self):
         """
         @return: content of metadata element
         """
         return self._value
-    
+
     def _setValue(self, NewValue):
         """
         Assign the content of the metadata element if valid.
@@ -934,32 +934,32 @@ class barMetadataElement(barAtlasSlideElement):
         """
         if self._validateValue(NewValue):
             self._value = NewValue
-    
+
     def _getName(self):
         """
         @return: name of the metadata element
         @rtype: str
         """
         return self._name
-    
+
     def getXMLelement(self):
         """
         An alias for C{L{barAtlasSlideElement.getXMLelement}(self, useBarNS = True)}.
         """
         self._attributes['name']    = self._name
         self._attributes['content'] = self._getContentString()
-        
-        return barAtlasSlideElement.getXMLelement(self, useBarNS = True) 
-    
+
+        return barAtlasSlideElement.getXMLelement(self, useBarNS = True)
+
     def getMetadataTuple(self):
         """
         Generate tuple containing name and value of medatada object.
-        
+
         @return: generated tuple
         @rtype (str, ?)
         """
         return (self._name, self._value)
-    
+
     value = property(_getValue, _setValue)
     """
     Content of the metadata element.
@@ -971,14 +971,14 @@ class barMetadataElement(barAtlasSlideElement):
 
     @type: str
     """
-    
+
 
 class barBregmaMetadataElement(barMetadataElement):
     """
     Class of objects representing bregma metadata elements.
-    
+
     @note: Type of the element content is float.
-    
+
     @note: Each slide may have only one BregmaMetadataElement - otherwise
            significant errors may ocurr.
     """
@@ -1008,7 +1008,7 @@ class barTransfMatrixMetadataElement(barMetadataElement):
         """
         barMetadataElement.__init__(self,\
                 BAR_TRAMAT_METADATA_TAGNAME, transformationMatrixTuple)
-    
+
     def _getContentString(self):
         return ",".join(map(str, self._value))
 
@@ -1019,14 +1019,14 @@ class barTransfMatrixMetadataElement(barMetadataElement):
 class barMarker(barAtlasSlideElement):
     """
     Class of objects representing markers.
-    
+
     Markers are elements which allows to provide spatial coordinate system via
     graphical SVG element which can be easily done by various graphics
     software. Markers are recalculated into metadata elements by
-    L{barPretracedSlide.parseMarkers<barPretracedSlide.parseMarkers>}. 
+    L{barPretracedSlide.parseMarkers<barPretracedSlide.parseMarkers>}.
     """
     _elementName = 'text'
-    
+
     def __init__(self, spatialLocation, svgLocation, properties = None):
         """
         @type  spatialLocation: (float, float)
@@ -1035,7 +1035,7 @@ class barMarker(barAtlasSlideElement):
         @type  svgLocation: (float, float)
         @param svgLocation: location (x, y) of the markers in SVG coordinate
                             system
-        
+
         @type  properties: {str : ?}
         @param properties: SVG attribute name to value mapping appended
                            to the XML representation of the marker
@@ -1048,60 +1048,60 @@ class barMarker(barAtlasSlideElement):
         else:
             # Load default SVG properties from configuration file:
             self._attributes = dict(DEFAULT_MARKER_ATTRIBUTES)
-        
+
         if not hasattr(spatialLocation, '__iter__'):
             spatialLocation = (spatialLocation,)
-        
+
         self._svgLocation     = svgLocation
         self._spatialLocation = spatialLocation
-    
+
     @classmethod
     def fromXML(cls, svgTextElement):
         """
         Create marker from its XML representation.
-        
+
         @type  svgTextElement: xml.dom.minidom.Node
         @param svgTextElement: source XML element
-        
+
         @return: created object
         @rtype: L{barMarker}
         """
-        
+
         # Check if given element is text element:
-        if not svgTextElement.tagName == 'text': 
+        if not svgTextElement.tagName == 'text':
             raise TypeError, "Invalid SVG element provided"
-        
+
         # Extract all attributes from given element:
         propertiesDict =\
           barCoordinateMarker._getAttributesDict(svgTextElement)
-        
+
         # Extract label's coordinates, caption and id which will be used in
         # marker's constructor.
         x, y = map(lambda x: float(propertiesDict[x]), ['x','y'])
-        
+
         # Parse text of text element looking for spatial coordinates
         # of the label
         labelCaption = _recurseTextNodeExtract(svgTextElement)
-        
+
         try:
             spatialCoordinates = map(float, re_CoordinateMarker.search(labelCaption).groups())
             return barCoordinateMarker(spatialCoordinates, (x,y))
         except:
             pass
-        
+
         try:
             spatialCoordinates = map(float, re_CoronalCoord.search(labelCaption).groups())
             return barCoronalMarker(spatialCoordinates, (x,y))
         except:
             pass
-    
+
     def getXMLelement(self, textNodeCaption = ""):
         """
         Generate XML DOM representation of the object.
-        
+
         @type  textNodeCaption: str
         @param textNodeCaption: caption of the marker
-        
+
         @return: generated XML DOM representation
         @rtype: xml.dom.minidom.Node
         """
@@ -1112,14 +1112,14 @@ class barMarker(barAtlasSlideElement):
 #        self._attributes['id']= self._idAttrib
         return barAtlasSlideElement._getTextNodeXMLelement(\
                 self, textNodeCaption)
-    
+
     def _getSpatialLocation(self):
         """
         @return: location (x, y) of the marker in spatial coordinate system
         @rtype: (float, float)
         """
         return tuple(map(float, self._spatialLocation))
-    
+
     def _setSpatialLocation(self, SpatialLocationTuple):
         """
         Assign the location of the marker in spatial coordinate system.
@@ -1128,14 +1128,14 @@ class barMarker(barAtlasSlideElement):
         @type SpatialLocationTuple: (float, float)
         """
         self._spatialLocation = SpatialLocationTuple
-    
+
     def _getSVGLocation(self):
         """
         @return: location (x, y) of the marker in SVG coordinate system
         @rtype: (float, float)
         """
         return tuple(map(float, self._svgLocation))
-    
+
     def _setSVGLocation(self, SVGLocationTuple):
         """
         Assign the location of the marker in SVG coordinate system.
@@ -1144,7 +1144,7 @@ class barMarker(barAtlasSlideElement):
         @type SVGLocationTuple: (float, float)
         """
         self._svgLocation = SVGLocationTuple
-    
+
     def __affineTransform(self, M):
         """
         Transform the location of the marker in SVG coordinate system.
@@ -1153,13 +1153,13 @@ class barMarker(barAtlasSlideElement):
         @type M: numpy 3x3 array
         """
         self.svgLocation = tuple(svgfix.transformPoint(self.svgLocation, M))
-    
+
     def affineTransform(self, M):
         """
-        An alias for C{self.L{__affineTransform}(M)}. 
+        An alias for C{self.L{__affineTransform}(M)}.
         """
         return self.affineTransform(M)
-    
+
     spatialLocation = property(_getSpatialLocation, _setSpatialLocation)
     """
     The location of the marker in spatial coordinate system.
@@ -1184,7 +1184,7 @@ class barCoordinateMarker(barMarker):
             BAR_COORDINATE_MARKER_TEMPLATE % tuple(self._spatialLocation)
         return super(self.__class__, self).getXMLelement(newTextNodeCaption)
 
-    
+
 class barCoronalMarker(barMarker):
     """
     Class of objects representing marker of anterior-posterior slide position.
@@ -1207,17 +1207,17 @@ class barPath(barAtlasSlideElement):
     many paths.
     """
     _elementName = 'path'
-    
+
     def __init__(self, pathID, pathDefinition, fillColor, properties = None, clearPathDef = False):
         """
         @type  pathID: str
         @param pathID: identifier of the path element that will be stored as
                        path id in XML representation (valid path id)
-        
+
         @type  pathDefinition: str
         @param pathDefinition: definition of the path (valid SVG path
                                definition)
-        
+
         @type  fillColor: str
         @param fillColor: color string in hexadecimal format (might begin with
                           "#" char or not)
@@ -1230,7 +1230,7 @@ class barPath(barAtlasSlideElement):
         @param clearPathDef: indicates if the L{pathDefinition} has to be
                              converted to parser-compatible format
         """
-        
+
         # We can load default path properties or replace default values by
         # substituted dictionary of properties
         if properties:
@@ -1240,20 +1240,20 @@ class barPath(barAtlasSlideElement):
             # Load default SVG properties from configuration file:
             self._attributes = dict(CONF_DEFAULT_PATH_ATTRIBUTES)
         self._attributesNS = dict(CONF_DEFAULT_PATH_ATTRIBUTES_NS)
-        
+
         # Customize path properties: set ID, path definition and fill color
         self._setPathDefinition(pathDefinition, clearPathDef)
         self.color = fillColor
         self.id = pathID
-    
+
     @classmethod
     def fromXML(cls, svgPathElement, clearPathDef = False):
         """
         Create path object from its XML representation.
-        
+
         @type svgPathElement: xml.dom.node
         @param svgPathElement: XML representation of the object
-        
+
         @return: created object
         @rtype: cls
         """
@@ -1262,7 +1262,7 @@ class barPath(barAtlasSlideElement):
         pathID = svgPathElement.getAttribute('id')
         if clearPathDef:
             pathDefinition = cls.simplifyPathDef(pathDefinition)
-        
+
         # If path element has defined fill color remove it and overwrite it with
         # inline style
         if svgPathElement.hasAttribute('fill'):
@@ -1270,7 +1270,7 @@ class barPath(barAtlasSlideElement):
         else:
             styleDict = parseStyle(svgPathElement.getAttribute('style'))
             fillColor = styleDict.get('fill',"#000000")
-        
+
         # we treat growlevel as optional parameter
         try:
             growlevel = int(svgPathElement.getAttributeNS(\
@@ -1280,10 +1280,10 @@ class barPath(barAtlasSlideElement):
             if __debug__:
                 _printRed('Invalid or empty growlevel provided. Using growlevel=0.\
                     Don\'t worry, it may happen.')
-        
+
         retPath = cls(pathID, pathDefinition, fillColor, clearPathDef = clearPathDef)
         retPath.growlevel = int(growlevel)
-        
+
         # Try to extract feature type and assign it to the path.
         # Skip it, if the feature type is undefined.
         try:
@@ -1294,40 +1294,40 @@ class barPath(barAtlasSlideElement):
 
         except:
             pass
-        
+
         return retPath
-    
+
     @staticmethod
     def simplifyPathDef(pathDefinition):
         """
         Change definition of path to absolute coordinates and eliminate all
         command shortcuts.
-        
+
         @type  pathDefinition: str
         @param pathDefinition: path definition
-        
+
         @return: simplified path
         @rtype: str
         """
-        
+
         # Convert incompatible path format (relative coordinates, long curve segments)
         # to more legible format compatible with parser
         return  UnparsePath(parsePath(pathDefinition))
-    
+
     def _getPathDefinition(self):
         """
         @return: SVG path definition
         @rtype: str
         """
         return self._attributes['d']
-        
+
     def _setPathDefinition(self, newPathDefinition, clearPathDef = False):
         """
         Assign the path definition.
-        
+
         @type  newPathDefinition: str
         @param newPathDefinition: new SVG path definition
-        
+
         @type clearPathDef: bool
         @param clearPathDef: indicates if the L{newPathDefinition} has to be
                              validated and converted to parser-compatible
@@ -1340,42 +1340,42 @@ class barPath(barAtlasSlideElement):
             self._attributes['d'] = self.simplifyPathDef(newPathDefinition)
         else:
             self._attributes['d'] = newPathDefinition
-        
+
     def _validatePath(self, pathDefinition):
         """
         Validate SVG path definition: Path definition has to contain at least
         three points and 'closepath'command in order to be considered as valid
         path.
-        
+
         @type  pathDefinition: str
         @param pathDefinition: SVG path definition to be validated.
-        
-        @return: True, if path definition is correct, False otherwise 
+
+        @return: True, if path definition is correct, False otherwise
         @rtype: bool
         """
         # Validate length:
         if len(parsePath(pathDefinition)) <= 3:
             return False
-        
+
         # Search for 'closepath' command
         if pathDefinition.strip()[-1] not in ['Z', 'z']:
             return False
         return True
-        
+
     def _getGrowlevel(self):
         """
         @return: gap filling level for the path
         @rtype: int
         """
         return self._attributesNS['growlevel']
-    
+
     def _setGrowlevel(self, Growlevel = None):
         """
         Set gap filling level for the path.
-        
+
         @type  Growlevel: int
         @param Growlevel: new level of gap filling that should be forced when
-                          tracing is performed 
+                          tracing is performed
         """
         if not Growlevel:
             Growlevel = 0
@@ -1383,29 +1383,29 @@ class barPath(barAtlasSlideElement):
             self._attributesNS['growlevel'] = Growlevel
         else:
             raise ValueError, "Given Growlevel is outside defined bounaries."
-    
+
     def _validateID(self, id):
         """
         Validate identifier of the path.
-        
+
         The basic rule of valid 3dBAR path id is that it is list of values
         separated with '_' (underscore) character. First value has to start exactly
         with 'structure' string, the second element is an actual uniqe id of the path while
         the last value is name of structure represented by particular path.
-        
+
         Renember: NO SPACES are allowed!
-        
+
         Example of proper 3dBAR path id is 'structureXX_genetared-from-label-6_Olf'
         while wrong definition could be 'str_Olf_from label 87'
-        
+
         @type  id: str
         @param id: SVG path identifier to be validated
-        
+
         @note: Method does not validate uniqness of given ID, only it's formal
                corectness.
         """
         valList = id.strip().split('_')
-        
+
         if len(valList) < 3:
             debugOutput("Wrong path length %s" % id, error=True)
             return False
@@ -1418,13 +1418,13 @@ class barPath(barAtlasSlideElement):
         if not validateStructureName(valList[-2]):
             debugOutput("Invalid path id[-2]: %s" % id, error=True)
             return False
-        
+
         return True
-    
+
     def _setID(self, newPathID):
         """
         Assign the identifier of the path.
-        
+
         @type  newPathID: str
         @param newPathID: new value of SVG path identifier
         """
@@ -1432,29 +1432,29 @@ class barPath(barAtlasSlideElement):
             self._attributes['id'] = newPathID.strip()
         else:
             raise ValueError, "Invalid path ID!"
-    
+
     def _getID(self):
         """
         @return: SVG path identifier
         @rtype: str
         """
         return self._attributes['id']
-    
+
     def _getPathType(self):
         """
         @return: value of 'L{type}' property
         @rtype: str
         """
         return self._attributesNS['type']
-    
+
     def _setPathType(self, newPathType):
         """
         Assign the value of the 'L{type}' property.
-        
+
         @type  newPathType: str
         @param newPathType: new value of the 'type' property
         """
-        
+
         if newPathType == None:
             self._attributesNS['type'] = newPathType
         else:
@@ -1462,7 +1462,7 @@ class barPath(barAtlasSlideElement):
             assert validateStructureName(newPathType) == newPathType,\
                     "Invalid feature type name provided: %s" % newPathType
             self._attributesNS['type'] = newPathType
-    
+
     def _getBbox(self):
         """
         Return value of the 'L{boundingBox}' property.
@@ -1471,20 +1471,20 @@ class barPath(barAtlasSlideElement):
         @rtype: (int, int, int, int)
         """
         return extractBoundingBox(self._attributes['d'])
-    
+
     def _setBbox(self, newBBox):
         """
         Raise ValueError
         """
         raise ValueError, "Bounding box is readonly property."
-    
+
     def _getColor(self):
         """
         @return: fill colour of the path in hexadecimal represenatation
         @rtype: str
         """
         return self._attributes['fill']
-    
+
     def _setColor(self, newColor):
         """
         Assign the fill colour of the path.
@@ -1495,27 +1495,27 @@ class barPath(barAtlasSlideElement):
         """
         if newColor[0] == "#": self._attributes['fill'] = newColor
         else: self._attributes['fill'] = "#" + newColor
-    
+
     def _getCorrespondingStructureName(self):
         """
         @return: name of the structure corresponding to the path
         @rtype: str
         """
         return self._getID().split('_')[-1]
-    
+
     def _getCorrespondingLabelID(self):
         """
         @return: identifier of the corresponding label
         @rtype: str
         """
         return self._getID().split('_')[-2]
-    
+
     def _setCorrespondingLabelID(self, newID):
         """
         Raise ValueError.
         """
         raise ValueError, "Corresponding label ID is readonly property."
-    
+
     def _rename(self, newStructName):
         """
         Change the structure corresponding to the path.
@@ -1527,43 +1527,43 @@ class barPath(barAtlasSlideElement):
         newID     = self.id.split('_')
         newID[-1] = validateStructureName(newStructName)
         self._setID(join('_').join(newID))
-    
+
     def __affineTransform(self, M):
         """
         Transform the location of the path in SVG coordinate system.
-        
+
         @param M: transformation matrix
         @type M: numpy 3x3 array
         """
         self.pathDef = svgfix.fixPathDefinition(self.pathDef,  M)
-        
+
     def affineTransform(self, M):
         """
         An alias for C{self.L{__affineTransform}(M)}.
         """
         return self.__affineTransform(M)
-    
+
     def __setCrispEdges(self, boolValue):
         """
         Set the value of 'shape-rendering' attribute.
-        
+
         @type boolValue: bool
         @param boolValue: True if 'shape-rendering' has to be 'crisp-edges',
                           False if it has to be 'geometric-precision'
         """
         assert type(boolValue) == type(True), "Boolean value expected"
-        
+
         if boolValue:
             self._attributes['shape-rendering'] = 'crisp-edges'
         else:
             self._attributes['shape-rendering'] = 'geometric-precision'
-    
+
     def __getCrispEdges(self):
         """
         @return: True when the value of 'shape-rendering' attribute is
         'crisp-edges', False otherwise.
-        
-        @rtype: bool 
+
+        @rtype: bool
         """
         if self._attributes.has_key('shape-rendering'):
             if self._attributes['shape-rendering'] == 'crisp-edges':
@@ -1572,92 +1572,92 @@ class barPath(barAtlasSlideElement):
                 return False
         else:
             return False
-    
+
     id         = property(_getID, _setID)
     """
     The path identifier.
-    
+
     @type: str
     """
-    
+
     type   = property(_getPathType, _setPathType)
     """
     Attribute holding type of the feature delineated by given path. For example
     it can be like 'gray matter', 'white matter', 'single cell', 'ventricle', and
     other... This property would be extended when INCF DAI common metadata set
     will be well established.
-    
+
     @type: string
     """
-    
+
     growlevel  = property(_getGrowlevel, _setGrowlevel)
     """
     Gap filling level for the path.
-    
+
     Baceuse barPath class is used in already traced files, gap filling
     level describes with which gap filling level tracing was performed.
     So in such case it has only informative purpose.
-    
+
     By default Growlevel is set to 0 which means that no erosion filter was
     applied.
-    
+
     @type: int
     """
-    
+
     pathDef    = property(_getPathDefinition, _setPathDefinition)
     """
     The SVG path definition.
-    
+
     @type: str
     """
-    
+
     boundingBox= property(_getBbox, _setBbox)
     """
     The path bounding box description (x1, y1, x2, y2), where x1, y2 are
     coordinates of top-left corner of bounding box and x2, y2 are coordinates
     of bottom-right corner of bounding box.
-    
+
     Please note that bounding box is only approximation of actual bounding box
     and may be slightly larger as it is based on extreme coordinated of control
     points creating given path. However, the difference is neglectable.
-    
+
     Read-only property.
-    
+
     @type: (int, int, int, int)
     """
-    
+
     bbx        = boundingBox
     """
     An alias for L{boundingBox} property.
     """
-    
+
     color      = property(_getColor, _setColor)
     """
     The fill colour of the path in hexadecimal represenatation.
-    
+
     @type: str
     """
-    
+
     structName = property(_getCorrespondingStructureName, _rename)
     """
     Name of the structure corresponding to the path.
-    
+
     @type: str
     """
-    
+
     relLabelID = property(_getCorrespondingLabelID, _setCorrespondingLabelID)
     """
     The identifier of the label corresponding to the path.
-    
+
     Read-only property.
-    
+
     @type: str
     """
-    
+
     crispEdges = property(__getCrispEdges, __setCrispEdges)
     """
     Property related to the 'shape-rendering' SVG path attribute.
-    
+
     See L{getter<__getCrispEdges>} and L{setter<__setCrispEdges>} for details.
     """
 
@@ -1665,13 +1665,13 @@ class barPath(barAtlasSlideElement):
 class barGenericStructure(barAtlasSlideElement):
     """
     Class of containers of L{paths<barPath>} related to one structure.
-    
+
     @ivar _paths: paths related to the structure
     @type _paths: {str : L{barPath}}
-    
+
     @ivar _name: name of the structure
     @type _name: str
-    
+
     @ivar _color: colour of the structure in hexadecimal format (with or
                   without leading '#')
     @type _color: str
@@ -1680,10 +1680,10 @@ class barGenericStructure(barAtlasSlideElement):
         """
         @param name: name of the structure
         @type name: str
-        
+
         @param color: colour of the structure
         @type color: str
-        
+
         @param pathList: paths to be included in the structure
         @type pathList: sequence([L{barPath}, ...])
         """
@@ -1691,29 +1691,29 @@ class barGenericStructure(barAtlasSlideElement):
         self._type = None
         self.name = name
         self._color = color
-        
+
         if pathList:
             self._type = pathList[0].type
             for path in pathList:
                 self.addPaths(path)
-    
+
     def __setitem__(self, key, value):
         """
         Add path to the structure.
-        
+
         @param key: path identifier (L{barPath.id})
         @type key: str
-        
+
         @param value: path
         @type value: L{barPath}
         """
         self._paths[key] = value
         self._paths[key].color = self._color
-    
+
     def __delitem__(self, key):
         """
         Remove path from the structure.
-        
+
         @param key: path identifier
         @type key: str
         """
@@ -1721,27 +1721,27 @@ class barGenericStructure(barAtlasSlideElement):
         # Removes path with given key. If the path is the last path in the
         # structute, delete also the structure.
         if len(self) == 0: del self
-    
+
     def __getitem__(self, key):
         """
         @param key: identifier of the requested path
         @type key: str
-        
+
         @return: requested path
         @rtype: L{barPath}
         """
         return self._paths[key]
-    
+
     def __str__(self):
         return "\n".join(map(str, self.values()))
-    
+
     def __len__(self):
         """
         @return: number of paths in the structure
         @rtype: int
         """
         return len(self._paths)
-    
+
     def updatePaths(self):
         """
         Update colour and name of contained paths.
@@ -1751,35 +1751,35 @@ class barGenericStructure(barAtlasSlideElement):
         map(lambda path:  path._setColor(self.color), self.paths)
         map(lambda path:  path._rename(self.name), self.paths)
         map(lambda path:  setattr(path, 'type', self.type), self.paths)
-    
+
     def keys(self):
         """
         @return: contained paths identifiers
         @rtype: [str, ...]
         """
         return self._paths.keys()
-    
+
     def items(self):
         """
         @return: (path identifier, path) pairs for contained paths
         @rtype: [(str, L{barPath}), ...]
         """
         return self._paths.items()
-    
+
     def values(self):
         """
         @return: contained paths
         @rtype: [L{barPath}, ...]
         """
         return self._paths.values()
-    
+
     def itervalues(self):
         """
         @return: iterator over contained paths
         @rtype: iterator([L{barPath}, ...])
         """
         return self._paths.itervalues()
-    
+
     def iterkeys(self):
         """
         @return: iterator over contained paths identifiers
@@ -1793,26 +1793,26 @@ class barGenericStructure(barAtlasSlideElement):
         @rtype: iterator([(str, L{barPath}), ...])
         """
         return self._paths.iteritems()
-    
+
     def _getPaths(self):
         """
         An alias for C{self.L{values}()}.
         """
         return self.values()
-    
+
     def _getFeatureType(self):
         """
         Getter for the L{type} property
-        
+
         @rtype: str or None
         @return: value of the L{type} property
         """
         return self._type
-    
+
     def _setFeatureType(self, newFeatureType):
         """
         Setter for the L{type} property of the structure.
-        
+
         @return: None
         """
         if newFeatureType == None:
@@ -1822,26 +1822,26 @@ class barGenericStructure(barAtlasSlideElement):
             assert validateStructureName(newFeatureType) == newFeatureType,\
                     "Invalid feature type name provided: %s" % newFeatureType
             self._type = newFeatureType
-        
+
         self.updatePaths()
-    
+
     def _setStructureName(self, name):
         """
         Assign the name of the structure.
-        
+
         @param name: new name of the structure
         @type name: str
         """
         self._name = validateStructureName(name)
         self.updatePaths()
-    
+
     def _getStructureName(self):
         """
         @return: name of the structure
         @rtype: str
         """
         return self._name
-    
+
     def _getStructureColor(self):
         """
         @return: colour of the structure in hexadecimal format (with or
@@ -1849,18 +1849,18 @@ class barGenericStructure(barAtlasSlideElement):
         @rtype: str
         """
         return self._color
-    
+
     def _setStructureColor(self, newColor):
         """
         Assign the colour of the structure.
-        
+
         @param newColor: new colour of the structure in hexadecimal format
                          (with or without the leading '#')
         @type newColor: str
         """
         self._color = newColor
         self.updatePaths()
-    
+
     def _getBbox(self):
         """
         @return: bounding box (min_x, min_y, max_x, max_y) of the whole
@@ -1869,13 +1869,13 @@ class barGenericStructure(barAtlasSlideElement):
         """
         # Alias for merginig bounding boxes.
         return _mergeBoundingBox( map(lambda path: path.bbx, self.paths))
-    
+
     def _setBbox(self, newBBox):
         """
         Raise ValueError.
         """
         raise ValueError, "Bounding box is readonly property."
-    
+
     def getXMLelement(self):
         """
         @return: iterator over XML DOM representations of contained paths.
@@ -1884,17 +1884,17 @@ class barGenericStructure(barAtlasSlideElement):
         # Should return iterator
         for path in sorted(self.itervalues(), key=lambda x: x.id):
             yield path.getXMLelement()
-    
+
     def addPaths(self, *args):
         """
         Add paths to the structure.
-        
+
         @type args: [L{barPath}, ...]
         """
         for newPath in args:
             self.__setitem__(newPath.id, newPath)
         self.updatePaths()
-            
+
     def __affineTransform(self, M):
         """
         Transform the location of all paths in SVG coordinate system.
@@ -1903,13 +1903,13 @@ class barGenericStructure(barAtlasSlideElement):
         @type M: numpy 3x3 array
         """
         map(lambda x: x.affineTransform(M),  self.paths)
-    
+
     def affineTransform(self, M):
         """
         An alias to C{self.L{__affineTransform}(M)}.
         """
         return self.__affineTransform(M)
-    
+
     def __setCrispEdges(self, boolValue):
         """
         Set 'L{crispEdges<barPath.crispEdges>}' attribute for every path of
@@ -1917,7 +1917,7 @@ class barGenericStructure(barAtlasSlideElement):
         """
         assert type(boolValue) == type(True), "Boolean value expected"
         map(lambda x: setattr(x, 'crispEdges', boolValue), self._paths.values())
-    
+
     def __getCrispEdges(self):
         """
         @rtype: bool
@@ -1925,51 +1925,51 @@ class barGenericStructure(barAtlasSlideElement):
                  attribute equal 'crispEdges', C{False} otherwise.
         """
         return all(map(lambda x: getattr(x, 'crispEdges'), self._paths.values()))
-    
+
     name           = property(_getStructureName, _setStructureName)
-    
+
     type           = property(_getFeatureType, _setFeatureType)
     """
     Attribute holding type of the feature delineated by given path. For example
     it can be like 'gray matter', 'white matter', 'single cell', 'ventricle', and
     other... This property would be extended when INCF DAI common metadata set
     will be well established.
-    
+
     @type: string
     """
-    
+
     color          = property(_getStructureColor, _setStructureColor)
     """
     Colour of the structure in hexadecimal format (with or without the leading
     '#').
-    
+
     @type: str
     """
-    
+
     bbx            = property(_getBbox, _setBbox)
     """
     Bounding box (min_x, min_y, max_x, max_y) of the whole structure.
-    
+
     Read-only property.
-    
+
     @type: (int, int, int, int)
     """
-    
+
     paths          = property(_getPaths)
     """
     Contained paths.
-    
+
     Read-only property.
-    
+
     @type: [L{barPath}, ...]
     """
-    
+
     crispEdges     = property(__getCrispEdges, __setCrispEdges)
     """
     The 'L{crispEdges<barPath.crispEdges>}' attribute of all contained paths.
     When read C{True} if the value of the attribute of every contained path
     is C{'crispEdges'}, C{False} otherwise.
-    
+
     @type: bool
     """
 
@@ -1995,7 +1995,7 @@ class barBoundingBox(barObject):
         else:
             self.boundaries = initialBoundaries
         pass
-    
+
     @classmethod
     def fromPathDefinition(cls, svgPathDefinition):
         """
@@ -2003,26 +2003,26 @@ class barBoundingBox(barObject):
 
         @type  svgPathDefinition: str
         @param svgPathDefinition: definition of the path in SVG manner
-        
+
         @return: created bounding box
         @rtype: L{barBoundingBox}
         """
         return barBoundingBox(extractBoundingBox(svgPathDefinition))
-    
+
     @classmethod
     def fromPathElement(self, svgPathElement):
         """
         Create bounding box based on SVG 'path' element.
 
-        @type  svgPathElement: xml.dom.minidom.Node 
+        @type  svgPathElement: xml.dom.minidom.Node
         @param svgPathElement: SVG path element
-        
+
         @return: created bounding box
         @rtype: L{barBoundingBox}
         """
         barBoundingBox.fromPathDefinition(\
            svgPathElement.getAttribute('d'))
-    
+
     def __merge(self, listOfBoundaries):
         """
         Merge given boundaries.
@@ -2030,7 +2030,7 @@ class barBoundingBox(barObject):
         @type  listOfBoundaries: [(int, int, int, int) or (float, float, float,
                                  float), ...]
         @param listOfBoundaries: boundaries to be merged
-        
+
         @return: merged boundaries
         @rtype: (int, int, int, int) or (float, float, float, float)
         """
@@ -2047,7 +2047,7 @@ class barBoundingBox(barObject):
         b = np.array(self.boundaries)
         e = np.array(extIterable)
         self.boundaries = tuple(b+e)
-    
+
     def __add__(self, obj):
         """
         Merge two bounding box objects into one.
@@ -2057,13 +2057,13 @@ class barBoundingBox(barObject):
         """
         merged = self.__merge((self.boundaries, obj.boundaries))
         return barBoundingBox(merged)
-    
+
     def __iter__(self):
         return iter(self.boundaries)
-   
+
     def __getitem__(self, index):
         return self.boundaries[index]
-    
+
     def __mul__(self, number):
         """
         @type number: int or float
@@ -2076,7 +2076,7 @@ class barBoundingBox(barObject):
         """
         multiplied = tuple(map(lambda x: round(x*number), self.boundaries))
         return barBoundingBox(multiplied)
-    
+
     def __str__(self):
         return ",".join(map(str, self.boundaries))
 
@@ -2086,7 +2086,7 @@ class barBoundingBox(barObject):
     def __ne__(self, other):
         return not self == other
 
-    
+
 #-------------------------------------------------
 # Slides
 #-------------------------------------------------
@@ -2096,19 +2096,19 @@ class barVectorSlide(barObject):
     """
     An abstract class representing all types of vector slides - slides that
     are based on SVG drawings.
-    
+
     @attention: This class is an abstract class and should never be instanced.
 
     @ivar slideTemplate: an empty SVG document which can be filled with labels,
                          structures and metadata
     @type slideTemplate: xml.dom.minidom.Document
-    
+
     @ivar _labels: label ID to label representation mapping
     @type _labels: {str : L{barStructureLabel}, ...}
-    
+
     @ivar _metadata: names of particular metadata to its representation mapping
     @type _metadata: {str : L{barMetadataElement}, ...}
-    
+
     @ivar slideNumber: slide number
     @type slideNumber: int
     """
@@ -2121,45 +2121,45 @@ class barVectorSlide(barObject):
         @param slideNumber: slide number
         """
         self.slideTemplate    = slideTemplate
-        
+
         self._labels           = {}
         self._metadata         = {}
         self.slideNumber = slideNumber
         self._setSlideTemplate(slideTemplate)
-    
+
     def _getLabels(self):
         """
         @rtype: [L{barStructureLabel}, ...]
         @return: labels of the SVG slide
         """
         return self._labels.values()
-    
+
     def _getMetadata(self):
         """
         @rtype: {str : L{barMetadataElement}, ...}
         @return: names of particular metadata to its representation mapping
         """
         return self._metadata
-    
+
     def updateMetadata(self, metadataList):
         if hasattr(metadataList, '__iter__'):
             map(self._setMetadata, metadataList)
         else:
             self._setMetadata(metadataList)
-    
+
     def _setMetadata(self, metadataElement):
         """
         Add metadata to the slide.
-        
+
         @type  metadataElement: L{barMetadataElement}
         @param metadataElement: metadata element to be added to the slide
         """
         self._metadata[metadataElement.name] = metadataElement
-    
+
     def addLabel(self, newLabel):
         """
         Add label to the slide.
-        
+
         @type  newLabel: L{barStructureLabel}
         @param newLabel: label to be added to the slide
         """
@@ -2168,9 +2168,9 @@ class barVectorSlide(barObject):
                "Label with ID %s already in the slide! Trying to fix.!\n"\
                 % (newLabel.ID,), error=False)
             newLabel.ID += '_'
-        
+
         self._labels[newLabel.ID] = newLabel
-    
+
     #TODO: fix setter/getter type conflict
     def _getSlideTemplate(self):
         """
@@ -2178,20 +2178,20 @@ class barVectorSlide(barObject):
         @return: SVG slide template
         """
         return self._slideTemplate
-    
+
     def _setSlideTemplate(self, newSlideTemplate):
         """
         Assign new slide template.
-        
+
         @type  newSlideTemplate: str
         @param newSlideTemplate: new slide template
-        
+
         @todo: Add slide validation before replacing the template. See
                L{_validateSlideTemplate}.
         """
         if self._validateSlideTemplate(newSlideTemplate):
             self._slideTemplate = dom.parseString(newSlideTemplate)
-    
+
     def _validateSlideTemplate(self, newSlideTemplate):
         """
         A stub of method.
@@ -2200,14 +2200,14 @@ class barVectorSlide(barObject):
         """
         #TODO: Add template validation.
         return True
-    
+
     def alignToRefMatrix(self, refTuple):
         """
         Transform slide in the way that current transformation matrix will be
-        equal to L{refTuple}. 
-        
+        equal to L{refTuple}.
+
         Workflow:
-        
+
             1. Get initial transformation matrix from metadata.
             2. Calculate corrections basing on initial transformation matrix
                and reference matrix.
@@ -2219,22 +2219,22 @@ class barVectorSlide(barObject):
                as image axis. When scaling is negative stereotaxic and image
                axes are oriented in opposite directions. Be very careful
                in such case.
-        
+
         @type  refTuple: (float, float, float, float)
         @param refTuple: reference transformation matrix (sxref, xref, syref,
                          yref) for aligning
         """
-        
+
         currentTranfTuple = tuple(self._metadata[BAR_TRAMAT_METADATA_TAGNAME].value)
         (tranfMatrix, status) = slides_aligner.makeAlignment(refTuple, currentTranfTuple)
-        
+
         # Status tells if given transformation should be applied:
         # yes, if it is non-identity transformation, no otherwise as we don't
         # want to waste time for multiplying all points by 1.
         if status:
             self.affineTransform(tranfMatrix)
             self._metadata[BAR_TRAMAT_METADATA_TAGNAME].value = refTuple
-    
+
     def Show(self, binFile='eog', tempFilename="/tmp/barTemp.svg"):
         """
         Display the slide in external SVG browser.
@@ -2242,13 +2242,13 @@ class barVectorSlide(barObject):
         @type  binFile: str
         @param binFile: name of the executable file that will be used instead of
                         the detault SVG browser
-        
+
         @type  tempFilename: str
         @param tempFilename: temporary file name used to store svg slide
         """
         self.writeXMLtoFile(tempFilename)
-        os.system(binFile + " " + tempFilename) 
-     
+        os.system(binFile + " " + tempFilename)
+
     def getLabelByName(self, labelCaption, labelType=None, oType='id'):
         """
         Find labels matching searching criteria (caption of the label and
@@ -2256,14 +2256,14 @@ class barVectorSlide(barObject):
 
         @type  labelCaption: str
         @param labelCaption: caption of the label
-        
+
         @type  labelType: class
         @param labelType: the label class
 
         @type  oType: str
         @param oType: When set to 'id' IDs of selected labels are returned, if
                       'ref' references are returned
-        
+
         @return: depends on L{oType}
         """
         if not labelType:  source = self.labels
@@ -2292,7 +2292,7 @@ class barVectorSlide(barObject):
         for labelID in self.getLabelByName(labelCaption):
             self._labels[labelID] = self._clsStructureLabel.castLabelType(
                                 self._labels[labelID], targetType)
-    
+
     def deleteLabelByCaption(self, labelCaption):
         """
         Remove from the slide every label of requested caption.
@@ -2302,7 +2302,7 @@ class barVectorSlide(barObject):
         """
         for labelID in self.getLabelByName(labelCaption):
             del self._labels[labelID]
-       
+
     def deleteLabelByID(self, labelID):
         """
         Remove from the slide label of requested ID.
@@ -2311,7 +2311,7 @@ class barVectorSlide(barObject):
         @param labelID: identifier of the label to be deleted
         """
         del self._labels[labelID]
-    
+
     def renameLabelByCaption(self, oldCaption, newCaption):
         """
         Change the caption of every label of requested caption.
@@ -2324,7 +2324,7 @@ class barVectorSlide(barObject):
         """
         for labelID in self.getLabelByName(oldCaption):
             self._labels[labelID].Caption = newCaption
-    
+
     def __getAllLabelsWithType(self, labelType):
         """
         @param labelType: requested type of labels
@@ -2335,7 +2335,7 @@ class barVectorSlide(barObject):
         """
         return [ label for label in self.labels if
                 label.__class__.__name__ == labelType.__name__ ]
-    
+
     def __affineTransform(self, M):
         """
         Transform the location of all paths in SVG coordinate system.
@@ -2344,7 +2344,7 @@ class barVectorSlide(barObject):
         @type M: numpy 3x3 array
         """
         map(lambda x: x.affineTransform(M),  self.labels)
-    
+
     def affineTransform(self, M):
         """
         Transform the location of all paths in SVG coordinate system.
@@ -2353,11 +2353,11 @@ class barVectorSlide(barObject):
         @type M: numpy 3x3 array
 
         @return: self
-        @rtype: L{barVectorSlide} 
+        @rtype: L{barVectorSlide}
         """
         self.__affineTransform(M)
         return self
-    
+
     def __validateMetadata(self):
         """
         Check if all necessary metadata elements are provided. If not - raise
@@ -2368,78 +2368,78 @@ class barVectorSlide(barObject):
             temp = self._metadata[BAR_BREGMA_METADATA_TAGNAME]
         except KeyError:
             raise KeyError, "Metadata not provided. Cannot continue."
-    
+
     def svg2srs(self, svgCoord, ndims = 2):
         """
         @type  svgCoord: (float, float)
         @param svgCoord: coordinates in svg coordinate system to be converted
                          into spatial coordinates.
-        
+
         @type  ndims: int
         @param ndims: number of dimensions of returned value (determines if
                       output value will be 2 or 3 dimensional; when C{ndims == 3}
                       coronal coordinate is also included)
-        
+
         @rtype: (float, float) or (float, float, float)
         @return: spatial coordinates corresponding to given svg coordinates
-        
+
         @requires: All metadata has to be provided and correct.
         """
         # Check metadata availability
         self.__validateMetadata()
-        
+
         # Check dimensionality
         assert ndims <= 3, "Invalid output dimensionality"
-        
+
         (x, y) = svgCoord
         (a, b, c, d) = self._metadata[BAR_TRAMAT_METADATA_TAGNAME].value
         coronalC     = self._metadata[BAR_BREGMA_METADATA_TAGNAME].value
-        
+
         # Calculate and return output
         if ndims == 2: return (a*x +b, c*y + d)
         if ndims == 3: return (a*x +b, c*y + d, coronalC)
-    
+
     def srs2svg(self, spatialCoord):
         """
         @type  spatialCoord: (float, float)
         @param spatialCoord: spatial coorrdinate to be converted into SVG
                              coordinate
-        
+
         @rtype:  (float, float)
         @return: SVG coordinates corresponding to provided spatial coordinates
-        
+
         @requires: All metadata has to be provided and correct.
         """
         # Check metadata availability
         self.__validateMetadata()
-        
+
         (a, b, c, d) = self._metadata[BAR_TRAMAT_METADATA_TAGNAME].value
         (xp, yp) = spatialCoord
-        
+
         return ( (xp-b)/a, (yp-d)/c )
-    
+
     def getCommentLabels(self):
         """
         An alias to C{self.L{__getAllLabelsWithType}(self.L{_clsCommentLabel})}.
         """
         return self.__getAllLabelsWithType(self._clsCommentLabel)
-    
+
     def getRegularLabels(self):
         """
         An alias to C{self.L{__getAllLabelsWithType}(self.L{_clsRegularLabel})}.
         """
         return self.__getAllLabelsWithType(self._clsRegularLabel)
-    
+
     def getSpotLabels(self):
         """
         An alias to C{self.L{__getAllLabelsWithType}(self.L{_clsSpotLabel})}.
         """
         return self.__getAllLabelsWithType(self._clsSpotLabel)
-    
+
     def _generateLabelIndex(self):
         """
         @return: label identifier to label representation mapping
-        @rtype: {str : L{barStructureLabel}} 
+        @rtype: {str : L{barStructureLabel}}
         """
         labelIndexByID = dict(map(lambda lab: (lab.ID, lab), self.labels))
         return labelIndexByID
@@ -2450,14 +2450,14 @@ class barVectorSlide(barObject):
         Part of XML parsing subroutine responsible for parsing given SVG
         document into xml.dom.minidom object. This method may be overriden
         in subclasses if more features are required.
-        
+
         @param svgDocument: SVG slide (DOM XML or filename or file handler)
         @type svgDocument: xml.dom.minidom.Document or str or file
-        
+
         @param fixDrawing: indicates if path definitions has to be redefined
                            with absolute coordinates
         @type fixDrawing: bool
-        
+
         @rtype: xml.dom.minidom.Document
         @return: xml.dom.minidom.Document
         """
@@ -2467,16 +2467,16 @@ class barVectorSlide(barObject):
         else:
             svgdom = svgDocument
         _removeWhitespacesXML(svgdom)
-        
+
         # Redefine path definitions using absolute coordinates
         if fixDrawing:
             svgfix.fixSvgImage(svgdom, pagenumber=0, fixHeader=False)
-        
+
         svgElement = svgdom.getElementsByTagName('svg')[0]
         # In case, when 3dBAR namespace is not defined, we declare it.
         svgElement.setAttribute('xmlns:bar', BAR_XML_NAMESPACE)
-        
-        return  svgdom     
+
+        return  svgdom
 
     @classmethod
     def _fromXML_BeforeCleanUpHook(cls, slide, svgdom):
@@ -2487,7 +2487,7 @@ class barVectorSlide(barObject):
         elements and extracting slide template.
         """
         pass
-    
+
     @classmethod
     def _fromXML_AfterCleanUpHook(cls, slide, svgdom):
         """
@@ -2496,7 +2496,7 @@ class barVectorSlide(barObject):
         executed just after removing all unnecessary elements and before
         assigning slide's template.
         """
-        pass    
+        pass
 
     @classmethod
     def _fromXML_LoadMetadata(cls, slide, svgdom):
@@ -2505,23 +2505,23 @@ class barVectorSlide(barObject):
         from provided XML element corresponding to CAF slide.
         This method can be overriden in subclasses if more features are
         required.
-        
+
         @type  slide: L{barVectorSlide}
         @param slide: Slide to which metadata extracted from C{svgdom} will be
                       assigned
-        
+
         @param svgdom: SVG slide (DOM XML or filename or file handler)
         @type svgdom: xml.dom.minidom.Document or str or file
-        
+
         @rtype: None
         @return: None
         """
-        
+
         # Get metadata element and extract all metadata
         # then iterate over all metadata elements and extract values
         metadataDataset =\
                 svgdom.getElementsByTagName(BAR_DATA_LOCATION_ELEMENT)[0]
-        
+
         for metadataEntry in metadataDataset.childNodes:
             ### Debug it !!!
             try:
@@ -2529,25 +2529,25 @@ class barVectorSlide(barObject):
                 slide._setMetadata(metadata)
             except:
                 pass
-        
+
         # Use extracted metadata elements to define tracing and rendering
         # properties:
         slide._tracingConf  = eval(slide._metadata['tracingConf'].value)
         slide._rendererConf = eval(slide._metadata['rendererConf'].value)
-    
+
     @classmethod
     def _fromXML_Cleanup(cls, slide, svgdom):
         """
         Part of XML parsing subroutine responsible for preparing XML template
         for given slide. This method can be overriden in subclasses
         if more features are required.
-        
+
         @type  slide: L{barVectorSlide}
         @param slide: Currently processed slide.
-        
+
         @param svgdom: SVG slide (DOM XML or filename or file handler)
         @type svgdom: xml.dom.minidom.Document or str or file
-        
+
         @rtype: None
         @return: None
         """
@@ -2555,36 +2555,36 @@ class barVectorSlide(barObject):
         for element in ['text', 'path', 'bar:data', 'image']:
             for elementToDelete in svgdom.getElementsByTagName(element):
                 elementToDelete.parentNode.removeChild(elementToDelete)
-    
+
     slideTemplate=property(_getSlideTemplate, _setSlideTemplate)
     """
     SVG slide template.
-    
+
     Property of non-consistent type.
     """
-    
+
     labels      = property(_getLabels)
     """
     Labels of the slide.
-    
+
     Read-only property.
-    
+
     @type: [L{barStructureLabel}, ...]
     """
-    
+
     labelIndex  = property(_generateLabelIndex)
     """
     Label identifier to label representation mapping.
-    
+
     Read-only property.
-    
-    @type: {str : L{barStructureLabel}} 
+
+    @type: {str : L{barStructureLabel}}
     """
-    
+
     metadata    = property(_getMetadata)
     """
     Slide metadata.
-    
+
     Property of non-consistent type.
     """
 
@@ -2594,11 +2594,11 @@ class barSlideRenderer(barVectorSlide):
     Class holding all operation related to rasterizing SVG slides. It allows
     rasteizing whole slide, particular structures (by their names), or paths
     with given ID or belonging to particular structures.
-    
+
     Class has to be supplied with various parameters described better in class
     constructor. All rendered images are provided in form of PIL images.
     """
-    
+
     def __init__(self, vectorSlide, rendererConfiguration, tracingConfiguration,
                  slideNumber=0):
         """
@@ -2609,37 +2609,37 @@ class barSlideRenderer(barVectorSlide):
             of SVG drawing
           - C{L{rendererConfiguration}['imageSize']} : (C{(int, int)}) size
             (width, height) of resulting bitmap image
-        
+
         @param rendererConfiguration: renderer configuration (see module
                                       description for details)
         @type  rendererConfiguration: {str : ?, ...}
-        
+
         @type tracingConfiguration: {str : ?, ...}
         @param tracingConfiguration: tracing configuration (see module
                                      description for details)
-        
+
         @param slideNumber: slide number
         @type slideNumber: int
         """
-        
+
         # Save rendering and tracing properties
-        self._rendererConf = rendererConfiguration 
+        self._rendererConf = rendererConfiguration
         self._tracingConf = tracingConfiguration
-        
+
         # Copy slide's data from provided vector slide info this instnace
         # (and hope that actual data will be copied, not only references ;)
-        
+
         self._metadata         = vectorSlide._metadata
         self._labels           = vectorSlide._labels
         self._slideTemplate    = vectorSlide._slideTemplate
         self.slideNumber       = vectorSlide.slideNumber
-    
+
     def renderSlide(self, otype='pil'):
         """
         An alias for C{self.L{_renderSvgDrawing}(self.L{getXMLelement}(), otype=otype)}.
         """
         return self._renderSvgDrawing(self.getXMLelement(), otype=otype)
-    
+
     def _toSVGCoordinates(self, ImageCoords):
         """
         Transform coordinates given in pixels (in image coordinate system) to
@@ -2648,23 +2648,23 @@ class barSlideRenderer(barVectorSlide):
 
         @type  ImageCoords: (int, int)
         @param ImageCoords: image coordinates to transform
-        
+
         @return: coordinates transformed to SVG drawing coordinate system
         @rtype: (float, float)
         """
-        
+
         # Just create few aliases
         imSize    = self._rendererConf['imageSize']
         refWidth  = self._rendererConf['ReferenceWidth' ]
         refHeight = self._rendererConf['ReferenceHeight']
-        
+
         # The formula is extremely simple x/xref * svg_size
-        # Where x is size of rendered image, xref - reference size, 
+        # Where x is size of rendered image, xref - reference size,
         # svg_size - svg coordinate value
-        
+
         return (float( 1./(imSize[0] / refWidth )* ImageCoords[0] ),\
                 float( 1./(imSize[1] / refHeight)* ImageCoords[1] ))
-    
+
     def _toImageCoordinates(self, svgCoords):
         """
         Convert coordinates from SVG image to coordinates in raster image system.
@@ -2680,116 +2680,116 @@ class barSlideRenderer(barVectorSlide):
         @return: image coordinates corresponding to provided SVG coordinates
         @rtype: (int, int)
         """
-        
+
         # Just create few aliases
         imSize    = self._rendererConf['imageSize']
         refWidth  = self._rendererConf['ReferenceWidth' ]
         refHeight = self._rendererConf['ReferenceHeight']
-        
+
         # The formula is extremely simple x/xref * svg_size
-        # Where x is size of rendered image, xref - reference size, 
+        # Where x is size of rendered image, xref - reference size,
         # svg_size - svg coordinate value
-        
+
         return (int(float( imSize[0] / refWidth * svgCoords[0] )),\
                 int(float( imSize[1] / refHeight* svgCoords[1] )))
-    
+
     def _renderSvgDrawing(self, svgdoc, renderingSize = None, boundingBox=None, otype='pil', grayscale=True):
         """
         Renders provided SVG image with varioous options and returns rendered
         image.
-        
+
         Workflow:
             1. Render image and convert it to NumPy array
             2. Manipulate channels and colours, convert to indexed mode
             3. Create and return PIL image
-        
+
         Availiable rendering protocols are:
             - C{'pil'} - returns PIL Image with rendered image,
             - C{'npy'} - returns NumPy array,
             - C{'rec'} - returns NumPy array rendered according to reconstruction
               module requirements
-        
+
         @type  svgdoc: xml.dom.minidom.Document
         @param svgdoc: SVG document to render
-        
+
         @type  renderingSize: (int, int)
         @param renderingSize: Dimensions (in pixels) of the rendered image,
                               before an optional cropping.
-        
+
         @type  boundingBox: (int, int, int, int)
         @param boundingBox: cropping coordinates (left, top, right, bottom);
                             applies only to 'rec' protocol
-        
+
         @type  otype: str
         @param otype: requested rendering protocol - one of C{'pil'}, C{'npy'},
                       C{'rec'}
-        
+
         @type  grayscale: bool
         @param grayscale: determines if returned image would be in grayscale
                           or RGB mode; applies only to C{'pil'} L{protocol<otype>}
-        
 
-        
+
+
         @todo: Consider rewriting this method to staticmethod
-        
+
         @rtype: PIL.Image.Image or numpy.ndarray
         @return: rendered SVG image
         """
         #TODO: Consider rewriting this method to staticmethod
-        
+
         # Put XML to rsvg
         svg = rsvg.Handle(data = svgdoc.toxml())
         if renderingSize:
             width, height = tuple(map(int, renderingSize))
         else:
             width, height = tuple(map(int,self._rendererConf['imageSize']))
-        
+
         # Allocate memory and create context
         surface = cairo.ImageSurface(cairo.FORMAT_ARGB32, width, height)
         cr = cairo.Context(surface)
-        
+
         # Define dimensions, rescale and render image
         wscale = float(width) / svg.props.width
         hscale = float(height) / svg.props.height
         cr.scale(wscale, hscale)
         svg.render_cairo(cr)
-        
+
         # Save snapshot of rendered image for debug purposes
         #if __debug__: surface.write_to_png ('debugfilename.png')
-        
+
         # Now we need generate PIL image from raw data extracted
         # from cairo surface. The workflow is following:
-        # Dump raw image data to numpy, correct channels sequence 
+        # Dump raw image data to numpy, correct channels sequence
         # And then convert NumPy array to PIL image object.
-        
+
         # Dump image information to NumPy array
         # surface.get_data() returns RGBA array thus we have to
         # reshape this array manually
         a = np.frombuffer(surface.get_data(), np.uint8)
         a.shape = (height, width, 4) ###XXX TODO: width and height are reversed!
-        
+
         # Swap channels (orig) [B,G,R,A] -> [R,G,B,A]
         b=a.copy()
         a[:,:,0]=b[:,:,2]
         a[:,:,2]=b[:,:,0]
         t=(255-a[:,:,3])
-        
+
         # TODO: Optimize it
         a[:,:,0]+=t
         a[:,:,1]+=t
         a[:,:,2]+=t
-        
-        # Remove unnecessary arrays 
+
+        # Remove unnecessary arrays
         del b
         del t
-        
+
         # TODO: Perhaps desaturation should be done manually (using numpy)
         # Put final image into cache
         # Ok, we convert numpy array to image, then we convert it to indexed
         # colour and then every color that is not white is set to 200 and after
         # that we have indexed image with 255 colors in which only white and 200
         # are used
-        
+
         # Returns color or grayscaled PIL image
         if otype == 'pil':
             if grayscale == True:
@@ -2797,20 +2797,20 @@ class barSlideRenderer(barVectorSlide):
             else:
                 image = Image.fromarray(a,'RGBA').convert("RGB")
             return image
-        
+
         # Returns grayscale npy array
         if otype == 'npy':
             a = 0.2989*a[:, :, 0] + 0.5870*a[:, :, 1] + 0.1140*a[:, :, 2]
             return a.astype(np.uint8)
-        
+
         # Returns scaled and cropped np. array.
         if otype[0:3] == 'rec':
             # Convert bitmap to grayscale
             image = Image.fromarray(a.astype(np.uint8),'RGBA').convert("L")
-            
+
             # Crop region of interest:
             image = image.crop(tuple(map(int,boundingBox)))
-            
+
             # By default reverse image to make background black and foreground
             # white:
             image = ImageChops.invert(image)
@@ -2818,7 +2818,7 @@ class barSlideRenderer(barVectorSlide):
             if otype[-2] == '1': image = image.transpose(Image.FLIP_LEFT_RIGHT)
             volumeSlice = np.array(image.getdata()).reshape(int(image.size[0]), int(image.size[1]), 1)
             return volumeSlice
-    
+
     def values(self):
         """
         A stub of method. Raise NotImplementedError.
@@ -2828,54 +2828,54 @@ class barSlideRenderer(barVectorSlide):
     def __getSlideSize(self):
         """
         Getter for the L{self.size} property.
-        
+
         @rtype: (int, int)
         @return: tuple with (width, height) of the slide.
         """
         return tuple(map(lambda x:\
             int(self._rendererConf[x]),\
             ['ReferenceWidth','ReferenceHeight']))
-    
+
     def __setSlideSize(self, newSize):
         """
         Setter for the L{self.size} property.
-        
+
         @type  newSize: (int, int)
         @param newSize: Dimensions of the SVG drawing in pixels
         """
         assert map(type, newSize) == map(type, (1,1)),\
                 "(int,int) Tuple of two integers required"
         x,y = newSize
-        
+
         self._rendererConf['ReferenceWidth'] = x
         self._rendererConf['ReferenceHeight']= y
-        
+
         self._tracingConf['PoTraceConf']['potrace_width_string'] = str(x) + 'pt'
         self._tracingConf['PoTraceConf']['potrace_height_string']= str(y) + 'pt'
-        
+
         #TODO: This solution is so lame! There should be 'slideTemplate object
         # that could be edited as any other object without digging in xml!
         svg = self._slideTemplate.getElementsByTagName('svg')[0]
         svg.setAttribute('width',  str(x))
         svg.setAttribute('height', str(y))
         svg.setAttribute('viewBox', "0 0 %d %d" % (x,y))
-    
+
     def __getBitmapSize(self):
         """
         Getter for the L{self.bitmapSize} property
-        
+
         @rtype: (int, int)
         @return: Resolution of the rasterized slide in pixels
         """
         return self._rendererConf['imageSize']
-    
+
     def __setBitmapSize(self, newBitmapSize):
         """
         Setter for the L{self.bitmapSize} property.
-        
+
         @type  newBitmapSize: (int, int)
         @param newBitmapSize: resloution of the rasterized slide in pixels.
-        
+
         @raise: ValueError
         """
         assert map(type, newBitmapSize) == map(type,(1,1)),\
@@ -2884,11 +2884,11 @@ class barSlideRenderer(barVectorSlide):
 
     size = property(__getSlideSize, __setSlideSize)
     """
-    Get / set the CAF slide dimensions in pixels. 
-    
+    Get / set the CAF slide dimensions in pixels.
+
     @type: (int, int)
     """
-    
+
     bitmapSize = property(__getBitmapSize, __setBitmapSize)
     """
     Get / set the size of the image that will be generated after invoking L{self.renderSlide}.
@@ -2908,15 +2908,15 @@ class barPretracedSlide(barSlideRenderer):
         """
         @type  slideTemplate: str
         @param slideTemplate: SVG slide template
-        
+
         @type rendererConfiguration: {str : ?, ...}
         @param rendererConfiguration: renderer configuration (see module
                                       description for details)
-        
-        @type tracingConfiguration: {str : ?, ...} 
+
+        @type tracingConfiguration: {str : ?, ...}
         @param tracingConfiguration: tracing configuration (see module
                                      description for details)
-        
+
         @type  slideNumber: int
         @param slideNumber: slide number
         """
@@ -2925,118 +2925,118 @@ class barPretracedSlide(barSlideRenderer):
                 rendererConfiguration = rendererConfiguration,\
                 tracingConfiguration  = tracingConfiguration,\
                 slideNumber = slideNumber)
-        
+
         self._svgPaths= []
         self.markers  = []
-    
+
     def __setitem__(self, key, newLabel):
         """
         Add label to the slide.
-        
+
         @param key: dummy parameter
-        
+
         @param newLabel: label to be added to the slide
-        @type newLabel: L{barStructureLabel} 
+        @type newLabel: L{barStructureLabel}
         """
         self._labels[newLabel.ID] = newLabel
-    
+
     def __getitem__(self, key):
         """
         @param key: label identifier
         @type key: str
-        
+
         @rtype: L{barStructureLabel}
         @return: label of requested identifier
         """
         return self._labels[key]
-    
+
     def __delitem__(self, key):
         """
         Remove label of requested identifier from the slide,
-        
+
         @param key: label identifier
         @type key: str
         """
         del self._labels[key]
-    
+
     def values(self):
         """
         Returns list of all svg paths as DOM Objects.
-        
+
         @rtype: [DOM Object, ... ]
         """
         return self._svgPaths
-    
+
     @classmethod
     def fromXML(cls, svgDocument, fixDrawing=False):
         """
         Create object representing given SVG slide.
-        
+
         @param svgDocument: SVG slide (DOM XML or filename or file handler)
         @type svgDocument: xml.dom.minidom.Document or str or file
-        
+
         @rtype: cls
         @return: created object
         """
-        
+
         # Initialize empty slide with dummy tracing and rendering configuration,
         # slide number empty
         slide = cls()
         svgdom = cls._fromXML_ParseXML(svgDocument, fixDrawing = fixDrawing)
-        
+
         cls._fromXML_LoadMetadata(slide, svgdom)
         cls._fromXML_LoadPaths(slide, svgdom)
         cls._fromXML_LoadLabels(slide, svgdom)
         cls._fromXML_BeforeCleanUpHook(slide, svgdom)
         cls._fromXML_Cleanup(slide, svgdom)
         cls._fromXML_AfterCleanUpHook(slide, svgdom)
-        
-        slide._setSlideTemplate(svgdom.toxml())
-        
-        return slide  
 
-    @classmethod    
+        slide._setSlideTemplate(svgdom.toxml())
+
+        return slide
+
+    @classmethod
     def _fromXML_LoadPaths(cls, slide, svgdom):
         """
         Part of XML parsing subroutine responsible for extracting SVG paths from
         provided XML element. This method should be overriden in subclasses if
         more features are required.
-        
+
         @type  slide: L{barVectorSlide}
         @param slide: Slide to which paths extracted from C{svgdom} will be
                       assigned
-        
+
         @param svgdom: SVG slide (DOM XML or filename or file handler)
         @type svgdom: xml.dom.minidom.Document or str or file
-        
+
         @rtype: None
         @return: None
         """
         for pathElement in svgdom.getElementsByTagName('path'):
             slide._svgPaths.append(pathElement)
-    
+
     @classmethod
     def _fromXML_LoadLabels(cls, slide, svgdom):
         """
         Part of XML parsing subroutine responsible for extracting labels and
         markers from provided XML element. This method can be overriden in
         subclasses if more features are required.
-        
+
         @type  slide: L{barVectorSlide}
         @param slide: Slide to which labels extracted from C{svgdom} will be
                       assigned
-        
+
         @param svgdom: SVG slide (DOM XML or filename or file handler)
         @type svgdom: xml.dom.minidom.Document or str or file
-        
+
         @rtype: None
         @return: None
         """
         # Information about spatial coordinate system may be presented in
         # form of markers or as metadata elements. Markers elements has priority
         # over metadata elements. If found, markers are processed first.
-        
-        # Then extract all text elements and separate them between labels 
+
+        # Then extract all text elements and separate them between labels
         # and markers. Labels are parsed at first as they are more probable
         for labelElement in svgdom.getElementsByTagName('text'):
             try:
@@ -3045,26 +3045,26 @@ class barPretracedSlide(barSlideRenderer):
             except:
                 marker = barMarker.fromXML(labelElement)
                 slide.markers.append(marker)
-    
+
     def affineTransform(self, M):
         """
         Transform the location (in SVG coordinate system) of every label, marker
         and path in the slide.
-        
+
         @param M: transformation matrix
         @type M: numpy 3x3 array
-        
+
         @return: self
         @rtype: L{barPretracedSlide}
         """
         self.__affineTransform(M)
         return self
-    
+
     def __affineTransform(self, M):
         """
         Transform the location (in SVG coordinate system) of every label, marker
         and path in the slide.
-        
+
         @param M: transformation matrix
         @type M: numpy 3x3 array
         """
@@ -3073,84 +3073,84 @@ class barPretracedSlide(barSlideRenderer):
         for pathElem in self._svgPaths:
             pathElem.setAttribute('d',\
                     svgfix.fixPathDefinition(pathElem.getAttribute('d'),  M))
-   
+
     def parseMarkers(self):
         """
         Transform information contained in slide markers to slide medatata
         information. Remove markers from the slide.
         """
-        
+
         m1 =[ m for m in self.markers if m.__class__ == barCoordinateMarker][0]
         m2 =[ m for m in self.markers if m.__class__ == barCoordinateMarker][1]
         bm =[ m for m in self.markers if m.__class__ == barCoronalMarker][0]
         self.updateMetadata(processMarkers(m1, m2, bm))
         self.markers = []
-     
+
     def getXMLelement(self):
         """
         Generate XML DOM representation of the object.
-        
+
         @return: generated XML DOM representation
         @rtype: xml.dom.minidom.Document
-        
+
         @todo: Reimplement this in the nice way
         """
-        
+
         # Save tracing and rendering properties as metadata entries:
         self._setMetadata(\
                 self._clsMetadataElement('tracingConf', repr(self._tracingConf)))
         self._setMetadata(\
                 self._clsMetadataElement('rendererConf', repr(self._rendererConf)))
-        
+
         # Get slide template
         slide = self._getSlideTemplate().cloneNode(True)
-        
+
         svgElement = slide.getElementsByTagName('svg')[0]
         metadataDataset =\
                 slide.getElementsByTagName(BAR_DATA_LOCATION_ELEMENT)[0]
-        
+
         for svgGroupDataset in slide.getElementsByTagName('g'):
             if svgGroupDataset.hasAttribute('xml:space'):
                 svgGroupDataset.removeAttribute('xml:space')
-        
+
         for metadataElement in self._metadata.values():
             metadataDataset.appendChild(metadataElement.getXMLelement())
-        
+
         for pathElement in self._svgPaths:
             svgGroupDataset.appendChild(pathElement)
-        
+
         for labelElement in self.labels:
             svgGroupDataset.appendChild(labelElement.getXMLelement())
-        
+
         if all(self.markers):
             for markerElement in self.markers:
                 svgGroupDataset.appendChild(markerElement.getXMLelement())
-        
+
         # Redefine path definitions using absolute coordinates
         # svgfix.fixSvgImage(slide, pagenumber=self.slideNumber, fixHeader=True)
         return slide
-    
+
     def modifyContours(self, newStrokeWidth = None, newStrokeColour = None):
         """
         Modify width and colour of the contours (paths).
-        
+
         @type  newStrokeWidth: float
         @param newStrokeWidth: new width of contour
-        
+
         @param newStrokeColour: new colour of the contour in hexadecimal
                                 format with leading '#'
         @type  newStrokeColour: str
         """
-        
+
         # Create modification dictionary basing on given parameters
         modifications={}
         if newStrokeWidth: modifications['newStrokeWidth'] = newStrokeWidth
         if newStrokeColour:modifications['newStrokeColour']= newStrokeColour
-        
+
         # Iterate over all contours and apply modifications
         for pathElement in self._svgPaths:
             modifyContour(pathElement, modifications)
-    
+
     svgDocument = property(getXMLelement)
 
 
@@ -3166,103 +3166,103 @@ class barTracedSlide(barSlideRenderer):
         """
         @type  slideTemplate: str
         @param slideTemplate: SVG slide template
-        
+
         @type rendererConfiguration: {str : ?, ...}
         @param rendererConfiguration: renderer configuration (see module
                                       description for details)
-        
+
         @type tracingConfiguration: {str : ?, ...}
         @param tracingConfiguration: tracing configuration (see module
                                      description for details)
-        
+
         @type  slideNumber: int
         @param slideNumber: slide number
         """
-        
+
         barSlideRenderer.__init__(self,\
                 barVectorSlide(slideTemplate, slideNumber),\
                 rendererConfiguration = rendererConfiguration,\
                 tracingConfiguration  = tracingConfiguration,\
                 slideNumber = slideNumber)
-                
+
         self._structures      = {}
-   
+
     @classmethod
     def fromXML(cls, svgDocument, fixDrawing=False):
         """
         Create object representing given SVG slide.
-        
+
         @param svgDocument: SVG slide (DOM XML or filename or file handler)
         @type svgDocument: xml.dom.minidom.Document or str or file
-        
+
         @param fixDrawing: indicates if path definitions has to be redefined
                            with absolute coordinates
         @type fixDrawing: bool
-        
+
         @rtype: cls
         @return: created object
         """
-        
+
         # Initialize empty slide with dummy tracing and rendering configuration,
         # slide number empty
         slide = cls()
         svgdom = cls._fromXML_ParseXML(svgDocument, fixDrawing=fixDrawing)
-        
+
         cls._fromXML_LoadMetadata(slide, svgdom)
         slide._fromXML_LoadStructures(slide, svgdom)
         slide._fromXML_LoadLabels(slide, svgdom)
         slide._fromXML_BeforeCleanUpHook(slide, svgdom)
         slide._fromXML_Cleanup(slide, svgdom)
         slide._fromXML_AfterCleanUpHook(slide, svgdom)
-        
+
         slide._setSlideTemplate(svgdom.toxml())
-        
-        return slide  
-    
-    @classmethod    
+
+        return slide
+
+    @classmethod
     def _fromXML_LoadStructures(cls, slide, svgdom):
         """
         Part of XML parsing subroutine responsible for extracting 'structure'
         objects from provided XML element. This method may be overriden
         in subclasses if more features are required.
-        
+
         @type  slide: L{barVectorSlide}
         @param slide: Slide to which structures extracted from C{svgdom} will be
                       assigned
-        
+
         @param svgdom: SVG slide (DOM XML or filename or file handler)
         @type svgdom: xml.dom.minidom.Document or str or file
-        
+
         @rtype: None
         @return: None
         """
         for pathElement in svgdom.getElementsByTagName('path'):
             newPath = cls._clsPath.fromXML(pathElement)
-            
+
             # TODO: Replace with try: except: clause
             if slide.has_key(newPath.structName):
                 slide.__getitem__(newPath.structName).addPaths(newPath)
             else:
                 strName = newPath.structName
                 strColor= newPath.color
-                
+
                 newStrc = cls._clsGenericStructure(strName, strColor, [newPath])
                 slide.addStructures(newStrc)
-    
+
     @classmethod
     def _fromXML_LoadLabels(cls, slide, svgdom):
         """
         Part of XML parsing subroutine responsible for extracting labels and
         markers from provided XML element. This method can be overriden in
         subclasses if more features are required.
-        
+
         @type  slide: L{barVectorSlide}
         @param slide: Slide to which labels extracted from C{svgdom} will be
                       assigned
-        
+
         @param svgdom: SVG slide (DOM XML or filename or file handler)
         @type svgdom: xml.dom.minidom.Document or str or file
-        
+
         @rtype: None
         @return: None
         """
@@ -3273,7 +3273,7 @@ class barTracedSlide(barSlideRenderer):
             except ValueError:
                 _printRed("Error while reading labels: %s\nSkipping." %\
                         (labelElement.toxml(),))
-    
+
     def __setitem__(self, key, newStructure):
         """
         Add structure to the slide.
@@ -3285,7 +3285,7 @@ class barTracedSlide(barSlideRenderer):
         @param newStructure: structure to be added to the slide
         """
         self._structures[key] = newStructure
-    
+
     def __getitem__(self, key):
         """
         @type key: str
@@ -3295,27 +3295,33 @@ class barTracedSlide(barSlideRenderer):
         @rtype: L{barGenericStructure}
         """
         return self._structures[key]
-   
+
     def __delitem__(self, key):
         """
         Remove structure denoted by provided structure name. All paths
         corresponding to the given structure are removed. Every path with
         identifier corresponding to the given structure is also removed.
-        
+
         @type  key: str
         @param key: name of the structure to be removed
         """
         for path in self._structures[key].paths:
-            del self._labels[path.relLabelID]
+            try:
+                del self._labels[path.relLabelID]
+            except:
+                if __debug__:
+                    _printRed("Warning: unable to remove label with ID: %s" % path.relLabelID)
+                pass
+
         del self._structures[key]
-    
+
     def keys(self):
         """
         @rtype: [str, ...]
         @return: names of structures in the slide
         """
         return self._structures.keys()
-    
+
     def items(self):
         """
         @rtype: [(str, L{barGenericStructure}), ...]
@@ -3323,25 +3329,25 @@ class barTracedSlide(barSlideRenderer):
                  structure
         """
         return self._structures.items()
-    
+
     def values(self):
         """
         @rtype: [L{barGenericStructure}, ...]
         @return: slide structures
         """
         return self._structures.values()
-    
+
     def __len__(self):
         """
         @rtype: int
         @return: number of structures in the slide
         """
         return len(self._structures)
-    
+
     def __add__(self, op):
         """
         Add two slides.
-        
+
         Preconditions:
             - The transformation matrix of both slides has to be identical,
             - Slides has to have equal 'z' axis location,
@@ -3349,7 +3355,7 @@ class barTracedSlide(barSlideRenderer):
             - Slides has to have identical slide number
             - Slides has to have the same reference rendering and tracing
               properties.
-        
+
         Definition of C{plus} operator:
             - New slide is created with the template and properties taken from
               operands,
@@ -3357,7 +3363,7 @@ class barTracedSlide(barSlideRenderer):
               then from the second operand
             - If operands contains labels, they are copied in the same order as
               structures.
-        
+
         Resolving conflicts:
             - currently labels and paths with identical ids, prevent C{add}
               operation.
@@ -3368,14 +3374,14 @@ class barTracedSlide(barSlideRenderer):
         @return: sum of the slides
         @rtype: L{barTracedSlide}
         """
-        
+
         # Compare the metadata
         # Define elements which values should be equal:
         #elToCompare = ['transformationmatrix', 'coronalcoord',\
         #        'rendererConf', 'tracingConf']
         elToCompare = ['transformationmatrix', \
                 'rendererConf', 'tracingConf']
-        
+
         for element in elToCompare:
             val1 = self.metadata[element].value
             val2 = op.metadata[element].value
@@ -3383,42 +3389,42 @@ class barTracedSlide(barSlideRenderer):
                 raise ValueError,\
                         "Cannot add given slides. Metadata elements %s are not equal: %s, %s." % \
                             (element, val1, val2)
-        
+
         if not self.slideTemplate.toxml() == op.slideTemplate.toxml():
             raise ValueError, "Cannot add given slides. Slide templates are not identical."
-        
+
         if not self.slideNumber == op.slideNumber:
             raise ValueError, "Cannot add given slides. Slide numbers are not equal."
-        
-        commonPathsIds = set(self.pathIndex.keys()) & set(op.pathIndex.keys()) 
+
+        commonPathsIds = set(self.pathIndex.keys()) & set(op.pathIndex.keys())
         if commonPathsIds:
             raise ValueError, "Cannot add given slides. Slide contains paths with the same IDs: " +\
-                ", ".join(map(str, commonPathsIds)) 
-        
+                ", ".join(map(str, commonPathsIds))
+
         commonLabelsIds = set(self.labelIndex.keys()) & set(op.labelIndex.keys())
         if commonPathsIds:
             raise ValueError, "Cannot add given slides. Slide contains paths with the same IDs: " +\
-                ", ".join(map(str, commonPathsIds)) 
-        
+                ", ".join(map(str, commonPathsIds))
+
         # Start the actual slides merging:
         slide = self.__class__()
-        
+
         # Copy slide template:
         slide.slideTemplate = self.slideTemplate.toxml()
-        
+
         # Merge metadata and update slide properties:
         slide._metadata={}
         slide.metadata.update(self.metadata)
         slide.metadata.update(op.metadata)
         slide._tracingConf  = eval(slide.metadata['tracingConf'].value)
         slide._rendererConf = eval(slide.metadata['rendererConf'].value)
-        
+
         # Merge paths and labels:
         map(slide.addPath, self.paths + op.paths)
         map(slide.addLabel, self.labels + op.labels)
-        
+
         return slide
-    
+
     def has_key(self, key):
         """
         @param key: name of the structure
@@ -3430,20 +3436,20 @@ class barTracedSlide(barSlideRenderer):
         """
         if key in self._structures: return True
         else: return False
-    
+
     def __addPath(self, newPath):
         """
         Add a path to the slide.
-        
+
         If structure corresponding to the added path exists, path is added to
         the structure. Otherwise new structure holding added path is created.
         This is possible as the path element holds name of the structure which
         it belongs to.
-        
+
         @note: Slide element does not contain L{barPath} elements directly.
                Paths are holded in structure elements so paths are added to
                the structures not to the slide directly.
-        
+
         @type  newPath: L{barPath}
         @param newPath: path to be added to the slide
         """
@@ -3452,16 +3458,16 @@ class barTracedSlide(barSlideRenderer):
         else:
             strName = newPath.structName
             strColor= newPath.color
-            
+
             newStrc = self._clsGenericStructure(strName, strColor, [newPath])
             self.addStructures(newStrc)
-    
+
     def addPath(self, newPathElement):
         """
         An alias of C{L{__addPath}(newPathElement)}
         """
         return self.__addPath(newPathElement)
-    
+
     def __generatePathIndex(self):
         """
         @return: path identifier to path representation mapping for all paths
@@ -3470,23 +3476,23 @@ class barTracedSlide(barSlideRenderer):
         """
         pathIndexByID = {}
         for structureElement in self.structures:
-            map(lambda pathEl: pathIndexByID.__setitem__(pathEl.id, pathEl), 
+            map(lambda pathEl: pathIndexByID.__setitem__(pathEl.id, pathEl),
                           structureElement.paths)
         return pathIndexByID
-    
+
     def _getPaths(self):
         """
         An alias for C{L{__generatePathIndex}().values()}
         """
         return self.__generatePathIndex().values()
-    
+
     def _getStructures(self):
         """
         @rtype: [L{barGenericStructure}, ...]
         @return: representations of all structures in the slide
         """
         return self.values()
-    
+
     def addStructures(self, *args):
         """
         Add provided structures to the slide. Existing structures
@@ -3496,21 +3502,21 @@ class barTracedSlide(barSlideRenderer):
         """
         for newStructure in args:
             self.__setitem__(newStructure.name, newStructure)
-   
+
     def __validateBoundingBoxes(self):
         """
         Validate bounding boxes. For some datasets it may happen that bounding
         boxes are calculated incorrectly due to data corruption.
-        
+
         @rtype: None
         """
         # Define the broadest allowed bounding box.
         maxBbx = (0, 0, self.size[0], self.size[1])
-        
+
         # Iterate over all structures checking if all of them are correct:
         for structure in self.structures:
             testBbx = structure.bbx
-            
+
             if (maxBbx[0] > testBbx[0]) or (maxBbx[1] > testBbx[1]) \
                 or (maxBbx[2] < testBbx[2]) or (maxBbx[3] < testBbx[3]):
                 _printRed("Invalid bounding box for structure %s detected. The \
@@ -3520,7 +3526,7 @@ class barTracedSlide(barSlideRenderer):
                         (structure.name, str(testBbx), str(maxBbx)) )
                 # Ehh... sometimes it raises false alerts
                 #raw_input("Press any Key")
-    
+
     def getXMLelement(self):
         """
         @return: XML representation of the slide
@@ -3529,53 +3535,53 @@ class barTracedSlide(barSlideRenderer):
         # Validate bounding boxes: check if all of them are withing slide's
         # area.
         self.__validateBoundingBoxes()
-        
+
         # Save tracing and rendering properties as metadata entries:
         self._setMetadata(\
                 self._clsMetadataElement('tracingConf', repr(self._tracingConf)))
         self._setMetadata(\
                 self._clsMetadataElement('rendererConf', repr(self._rendererConf)))
         slide = self._getSlideTemplate().cloneNode(True)
-        
+
         svgElement = slide.getElementsByTagName('svg')[0]
         metadataDataset =\
                 slide.getElementsByTagName(BAR_DATA_LOCATION_ELEMENT)[0]
-        
+
         for svgGroupDataset in slide.getElementsByTagName('g'):
             if svgGroupDataset.hasAttribute('xml:space'):
                 svgGroupDataset.removeAttribute('xml:space')
-        
+
         for metadataElement in sorted(self._metadata.itervalues(), key=lambda x: x.name):
             metadataDataset.appendChild(metadataElement.getXMLelement())
-        
+
         # Put vBrain as bottom-most structure:
         try:
             for pathElement in self._structures['vBrain'].getXMLelement():
                 svgGroupDataset.appendChild(pathElement)
         except:
             pass
-        
+
         for pathElementId in sorted(self.pathIndex):
             pathElement = self.pathIndex[pathElementId]
             if not pathElement.structName == 'vBrain':
                 svgGroupDataset.appendChild(pathElement.getXMLelement())
-        
+
         for labelElement in self.labels:
             svgGroupDataset.appendChild(labelElement.getXMLelement())
-        
+
         # Redefine path definitions using absolute coordinates
         # svgfix.fixSvgImage(slide, pagenumber=self.slideNumber, fixHeader=True)
         return slide
-    
+
     def recolor(self, colorMapping):
         """
         Change colour of every slide structure according to the given colour
         mapping. Colours of structures not included in the mapping are preserved.
-        
+
         @param colorMapping: structure name to colour (in hexadecimal format)
                              mapping
         @type colorMapping: {str : str, ...}
-        
+
         @return: self
         @rtype: L{barTracedSlide}
         """
@@ -3585,7 +3591,7 @@ class barTracedSlide(barSlideRenderer):
             except:
                 pass
         return self
-    
+
     def affineTransform(self, M):
         """
         Transform the location (in SVG coordinate system) of every label and
@@ -3599,7 +3605,7 @@ class barTracedSlide(barSlideRenderer):
         """
         self.__affineTransform(M)
         return self
-    
+
     def __affineTransform(self, M):
         """
         Transform the location (in SVG coordinate system) of every label and
@@ -3610,46 +3616,46 @@ class barTracedSlide(barSlideRenderer):
         """
         barVectorSlide.affineTransform(self, M)
         map(lambda x: x.affineTransform(M),  self.paths)
-    
+
     def findDuplicatedRegions(self, Options = None, Apply = True):
         """
         Method for post processing of traced files. At this moment, has
         following capabilities:
-            
+
             1. Find regions which are defined by the same path (the same path means
                that the definition of the path <d> attribute is the same for those
                paths). In other words find regions with the same <d> tags.
-             
+
             2. Find corresponding labels for those regions.
-                
+
             3. Remove all but one path.
                     - Leave only one label (the first one) defining given region
                     - Mark other labels as "spot labels" and make them red
-            
+
         Traced file may have all kinds of labels (normal, spot label, comment label).
         Effect it that there should be no overlapping areas in output file, no new
         unlabelled areas and some new spotlabels.
-        
+
         @param Options: dummy parameter - placeholder for further processing
                         options
-        
+
         @type  Apply: bool
         @param Apply: determine if slide is processed or not; when C{True},
                       duplicated paths are removed and labels are
                       changed; otherwise slide is not processed, only
                       duplicated areas are found and returned
-        
-        @todo: Implement processing options 
-        
+
+        @todo: Implement processing options
+
         @return: mapping of keywords 'preserve' and 'remove' to representations
                  of slide paths to be preserved and removed
         @rtype: {str : [L{barPath}, ...], str : [L{barPath}, ...]}
         """
-        
+
         pathData = map( lambda path: (path, path.pathDef), self.paths )
         pathData.sort(key=lambda path: path[1])
         toChange={'preserve':[],'remove':[]}
-        
+
         # Now the hardest thing: determining which elements will be considered
         # as an actual paths and labels and which of them will be removed or
         # replaced. The approach is following: for each extracted path
@@ -3660,23 +3666,23 @@ class barTracedSlide(barSlideRenderer):
         # paths are denoted as paths to remove. If there is only path with given
         # definition if would be preserved while list of paths to remove would
         # be empty
-        
+
         for pathDef in pathData:
             tempresult = ([x[0] for x in pathData if x[1]==pathDef[1]], pathDef[1])
             elementToBePreserved = tempresult[0].pop()
             elementsToBeRemoved=tempresult[0]
             toChange['preserve'].append(elementToBePreserved)
             toChange['remove'].append(elementsToBeRemoved)
-        
+
         # Make flat list of unique id's to remove and to preserve
         toChange['preserve']=list(set(flatten(toChange['preserve'])))
         toChange['remove']  =list(set(flatten(toChange['remove'])))
-        
+
         # When processing flag is set to False, do not process slide - just
         # return list of duplicated labels
         if Apply:
             self.__processDuplicates(Options, toChange)
-        
+
         return toChange
 
     def __processDuplicates(self, Options, listOfChanges):
@@ -3684,49 +3690,49 @@ class barTracedSlide(barSlideRenderer):
         Process paths and labels in following way:
             - Remove paths that should be removed
             - Change type of corresponding label to SpotLabel
-        
+
         @param listOfChanges: mapping of keyword 'remove' to representation
                               of slide paths to be removed
         @type listOfChanges: {str : [L{barPath}, ...], ...}
-        
+
         @param Options: dummy parameter - placeholder for further processing
                         options
         """
-        
+
         # Iterate all paths that are marked for removal
         # remove them and change type of corresponfing label to barSpotLabel
         for pathToRemove in listOfChanges['remove']:
-            # ltrID    = Label to rename id 
+            # ltrID    = Label to rename id
             # prtID    = path to remove id
             # ptrStrNa = path to remove structure name
-            
+
             ltrID = pathToRemove.relLabelID
             prtID = pathToRemove.id
             ptrStrNa = pathToRemove.structName
-            
+
             # Change type of corresponding label to spotlabel
             self._labels[ltrID] =\
                     self._clsStructureLabel.castToSpotLabel(self._labels[ltrID])
-            
-            # Print debugging information: 
+
+            # Print debugging information:
             print >>sys.stderr, "Removing path with is %s" % prtID
             print >>sys.stderr, "\tFrom structure %s" % ptrStrNa
             print >>sys.stderr, "Type of label with id: '%s' changed to spotlabel" % str(prtID)
-           
+
             # Finally remove path
             del  self[pathToRemove.structName]._paths[pathToRemove.id]
-    
+
     def __setCrispEdges(self, boolValue):
         """
         Set 'L{crispEdges<barGenericStructure.crispEdges>}' attribute for
         every structure representation in the slide.
-        
+
         @param boolValue: new value of the attribute
         @type boolValue: bool
         """
         assert type(boolValue) == type(True), "Boolean value expected"
         map(lambda x: setattr(x, 'crispEdges', boolValue), self.values())
-    
+
     def __getCrispEdges(self):
         """
         @rtype: bool
@@ -3735,49 +3741,49 @@ class barTracedSlide(barSlideRenderer):
                  equal C{True}; C{False} false.
         """
         return all( map(lambda x: getattr(x, 'crispEdges'), self.values()) )
-    
+
     paths       = property(_getPaths)
     """
     Representations of all paths in the slide.
-    
+
     Read-only property.
-    
+
     @type: [L{barPath}, ...]
     """
-    
+
     pathIndex   = property(__generatePathIndex)
     """
     Path identifier to path representation mapping for all paths in the slide.
-    
+
     Read-only property.
-    
+
     @type: {str : L{barPath}, ...}
     """
-    
+
     structures  = property(_getStructures)
     """
     Representations of all structures in the slide.
-    
+
     Read-only property.
-    
+
     @type: [L{barGenericStructure}, ...]
     """
-    
+
     svgDocument = property(getXMLelement)
     """
     XML representation of the slide.
-    
+
     Read-only property.
-    
+
     @type: xml.dom.minidom.Document
     """
-    
+
     crispEdges     = property(__getCrispEdges, __setCrispEdges)
     """
-    The 'L{crispEdges<barGenericStructure.crispEdges>}' attribute of all contained 
+    The 'L{crispEdges<barGenericStructure.crispEdges>}' attribute of all contained
     structures. When read C{True} if the value of the attribute of every contained
     structure is C{'crispEdges'}, C{False} otherwise.
-    
+
     @type: bool
     """
 
@@ -3794,7 +3800,7 @@ class barTracedSlideRenderer(barTracedSlide):
 
         @type  path: L{barPath}
         @param path: path for which best label location is determined
-        
+
         @rtype: (float, float)
         @return: optimal coordinates (x, y) of the label in SVG coords
         """
@@ -3802,7 +3808,7 @@ class barTracedSlideRenderer(barTracedSlide):
         (x,y) = getBestLabelLocation(slideRendering)
         (x,y) = self._toSVGCoordinates((x,y))
         return (x, y)
-    
+
     def getSlideMassCenter(self):
         """
         Calculate mass center of the slide basing on grayscale slide
@@ -3813,31 +3819,31 @@ class barTracedSlideRenderer(barTracedSlide):
         """
         imgMassCentre = massCentre(self.renderSlide())
         return self._toSVGCoordinates(imgMassCentre)
-    
+
     def getMask(self, maskColor='#000000'):
         """
         Change colour of every structure in the slide to given colour.
-        
+
         @param maskColor: colour in hexadecimal format
         @type maskColor: str
-        
+
         @return: self
         @rtype: L{barTracedSlideRenderer}
         """
         map(lambda x: setattr(x, 'color', maskColor), self.structures)
-        return self 
-        
+        return self
+
     def generateLabels(self, skipLabels = []):
         """
         Assign text label for each path in the slide and place it in the center
         (according to maximal value of distance transform) of the path.
-        
+
         All existing regular labels are erased while comment labels and spot
         labels remains.
-        
+
         @type  skipLabels: [str, ...]
         @param skipLabels: names of structures which labels are preserved
-        
+
         @rtype: L{barTracedSlide}
         @return: self
         """
@@ -3845,17 +3851,17 @@ class barTracedSlideRenderer(barTracedSlide):
         # Do not delete other types of labels
         toRemoveID = [l.ID for l in self.labels if l.__class__ == self._clsRegularLabel]
         map(lambda y: self._labels.__delitem__(y), toRemoveID)
-        
+
         # Get path index from original slide
         pathIndex = self.pathIndex
-        print pathIndex 
-        
+        print pathIndex
+
         # Iterate over all paths and generating new regular label for each
         # path
-        #for (pathNo, pathID) in enumerate(pathIndex.keys()): 
+        #for (pathNo, pathID) in enumerate(pathIndex.keys()):
         for path in pathIndex.values():
-            newLabelID      = path.relLabelID 
-            newLabelCaption = path.structName 
+            newLabelID      = path.relLabelID
+            newLabelCaption = path.structName
             print newLabelID,newLabelCaption
             # Skip processing this label if requested
             if newLabelCaption in skipLabels: continue
@@ -3864,16 +3870,16 @@ class barTracedSlideRenderer(barTracedSlide):
             # Generate new label and append it into the slide
             newLabel = self._clsRegularLabel(newLabelCoords, newLabelCaption, newLabelID)
             self.addLabel(newLabel)
-        
+
         return self
-    
+
     def renderStructureList(self, structureNameList):
         """
         Render image of requested structures. At least one of the structures
         has to be defined in the slide or blank white image will be returned.
 
-        Structures are recognized by names of barStructure 
-        
+        Structures are recognized by names of barStructure
+
         Workflow:
             1. Get empty slide using template from existing slide.
             2. Copy desired structures into new slide leaving other structurees
@@ -3881,15 +3887,15 @@ class barTracedSlideRenderer(barTracedSlide):
 
         @type  structureNameList: [str, ...]
         @param structureNameList: names of structures to be rendered
-        
+
         @rtype: PIL.Image.Image
         @return: rendered image
         """
         tempSlide = self.getStructuresSubset(structureNameList)
-        
+
         # Render temporary slide and return the results
         return self._renderSvgDrawing(tempSlide.getXMLelement())
-    
+
     def getStructuresSubset(self, structureNameList):
         """
         @param structureNameList: structures to be included in the returned
@@ -3897,37 +3903,37 @@ class barTracedSlideRenderer(barTracedSlide):
         @type structureNameList: [str, ...]
 
         @return: slide containing only requested structures
-        @rtype: L{barTracedSlideRenderer} 
+        @rtype: L{barTracedSlideRenderer}
         """
-        
+
         # Create temporary slide
         tempSlide = self.__class__(\
                 slideTemplate = self.slideTemplate.toxml(),
                 slideNumber = self.slideNumber,
                 rendererConfiguration = self._rendererConf,
                 tracingConfiguration  = self._tracingConf)
-        
+
         # Copy structures that we want to render into new slide
         slideStructNames = map(lambda x: getattr(x,'name'), self.values())
         existingStructures = list(set(structureNameList) & set(slideStructNames))
         for structureName in existingStructures:
             tempSlide[structureName] = self[structureName]
-        
+
         # Also, remember to copy metadata
         tempSlide._metadata = self._metadata
-        
+
         return tempSlide
-    
+
     def renderPath(self, pathObject):
         """
         Render the path image.
-        
+
         Returned image has two colors: white for background, black for
         foreground.
 
         @type  pathObject: L{barPath}
         @param pathObject: path representation
-        
+
         @rtype: PIL.Image.Image
         @return: rendered image
         """
@@ -3937,31 +3943,31 @@ class barTracedSlideRenderer(barTracedSlide):
                 slideNumber = self.slideNumber,
                 rendererConfiguration = self._rendererConf,
                 tracingConfiguration  = self._tracingConf)
-        
+
         # Also, remember to copy metadata
         tempSlide._metadata = self._metadata
-        
+
         # Unfortunately, we need to create xml document and append path in th
         # 'dom' manner :(
         singlePathDocument = tempSlide.getXMLelement()
         pe = pathObject.getXMLelement() # pe stands for pathElement
-        
+
         # If path element has defined fill color remove it and overwrite it with
         # inline style
         if pe.hasAttribute('fill'): pe.removeAttribute('fill')
         styleDict = parseStyle(pe.getAttribute('style'))
         styleDict['fill']='#000000'
         pe.setAttribute('style', formatStyle(styleDict))
-        
+
         # Append path to empty slide template
         for layer in singlePathDocument.getElementsByTagName('g'):
             if layer.getAttribute('id') == 'content':
-                layer.appendChild(pe)       
+                layer.appendChild(pe)
         #singlePathDocument.getElementsByTagName('g')[0].appendChild(pe)
-        
+
         # return prepared slide and return resulting image
         return self._renderSvgDrawing(singlePathDocument)
-    
+
     def contourize(self):
         """
         Convert given CAF slide into contour slide by removing fill from paths
@@ -3972,55 +3978,55 @@ class barTracedSlideRenderer(barTracedSlide):
         """
         contourSlideRen = barPretracedSlideRenderer.fromXML(
                 self.getXMLelement())
-        
+
         contourSlideRen.slideNumber = self.slideNumber
         contourSlideRen.modifyContours(
                 newStrokeWidth = CONF_DEFAULT_CONTOUR_WIDTH,\
                 newStrokeColour= CONF_DEFAULT_CONTOUR_COLOUR)
-        
+
         # Check if vBrain labels are defined, if they are
-        # skip, if not, add them 
+        # skip, if not, add them
         if not len(self.getLabelByName('vBrain')):
             contourSlideRen.addLabel(\
                     self._clsRegularLabel(CONF_DEFAULT_VBRAIN_LABEL_LOC,\
                     'vBrain', 'labelvBrain0'))
-        
+
         return contourSlideRen
 
 
 class barPretracedSlideRenderer(barPretracedSlide):
     """
     Class which converts contour slides into CAF slides.
-    
+
     @todo: Perhaps replacing all PIL procedures with NumPy rutines will give
            some speedup?
 
     @type __labelCache: {str : L{barStructureLabel}, ...}
     @ivar __labelCache: temporary cache holding labels from contour slide;
                         removed after tracing
-        
+
     @type __labelsLeft: [L{barStructureLabel}, ...]
     @ivar __labelsLeft: labels undergoing tracing procedure; removed after
                         tracing
-        
+
     @type __vBrainLabels: [L{barStructureLabel}, ...]
     @ivar __vBrainLabels: subset of L{__labelCache} holding C{'vBrain'}
                           labels processed in different way than other labels
-        
+
     @type __imageCache: [PIL.Image.Image, ...]
     @ivar __imageCache: images representing slide; consecutive elements have
                         thicker contours due to gap filling algorithm
-        
+
     @type __brainOutline: PIL.Image.Image
     @ivar __brainOutline: whole brain outline; image is generated in moment
                           of provedding vBrain labels; during tracing consecutive
                           areas are substracted from brain outline; remaining
                           white areas are considered as ublabelled areas
-        
+
     @type _tracingConf: {str : ?, ...}
     @ivar _tracingConf: tracing configuration (see module description for details)
     """
-    
+
     def trace(self, colorMapping):
         """
         Perform tracing of the slide according to C{self.L{_tracingConf}}.
@@ -4028,61 +4034,63 @@ class barPretracedSlideRenderer(barPretracedSlide):
         @type   colorMapping: {str : str, ...}
         @param  colorMapping: structure name to hexadecimal color mapping
                               defining unique colour for each structure
-        
+
         @rtype: L{barTracedSlideRenderer}
         @return: traced slide created by tracing the contour slide
         """
         if __debug__: _printRed("Initializing tracing...")
-        
+
         # Remove unlabelled labels
         self.deleteLabelByCaption('Unlabelled')
         self.deleteLabelByCaption('Unlabeled')
-        
+
         # Cache labels in order to add them later to the traced slide.
         # Extract regular labels - seeds for tracing
         self.__labelCache = self._labels
         self.__labelsLeft = self.getRegularLabels() # Holds labels yet unprocessed
-        
+        self.__labelsToPassSpot = self.getSpotLabels() # Grab all the spot labels to pass
+        self.__labelsToPassComment = self.getCommentLabels() # Grab all the spot labels to pass
+
         # Extract vBrain labels in order to create brain outline
         self.__vBrainLabels = self.getLabelByName('vBrain', oType = 'ref',\
                                                 labelType=self._clsRegularLabel)
         if len(self.__vBrainLabels) == 0:
                 _printRed("No vBrain labels detected. Skipping.")
                 return None
-        
+
         # Set growlevel=0 for vBrain labels.
         map(lambda x: x.__setattr__('growlevel',0), self.__vBrainLabels)
         map(self.__labelsLeft.remove, self.__vBrainLabels)
-        
-        self._trPathGen = 0 # Simple path number holder 
-        
+
+        self._trPathGen = 0 # Simple path number holder
+
         # Remove labels from this slide so they
         #do not interrupt tracing process.
-        self._labels = {}        
-        
-        # Create bitmap cache and load images into cache 
+        self._labels = {}
+
+        # Create bitmap cache and load images into cache
         self.__imageCache = []
         self.__loadImage()
         self.__createCache()
-        
+
         # Create empty traced slide
         retSlide = barTracedSlideRenderer(
              slideTemplate = self.slideTemplate.toxml(),\
              rendererConfiguration = self._rendererConf,\
              tracingConfiguration  = self._tracingConf)
         retSlide._metadata = self._metadata
-        
+
         # Append vBrain structure to the traced slide
-        if __debug__: _printRed("Processing vBrain...")        
+        if __debug__: _printRed("Processing vBrain...")
         map(retSlide.addPath, self.__processVbrain())
         map(retSlide.addLabel, self.__vBrainLabels)
-        
+
         # This is a bit tricky: At first we detect all incorrectly placed labels
-        # then we remove them from tracing, 
-        if __debug__: _printRed("Detecting invalidly placed labels...")        
+        # then we remove them from tracing,
+        if __debug__: _printRed("Detecting invalidly placed labels...")
         labelsRejected =  self.__getMissplacedLabels()
         map(self.__labelsLeft.remove, labelsRejected)
-        
+
         # Rejected labels has to be changed to comment labels in contour slide.
         # Fortunately they are distinguished by id. in order to avoid
         # duplicationg IDs first we remove labels with ids ofrejected labels and
@@ -4091,12 +4099,14 @@ class barPretracedSlideRenderer(barPretracedSlide):
         labelsRejected =  map(lambda x: x.castToSpotLabel(x), labelsRejected)
         map(lambda x: self.__labelCache.__setitem__(x.ID, x), labelsRejected)
         map(retSlide.addLabel, labelsRejected)
-        
+
         # Processing correctly placed regular labels - main part of the script.
-        if __debug__: _printRed("Processing labels...")  
+        if __debug__: _printRed("Processing labels...")
         map(retSlide.addPath, self.__processLabels())
         map(retSlide.addLabel, self.__labelsLeft)
-        
+        map(retSlide.addLabel, self.__labelsToPassComment) # Paste comment labels
+        map(retSlide.addLabel, self.__labelsToPassSpot)    # Paste spot labels
+
         if self._tracingConf['DetectUnlabelled']:
             if __debug__: _printRed("Detecting unlabelles areas...")
             #TODO: Remove unlabelled areas from the labelCache
@@ -4105,16 +4115,16 @@ class barPretracedSlideRenderer(barPretracedSlide):
             map(retSlide.addLabel, UnlabelledLabels)
         else:
             UnlabelledLabels = []
-        
+
         if __debug__: _printRed("Finishing...")
         # Put all remaining labels back to the contour slide
         self._labels = self.__labelCache
         map(self.addLabel, UnlabelledLabels)
-        
+
         self.__clearAfterTracing()
-        
+
         return retSlide.recolor(colorMapping)
-    
+
     #{ Subprocedures - in order of execution
     def __loadImage(self):
         """
@@ -4125,24 +4135,24 @@ class barPretracedSlideRenderer(barPretracedSlide):
         """
         self.__imageCache.append(\
                 Image.eval(self.renderSlide(), self.__setContourColor))
-    
+
     def __setContourColor(self, pixelColorValue):
         """
         Apply treshold function for given pixel value. All pixels which are
         non-white pixels becomes C{self.L{_tracingConf}['GrowDefaultBoundaryColor']}
         pixels. This procedure assures that output image has only two colours
         (white and boundary) which is very convinient in further processing.
-        
+
         @type  pixelColorValue: int
         @param pixelColorValue: value of given pixel
-        
+
         @rtype: int
         @return: 255 if white pixel is given, C{self.L{_tracingConf}['GrowDefaultBoundaryColor']}
                  otherwise
         """
         # Just make an alias (perhaps it executes faster)
         defaultBoundaryColour = self._tracingConf['GrowDefaultBoundaryColor']
-        
+
         if pixelColorValue != 255: return defaultBoundaryColour
         else: return 255
 
@@ -4155,7 +4165,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
         # Just aliases:
         intensity  = self._tracingConf['MinFiterTimesApplication']
         cacheLevel = self._tracingConf['CacheLevel']
-        
+
         filter = ImageFilter.MinFilter(intensity)
         for l in range(cacheLevel):
             self.__imageCache.append(\
@@ -4166,34 +4176,34 @@ class barPretracedSlideRenderer(barPretracedSlide):
         Create outline of the whole brain. The outline serves further as a
         reference for detecting missplaced labels and obviously as structure
         representing whole brain.
-        
+
         Outline is created by substracting result of flooding each vBrain label
         and then inversing the result and tracing resulting bitmap.
-        
+
         @rtype: [L{barPath}, ...]
         @return: paths representing outline of the whole brain
         """
-        
+
         # Create empty white image for filling it with vBrain structure:
         self.__brainOutline =  ImageChops.constant(self.__imageCache[0], 255)
-        
+
         # Then create image mask for vBrain structure;
         for (i, vBrainLabel) in enumerate(self.__vBrainLabels):
             self.__substractFromBrainOutline(\
                     self.__applyFill(self.__imageCache[0], vBrainLabel),\
                     source = 'Brain')
-            
+
             if __debug__ and self._tracingConf['DumpVBrain']:
                 self.__brainOutline.save("%d_vBrain_%s.png"\
                         % (self.slideNumber, vBrainLabel.ID))
-        
+
         return self.__bitmapToPaths(self.__brainOutline, vBrainLabel, invert = True)
-    
+
     def __getMissplacedLabels(self):
         """
         Dectect labels that cannot be traced as they are missplaced: placed
         over the contours or outside the brain area.
-        
+
         @rtype: [L{barRegularLabel}, ...]
         @return: labels that has to be excluded from tracing
         """
@@ -4204,14 +4214,14 @@ class barPretracedSlideRenderer(barPretracedSlide):
             if not self.__isAllowedForFilling(self.__imageCache[0], label):
                 toRemove.append(label)
         return toRemove
-    
+
     def __processLabels(self):
         """
         Create list of paths basing on the list of labels to be traced
         (C{self.L{__labelsLeft}}).
-        
+
         @rtype: [L{barPath}, ...]
-        @return: paths created by tracing individual labels 
+        @return: paths created by tracing individual labels
         """
         paths = []
         noLabels = len(self.__labelsLeft)
@@ -4221,13 +4231,13 @@ class barPretracedSlideRenderer(barPretracedSlide):
             print >>sys.stderr, "\tLocation: %3.1f,%3.1f" % seedLabel.Location
             paths.append(self.__processSingleLabel(seedLabel))
         return flatten(paths)
-    
+
     def __getUnlabeled(self):
         """
         Create list of paths and corresponding labels by tracing areas that
-        were not labeled in pretraced files (unlabeled areas). This process 
+        were not labeled in pretraced files (unlabeled areas). This process
         is rather complicated so few words of explanation:
-        
+
             1. We look for patches of N or more pixels. Only such areas
                are considered as unlabelled areas. Smaller areas are most
                probably residual white pixels and should be ommited.
@@ -4235,74 +4245,74 @@ class barPretracedSlideRenderer(barPretracedSlide):
                on "1".
             3. Patch of N or more white pixels is flooded with value "2"
                after tracing.
-        
+
         After fiding unlabelled areas we can find 4 values of pixels:
-        
+
             1. "0": areas outside brain
             2. "1": pixels of more than one adjacent pixels but less than N
             3. "2": patches of N or more white pixels
-        
+
         @rtype: ([L{barPath}, ...], [L{barRegularLabel}, ...])
         @return: pair of lists of paths and corresponding labels generated
                  during detections of unlabelled areas.
         """
-        
+
         # Two types of elements are collected: patch covering unlabelled areas
         # and corresponding labels
-        
+
         unlabeledAreasLabelsList= []   # Here we hold all newly generated labels
         unlabeledPathList       = []   # and here all newly generated labels
         whiteCoordList=[]              # List of coordinates white pixels. Coordinates
                                        # are corrected in on order to avoid analyzing
                                        # the same coordinates twice.
-        
+
         #coords = self.__getUnlabeledAreas()# Get initial white pixel coordinate and start loop
-        
+
         #while coords and (coords not in whiteCoordList):
         unlabelledTreshold = self._tracingConf['UnlabelledTreshold']
         for coords in self.__getUnlabeledAreas():
-        
+
             # Flood image at give coordinates. "1" index is used, not "0". Also get number
             # number of flooded pixels.
             numberOfFloodedPixels = floodFillScanlineStack(self.__brainOutline, coords, 1)
-            
+
             whiteCoordList.append(coords) # Append coordinates to list in order
                                           # to avoid duplication
-            
+
             # When more than N pixels is flooded we should consider this area as
             # an actual unlabelled area (not some residual single white pixels)
             # and we should start tracing procedure.
             if numberOfFloodedPixels > unlabelledTreshold:
-             
+
                 # Replace colors to get image suitable for tracing:
                 # all colors are converted to white. Values "1" are converted to "0"
                 # so the structure is black and surroundings are white
                 ImageForTracing = self.__brainOutline.point([255]+[0]+254*[255])
                 newLabelLocation = getBestLabelLocation(ImageForTracing)
-                
+
                 newLabel = self._clsRegularLabel(\
                             self._toSVGCoordinates(newLabelLocation),\
                             'Unlabelled',\
                             'Unlabelled-%d-%d' % coords,\
                             growlevel = 0)
                 unlabeledAreasLabelsList.append(newLabel)
-                
+
                 # Apply minimum filter to slightly increase size of trace structures.
                 #ImageForTracing = ImageForTracing.filter(ImageFilter.MaxFilter(3))
                 map(unlabeledPathList.append, self.__bitmapToPaths(ImageForTracing, newLabel))
                 if __debug__ and self._tracingConf['DumpEachStepPNG']:
                     self.__brainOutline.save("%d_detected_ublabelled_%d_%d.png"%\
                             (self.slideNumber, coords[0], coords[1]), "PNG")
-                
+
             # Finally, do some trick: replace all pixels with value "1" to "2",
             # which prevents from accumulating consecutive areas.
             print "Unlabelled area found at location %d, %d (img.)" % coords
             print "\tcreating Unlabelled label\n"
             numberOfFloodedPixels = floodFillScanlineStack(self.__brainOutline, coords, 2)
-            
+
             # Get new coordinates and cotinue loop
             #coords = self.__getUnlabeledAreas()
-        
+
         # Dump image after tracing unlabelled areas to show what we have done! :)
         if __debug__ and self._tracingConf['DumpEachStepPNG']:
             self.__brainOutline.save("%d_after_tracing.png"% self.slideNumber, "PNG")
@@ -4313,15 +4323,17 @@ class barPretracedSlideRenderer(barPretracedSlide):
         Clear all temporary class attributes created for tracing purposes.
         Invoked by C{self.L{trace}} method as the last step of tracing.
         """
-        
+
         # Remove all temporary attributtes
         del self.__labelCache
         del self.__labelsLeft
         del self.__vBrainLabels
         del self.__imageCache
         del self.__brainOutline
+        del self.__labelsToPassComment
+        del self.__labelsToPassSpot
     #}
-    
+
     #{ Main functions - they do most of the work
     def __processSingleLabel(self, seedLabel):
         """
@@ -4329,10 +4341,10 @@ class barPretracedSlideRenderer(barPretracedSlide):
 
         If grow level for given seed label is not provided, perform automatic
         grow level selection, and finally create path with all properties.
-        
+
         @type  seedLabel: L{barRegularLabel}
         @param seedLabel: seed label
-        
+
         @rtype: [L{barPath}, ...]
         @return: list of paths resulting from tracing of the given source image
                  and provided L{seed label<seedLabel>}.
@@ -4341,7 +4353,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
                assigning to C{self._tracingConf['BestFillAlgorithm']} reference
                for desired function.
         """
-        
+
         # If growlevel is unassigned, select best growlevel automatically:
         if seedLabel.growlevel == -1:
             # Get area covered by each fill then choose best growlevel
@@ -4349,19 +4361,19 @@ class barPretracedSlideRenderer(barPretracedSlide):
             # Detect 'None' images and do not include them in automatic grow
             # level selection:
             if area.count(None)>0: area = area[0:area.index(None)]
-            
+
             # Determine BestGrowLevel using provied BestFillAlgorithm
             BestGrowLevel = selectBestGapFillingLevel(area)
             imageToTrace  = imgs[BestGrowLevel]
             seedLabel.growlevel = BestGrowLevel
             print >>sys.stderr, "\tAssigned growlevel %d" % (BestGrowLevel,)
-        
-        # If growlevel is provided, use it:       
+
+        # If growlevel is provided, use it:
         elif 0 <= seedLabel.growlevel <= self._tracingConf['CacheLevel']:
             imageToTrace = self.__applyFill(\
                               self.__imageCache[seedLabel.growlevel],\
                               seedLabel)
-            
+
             # Sometimes, image cannt be traced with given growlevel (ie. when
             # contours are overgrown). This should not happen when grow level is
             # determinated automatically.
@@ -4369,38 +4381,38 @@ class barPretracedSlideRenderer(barPretracedSlide):
                 #TODO: Provide error handling here
                 print seedLabel
                 return
-             
-            print >>sys.stderr, "\tUsing growlevel %d" % (seedLabel.growlevel,)            
-        
+
+            print >>sys.stderr, "\tUsing growlevel %d" % (seedLabel.growlevel,)
+
         # If provided growlevel is not in allowed ragnge, skip tracing
         # particular label
         else:
             print >>sys.stderr, "Growlevel %d out of allowed range - \
                                 skipping" % (seedLabel.growlevel,)
-        
+
         # Substract traced structure from brain outline to mark that given area
         # is already traced.
         self.__substractFromBrainOutline(imageToTrace)
         return self.__bitmapToPaths(imageToTrace, seedLabel)
-    
+
     def __bitmapToPaths(self, sourceImage, seedLabel, invert = False):
         """
         Perform all operation releted with tracing bitmap into list of paths:
-             
+
             1. create DOM structure from PoTrace SVG output,
             2. create single path segments instead of long bezier paths,
             3. convert path coordinates to absolute,
             4. reduce transformation rules (using L{svgfix} module.
-                    
+
         @type  sourceImage: PIL.Image.Image
         @param sourceImage: image for tracing
-        
+
         @type  seedLabel: L{barRegularLabel}
         @param seedLabel: seed label
-        
+
         @type  invert: bool
         @param invert: determine if image has to be inverted before tracing
-        
+
         @rtype: [L{barPath}, ...]
         @return: paths resulting from tracing of the given source image
                  and the provided L{seed label<seedLabel>}.
@@ -4408,31 +4420,31 @@ class barPretracedSlideRenderer(barPretracedSlide):
         # Invert source image, if requested:
         if invert:
             sourceImage = ImageOps.invert(sourceImage)
-        
+
         # Perform tracing procedure and cleam output
         tracerOutput = performTracing(sourceImage,\
                            self._tracingConf['PoTraceConf'])
         svgdom = cleanPotraceOutput(tracerOutput)
-        
+
         # Convert resulting svg document into set of barPaths
         newPathList = map(lambda x:\
                 self._getPath(x, seedLabel),\
                 svgdom.getElementsByTagName('path'))
-        
+
         # If debuging procedures are enabled save tracing results (SVG file) and
         # source image (PNG file)
         if __debug__ and self._tracingConf['DumpEachStepSVG']:
             OutputFilename = "%d_%s_%s.svg" % (self.slideNumber,\
                     seedLabel.ID, seedLabel.Caption)
             self._saveSVG(svgdom, OutputFilename)
-        
+
         if __debug__ and self._tracingConf['DumpEachStepPNG']:
             OutputFilename = "%d_%s_%s.png" % (self.slideNumber,\
                     seedLabel.ID, seedLabel.Caption)
             self._saveBitmap(sourceImage, OutputFilename)
-        
+
         return newPathList
-    
+
     def _getPath(self, pathElem, seedLabel):
         """
         Create L{barPath} from provided SVG path element (result of tracing)
@@ -4440,32 +4452,32 @@ class barPretracedSlideRenderer(barPretracedSlide):
         however it has black colour assigned.
 
         @param pathElem: xml.dom.minidom.Node
-        @type  pathElem: SVG path element 
-        
+        @type  pathElem: SVG path element
+
         @param seedLabel: L{barRegularLabel}
         @type  seedLabel: seed label
-        
+
         @rtype: L{barPath}
         @return: path representation created from provided SVG path element
         """
         #Assign dummy id and fill color to avoid parPath constructor errors
         pathElem.setAttribute('id','structure_0_dummy')
         pathElem.setAttribute('fill','#000000')
-        
+
         # Create new path element
         newPath = self._clsPath.fromXML(pathElem, clearPathDef = True)
         newPath.id = self._getNewPathID(seedLabel)
         newPath.structName = seedLabel.Caption
-        
+
         return newPath
-    
+
     def _getNewPathID(self, seedLabel):
         """
         Generate proper path identifier of the path related to the seed label.
 
         @param seedLabel: L{barRegularLabel}
         @type  seedLabel: seed label
-        
+
         @rtype: str
         @return: identifier of new path generated using
                  C{self.L{_tracingConf}['NewPathIdTemplate']}
@@ -4474,7 +4486,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
         newPathId = self._tracingConf['NewPathIdTemplate'] %\
                 (self._trPathGen, seedLabel.ID, seedLabel.Caption)
         return newPathId
-    
+
     def __substractFromBrainOutline(self, imageToSubstract, source = 'Struct'):
         """
         Mark traced areas on L{__brainOutline}. Depending on L{source} marking
@@ -4484,62 +4496,62 @@ class barPretracedSlideRenderer(barPretracedSlide):
 
         @param imageToSubstract: PIL image
         @type  imageToSubstract: PIL.Image.Image
-        
+
         @type  source: str
         @param source: determines source of L{imageToSubstract} (may be either
                        C{'Struct'} or C{'Brain'}).
         """
-        
+
         # Save brain contour to further comparison
         # Apply treshold eliminating all non-black pixels
         if source == 'Struct':
             self.__brainOutline=\
                     ImageChops.darker(self.__brainOutline,\
                     imageToSubstract.point([100]+255*[255]))
-        
+
         if source == 'Brain':
             self.__brainOutline=\
                     ImageChops.multiply(\
                     imageToSubstract.point([0]+255*[255]),\
                     self.__brainOutline)
-    
+
     def __applyFill(self, sourceImage, seedLabel, retNPIX = False):
         """
         Apply flood fill to given image using coordinates passed in the
         seed label.
-        
+
         Description:
             1. Extract coordinates and structure name from C{seedLabel}.
             2. Rescale SVG coordinates to rendered image coordinates
-            3. Fill given image with black color 
+            3. Fill given image with black color
             4. Extend filled region by applying C{MinFilter} filter. Do it C{l+1} times
             5. Return flooded image or return number of black pixels depending
                on C{retNPIX} value.
-        
+
         @type  sourceImage: PIL.Image.Image
         @param sourceImage: image to be floodfilled
-        
+
         @type  seedLabel: L{barRegularLabel}
         @param seedLabel: seed label
-        
+
         @type  retNPIX: bool
         @param retNPIX: if C{True}, floodfilled image is returned along with
                         number of replaced pixels; otherwise only flooded
                         image is returned
-        
+
         @rtype: (PIL.Image.Image, int) or PIL.Image.Image
         @return: flooded image (and number of flooded pixels if requested)
         """
         coords = self._toImageCoordinates(seedLabel.Location)
-        
+
         # Determine if it is posssble to flood fill at given coordinate
         if not self.__isAllowedForFilling(sourceImage, seedLabel):
             return None
-        
+
         # Copy input image in order to preserve original
         ImToFlood=sourceImage.copy()
         npix = floodFillScanlineStack(ImToFlood, coords, 0)
-        
+
         # Extend flooded area in order to preserve initial structure area
         # Index of image C{im} in L{ImageCache<ImageCache>} list.
         # Used in extending grow region - MIN filter is applied to flooded
@@ -4549,30 +4561,30 @@ class barPretracedSlideRenderer(barPretracedSlide):
         # Factor 1 is arbitraty.
         for j in range(seedLabel.growlevel + 1):
             ImToFlood = ImToFlood.filter(ImageFilter.MinFilter(3))
-        
+
         if retNPIX: return (ImToFlood, npix)
         else: return ImToFlood
-    
+
     def __isAllowedForFilling(self, im, seedLabel):
         """
         Determine if bitmap with given seed label is suitable for tracing.
         There are briefly two conditions which need to be satisfied in order
         to allow the tracing:
-        
+
             1. Seed has to be placed within brain contour. The brain contour is
                defined at the begining of tracing procedure.
             2. Seed has to be placed at white pixel. If seed points into
                non-white pixel is it a) border between two structures; b) area
                outside brain contour.
-        
+
         In both cases debug information is printed.
-        
-        @type  im: PIL.Image.Image 
+
+        @type  im: PIL.Image.Image
         @param im: image to be floodfilled
-        
+
         @param seedLabel: L{barRegularLabel}
         @type  seedLabel: seed label
-        
+
         @rtype: bool
         @return: C{True} if image is suitable for tracing (according to testing
                  conditions), C{False} otherwise
@@ -4580,20 +4592,20 @@ class barPretracedSlideRenderer(barPretracedSlide):
         if not self.__isOutsideBrainOutline(seedLabel): return False
         if not self.__isOverContour(im, seedLabel): return False
         return True
-    
+
     def __getUnlabeledAreas(self):
         """
         Find white pixels in the image. If found pixel has white neighbourhood,
         its coordinates are returned, otherwise iteration continues
         until all white pixels are spotted.
-        
+
         Current algorithm is rather ineffective. Main reason is that function
         has to exit if patch of white pixels is spotted. Then function is
         invoked again and iteration starts from beginning which is extremely
         ineffective. What should be done in such case?  Perhaps implementation
         should include iterator. The problem is that we need to change array
         while we iterate over this array.
-        
+
         @rtype: (int, int)
         @return: (x, y) image coordinates of first spotted pixel that belongs
                  to patch (two or more adjecent pixeles) of white pixels;
@@ -4601,10 +4613,10 @@ class barPretracedSlideRenderer(barPretracedSlide):
         """
         # Access image pixel by pixel
         pix = self.__brainOutline.load()
-        
+
         # Holds current pixel number
         pn=0
-        
+
         # Iterate over all image
         for i in self.__brainOutline.getdata():
             pn+=1
@@ -4622,16 +4634,16 @@ class barPretracedSlideRenderer(barPretracedSlide):
                     yield (x,y)
         #return None
     #}
-   
+
     #{ Auxiliary functions
-    def __isOutsideBrainOutline(self, seedLabel): 
+    def __isOutsideBrainOutline(self, seedLabel):
         """
         Determine if label is placed outside brain outline according to values
         of C{self.L{__brainOutline}}.
 
         @param seedLabel: L{barRegularLabel}
         @type  seedLabel: seed label
-        
+
         @rtype: bool
         @return: C{True} if label is placed outside brain, C{False} otherwise
         """
@@ -4644,17 +4656,17 @@ class barPretracedSlideRenderer(barPretracedSlide):
             self.__dumpWrongSeed(self.__brainOutline, seedLabel)
             return False
         return True
-    
+
     def __isOverContour(self, im, seedLabel):
         """
         Determine if label is not placed over boundary.
 
-        @type  im: PIL.Image.Image 
+        @type  im: PIL.Image.Image
         @param im: image to verify seed label location
-        
+
         @param seedLabel: L{barRegularLabel}
         @type  seedLabel: seed label
-        
+
         @rtype:  bool
         @return: C{True} if label is not placed over contour, C{False} otherwise
         """
@@ -4664,18 +4676,18 @@ class barPretracedSlideRenderer(barPretracedSlide):
             self.__dumpWrongSeed(im, seedLabel)
             return False
         return True
-    
+
     def _saveBitmap(self, im, filename):
         """
         Save provided image.
 
-        @type  im: PIL.Image.Image 
+        @type  im: PIL.Image.Image
         @param im: bitmap image to be saved
-        
+
         @type  filename: str
         @param filename: name of the output file (only filename - without path;
                          provide .png extension)
-        
+
         @todo: integrate _saveBitmap and _saveSVG into one function
         """
         OutputFilename = os.path.join(\
@@ -4686,9 +4698,9 @@ class barPretracedSlideRenderer(barPretracedSlide):
         """
         Save provided SVG.
 
-        @type  svgdom: xml.dom.minidom.Document 
+        @type  svgdom: xml.dom.minidom.Document
         @param svgdom: SVG image to be saved
-        
+
         @type  filename: str
         @param filename: name of the output file (only filename - without path;
                          provide .png extension)
@@ -4701,15 +4713,15 @@ class barPretracedSlideRenderer(barPretracedSlide):
         #svgdom.writexml(f)
         svgdom.writexml(f, indent="\n", addindent="\n", newl="\n")
         f.close()
-    
+
     def __getCoveredAreasList(self, seedLabel):
         """
         For images from C{self.L{__imageCache}} perform floodfilling with
         seed label.
-        
+
         @type  seedLabel: L{barRegularLabel}
         @param seedLabel: seed label
-        
+
         @rtype: ([PIL.Image.Image, ...], [int, ...])
         @return: pair of lists of floodfilled images and area of floodfill
                  in pixels (both lists have the same length and are
@@ -4717,14 +4729,14 @@ class barPretracedSlideRenderer(barPretracedSlide):
         """
         # List of calculated areas
         result=[]
-        
+
         # Save information about areas covered in each grow step
         # This data is usefull when it comes to define some heuristics about
         # number of grows that gives best recoinstruction accuracy.
         result = map(lambda x:\
                 self.__applyFill(x, seedLabel, retNPIX = True),\
                 self.__imageCache)
-        
+
         # Dump rebug information if required
         if __debug__: print\
                 "Structure:\t"+ seedLabel.Caption +"\t"        +\
@@ -4736,32 +4748,32 @@ class barPretracedSlideRenderer(barPretracedSlide):
         if result.count(None):
             print result.index(None)
             result = result[0:result.index(None)]
-        
+
         #TODO: refactoring with unzip...
         images, areas = map(lambda x: x[0], result), map(lambda x: x[1], result)
         return (images, areas)
-    
+
     def __dumpWrongSeed(self, im, seedLabel):
         """
         Output warning message to stderr and dump invalid image into a file.
-        
-        @type  im: PIL.Image.Image 
+
+        @type  im: PIL.Image.Image
         @param im: image to be dumped
-        
+
         @param seedLabel: L{barRegularLabel}
         @type  seedLabel: seed label
         """
         # Transform SVG coordinates to rasterized image coordinates.
         goodCoords = self._toImageCoordinates(seedLabel.Location)
-        
+
         # Print warning that seed points at pixel with incorrect values
         _printRed("\tTracing of area %s located at coordinates %d,%d "\
                 % (seedLabel.Caption, goodCoords[0], goodCoords[1]))
         _printRed("\tis ommited because of non-white seed pixel value.")
         _printRed("\ttry aligning label or manualy set boundary growing level.\n")
-        
+
         if not self._tracingConf['DumpWrongSeed']: return
-        
+
         ImToFlood = im.copy()
         # Draw gray circle at debug image in order to mark area when error
         # occured
@@ -4772,7 +4784,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
                 )\
                 , 60)
         del draw
-        
+
         # Generate debug filename. Filename consists from following
         # information: slidenumber, boundary growing level, labelID adn seed
         # coordinates.
@@ -4781,7 +4793,7 @@ class barPretracedSlideRenderer(barPretracedSlide):
             'debug_filled_'+seedLabel.Caption+\
             '_grow_'+str(seedLabel.growlevel)+\
             '_%d_%d.png' % goodCoords
-        
+
         self._saveBitmap(ImToFlood, tempDumpFilename)
     #}
 
@@ -4802,7 +4814,7 @@ barContourSlide = barPretracedSlideRenderer # Just an alias
 #TODO: stupid! do something. Algorithms settings:
 #BAR_TRACER_DEFAULT_SETTINGS['BestFillAlgorithm'] = selectBestGapFillingLevel
 
-    
+
 def _printRed(str):
     """
     Print given string to stderr using red color.
@@ -4815,13 +4827,13 @@ def _printRed(str):
 def debugOutput(msg, error=False):
     """
     Print debug message to stderr. Error messages are printed in red colour.
-    
+
     If the message is not an error message it is printed only if
     C{__debug__ == True}.
-    
+
     @type msg: str
     @param msg: debug message
-    
+
     @type error: bool
     @param error: indicates if the debug message is an error message
     """
@@ -4834,16 +4846,16 @@ def processMarkers(m1, m2, bm):
     """
     Calculate stereotectical coordinates transformation matrix and
     anterior-posterior coordinate of slide from given markers.
-    
+
     @param m1: marker of slide position in coronal plane
     @type m1: L{barCoordinateMarker}
-    
+
     @param m2: marker of slide position in coronal plane
     @type m2: L{barCoordinateMarker}
-    
+
     @param bm: marker of anterior-posterior slide position
     @type bm: L{barCoronalMarker}
-    
+
     @rtype: (L{_clsTransfMatrixMetadataElement}, L{_clsBregmaMetadataElement})
     @return: representation of metadata elements containing stereotectical
              coordinates transformation matrix and anterior-posterior
@@ -4854,20 +4866,20 @@ def processMarkers(m1, m2, bm):
     (x1p, y1p) = m1.spatialLocation
     (x2p, y2p) = m2.spatialLocation
     (z,)       = bm.spatialLocation
-    
+
     (a,b,c,d,z) = slides_aligner.calculateTransfFromMarkers(\
             (x1, y1), (x2, y2), (x1p, y1p), (x2p, y2p), z)
-    
-    
+
+
     TransfMatrixMeta = barObject._clsTransfMatrixMetadataElement((a,b,c,d))
     CoronalCoordMeta = barObject._clsBregmaMetadataElement(z)
     return (TransfMatrixMeta, CoronalCoordMeta)
-    
+
 def validateStructureName(structureName):
     """
     @type  structureName: str
     @param structureName: name to be verified
-    
+
     @rtype: str or bool
     @return: L{structureName} if structure name if correct, C{Flase} otherwise.
 
@@ -4877,7 +4889,7 @@ def validateStructureName(structureName):
     """
     if not __debug__:
         return  structureName
-     
+
     return (len(structureName) <= 40 # length is within proper range
         and not structureName.startswith("-") and not structureName.endswith("-") # no bordering hyphens
         and CONF_ALOWED_STRUCTURE_CHARACTERS.search(structureName) and structureName) # contains only legal characters
@@ -4888,7 +4900,7 @@ def cleanPotraceOutput(tracerOutput):
 
     @type  tracerOutput: str
     @param tracerOutput: string produced by PoTrace
-    
+
     @rtype: xml.dom.minidom.Document
     @return: SVG image fixed by the procedure.
     """
@@ -4900,10 +4912,10 @@ def CleanFilename(filename):
     """
     Strip filename from prohibited characters.
     Prohibited characters are replaced by underscore characted.
-    
+
     @type  filename : str
     @param filename : filename to strip
-    
+
     @return         : corrected filename
     @rtype: str
     """
@@ -4913,20 +4925,20 @@ def flatten(x):
     """
     Create a flat sequence containing all elements retrieved from the sequence
     recursively contained sub-sequences (iterables).
-    
+
     Examples:
     >>> [1, 2, [3,4], (5,6)]
     [1, 2, [3, 4], (5, 6)]
     >>> flatten([[[1,2,3], (42,None)], [4,5], [6], 7, MyVector(8,9,10)])
     [1, 2, 3, 42, None, 4, 5, 6, 7, 8, 9, 10]
-    
+
     @type  x: sequence
     @param x: sequence to be flatted
-    
+
     @return: created sequence
     @rtype: [?, ...]
     """
-    
+
     result = []
     for el in x:
         #if isinstance(el, (list, tuple)):
@@ -4939,7 +4951,7 @@ def flatten(x):
 def _removeWhitespacesXML(domNode, unlink=True):
     """
     Remove unnecessary white spaces from given XML element.
-    
+
     @param domNode: XML element
     @type domNode: xml.dom.minidom.Node
 
@@ -4960,12 +4972,12 @@ def _removeWhitespacesXML(domNode, unlink=True):
         domNode.removeChild(child)
         if unlink:
             child.unlink()
-    
+
 def _recurseTextNodeExtract(tspanElement):
     retval = ""
     for t in tspanElement.childNodes:
         if t.nodeType == t.TEXT_NODE:
             retval += strip(t.nodeValue)
         retval += strip(_recurseTextNodeExtract(t))
-    return retval              
+    return retval
 
