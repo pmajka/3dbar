@@ -616,7 +616,7 @@ class barStructureLabel(barAtlasSlideElement):
             retLabel = cls._clsSpotLabel( (x, y), labelCaption[1:].replace('.',''), labelID)
         else:
             retLabel = cls._clsRegularLabel( (x, y), labelCaption, labelID ) 
-        
+
         # Customize label properties
         if labelFontSize: retLabel._attributes['font-size'] = labelFontSize
         else: pass
@@ -1081,7 +1081,7 @@ class barMarker(barAtlasSlideElement):
         
         # Parse text of text element looking for spatial coordinates
         # of the label
-        labelCaption       = svgTextElement.firstChild.nodeValue
+        labelCaption = _recurseTextNodeExtract(svgTextElement)
         
         try:
             spatialCoordinates = map(float, re_CoordinateMarker.search(labelCaption).groups())
@@ -3122,8 +3122,9 @@ class barPretracedSlide(barSlideRenderer):
         for labelElement in self.labels:
             svgGroupDataset.appendChild(labelElement.getXMLelement())
         
-        for markerElement in self.markers:
-            svgGroupDataset.appendChild(markerElement.getXMLelement())
+        if all(self.markers):
+            for markerElement in self.markers:
+                svgGroupDataset.appendChild(markerElement.getXMLelement())
         
         # Redefine path definitions using absolute coordinates
         # svgfix.fixSvgImage(slide, pagenumber=self.slideNumber, fixHeader=True)
