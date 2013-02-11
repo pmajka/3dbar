@@ -98,6 +98,10 @@ class AtlasParser(bar.barVectorParser):
             if regularLabel.Caption in regularLabelsToRemove:
                 tracedSlide.deleteLabelByCaption(regularLabel.Caption)
 
+        #tracedSlide.size = (650, 850)
+        #tracedSlide.bitmapSize = (650, 850)
+
+        # Finally, we can write the slide
         tracedSlide.writeXMLtoFile(self._getOutputFilename(slideNumber))
 
         return tracedSlide
@@ -121,6 +125,6 @@ if __name__ == '__main__':
 
     ap = AtlasParser(inputDirectory, outputDirectory)
     ap.parseAll()
-    #for i in range(13,51):
+    #for i in range(2,51):
     #    ap.parse(i)
     #ap.reindex()

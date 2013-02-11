@@ -35,7 +35,8 @@ slideNumber = 50
 # that case the slideRange should be defined equal to range(n) or range(1,n+1).
 # The slide range may start from arbitrary integer (i.e. range(75,n+75+1). If
 # you do not require any offset leave this value as it is.
-slideOffset = 0 slideRange = range(slideOffset, slideNumber + slideOffset + 1)
+slideOffset = 0
+slideRange = range(slideOffset, slideNumber + slideOffset + 1)
 
 #  renderingProperties dictionary defines the size of the rasterized conrour
 #  slide and CAF slide.
