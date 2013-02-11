@@ -25,17 +25,17 @@ legitimateCommentLabels = ['(12L)', '(12M)', '(DA)', '(DM)', 'fovea', '(FSTv)',
 
 legitimateSpotLabels = ['orbs', 'fovea', 'rf', 'lf', 'hif', 'sts']
 
+regularLabelsToRemove = ['Unlabelled', 'Unlabeled','vBrain']
+
 # The number of slides creating the atlas
 slideNumber = 50
 
-# slideRange determines numbers of consecutive slides.
-# Usually having n slides one may to enumerate them starting from 0 to n-1 or
-# starting from 1 to n. In that case the slideRange should be defined equal to
-# range(n) or range(1,n+1). The slide range may start from arbitrary integer
-# (i.e. range(75,n+75+1). If you do not require any offset leave this value as it
-# is.
-slideOffset = 0
-slideRange = range(slideOffset, slideNumber + slideOffset + 1)
+# slideRange determines numbers of consecutive slides.  Usually having n slides
+# one may to enumerate them starting from 0 to n-1 or starting from 1 to n. In
+# that case the slideRange should be defined equal to range(n) or range(1,n+1).
+# The slide range may start from arbitrary integer (i.e. range(75,n+75+1). If
+# you do not require any offset leave this value as it is.
+slideOffset = 0 slideRange = range(slideOffset, slideNumber + slideOffset + 1)
 
 #  renderingProperties dictionary defines the size of the rasterized conrour
 #  slide and CAF slide.

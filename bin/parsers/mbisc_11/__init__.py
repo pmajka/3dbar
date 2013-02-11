@@ -5,12 +5,15 @@ import sys
 import datetime
 
 from bar import parsers as bar
-from bar.base import getDictionaryFromFile, barCafSlide
+from bar.base import getDictionaryFromFile
 from user_data import renderingProperties, tracerSettings,\
     userMetadata, slideRange,\
     colorMappingFilename, fullNameMappingFilename,\
     hierarchyFilename, \
-    legitimateStructures, legitimateCommentLabels, legitimateSpotLabels
+    legitimateStructures, legitimateCommentLabels, legitimateSpotLabels, regularLabelsToRemove
+
+# Some of the metadata has to be updated before parsing. This concerns
+# especially some of the filename templates and slide rendering properties:
 
 filenameTempates = dict(traced='%02d_traced_v%d.svg',
                         pretraced='%03d_v%d.svg')
@@ -25,6 +28,8 @@ indexerProps.update({
 
 class AtlasParser(bar.barVectorParser):
     def __init__(self, inputDirectory, outputDirectory):
+        # Update the parser properties dictionary before invoking an instance
+        # of vector atlas parser (this is the way it works).
         props = {}
         props['filenameTemplates'] = filenameTempates
         props['slideRange'] = slideRange
@@ -38,9 +43,13 @@ class AtlasParser(bar.barVectorParser):
 
         bar.barVectorParser.__init__(self, **props)
 
+        # Add slide tracing and rendering settings to the parser's data
         self._tracingConf = tracerSettings
         self._rendererConf = renderingProperties
 
+        # And now update the parser's indexer configuration (phew...) as
+        # previously we were updating only properties and configuration of the
+        # parser itself.
         self.indexer.updateProperties(indexerProps)
 
     def _getInputFilename(self, slideNumber):
@@ -53,9 +62,24 @@ class AtlasParser(bar.barVectorParser):
     def parse(self, slideNumber):
         tracedSlide = bar.barVectorParser.parse(self, slideNumber,
                                                 useIndexer=False,
-                                                writeSlide=False)
+                                                writeSlide=False,
+                                                writeContourBack=False)
+
+        # The code above is quite easy: 1) we don't want to index slides as we
+        # parse them (there will be dedicated indexer's sweep at the end of the
+        # parsing. 2) We don't want to save the traced slide to the disk (as
+        # there are some corrections to apply) 3). We don't want to put
+        # any feedback from the tracing procedure to the contour slides (as
+        # they look ugly then).
+
+        # A series of corrections to apply to the caf slide before saving:
+        # 1) Increase font size as the default one is a bit to small
+        # 2) Removal of all the labels and structures which are not defined in
+        # the structures hierarchy. This includes a verification of all the
+        # labels and st
+
         map(lambda x:
-            x._attributes.update({'font-size': '10px'}),
+            x._attributes.update({'font-size': '15px'}),
             tracedSlide.labels)
 
         for structure in tracedSlide.structures:
@@ -67,8 +91,12 @@ class AtlasParser(bar.barVectorParser):
                 tracedSlide.deleteLabelByCaption(spotLabel.Caption)
 
         for commentLabel in tracedSlide.getCommentLabels():
-            if spotLabel.Caption not in legitimateCommentLabels:
+            if commentLabel.Caption not in legitimateCommentLabels:
                 tracedSlide.deleteLabelByCaption(commentLabel.Caption)
+
+        for regularLabel in tracedSlide.getRegularLabels():
+            if regularLabel.Caption in regularLabelsToRemove:
+                tracedSlide.deleteLabelByCaption(regularLabel.Caption)
 
         tracedSlide.writeXMLtoFile(self._getOutputFilename(slideNumber))
 
@@ -92,6 +120,7 @@ if __name__ == '__main__':
         outputDirectory = 'atlases/mbisc_11/caf/'
 
     ap = AtlasParser(inputDirectory, outputDirectory)
-    #ap.parseAll()
+    ap.parseAll()
+    #for i in range(13,51):
+    #    ap.parse(i)
     #ap.reindex()
-    ap.parse(19)
