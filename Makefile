@@ -175,7 +175,9 @@ tem:
 mbisc_11:
 	mkdir -p ${ATLASES_DIR}mbisc_11/src
 	mkdir -p ${ATLASES_DIR}mbisc_11/caf
-	python ${PARSERS_DIR}/mbisc_11/preprocessSVG.py ${ATLASES_DIR}mbisc_11/src/src_atlas.svg "${ATLASES_DIR}mbisc_11/src/%03d_v1.svg"
+	#python ${PARSERS_DIR}/mbisc_11/preprocessSVG.py ${ATLASES_DIR}mbisc_11/src/src_atlas.svg "${ATLASES_DIR}mbisc_11/src/%03d_v1.svg"
+	python ${PARSERS_DIR}/mbisc_11/__init__.py
+	if [ -e ${ATLASES_DIR}mbisc_11/caf-reference ]; then diff -r  ${ATLASES_DIR}mbisc_11/caf ${ATLASES_DIR}mbisc_11/caf-reference > diff_mbisc_11.txt; fi
 
 clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}sba_DB08/caf ${ATLASES_DIR}sba_DB08/src
@@ -196,6 +198,7 @@ clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}aba/caf ${ATLASES_DIR}aba/src
 	rm -rfv ${ATLASES_DIR}aba2011/caf ${ATLASES_DIR}aba2011/src
 	rm -rfv ${ATLASES_DIR}tem/caf ${ATLASES_DIR}tem/src
+	rm -rfv ${ATLASES_DIR}mbisc_11/caf ${ATLASES_DIR}mbisc_11/src
 
 reference_datasets:
 	rm -rf ${ATLASES_DIR}whs_0.5/caf-reference; cp -r ${ATLASES_DIR}whs_0.5/caf ${ATLASES_DIR}whs_0.5/caf-reference
@@ -216,11 +219,13 @@ reference_datasets:
 	rm -rf ${ATLASES_DIR}aba/caf-reference; cp -r ${ATLASES_DIR}aba/caf ${ATLASES_DIR}aba/caf-reference
 	rm -rf ${ATLASES_DIR}aba2011/caf-reference; cp -r ${ATLASES_DIR}aba2011/caf ${ATLASES_DIR}aba2011/caf-reference
 	rm -rf ${ATLASES_DIR}tem/caf-reference; cp -r ${ATLASES_DIR}tem/caf ${ATLASES_DIR}tem/caf-reference
+	rm -rf ${ATLASES_DIR}mbisc_11/caf-reference; cp -r ${ATLASES_DIR}mbisc_11/caf ${ATLASES_DIR}mbisc_11/caf-reference
 
 clean_diff:
 	rm -rfv diff_neurolucidaXML.txt diff_vector-test.txt\
 		    diff_whs_0.51.txt diff_whs_0.5.txt diff_sba_PHT00.txt diff_sba_DB08.txt\
 			diff_sba_WHS09.txt diff_sba_WHS10.txt diff_sba_LPBA40_on_SRI24.txt\
 			diff_sba_RM_on_F99.txt diff_aba.txt diff_tem.txt diff_whs_0.6.1.txt diff_whs_0.6.2.txt\
-			diff_sba_FVE91_on_F99.txt diff_aba2011.txt diff_sba_B05_on_Conte69.txt
+			diff_sba_FVE91_on_F99.txt diff_aba2011.txt diff_sba_B05_on_Conte69.txt \
+			diff_mbisc_11.txt
 
