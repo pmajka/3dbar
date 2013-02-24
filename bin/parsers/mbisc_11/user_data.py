@@ -132,13 +132,16 @@ tracerSettings['NewPathIdTemplate'] = 'structure%d_%s_%s'
 # CAFCreatorEmail: CAF authors email
 userMetadata = dict([
         ('CAFName', 'mbisc_11'),
-        ('CAFFullName', 'mbisc_11'),
+        ('CAFFullName', 'CAF dataset based on The Marmoset Brain in Stereotactic Coordinates.'),
         ('CAFSlideOrientation', 'coronal'),
         ('CAFSlideUnits', 'mm'),
-        ('CAFComment', 'please provide description'),
+        ('Language', 'En'),
+        ('CAFComment', 'CAF dataset based on by: George Paxinos, Michael Petrides, Charles Watson, Marcello Rosa, Hironobu Tokuno; Publisher: Academic Press. The dataset contains only cortical structures.'),
+        ('Licencing', 'Unclear.'),
+        ('SourceLicencing', 'Copyright by Academic Press. Restricted.'),
         ('RefCords', '-1.09904044745,19.1636693709,0.0235184448749,-0.0235184496638'),
-        ('CAFAxesOrientation', 'RAS'),
-        ('CAFCreator', 'pmajka@nencki.gov.pl'),
+        ('CAFAxesOrientation', 'RSA'),
+        ('CAFCreator', 'Piotr Majka, Jakub Kowalski - Nencki Institute of Experimental Biology; Tristan Chaplin - Department of Physiology, Monash University.'),
         ('CAFCreatorEmail','pmajka@nencki.gov.pl')])
 
 # Color mapping filename:
