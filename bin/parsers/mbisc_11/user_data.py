@@ -131,17 +131,21 @@ tracerSettings['NewPathIdTemplate'] = 'structure%d_%s_%s'
 
 # CAFCreatorEmail: CAF authors email
 userMetadata = dict([
+        ('Genus', 'Callithrix'),
+        ('Species', 'Callithrix jacchus'),
+        ('Age', '3 years and 2 months; mass: 500g'),
+        ('Sex', 'female'),
         ('CAFName', 'mbisc_11'),
-        ('CAFFullName', 'CAF dataset based on The Marmoset Brain in Stereotactic Coordinates.'),
+        ('CAFFullName', 'CAF dataset based on \'The Marmoset Brain in Stereotactic Coordinates\' <a href="http://www.amazon.com/Marmoset-Brain-Stereotaxic-Coordinates/dp/0124158188">atlas</a>.'),
         ('CAFSlideOrientation', 'coronal'),
         ('CAFSlideUnits', 'mm'),
         ('Language', 'En'),
         ('CAFComment', 'CAF dataset based on by: George Paxinos, Michael Petrides, Charles Watson, Marcello Rosa, Hironobu Tokuno; Publisher: Academic Press. The dataset contains only cortical structures.'),
-        ('Licencing', 'Unclear.'),
-        ('SourceLicencing', 'Copyright by Academic Press. Restricted.'),
+        ('Licencing', 'Restricted.'),
+        ('SourceLicencing', 'Restricted. Copyright (c) 2012 Elsevier Inc. All rights reserved'),
         ('RefCords', '-1.09904044745,19.1636693709,0.0235184448749,-0.0235184496638'),
         ('CAFAxesOrientation', 'RSA'),
-        ('CAFCreator', 'Piotr Majka, Jakub Kowalski - Nencki Institute of Experimental Biology; Tristan Chaplin - Department of Physiology, Monash University.'),
+        ('CAFCreator', 'Piotr Majka, Jakub Kowalski, Nencki Institute of Experimental Biology; Tristan Chaplin, Department of Physiology, Monash University.'),
         ('CAFCreatorEmail','pmajka@nencki.gov.pl')])
 
 # Color mapping filename:
