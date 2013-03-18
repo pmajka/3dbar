@@ -456,7 +456,7 @@ def parseSVG(srcFilename, dstPattern):
         
         node.unlink()
 
-        fName = dstPattern % i
+        fName = dstPattern % (i + 1)
         fh = open(fName, 'w')
         #print 'writing %s' % fName
         # there is an unicode encoding bug in writexml -_-
