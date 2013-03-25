@@ -28,7 +28,7 @@ legitimateSpotLabels = ['orbs', 'fovea', 'rf', 'lf', 'hif', 'sts']
 regularLabelsToRemove = ['Unlabelled', 'Unlabeled','vBrain']
 
 # The number of slides creating the atlas
-slideNumber = 50
+slideNumber = 62
 
 # slideRange determines numbers of consecutive slides.  Usually having n slides
 # one may to enumerate them starting from 0 to n-1 or starting from 1 to n. In
