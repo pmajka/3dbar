@@ -102,6 +102,8 @@ class barVtkConstantPad(object):
         translator.SetOriginTranslation(-padx*sx, -pady*sy, -padz*sz)
         translator.SetInput(source)
 
+        # Now we actually pad the image filling the extended canvas with the
+        # "0" value.
         pad_filter = vtk.vtkImageConstantPad()
         pad_filter.SetConstant(0)
         pad_filter.SetOutputWholeExtent(initial_extent[0], initial_extent[1]+2*padx,
