@@ -68,6 +68,7 @@ class barVtkConstantPad(object):
         self._input = imageData
 
     def SetPaddingValues(self, padx, pady, padz):
+        #TODO: Check if padding is as positive integer?
         self._padding = (padx, pady, padz)
 
     def GetClassName(self):
@@ -78,7 +79,7 @@ class barVtkConstantPad(object):
         # for output data type is performed. In such case, just generate a
         # blank ImageData object just to be able to determine filter's output
         # data type.
-        if self._input.GetWholeExtent() == (0, -1, 0, -1, 0, -1):
+        if self._padding == (0, 0, 0):
             self._output = self._input
             return
 
