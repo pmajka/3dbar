@@ -3,6 +3,36 @@
 		<elements>
 			<pipelineelement disable="False" displayable="True" on="False" order="0">
 				<vtkclass>
+					barVtkConstantPad
+				</vtkclass>
+				<desc>
+					Pad the volume
+				</desc>
+				<params>
+					<param display="True" hidden="False" order="0">
+						<name>
+							SetPaddingValues
+						</name>
+						<desc>
+							Set x,y and z, padding:
+						</desc>
+						<args>
+							<value order="0" type="int">
+								0
+							</value>
+							<value order="1" type="int">
+								0
+							</value>
+							<value order="2" type="int">
+								0
+							</value>
+						</args>
+					</param>
+				</params>
+            </pipelineelement>
+
+			<pipelineelement disable="False" displayable="True" on="False" order="1">
+				<vtkclass>
 					barVtkAllFlip
                 </vtkclass>
 				<desc>
@@ -90,7 +120,7 @@
 				</params>
             </pipelineelement>
 
-			<pipelineelement disable="False" displayable="True" on="False" order="0">
+			<pipelineelement disable="False" displayable="True" on="False" order="2">
 				<vtkclass>
 					vtkImagePermute
 				</vtkclass>
@@ -120,8 +150,7 @@
 				</params>
             </pipelineelement>
 
-
-			<pipelineelement disable="False" displayable="True" on="False" order="0">
+			<pipelineelement disable="False" displayable="True" on="False" order="3">
 				<vtkclass>
 				    vtkImageChangeInformation
 				</vtkclass>
@@ -151,7 +180,7 @@
 				</params>
             </pipelineelement>
 
-			<pipelineelement disable="False" displayable="True" on="False" order="1">
+			<pipelineelement disable="False" displayable="True" on="False" order="4">
 				<vtkclass>
 					vtkImageGaussianSmooth
 				</vtkclass>
@@ -180,8 +209,9 @@ along x,y and z axes
 						</args>
 					</param>
 				</params>
-			</pipelineelement>
-			<pipelineelement disable="True" displayable="True" on="True" order="2">
+            </pipelineelement>
+
+			<pipelineelement disable="True" displayable="True" on="True" order="5">
 				<vtkclass>
 					vtkMarchingCubes
 				</vtkclass>
@@ -237,7 +267,7 @@ along x,y and z axes
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="False" on="True" order="3">
+			<pipelineelement disable="False" displayable="False" on="True" order="6">
 				<vtkclass>
 					vtkTriangleFilter
 				</vtkclass>
@@ -384,11 +414,12 @@ along x,y and z axes
 					</param>
 				</params>
 			</pipelineelement>
-            <pipelineelement disable="False" displayable="True"  on="True" order="6">
+            <pipelineelement disable="False" displayable="False"  on="True" order="6">
                 <vtkclass>vtkCleanPolyData</vtkclass>
                 <desc>libvtkGraphicsPython.vtkCleanPolyData</desc>
                 <params/>
             </pipelineelement>
+
 			<pipelineelement disable="False" displayable="False" on="True" order="7">
 				<vtkclass>
 					vtkPolyDataNormals
