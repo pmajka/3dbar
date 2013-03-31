@@ -18,6 +18,25 @@ Installing required packages (Ubuntu)
 =====================================
 
 
+* Installation in Ubuntu/Kubuntu 12.04 LTS (confirmed 31.03.2013)
+
+  1. Install the Visualization Toolkit and other graphics libraries::
+
+       sudo apt-get install \
+       libvtk5.8 libvtk5-dev libvtk5.8-qt4 libvtk5-qt4-dev \
+       tk8.5 tk8.5-dev \
+       python-vtk libgtkgl2.0-1 libgtkgl2.0-dev libgtkglext1 librsvg2-2 python-nifti
+
+  2. Install python related packages::
+
+       sudo apt-get install \
+       python-gtkglext1 python-rsvg python-opengl python-numpy python-scipy python-wxgtk2.8
+
+  3. Other packages::
+
+      sudo apt-get install \
+      potrace pstoedit python-setuptools python-epydoc
+
 * Installation in Ubuntu/Kubuntu 11.10
 
   1. Install the Visualization Toolkit and other graphics libraries::
