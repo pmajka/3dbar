@@ -27,7 +27,7 @@ legitimateSpotLabels = ['orbs', 'fovea', 'rf', 'lf', 'hif', 'sts']
 
 regularLabelsToRemove = ['Unlabelled', 'Unlabeled','vBrain']
 
-# The number of slides creating the atlas
+# The number of slides constituting the atlas
 slideNumber = 62
 
 # slideRange determines numbers of consecutive slides.  Usually having n slides
@@ -136,16 +136,16 @@ userMetadata = dict([
         ('Age', '3 years and 2 months; mass: 500g'),
         ('Sex', 'female'),
         ('CAFName', 'mbisc_11'),
-        ('CAFFullName', 'CAF dataset based on \'The Marmoset Brain in Stereotactic Coordinates\' <a href="http://www.amazon.com/Marmoset-Brain-Stereotaxic-Coordinates/dp/0124158188">atlas</a>.'),
+        ('CAFFullName', 'Cortical structures from <i>The Marmoset Brain in Stereotactic Coordinates</i> atlas.'),
         ('CAFSlideOrientation', 'coronal'),
         ('CAFSlideUnits', 'mm'),
         ('Language', 'En'),
-        ('CAFComment', 'CAF dataset based on by: George Paxinos, Michael Petrides, Charles Watson, Marcello Rosa, Hironobu Tokuno; Publisher: Academic Press. The dataset contains only cortical structures.'),
-        ('Licencing', 'Restricted.'),
+        ('CAFComment', 'CAF dataset covering cortical structures from <a href="http://www.amazon.com/Marmoset-Brain-Stereotaxic-Coordinates/dp/0124158188">The Marmoset Brain in Stereotactic Coordinates</a> atlas by: George Paxinos, Michael Petrides, Charles Watson, Marcello Rosa, Hironobu Tokuno; Publisher: Academic Press.'),
+        ('Licencing', 'To be discussed'),
         ('SourceLicencing', 'Restricted. Copyright (c) 2012 Elsevier Inc. All rights reserved'),
         ('RefCords', '-1.09904044745,19.1636693709,0.0235184448749,-0.0235184496638'),
         ('CAFAxesOrientation', 'RSA'),
-        ('CAFCreator', 'Piotr Majka, Jakub Kowalski, Nencki Institute of Experimental Biology; Tristan Chaplin, Department of Physiology, Monash University.'),
+        ('CAFCreator', 'Piotr Majka and Jakub Kowalski - Nencki Institute of Experimental Biology; Tristan Chaplin - Department of Physiology, Monash University.'),
         ('CAFCreatorEmail','pmajka@nencki.gov.pl')])
 
 # Color mapping filename:
