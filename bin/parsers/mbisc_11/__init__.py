@@ -125,6 +125,4 @@ if __name__ == '__main__':
 
     ap = AtlasParser(inputDirectory, outputDirectory)
     ap.parseAll()
-    #for i in range(37,40):
-    #   ap.parse(i)
     ap.reindex()

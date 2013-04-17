@@ -140,12 +140,12 @@ userMetadata = dict([
         ('CAFSlideOrientation', 'coronal'),
         ('CAFSlideUnits', 'mm'),
         ('Language', 'En'),
-        ('CAFComment', 'CAF dataset covering cortical structures from <a href="http://www.amazon.com/Marmoset-Brain-Stereotaxic-Coordinates/dp/0124158188">The Marmoset Brain in Stereotactic Coordinates</a> atlas by: George Paxinos, Michael Petrides, Charles Watson, Marcello Rosa, Hironobu Tokuno; Publisher: Academic Press.'),
-        ('Licencing', 'To be discussed'),
-        ('SourceLicencing', 'Restricted. Copyright (c) 2012 Elsevier Inc. All rights reserved'),
+        ('CAFComment', 'CAF dataset coering cortical structures from <a href="http://www.amazon.com/Marmoset-Brain-Stereotaxic-Coordinates/dp/0124158188">The Marmoset Brain in Stereotactic Coordinates</a> atlas by: George Paxinos, Michael Petrides, Charles Watson, Marcello Rosa, Hironobu Tokuno; Publisher: Academic Press.'),
+        ('Licencing', 'To be discussed.'),
+        ('SourceLicencing', 'Restricted. Copyright (c) 2012 Elsevier Inc. All rights reserved.'),
         ('RefCords', '-1.09904044745,19.1636693709,0.0235184448749,-0.0235184496638'),
         ('CAFAxesOrientation', 'RSA'),
-        ('CAFCreator', 'Piotr Majka and Jakub Kowalski - Nencki Institute of Experimental Biology; Tristan Chaplin - Department of Physiology, Monash University.'),
+        ('CAFCreator', 'Piotr Majka and Jakub Kowalski - Nencki Institute of Experimental Biology; Tristan Chaplin and Jonathan Chan - Department of Physiology, Monash University.'),
         ('CAFCreatorEmail','pmajka@nencki.gov.pl')])
 
 # Color mapping filename:

@@ -12,7 +12,7 @@ the http://www.3dbar.org website for more detailed description.
 
 If you haven't done this already, please let us know that you are using
 3D Brain Atlas Reconstructor by filling out short form available on
-http://service.3dbar.org/downloadForm . Thanks a lot.
+http://www.3dbars.org/register . Thanks a lot.
 
 Installing required packages (Ubuntu)
 =====================================
