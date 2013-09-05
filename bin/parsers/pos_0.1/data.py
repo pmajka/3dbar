@@ -38,7 +38,7 @@ REFERENCE_HEIGHT = 250
 voxelSize = 0.05
 
 # ax+b, cy+d
-a, b, c, d = voxelSize, 8.0, -voxelSize, 1.0
+a, b, c, d = -voxelSize, 8.0, -voxelSize, 1.0
 spatialTransformationMatrix= (a,b,c,d)
 alignerCoordinateTuple = (b,d,a,c)
 
@@ -65,7 +65,7 @@ filenameTempates = dict(traced='%03d_traced_v%d.svg')
 renderingProperties = {}
 renderingProperties['ReferenceWidth']  = REFERENCE_WIDTH
 renderingProperties['ReferenceHeight'] = REFERENCE_HEIGHT
-renderingProperties['imageSize']       = (REFERENCE_WIDTH*3, REFERENCE_HEIGHT*3)
+renderingProperties['imageSize']       = (REFERENCE_WIDTH*1, REFERENCE_HEIGHT*1)
 
 potraceProperties    = {}
 potraceProperties['potrace_accuracy_parameter']   ='0.001'
@@ -99,7 +99,7 @@ indexerProperties = dict([
 ('Genus', 'Monodelphis'),
 ('Species', '<i>Monodelphis domestica</i>'),
 ('Strain', 'outbred'),
-('Age', '1 year'),
+('Age', '1 year (xxx) days'),
 ('Sex', 'male'),
 ('Source', 'url_to_the_segmentaion'),
 ('Language', 'En'),

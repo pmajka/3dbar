@@ -65,16 +65,17 @@ class AtlasParser(bar.barBitmapParser):
         #Some properties cannot be predefined, adding them now:
         self.setProperty('outputDirectory', outputDirectory)
 
-        # set structure name -> structure colour mapping
+        # Assign structure abbreviation --> structure colour mapping
+        # Assign structure abbreviation --> structure fullname mapping
         fullnameMappingFile = os.path.join(self.inputDirectory,'fullnames.txt')
         structureColours = getDictionaryFromFile(fullnameMappingFile, 1, 2)
         imageToStructure = getDictionaryFromFile(fullnameMappingFile, 0, 1)
-        imageToStructure = dict( ('#'+k.lower(), v) for k, v in
-                imageToStructure.iteritems())
+        imageToStructure = dict( ('#'+k.lower(), v) for k, v in  # small
+                imageToStructure.iteritems())                    # correction
 
         self.setProperty('structureColours', structureColours)
         self.setProperty('imageToStructure', imageToStructure)
-        self.indexer.colorMapping=structureColours
+        self.indexer.colorMapping = structureColours
 
         self._defineSlideRange(antPostAxis=2)
         self._pathNumber = 0
@@ -99,7 +100,8 @@ class AtlasParser(bar.barBitmapParser):
                                                  writeSlide = False,
                                                  useIndexer = False)
 
-        # Reduce label size
+        # Reduce label size as the default font-size is definitely
+        # too large
         map(lambda x: \
                 x._attributes.update({'font-size':'12px'}),\
                 tracedSlide.labels)
@@ -127,7 +129,7 @@ class AtlasParser(bar.barBitmapParser):
 
         # Load and use fullname mapping
         fullnameMappingFile = os.path.join(self.inputDirectory,'fullnames.txt')
-        self.indexer.setNameMappingFromFile(fullnameMappingFile, 2 , 4)
+        self.indexer.setNameMappingFromFile(fullnameMappingFile, 2, 4)
 
         self.writeIndex()
 
