@@ -34,9 +34,6 @@ from data import *
 
 class AtlasParser(bar.barBitmapParser):
     """
-    @type  rawSlidesDirectory: string
-    @param rawSlidesDirectory: Directory with raw SVG files (raw conversion from ie. PDF)
-
     Required to implement:
     _getSourceImage(self, slideNumber)
     _createMask(self, image, colorValue)
@@ -57,13 +54,13 @@ class AtlasParser(bar.barBitmapParser):
 
         # Define source dataset location and initialize parser by loading
         # source dataset
-        sourceFilename = '/home/pmajka/Dropbox/Photos/oposy_skrawki/02_02_NN2/02_02_NN2_segmentacja_mri.nii.gz'
+        sourceFilename = '/home/pmajka/Dropbox/02_02_NN2_segmentation_in_uct_space.nii.gz'
         #volumetricFile = os.path.join(inputDirectory,sourceFilename)
         volumetricFile = sourceFilename
+
         self._volumeSrc = nifti.NiftiImage(volumetricFile)
         self._volumeHeader = self._volumeSrc.header
         self._volume = self._volumeSrc.data
-        print self._volume.shape
 
         #Some properties cannot be predefined, adding them now:
         self.setProperty('outputDirectory', outputDirectory)
@@ -95,7 +92,6 @@ class AtlasParser(bar.barBitmapParser):
         antPostDim = self._volumeHeader['dim'][antPostAxis]
         self._voxelSize = self._volumeHeader['pixdim'][antPostAxis]
         self.slideRange = map(lambda x: x, range(0, antPostDim))
-        print self.slideRange
 
     def parse(self, slideNumber):
         tracedSlide = bar.barBitmapParser.parse(self, slideNumber,\
@@ -159,7 +155,6 @@ class AtlasParser(bar.barBitmapParser):
         resizeTuple = self.renderingProperties['imageSize']
         image = ImageChops.multiply(ImageChops.multiply(mask[1], mask[0]),mask[2])
         image = ImageChops.invert(image).resize(resizeTuple, Image.ANTIALIAS)
-        #image = ImageChops.invert(image).resize(resizeTuple, Image.NEAREST)
         return image
 
     def _getSpatialCoordinate(self, voxelIndexTuple):
@@ -192,5 +187,5 @@ if __name__=='__main__':
         outputDirectory = 'atlases/pos_0.1/caf/'
 
     ap = AtlasParser(inputDirectory, outputDirectory)
-#   ap.parse(150)
-    ap.parseAll()
+    ap.parse(352)
+#   ap.parseAll()

@@ -33,13 +33,12 @@ CONF_CONTACT_EMAIL  = 'pmajka@nencki.gov.pl'
 CONF_CAF_COMPIL_TIME= datetime.datetime.utcnow().strftime("%F %T")
 CONF_CAF_FULL_NAME = 'Stereotaxic multimodal template of the gray-short tailed opossum (monodelphis domestica).'
 
-REFERENCE_WIDTH = 350  #320
-REFERENCE_HEIGHT = 270 #250
-STACK_LENGTH = 510
+REFERENCE_WIDTH = 320
+REFERENCE_HEIGHT = 250
 voxelSize = 0.05
 
 # ax+b, cy+d
-a, b, c, d = voxelSize, -5.3965, -voxelSize, 5.4825
+a, b, c, d = voxelSize, 8.0, -voxelSize, 1.0
 spatialTransformationMatrix= (a,b,c,d)
 alignerCoordinateTuple = (b,d,a,c)
 
