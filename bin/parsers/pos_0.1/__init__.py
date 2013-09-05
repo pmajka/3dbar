@@ -54,9 +54,8 @@ class AtlasParser(bar.barBitmapParser):
 
         # Define source dataset location and initialize parser by loading
         # source dataset
-        sourceFilename = '/home/pmajka/Dropbox/02_02_NN2_segmentation_in_uct_space.nii.gz'
-        #volumetricFile = os.path.join(inputDirectory,sourceFilename)
-        volumetricFile = sourceFilename
+        sourceFilename = '02_02_NN2_segmentation_in_uct_space.nii.gz'
+        volumetricFile = os.path.join(inputDirectory, sourceFilename)
 
         self._volumeSrc = nifti.NiftiImage(volumetricFile)
         self._volumeHeader = self._volumeSrc.header
