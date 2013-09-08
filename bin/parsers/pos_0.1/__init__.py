@@ -188,5 +188,4 @@ if __name__=='__main__':
         outputDirectory = 'atlases/pos_0.1/caf/'
 
     ap = AtlasParser(inputDirectory, outputDirectory)
-    ap.parse(352)
-#   ap.parseAll()
+    ap.parseAll()
