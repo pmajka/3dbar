@@ -14,4 +14,6 @@ Ministry of Regional Development, POIG.02.03.00-00-003/09.
 
 === Licensing infortmation: ===
 
-TO BE PROVIDED
+This work is licensed under a Creative Commons
+Attribution-NonCommercial 3.0 Unported License.
+(http://creativecommons.org/licenses/by-nc/3.0/)
