@@ -141,7 +141,7 @@ userMetadata = dict([
         ('CAFSlideUnits', 'mm'),
         ('Language', 'En'),
         ('CAFComment', 'CAF dataset coering cortical structures from <a href="http://www.amazon.com/Marmoset-Brain-Stereotaxic-Coordinates/dp/0124158188">The Marmoset Brain in Stereotactic Coordinates</a> atlas by: George Paxinos, Michael Petrides, Charles Watson, Marcello Rosa, Hironobu Tokuno; Publisher: Academic Press.'),
-        ('Licencing', 'To be discussed.'),
+        ('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
         ('SourceLicencing', 'Restricted. Copyright (c) 2012 Elsevier Inc. All rights reserved.'),
         ('RefCords', '-1.09904044745,19.1636693709,0.0235184448749,-0.0235184496638'),
         ('CAFAxesOrientation', 'RSA'),
