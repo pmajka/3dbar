@@ -47,7 +47,7 @@ REFERENCE_HEIGHT = 1169.2
 slideRange = range(0,151)
 
 alignerCoordinateTuple =\
-    (-1.4579349904, 42.5786314526, 0.0478011472, -0.0480192077) 
+    (-1.4579349904, 42.5786314526, 0.0478011472, -0.0480192077)
 
 filenameTempates = dict(traced='%d_traced_v%d.svg')
 
@@ -60,8 +60,8 @@ potraceProperties['potrace_height_string']  =      '%fpt' % REFERENCE_HEIGHT
 tracerSettings={}
 tracerSettings['DumpEachStepSVG']          = True
 tracerSettings['DumpEachStepPNG']          = True
-tracerSettings['DumpWrongSeed']            = True 
-tracerSettings['DumpVBrain']               = True 
+tracerSettings['DumpWrongSeed']            = True
+tracerSettings['DumpVBrain']               = True
 tracerSettings['DumpDirectory']            = '.'
 tracerSettings['DetectUnlabelled']         = False
 tracerSettings['CacheLevel']               = 5

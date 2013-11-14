@@ -183,9 +183,9 @@ mbisc_11:
 pos_0.1:
 	mkdir -p ${ATLASES_DIR}pos_0.1/src
 	mkdir -p ${ATLASES_DIR}pos_0.1/caf
-	python ${PARSERS_DIR}/pos_0.1/preprocess_data.py ${ATLASES_DIR}pos_0.1/src/label_descriptions.txt ${ATLASES_DIR}pos_0.1/src/fullnames.txt
+	python ${PARSERS_DIR}/pos_0.1/preprocess_data.py ${ATLASES_DIR}pos_0.1/src/label_descriptions.txt ${ATLASES_DIR}pos_0.1/src/fullnames.txt ${ATLASES_DIR}pos_0.1/src/parents.txt
 	python ${PARSERS_DIR}/pos_0.1/__init__.py
-	if [ -e ${ATLASES_DIR}pos_0.1/caf-reference ]; then diff -r  ${ATLASES_DIR}pos_0.1/caf ${ATLASES_DIR}pos_0.1/caf-reference > diff_pos_0.1.txt; fi
+	#if [ -e ${ATLASES_DIR}pos_0.1/caf-reference ]; then diff -r  ${ATLASES_DIR}pos_0.1/caf ${ATLASES_DIR}pos_0.1/caf-reference > diff_pos_0.1.txt; fi
 
 clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}sba_DB08/caf ${ATLASES_DIR}sba_DB08/src

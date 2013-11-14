@@ -79,6 +79,9 @@ class AtlasParser(bar.barBitmapParser):
         self._defineSlideRange(antPostAxis=2)
         self._pathNumber = 0
 
+        # Define hierarchy root
+        self.indexer.hierarchyRootElementName = 'Br'
+
         # Set indexer properties
         self.indexer.updateProperties(indexerProperties)
 
@@ -116,9 +119,9 @@ class AtlasParser(bar.barBitmapParser):
         bar.barBitmapParser.reindex(self)
 
         #Load hierarchy from parents.txt
-        #hierarhySourceFilename = os.path.join(self.inputDirectory, 'parents.txt')
-        #self.indexer.setParentsFromFile(hierarhySourceFilename)
-        self.indexer.createFlatHierarchy()
+        hierarhySourceFilename = os.path.join(self.inputDirectory, 'parents.txt')
+        self.indexer.setParentsFromFile(hierarhySourceFilename)
+        #self.indexer.createFlatHierarchy()
 
         # set structure name -> structure colour mapping
         fullnameMappingFile = os.path.join(self.inputDirectory,'fullnames.txt')
@@ -128,7 +131,7 @@ class AtlasParser(bar.barBitmapParser):
 
         # Load and use fullname mapping
         fullnameMappingFile = os.path.join(self.inputDirectory,'fullnames.txt')
-        self.indexer.setNameMappingFromFile(fullnameMappingFile, 2, 4)
+        self.indexer.setNameMappingFromFile(fullnameMappingFile, 1, 3)
 
         self.writeIndex()
 
@@ -189,3 +192,4 @@ if __name__=='__main__':
 
     ap = AtlasParser(inputDirectory, outputDirectory)
     ap.parseAll()
+    #ap.reindex()
