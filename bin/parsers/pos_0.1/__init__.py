@@ -54,6 +54,7 @@ class AtlasParser(bar.barBitmapParser):
 
         # Define source dataset location and initialize parser by loading
         # source dataset
+        # TODO: Change the segmnetation filename.
         sourceFilename = '02_02_NN2_segmentation_in_uct_space.nii.gz'
         volumetricFile = os.path.join(inputDirectory, sourceFilename)
 
@@ -78,9 +79,6 @@ class AtlasParser(bar.barBitmapParser):
 
         self._defineSlideRange(antPostAxis=2)
         self._pathNumber = 0
-
-        # Define hierarchy root
-        self.indexer.hierarchyRootElementName = 'Br'
 
         # Set indexer properties
         self.indexer.updateProperties(indexerProperties)
@@ -177,7 +175,6 @@ class AtlasParser(bar.barBitmapParser):
         return spatialTransformationMatrix
 
     def _getNewPathID(self, structName = None):
-        #TODO: Assert no spaces in structure name and not null structName
         self._pathNumber+=1
         return "structure%d_label%d_%s" % (self._pathNumber, self._pathNumber, structName)
 

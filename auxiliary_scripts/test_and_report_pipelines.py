@@ -69,7 +69,7 @@ echo ${size}
 
 %s
 """
- 
+
     __linePattern = """# BEGIN %%(pipeline)s
 
 PIPELINE_DIR=`pwd`/pipeline_test_`date +"%%%%%%%%Y-%%%%%%%%m-%%%%%%%%d"`/%%(pipeline)s_`date +%%%%%%%%s`/
@@ -150,7 +150,7 @@ dir3dbar = args[0]
 cafName = args[1]
 pipelines = args[2:]
 
-print scriptGenerator(dir3dbar, cafName, pipelines, options.format, ec, options.voxelDimensions) 
+print scriptGenerator(dir3dbar, cafName, pipelines, options.format, ec, options.voxelDimensions)
 
 
 #TODO: multiple pipelines, one set; switches
