@@ -301,7 +301,7 @@ along x,y and z axes
 					</param>
 				</params>
 			</pipelineelement>
-			<pipelineelement disable="False" displayable="True" on="True" order="7">
+			<pipelineelement disable="False" displayable="True" on="False" order="7">
 				<vtkclass>
 					barVtkMirror
 				</vtkclass>
