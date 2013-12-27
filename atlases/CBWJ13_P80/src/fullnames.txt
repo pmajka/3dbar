@@ -1,0 +1,30 @@
+000000	bcg	background	ffffff #Background color 
+
+C8C8C8	-	[-]	000000
+010101	cing	Cingulum	00AAAA
+020202	MBr	Midbrain	005555
+030303	SN	Substantia nigra	00FF7F
+040404	ac	Anterior commissure	00AA55
+050505	HBr	Hindbrain	00552A
+060606	Spt	Septum	00FF00
+070707	DiagD	Diagonal domain	00AA00
+080808	Hy	Hypothalamus	005500
+090909	Str	Striatum	7FFF00
+0A0A0A	IBr	Diencephalon	55AA00
+0B0B0B	ic	Internal capsule	2A5500
+0C0C0C	HiF	Hippocampal formation	FFFF00
+0D0D0D	GP	Pallidum	AAAA00
+0E0E0E	Acb	Accumbens	555500
+0F0F0F	fi	Fimbria fornix	FF7F00
+101010	cc	Corpus Callosum	AA5500
+111111	Amg	Amygdala	552A00
+121212	POA	Preoptic area	FF0000
+131313	Ctx	Isocortex	AA0000
+141414	Cb	Cerebellum	550000
+151515	Olf	Olfactory structures	FF007F
+161616	BNST	Bed nuclei stria terminalis	AA0055
+171717	Hp	Pituitary	55002A
+181818	ventr	Ventricles	FF00FF
+191919	opt	Optic pathway	AA00AA
+1A1A1A	Pi	Pineal gland	550055
+1B1B1B	Bs	brainstem	0000FF
