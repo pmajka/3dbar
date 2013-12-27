@@ -187,6 +187,15 @@ pos_0.1:
 	python ${PARSERS_DIR}/pos_0.1/__init__.py
 	#if [ -e ${ATLASES_DIR}pos_0.1/caf-reference ]; then diff -r  ${ATLASES_DIR}pos_0.1/caf ${ATLASES_DIR}pos_0.1/caf-reference > diff_pos_0.1.txt; fi
 
+CBWJ13_P80:
+	wget --keep-session-cookies --save-cookies ${ATLASES_DIR}/CBWJ13_P80/src/cookies.txt --post-data 'username=civmpub&password=civmpub' http://civmvoxport.duhs.duke.edu/voxbase/login.php -O /dev/null
+	wget --load-cookies ${ATLASES_DIR}/CBWJ13_P80/src/cookies.txt http://civmvoxport.duhs.duke.edu/voxbase/downloaddataset.php?stackID=22940 -O ${ATLASES_DIR}/CBWJ13_P80/src/pnd80_average_labels.nii
+	rm  ${ATLASES_DIR}/CBWJ13_P80/src/cookies.txt
+	mkdir -p ${ATLASES_DIR}/CBWJ13_P80/src
+	mkdir -p ${ATLASES_DIR}/CBWJ13_P80/caf
+	python ${PARSERS_DIR}/CBWJ13_P80/__init__.py
+	if [ -e ${ATLASES_DIR}/CBWJ13_P80/caf-reference ]; then diff -r ${ATLASES_DIR}/CBWJ13_P80/caf ${ATLASES_DIR}/CBWJ13_P80/caf-reference > diff_CBWJ13_P80.txt; fi
+
 clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}sba_DB08/caf ${ATLASES_DIR}sba_DB08/src
 	rm -rfv ${ATLASES_DIR}sba_PHT00/caf ${ATLASES_DIR}sba_PHT00/src
@@ -208,6 +217,7 @@ clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}tem/caf ${ATLASES_DIR}tem/src
 	rm -rfv ${ATLASES_DIR}mbisc_11/caf ${ATLASES_DIR}mbisc_11/src
 	rm -rfv ${ATLASES_DIR}pos_0.1/caf ${ATLASES_DIR}pos_0.1/src
+	rm -rfv ${ATLASES_DIR}CBWJ13_P80/caf ${ATLASES_DIR}CBWJ13_P80/src
 
 reference_datasets:
 	rm -rf ${ATLASES_DIR}whs_0.5/caf-reference; cp -r ${ATLASES_DIR}whs_0.5/caf ${ATLASES_DIR}whs_0.5/caf-reference
@@ -230,6 +240,7 @@ reference_datasets:
 	rm -rf ${ATLASES_DIR}tem/caf-reference; cp -r ${ATLASES_DIR}tem/caf ${ATLASES_DIR}tem/caf-reference
 	rm -rf ${ATLASES_DIR}mbisc_11/caf-reference; cp -r ${ATLASES_DIR}mbisc_11/caf ${ATLASES_DIR}mbisc_11/caf-reference
 	rm -rf ${ATLASES_DIR}pos_0.1/caf-reference; cp -r ${ATLASES_DIR}pos_0.1/caf ${ATLASES_DIR}pos_0.1/caf-reference
+	rm -rf ${ATLASES_DIR}CBWJ13_P80/caf-reference; cp -r ${ATLASES_DIR}CBWJ13_P80/caf ${ATLASES_DIR}CBWJ13_P80/caf-reference
 
 clean_diff:
 	rm -rfv diff_neurolucidaXML.txt diff_vector-test.txt\
@@ -237,5 +248,4 @@ clean_diff:
 			diff_sba_WHS09.txt diff_sba_WHS10.txt diff_sba_LPBA40_on_SRI24.txt\
 			diff_sba_RM_on_F99.txt diff_aba.txt diff_tem.txt diff_whs_0.6.1.txt diff_whs_0.6.2.txt\
 			diff_sba_FVE91_on_F99.txt diff_aba2011.txt diff_sba_B05_on_Conte69.txt \
-			diff_mbisc_11.txt diff_pos_0.1.txt
-
+			diff_mbisc_11.txt diff_pos_0.1.txt diff_CBWJ13_P80.txt
