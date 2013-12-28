@@ -24,7 +24,7 @@
 
 import datetime
 
-CONF_PARSER_COMMENT = 'CAF dataset based on the  P80 data from the Evan Calabrese, Alexandra Badea, Charles Watson, G. Allan Johnson (2013) "A quantitative magnetic resonance histology atlas of postnatal rat brain development with regional estimates of growth and variability.", Neuroimage 71:196-206. 10.1016/j.neuroimage.2013.01.017.'
+CONF_PARSER_COMMENT = 'CAF dataset based on the P80 data from the Evan Calabrese, Alexandra Badea, Charles Watson, G. Allan Johnson (2013) "A quantitative magnetic resonance histology atlas of postnatal rat brain development with regional estimates of growth and variability.", Neuroimage 71:196-206. 10.1016/j.neuroimage.2013.01.017.'
 CONF_PARSER_NAME    = 'CBWJ13_P80'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology'
 CONF_CONTACT_EMAIL  = 'pmajka@nencki.gov.pl'
@@ -105,7 +105,7 @@ indexerProperties = dict([
 ('Language', 'En'),
 ('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
 ('SourceLicencing', 'CC-BY put details'),
-('SRSCode', 'SRS origin defined verbally as the "Junction of the rostral and dorsal tangential planes of the anterior commissure with the mid-sagittal plane", which corresponds to voxel [953,340,379] in the original NIFTI dataset (link). See <a href="http://scalablebrainatlas.incf.org/CBWJ13_age_P80/AC_origin.jpg" target="_blank">this image</a> from the  <a href="http://scalablebrainatlas.incf.org" target="_blank">Scalable Brain Atlas website for details</a>'),
+('SRSCode', 'SRS origin described as the "Junction of the rostral and dorsal tangential planes of the anterior commissure with the mid-sagittal plane", which corresponds to voxel [953,340,379] in the original NIFTI dataset (link). See <a href="http://scalablebrainatlas.incf.org/CBWJ13_age_P80/AC_origin.jpg" target="_blank">this image</a> from the  <a href="http://scalablebrainatlas.incf.org" target="_blank">Scalable Brain Atlas website for details</a>'),
 ('ReferenceWidth', str(REFERENCE_WIDTH)),
 ('ReferenceHeight', str(REFERENCE_HEIGHT)),
 ('FilenameTemplate',filenameTempates['traced']),
