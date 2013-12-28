@@ -38,7 +38,7 @@ coronal_origin_voxel_index = 953
 # Origin of the coordinate system in the source volume [953,340,379]
 
 # ax+b, cy+d
-a, b, c, d = -voxelSize, 8.5, voxelSize, -9.475
+a, b, c, d = -voxelSize, 8.45, voxelSize, -8.20
 spatialTransformationMatrix = (a,b,c,d)
 alignerCoordinateTuple = (b,d,a,c)
 
