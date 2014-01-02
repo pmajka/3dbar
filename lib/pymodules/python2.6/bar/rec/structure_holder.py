@@ -233,10 +233,12 @@ class structureHolder():
         # Esspecialy direction of Y axis:
         # We take absolute value of scalings and coronal resosolution as
         # VTK handles negavite scaling very poor.
+        # TODO: Crashes for the following values: 8.45 -8.2 -0.025 0.025
+        # TODO: Fix it!
 
         if sx > 0 and sy > 0:
-            T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
             S = numpy.array( [[sx,0,0,0 ],[0,sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
+            T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,ty],[0,0,1,tz],[0,0,0,1]])
         elif sx > 0 and sy < 0:
             S = numpy.array( [[sx,0,0,0 ],[0,-sy,0,0 ],[0,0,sz,0],[0,0,0,1]])
             T = numpy.array( [[1 ,0,0,tx],[0,1 ,0,sy*h+ty],[0,0,1,tz],[0,0,0,1]])
