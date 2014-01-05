@@ -24,12 +24,12 @@
 
 import datetime
 
-CONF_PARSER_COMMENT = 'CAF dataset based on the P80 data from the Evan Calabrese, Alexandra Badea, Charles Watson, G. Allan Johnson (2013) "A quantitative magnetic resonance histology atlas of postnatal rat brain development with regional estimates of growth and variability.", Neuroimage 71:196-206. 10.1016/j.neuroimage.2013.01.017.'
+CONF_PARSER_COMMENT = 'CAF dataset based on the P80 data from the Evan Calabrese, Alexandra Badea, Charles Watson, G. Allan Johnson (2013) <i>A quantitative magnetic resonance histology atlas of postnatal rat brain development with regional estimates of growth and variability.</i>, Neuroimage 71:196-206, <a href="http://dx.doi.org/10.1016/j.neuroimage.2013.01.017" target="_blank">10.1016/j.neuroimage.2013.01.017</a>.'
 CONF_PARSER_NAME    = 'CBWJ13_P80'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology'
 CONF_CONTACT_EMAIL  = 'pmajka@nencki.gov.pl'
 CONF_CAF_COMPIL_TIME= datetime.datetime.utcnow().strftime("%F %T")
-CONF_CAF_FULL_NAME = 'CAF dataset based on the  P80 data from the Evan Calabrese, Alexandra Badea, Charles Watson, G. Allan Johnson (2013) "A quantitative magnetic resonance histology atlas of postnatal rat brain development with regional estimates of growth and variability.", Neuroimage 71:196-206. 10.1016/j.neuroimage.2013.01.017.'
+CONF_CAF_FULL_NAME = 'Adult (P80) Wistar rat brain template by Calabrese et. al. (2013)'
 
 REFERENCE_WIDTH = 680
 REFERENCE_HEIGHT = 660
@@ -97,7 +97,7 @@ atlasparserProperties=(
 ('slideTemplate', tracedSlideTemplate))
 
 indexerProperties = dict([
-('Genus', 'Monodelphis'),
+('Genus', '<i>Rattus</i>'),
 ('Species', '<i>Rattus norvegicus</i>'),
 ('Strain', 'Wistar'),
 ('Age', 'adult, postnatal day 80'),
@@ -105,7 +105,7 @@ indexerProperties = dict([
 ('Source', 'http://civmvoxport.duhs.duke.edu/voxbase/preview.php?tid=B&studyid=208&datasetid=11970'),
 ('Language', 'En'),
 ('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
-('SourceLicencing', 'CC-BY put details'),
+('SourceLicencing', 'Academic use only. <a href="http://www.civm.duhs.duke.edu/SharedData/DataSupplements.htm"  target="_blank">Please check the CIVM website for the details</a>.'),
 ('SRSCode', 'SRS origin described as the "Junction of the rostral and dorsal tangential planes of the anterior commissure with the mid-sagittal plane", which corresponds to voxel [953,340,379] in the original NIFTI dataset (link). See <a href="http://scalablebrainatlas.incf.org/CBWJ13_age_P80/AC_origin.jpg" target="_blank">this image</a> from the  <a href="http://scalablebrainatlas.incf.org" target="_blank">Scalable Brain Atlas website for details</a>'),
 ('ReferenceWidth', str(REFERENCE_WIDTH)),
 ('ReferenceHeight', str(REFERENCE_HEIGHT)),

@@ -65,7 +65,7 @@ filenameTempates = dict(traced='%03d_traced_v%d.svg')
 renderingProperties = {}
 renderingProperties['ReferenceWidth']  = REFERENCE_WIDTH
 renderingProperties['ReferenceHeight'] = REFERENCE_HEIGHT
-renderingProperties['imageSize']       = (REFERENCE_WIDTH*4, REFERENCE_HEIGHT*4)
+renderingProperties['imageSize']       = (REFERENCE_WIDTH*5, REFERENCE_HEIGHT*5)
 
 potraceProperties    = {}
 potraceProperties['potrace_accuracy_parameter']   ='0.001'

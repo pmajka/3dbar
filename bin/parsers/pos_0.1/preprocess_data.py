@@ -69,6 +69,7 @@ if __name__ == "__main__":
             # 1,2,3 - r,g,b colors of the structure
             # 4,5,6 - not interesting,
             # 7 - string in format: fullname|abbrev|parent's abbrev
+            print row
             r, g, b = tuple(map(int, row[1:4]))
             fullname = row[7].split("|")[0].replace('"', "")
             abbreviation = row[7].split("|")[1].replace('"', "")
