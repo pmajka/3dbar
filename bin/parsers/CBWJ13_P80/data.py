@@ -24,12 +24,12 @@
 
 import datetime
 
-CONF_PARSER_COMMENT = 'CAF dataset based on the P80 data from the Evan Calabrese, Alexandra Badea, Charles Watson, G. Allan Johnson (2013) <i>A quantitative magnetic resonance histology atlas of postnatal rat brain development with regional estimates of growth and variability.</i>, Neuroimage 71:196-206, <a href="http://dx.doi.org/10.1016/j.neuroimage.2013.01.017" target="_blank">10.1016/j.neuroimage.2013.01.017</a>.'
+CONF_PARSER_COMMENT = 'CAF dataset based on the P80 data from the Evan Calabrese, Alexandra Badea, Charles Watson, G. Allan Johnson (2013) <i>A quantitative magnetic resonance histology atlas of postnatal rat brain development with regional estimates of growth and variability</i>, Neuroimage 71:196-206, <a href="http://dx.doi.org/10.1016/j.neuroimage.2013.01.017" target="_blank">10.1016/j.neuroimage.2013.01.017</a>.'
 CONF_PARSER_NAME    = 'CBWJ13_P80'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology'
 CONF_CONTACT_EMAIL  = 'pmajka@nencki.gov.pl'
 CONF_CAF_COMPIL_TIME= datetime.datetime.utcnow().strftime("%F %T")
-CONF_CAF_FULL_NAME = 'Adult (P80) Wistar rat brain template by Calabrese et. al. (2013)'
+CONF_CAF_FULL_NAME = 'Adult (P80) Wistar rat brain template by Calabrese et al. (2013)'
 
 REFERENCE_WIDTH = 680
 REFERENCE_HEIGHT = 660

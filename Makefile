@@ -183,6 +183,8 @@ mbisc_11:
 pos_0.1:
 	mkdir -p ${ATLASES_DIR}pos_0.1/src
 	mkdir -p ${ATLASES_DIR}pos_0.1/caf
+	wget http://doc.3dbar.org/possum/01/segmentation_in_srs.nii.gz -O ${ATLASES_DIR}/pos_0.1/src/segmentation_in_uct_space.nii.gz
+	wget http://doc.3dbar.org/possum/01/labels.txt -O ${ATLASES_DIR}/pos_0.1/src/label_descriptions.txt
 	python ${PARSERS_DIR}/pos_0.1/preprocess_data.py ${ATLASES_DIR}pos_0.1/src/label_descriptions.txt ${ATLASES_DIR}pos_0.1/src/fullnames.txt ${ATLASES_DIR}pos_0.1/src/parents.txt
 	python ${PARSERS_DIR}/pos_0.1/__init__.py
 	#if [ -e ${ATLASES_DIR}pos_0.1/caf-reference ]; then diff -r  ${ATLASES_DIR}pos_0.1/caf ${ATLASES_DIR}pos_0.1/caf-reference > diff_pos_0.1.txt; fi
