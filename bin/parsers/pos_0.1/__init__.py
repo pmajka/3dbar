@@ -54,8 +54,7 @@ class AtlasParser(bar.barBitmapParser):
 
         # Define source dataset location and initialize parser by loading
         # source dataset
-        # TODO: Change the segmnetation filename.
-        sourceFilename = '02_02_NN2_segmentation_in_uct_space.nii.gz'
+        sourceFilename = 'segmentation_in_uct_space.nii.gz'
         volumetricFile = os.path.join(inputDirectory, sourceFilename)
 
         self._volumeSrc = nifti.NiftiImage(volumetricFile)
@@ -103,7 +102,7 @@ class AtlasParser(bar.barBitmapParser):
         # Reduce label size as the default font-size is definitely
         # too large
         map(lambda x: \
-                x._attributes.update({'font-size':'12px'}),\
+                x._attributes.update({'font-size':'8px'}),\
                 tracedSlide.labels)
         tracedSlide.writeXMLtoFile(self._getOutputFilename(slideNumber))
 

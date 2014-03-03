@@ -190,5 +190,4 @@ if __name__=='__main__':
         outputDirectory = 'atlases/CBWJ13_P80/caf/'
 
     ap = AtlasParser(inputDirectory, outputDirectory)
-    #ap.parseAll()
-    ap.reindex()
+    ap.parseAll()
