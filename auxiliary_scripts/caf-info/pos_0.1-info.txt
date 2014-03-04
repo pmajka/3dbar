@@ -1,0 +1,22 @@
+This dataset was created using 3d Brain Atlas Reconstructor – software dedicated
+for creating three-dimensional reconstructions from 2D slides.
+
+CAF dataset based on parcellation of gray-short tailed opossum brain:
+    http://doc.3dbar.org/possum/01/segmentation_in_srs.nii.gz
+by Chlodzinska et. al. (2013) (http://pns2013.pl/program/poster-sessions-2/)
+
+See Majka et. al. (2012) (http://www.frontiersin.org/10.3389/conf.fninf.2014.08.00081/event_abstract),
+Clodzinska et. al. (2012) (http://fens.ekonnect.co/FENS_331/poster_32524/program.aspx)
+and Majka et. al. (2013) (http://www.frontiersin.org/Community/AbstractDetails.aspx?ABS_DOI=10.3389/conf.fninf.2013.09.00021&eid=1904&sname=Neuroinformatics_2013)
+for detailed description of the goals and procedures.
+
+Also check the source data repository:
+    http://www.3dbar.org/wiki/barPossumSupplement
+for the source MR volume, as well as three dimensional reconstruction of the brain volume based on Nissl-stained sections, myelin-stained sections and blockface images.
+
+
+=== Licensing infortmation: ===
+
+This work is licensed under a Creative Commons
+Attribution-NonCommercial 3.0 Unported License.
+(http://creativecommons.org/licenses/by-nc/3.0/)
