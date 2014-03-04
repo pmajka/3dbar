@@ -24,14 +24,17 @@
 
 import datetime
 
-CONF_PARSER_COMMENT = 'CAF dataset based on: \
-<a href="http://put_the_url_of_the_opossum_segmentation" target="_blank">\
-pos_template</a>'
+CONF_PARSER_COMMENT = 'CAF dataset based on <a href="http://doc.3dbar.org/possum/01/segmentation_in_srs.nii.gz" target="_blank">parcellation</a> of a gray short-tailed opossum brain by <a href="http://pns2013.pl/program/poster-sessions-2/" target="_blank">Chlodzinska et. al. (2013)</a>. \
+See <a href="http://www.frontiersin.org/10.3389/conf.fninf.2014.08.00081/event_abstract" target="_blank"> Majka et. al. (2012)</a>, \
+<a href="http://fens.ekonnect.co/FENS_331/poster_32524/program.aspx" target="_blank">Clodzinska et. al. (2012)</a> \
+and <a href="http://www.frontiersin.org/Community/AbstractDetails.aspx?ABS_DOI=10.3389/conf.fninf.2013.09.00021&eid=1904&sname=Neuroinformatics_2013" target="_blank">Majka et. al. (2013)</a> \
+for detailed description of the goals and procedures. \
+Also check the <a href="http://www.3dbar.org/wiki/barPossumSupplement" target="_blank"> source data repository</a> for the reference MR volume, as well as three dimensional reconstruction of the brain volume based on Nissl-stained sections, myelin-stained sections and blockface images.'
 CONF_PARSER_NAME    = 'pos_0.1'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology'
 CONF_CONTACT_EMAIL  = 'pmajka@nencki.gov.pl'
 CONF_CAF_COMPIL_TIME= datetime.datetime.utcnow().strftime("%F %T")
-CONF_CAF_FULL_NAME = 'Stereotaxic multimodal template of the gray-short tailed opossum (monodelphis domestica).'
+CONF_CAF_FULL_NAME = 'Stereotaxic multimodal template of the gray-short tailed opossum (<i>Monodelphis domestica</i>)'
 
 REFERENCE_WIDTH = 320
 REFERENCE_HEIGHT = 250
@@ -65,7 +68,7 @@ filenameTempates = dict(traced='%03d_traced_v%d.svg')
 renderingProperties = {}
 renderingProperties['ReferenceWidth']  = REFERENCE_WIDTH
 renderingProperties['ReferenceHeight'] = REFERENCE_HEIGHT
-renderingProperties['imageSize']       = (REFERENCE_WIDTH*5, REFERENCE_HEIGHT*5)
+renderingProperties['imageSize']       = (REFERENCE_WIDTH*8, REFERENCE_HEIGHT*8)
 
 potraceProperties    = {}
 potraceProperties['potrace_accuracy_parameter']   ='0.001'
@@ -98,8 +101,8 @@ atlasparserProperties=(
 indexerProperties = dict([
 ('Genus', 'Monodelphis'),
 ('Species', '<i>Monodelphis domestica</i>'),
-('Strain', 'wildtype'),
-('Age', '1 year (xxx) days'),
+('Strain', 'outbred'),
+('Age', '1 year'),
 ('Sex', 'male'),
 ('Source', 'url_to_the_segmentaion'),
 ('Language', 'En'),
