@@ -44,7 +44,7 @@ To create index file following command has to be executed:
 
 import os
 import sys
-from optparse import OptionParser,OptionGroup
+from optparse import OptionParser, OptionGroup
 
 def printRed(str):
     """
