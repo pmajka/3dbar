@@ -18,7 +18,7 @@ Installing required packages (Ubuntu)
 =====================================
 
 
-* Installation in Ubuntu/Kubuntu 12.04 LTS (confirmed 31.03.2013)
+* Installation in Ubuntu/Kubuntu 12.04 LTS and 14.04 LTS (confirmed 7.04.2014)
 
   1. Install the Visualization Toolkit and other graphics libraries::
 
@@ -34,7 +34,7 @@ Installing required packages (Ubuntu)
 
   3. Other packages::
 
-      sudo apt-get install \
+      sudo apt-get install imagemagick \
       potrace pstoedit python-setuptools python-epydoc
 
 * Installation in Ubuntu/Kubuntu 11.10

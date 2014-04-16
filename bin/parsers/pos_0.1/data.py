@@ -26,15 +26,15 @@ import datetime
 
 CONF_PARSER_COMMENT = 'CAF dataset based on <a href="http://doc.3dbar.org/possum/01/segmentation_in_srs.nii.gz" target="_blank">parcellation</a> of a gray short-tailed opossum brain by <a href="http://pns2013.pl/program/poster-sessions-2/" target="_blank">Chlodzinska et. al. (2013)</a>. \
 See <a href="http://www.frontiersin.org/10.3389/conf.fninf.2014.08.00081/event_abstract" target="_blank"> Majka et. al. (2012)</a>, \
-<a href="http://fens.ekonnect.co/FENS_331/poster_32524/program.aspx" target="_blank">Clodzinska et. al. (2012)</a> \
+<a href="http://fens.ekonnect.co/FENS_331/poster_32524/program.aspx" target="_blank">Chlodzinska et. al. (2012)</a> \
 and <a href="http://www.frontiersin.org/Community/AbstractDetails.aspx?ABS_DOI=10.3389/conf.fninf.2013.09.00021&eid=1904&sname=Neuroinformatics_2013" target="_blank">Majka et. al. (2013)</a> \
-for detailed description of the goals and procedures. \
-Also check the <a href="http://www.3dbar.org/wiki/barPossumSupplement" target="_blank"> source data repository</a> for the reference MR volume, as well as three dimensional reconstruction of the brain volume based on Nissl-stained sections, myelin-stained sections and blockface images.'
+for detailed description of goals and procedures. \
+Also check the <a href="http://www.3dbar.org/wiki/barPossumSupplement" target="_blank"> source data repository</a> for the reference MR volume, as well as a three dimensional reconstruction of the brain volume based on Nissl-stained sections, myelin-stained sections and blockface images.'
 CONF_PARSER_NAME    = 'pos_0.1'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology'
 CONF_CONTACT_EMAIL  = 'pmajka@nencki.gov.pl'
 CONF_CAF_COMPIL_TIME= datetime.datetime.utcnow().strftime("%F %T")
-CONF_CAF_FULL_NAME = 'Stereotaxic multimodal template of the gray-short tailed opossum (<i>Monodelphis domestica</i>)'
+CONF_CAF_FULL_NAME = 'Stereotaxic multimodal template of the gray-short tailed opossum'
 
 REFERENCE_WIDTH = 320
 REFERENCE_HEIGHT = 250
@@ -101,13 +101,13 @@ atlasparserProperties=(
 indexerProperties = dict([
 ('Genus', 'Monodelphis'),
 ('Species', '<i>Monodelphis domestica</i>'),
-('Strain', 'outbred'),
+('Strain', 'WT outbred'),
 ('Age', '1 year'),
 ('Sex', 'male'),
 ('Source', 'url_to_the_segmentaion'),
 ('Language', 'En'),
 ('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
-('SourceLicencing', 'CC-BY put details'),
+('SourceLicencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
 ('SRSCode', '-'),
 ('ReferenceWidth', str(REFERENCE_WIDTH)),
 ('ReferenceHeight', str(REFERENCE_HEIGHT)),
