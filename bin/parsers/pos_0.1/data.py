@@ -34,7 +34,7 @@ CONF_PARSER_NAME    = 'pos_0.1'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology'
 CONF_CONTACT_EMAIL  = 'pmajka@nencki.gov.pl'
 CONF_CAF_COMPIL_TIME= datetime.datetime.utcnow().strftime("%F %T")
-CONF_CAF_FULL_NAME = 'Stereotaxic multimodal template of the gray-short tailed opossum'
+CONF_CAF_FULL_NAME = 'Stereotaxic multimodal template of the gray-short tailed opossum brain'
 
 REFERENCE_WIDTH = 320
 REFERENCE_HEIGHT = 250
@@ -71,7 +71,7 @@ renderingProperties['ReferenceHeight'] = REFERENCE_HEIGHT
 renderingProperties['imageSize']       = (REFERENCE_WIDTH*8, REFERENCE_HEIGHT*8)
 
 potraceProperties    = {}
-potraceProperties['potrace_accuracy_parameter']   ='0.001'
+potraceProperties['potrace_accuracy_parameter']   ='0.01'
 potraceProperties['potrace_svg_resolution_string']='300x300'
 potraceProperties['potrace_width_string']   =      '%dpt' % REFERENCE_WIDTH
 potraceProperties['potrace_height_string']  =      '%dpt' % REFERENCE_HEIGHT
@@ -104,7 +104,7 @@ indexerProperties = dict([
 ('Strain', 'WT outbred'),
 ('Age', '1 year'),
 ('Sex', 'male'),
-('Source', 'url_to_the_segmentaion'),
+('Source', 'http://doc.3dbar.org/possum/01/segmentation_in_srs.nii.gz'),
 ('Language', 'En'),
 ('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
 ('SourceLicencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
