@@ -4890,7 +4890,7 @@ def validateStructureName(structureName):
     if not __debug__:
         return  structureName
 
-    return (len(structureName) <= 40 # length is within proper range
+    return (len(structureName) <= 60 # length is within proper range
         and not structureName.startswith("-") and not structureName.endswith("-") # no bordering hyphens
         and CONF_ALOWED_STRUCTURE_CHARACTERS.search(structureName) and structureName) # contains only legal characters
 
