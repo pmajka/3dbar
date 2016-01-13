@@ -24,8 +24,8 @@ function processSingleRegularPipeline {
     local REPORTFILE=${PIPELINE_DIR}/report.txt
     
    DISPLAY=:0.0;
-   /home/pmajka/3dbrainatlases/batchinterface.sh $ATLAS \
-       Brain -g 999 \
+   /home/pmajka/repos/3dbar/batchinterface.sh $ATLAS \
+       Brain-region-hierarchy -g 999 \
        -p ${PIPELINE} \
        -e $PIPELINE_DIR \
        ${VIEWPORT} \
@@ -57,10 +57,11 @@ local size=`ls -lS --block-size=1 $1 \
 echo ${size}
 }
 
-for ATLAS in paxinos_watson_rbisc/caf-src/index.xml paxinos_franklin_mbisc/caf-src/index.xml
+for ATLAS in atlases/WHS_SD_rat_atlas_v2/caf/index.xml
 do
-    for PIPELINE in pf_hi.xml pf_low.xml pf_sm.xml
+    for PIPELINE in WHS_SD_rat_atlas_v2-HQ.xml WHS_SD_rat_atlas_v2-LQ.xml WHS_SD_rat_atlas_v2-SmoothGlobal.xml WHS_SD_rat_atlas_v2-SmoothIntermediate.xml WHS_SD_rat_atlas_v2-SmoothLocal.xml WHS_SD_rat_atlas_v2-Thumbnail.xml
     do
         processSingleRegularPipeline ${ATLAS} ${PIPELINE}
     done
 done
+
