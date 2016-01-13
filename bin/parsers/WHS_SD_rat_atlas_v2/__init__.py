@@ -162,5 +162,5 @@ if __name__=='__main__':
         outputDirectory = 'atlases/WHS_SD_rat_atlas_v2/caf/'
 
     ap = AtlasParser(inputDirectory, outputDirectory)
-    #ap.parseAll()
+    ap.parseAll()
     ap.reindex()

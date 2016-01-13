@@ -27,8 +27,8 @@ import datetime
 CONF_PARSER_COMMENT = """CAF dataset based on: \
 <a href="http://software.incf.org/software/waxholm-space-atlas-of-the-sprague-dawley-rat-brain/waxholm-space-atlas-of-the-sprague-dawley-rat-brain-package/quick-pack/mbat-ready-sprague-dawley-atlas-v2-bundle/at_download/file" target="_blank">\
 Waxholm Space atlas of the Sprague Dawley rat brain</a>: \
-WaxholmSpace atlas of the Sprague Dawley rat brain \
-Papp EA, Leergaard TB, Calabrese E, Johnson GA, Bjaalie JG. 2014. NeuroImage Waxholm Space atlas of the Sprague Dawley rat brain. Neuroimage. 97:374–386."""
+Papp, E.A., Leergaard, T.B., Calabrese, E., Johnson, G.A., & Bjaalie, J.G. (2014). <i>NeuroImage Waxholm Space atlas of the Sprague Dawley rat brain</i>. NeuroImage, 97, 374–386. http://doi.org/10.1016/j.neuroimage.2014.04.001"""
+
 CONF_PARSER_NAME    = 'WHS_SD_rat_atlas_v2'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology'
 CONF_CONTACT_EMAIL  = 'pmajka@nencki.gov.pl'
@@ -41,7 +41,7 @@ REFERENCE_HEIGHT = 512
 # The values below are tweaked values which are automatically
 # extrated from the niftii file, but these are slightly modified
 # for better reconstruction accuracy
-# ax+b, cy+d
+# a * x + b, c * y + d
 voxelSize = 0.0390625
 a, b, c, d = voxelSize, -9.53240414, -voxelSize, 10.31178775
 spatialTransformationMatrix = (a,b,c,d)
@@ -73,7 +73,7 @@ filenameTempates = dict(traced='%d_traced_v%d.svg')
 renderingProperties = {}
 renderingProperties['ReferenceWidth']  = REFERENCE_WIDTH
 renderingProperties['ReferenceHeight'] = REFERENCE_HEIGHT
-renderingProperties['imageSize']       = (REFERENCE_WIDTH*5, REFERENCE_HEIGHT*5)
+renderingProperties['imageSize']       = (REFERENCE_WIDTH*16, REFERENCE_HEIGHT*16)
 
 potraceProperties    = {}
 potraceProperties['potrace_accuracy_parameter']   ='0.001'
@@ -109,7 +109,7 @@ indexerProperties = dict([
 ('Strain', 'Sprague Dawley'),
 ('Age', 'adult, postnatal day 80, mass: 397.6g'),
 ('Sex', 'male'),
-('Source', 'http://dx.doi.org/10.1016/j.neuroimage.2014.04.001'),
+('Source', 'http://software.incf.org/software/waxholm-space-atlas-of-the-sprague-dawley-rat-brain/waxholm-space-atlas-of-the-sprague-dawley-rat-brain-package/quick-pack/mbat-ready-sprague-dawley-atlas-v2-bundle/at_download/file'),
 ('Language', 'En'),
 ('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="CC-BY-NC-SA" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>'),
 ('SourceLicencing', ' CC-BY-NC-SA (<a href="http://software.incf.org/software/waxholm-space-atlas-of-the-sprague-dawley-rat-brain" target="_blank">see details</a>)'),

@@ -16,7 +16,8 @@ SBA_PARSERS  = sba_DB08 sba_PHT00 sba_WHS09 sba_WHS10 sba_LPBA40_on_SRI24 sba_RM
 FAST_PARSERS = nl_olek ${SBA_PARSERS} tem
 WHS          = whs_0.5 whs_0.51 whs_0.5_symm whs_0.6.1 whs_0.6.2
 POS          = pos_0.1
-PARSERS      = aba aba2011 ${FAST_PARSERS} ${WHS} ${POS}
+WHS_RAT      = WHS_SD_rat_atlas_v2 WHS_SD_rat_atlas_v101
+PARSERS      = aba aba2011 ${FAST_PARSERS} ${WHS} ${POS} ${WHS_RAT}
 
 all: clean ${PARSERS} doc
 	echo "Done"
@@ -198,6 +199,22 @@ CBWJ13_P80:
 	python ${PARSERS_DIR}/CBWJ13_P80/__init__.py
 	if [ -e ${ATLASES_DIR}/CBWJ13_P80/caf-reference ]; then diff -r ${ATLASES_DIR}/CBWJ13_P80/caf ${ATLASES_DIR}/CBWJ13_P80/caf-reference > diff_CBWJ13_P80.txt; fi
 
+WHS_SD_rat_atlas_v2:
+	mkdir -p ${ATLASES_DIR}/WHS_SD_rat_atlas_v2/src
+	wget http://software.incf.org/software/waxholm-space-atlas-of-the-sprague-dawley-rat-brain/waxholm-space-atlas-of-the-sprague-dawley-rat-brain-package/quick-pack/mbat-ready-sprague-dawley-atlas-v2-bundle/at_download/file -O ${ATLASES_DIR}/WHS_SD_rat_atlas_v2/src/MBAT_WHS_SD_rat_atlas_v2_pack.zip
+	unzip -o ${ATLASES_DIR}WHS_SD_rat_atlas_v2/src/MBAT_WHS_SD_rat_atlas_v2_pack.zip -d ${ATLASES_DIR}WHS_SD_rat_atlas_v2/src/
+	mkdir -p ${ATLASES_DIR}/WHS_SD_rat_atlas_v2/caf
+	python ${PARSERS_DIR}/WHS_SD_rat_atlas_v2/__init__.py
+	if [ -e ${ATLASES_DIR}/WHS_SD_rat_atlas_v2/caf-reference ]; then diff -r ${ATLASES_DIR}/WHS_SD_rat_atlas_v2/caf ${ATLASES_DIR}/WHS_SD_rat_atlas_v2/caf-reference > diff_WHS_SD_rat_atlas_v2.txt; fi
+
+WHS_SD_rat_atlas_v101:
+	mkdir -p ${ATLASES_DIR}/WHS_SD_rat_atlas_v101/src
+	wget http://software.incf.org/software/waxholm-space-atlas-of-the-sprague-dawley-rat-brain/waxholm-space-atlas-of-the-sprague-dawley-rat-brain-package/v1.01/mbat-ready-sprague-dawley-atlas-v1.01/at_download/file -O ${ATLASES_DIR}/WHS_SD_rat_atlas_v101/src/MBAT_WHS_SD_rat_atlas_v101_pack.zip
+	unzip -o ${ATLASES_DIR}WHS_SD_rat_atlas_v101/src/MBAT_WHS_SD_rat_atlas_v101_pack.zip -d ${ATLASES_DIR}WHS_SD_rat_atlas_v101/src/
+	mkdir -p ${ATLASES_DIR}/WHS_SD_rat_atlas_v101/caf
+	python ${PARSERS_DIR}/WHS_SD_rat_atlas_v101/__init__.py
+	if [ -e ${ATLASES_DIR}/WHS_SD_rat_atlas_v101/caf-reference ]; then diff -r ${ATLASES_DIR}/WHS_SD_rat_atlas_v101/caf ${ATLASES_DIR}/WHS_SD_rat_atlas_v101/caf-reference > diff_WHS_SD_rat_atlas_v101.txt; fi
+
 clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}sba_DB08/caf ${ATLASES_DIR}sba_DB08/src
 	rm -rfv ${ATLASES_DIR}sba_PHT00/caf ${ATLASES_DIR}sba_PHT00/src
@@ -220,6 +237,8 @@ clean: clean_diff doc_clean
 	rm -rfv ${ATLASES_DIR}mbisc_11/caf ${ATLASES_DIR}mbisc_11/src
 	rm -rfv ${ATLASES_DIR}pos_0.1/caf ${ATLASES_DIR}pos_0.1/src
 	rm -rfv ${ATLASES_DIR}CBWJ13_P80/caf ${ATLASES_DIR}CBWJ13_P80/src
+	rm -rfv ${ATLASES_DIR}WHS_SD_rat_atlas_v2/caf  ${ATLASES_DIR}/WHS_SD_rat_atlas_v2/src
+	rm -rfv ${ATLASES_DIR}WHS_SD_rat_atlas_v101/caf  ${ATLASES_DIR}/WHS_SD_rat_atlas_v101/src
 
 reference_datasets:
 	rm -rf ${ATLASES_DIR}whs_0.5/caf-reference; cp -r ${ATLASES_DIR}whs_0.5/caf ${ATLASES_DIR}whs_0.5/caf-reference
@@ -243,6 +262,8 @@ reference_datasets:
 	rm -rf ${ATLASES_DIR}mbisc_11/caf-reference; cp -r ${ATLASES_DIR}mbisc_11/caf ${ATLASES_DIR}mbisc_11/caf-reference
 	rm -rf ${ATLASES_DIR}pos_0.1/caf-reference; cp -r ${ATLASES_DIR}pos_0.1/caf ${ATLASES_DIR}pos_0.1/caf-reference
 	rm -rf ${ATLASES_DIR}CBWJ13_P80/caf-reference; cp -r ${ATLASES_DIR}CBWJ13_P80/caf ${ATLASES_DIR}CBWJ13_P80/caf-reference
+	rm -rf ${ATLASES_DIR}WHS_SD_rat_atlas_v2/caf-reference; cp -r ${ATLASES_DIR}WHS_SD_rat_atlas_v2/caf ${ATLASES_DIR}WHS_SD_rat_atlas_v2/caf-reference
+	rm -rf ${ATLASES_DIR}WHS_SD_rat_atlas_v101/caf-reference; cp -r ${ATLASES_DIR}WHS_SD_rat_atlas_v101/caf ${ATLASES_DIR}WHS_SD_rat_atlas_v101/caf-reference
 
 clean_diff:
 	rm -rfv diff_neurolucidaXML.txt diff_vector-test.txt\
@@ -250,4 +271,5 @@ clean_diff:
 			diff_sba_WHS09.txt diff_sba_WHS10.txt diff_sba_LPBA40_on_SRI24.txt\
 			diff_sba_RM_on_F99.txt diff_aba.txt diff_tem.txt diff_whs_0.6.1.txt diff_whs_0.6.2.txt\
 			diff_sba_FVE91_on_F99.txt diff_aba2011.txt diff_sba_B05_on_Conte69.txt \
-			diff_mbisc_11.txt diff_pos_0.1.txt diff_CBWJ13_P80.txt
+			diff_mbisc_11.txt diff_pos_0.1.txt diff_CBWJ13_P80.txt diff_WHS_SD_rat_atlas_v2.txt \
+			diff_WHS_SD_rat_atlas_v101.txt
