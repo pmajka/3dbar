@@ -1,0 +1,34 @@
+This model was created using 3d Brain Atlas Reconstructor – software dedicated
+to reconstructing three-dimensional reconstruction from 2D slides.
+
+This CAF dataset is based on the:
+
+Papp, E. A., Leergaard, T. B., Calabrese, E., Johnson, G. A., & Bjaalie, J. G. (2014).
+NeuroImage Waxholm Space atlas of the Sprague Dawley rat brain.
+NeuroImage, 97, 374–386. http://doi.org/10.1016/j.neuroimage.2014.04.001
+
+The source dataset is available from:
+http://software.incf.org/software/waxholm-space-atlas-of-the-sprague-dawley-rat-brain/download
+
+The delineations were adopted from the "MBAT-ready Sprague Dawley atlas v1.01 bundle"
+containing label volume with manually segmented brain regions:
+http://software.incf.org/software/waxholm-space-atlas-of-the-sprague-dawley-rat-brain/waxholm-space-atlas-of-the-sprague-dawley-rat-brain-package/v1.01/mbat-ready-sprague-dawley-atlas-v1.01/at_download/file
+Version dated on 17 Nov 2014 (md5: e470fb266f27f9a5ce060037eb68ab32) was used.
+
+The offline version of 3dBAR allows for customizable generation of three-dimensional
+structures (ie. with different resolutions or various mesh processing filters).
+Final reconstructions may be exported as polygonal meshes (VRML, X3D) as well as
+volumetric data (NIfTI, vtk).
+
+Visit http://www.3dbar.org for more information about the software and relase
+notifications. Project is supported by an infrastructural grant from the Polish
+Ministry of Regional Development, POIG.02.03.00-00-003/09.
+
+=== Licensing infortmation: ===
+
+This work is licensed under a Creative Commons
+Attribution-NonCommercial 3.0 Unported License.
+(https://creativecommons.org/licenses/by-nc-sa/4.0/)
+
+Licencing information for the source dataset is available at:
+http://software.incf.org/software/waxholm-space-atlas-of-the-sprague-dawley-rat-brain
