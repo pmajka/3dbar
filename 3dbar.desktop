@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=3dbar
+Exec=/home/orlab/git/3dbar/3dbar.sh
+Icon=/home/orlab/git/3dbar/icon.svg
