@@ -35,7 +35,7 @@ G{importgraph}
 import os
 import random
 import math
-import vtk 
+import vtk
 from batchinterface import batchInterface
 
 from bar.base import debugOutput
@@ -65,50 +65,50 @@ def rotateX(a, (x, y, z)):
 class barBatchReconstructor(object):
     """
     The class for performing batch reconstructions of structures from CAF datasets.
-        
+
     @cvar MAX_HIERARCHY_DEPTH: the maximum supposed depth of hierarchy tree.
     @type MAX_HIERARCHY_DEPTH: int
 
     @ivar vtkapp: structure from volume reconstructor used by the object
     @type vtkapp: L{barReconstructionModule} object
-    
+
     @ivar renWin: the render window used by the object
     @type renWin: vtk.vtkRenderWindow object
-    
+
     @ivar iren: the render window interactor used by the object
     @type iren: vtk.vtkRenderWindowInteractor
-    
+
     @ivar sh: an object holding structures data from CAF datasets
     @type sh: L{structureHolder} object
-    
+
     @group Voxel size: xyres, zres
-    
+
     @ivar xyres: Voxel size in coronal plane in mm
     @type xyres: float
-    
+
     @ivar zres: Voxel size along anterior-posterios axis in mm
     @type zres: float
-    
+
     @ivar exportDir: the path to a directory for reconstructions
     @type exportDir: str
-    
+
     @ivar depth: the maximum level of substructures (in the structure tree)
                  to be generated
     @type depth: int
-    
+
     @ivar formats: the set of reconstruction file formats to be generated
     @type formats: set(str)
-    
+
     @ivar show: True if the reconstruction has to be displayed to the user,
                 False otherwise
     @type show: bool
-    
+
     @ivar composite: True if requested to perform a reconstruction of the
                      structure as a scene composed of the reconstructions of
                      the basic substructures in the hierarchy tree (up to the
                      level L{depth}), False otherwise.
     @type composite: bool
-    
+
     @ivar outline: List of structures which translucent brain outlines are
                    generated and appended to the regular reconstructions.
                    The outlines can be exported only to scene formats as VRML,
@@ -119,26 +119,26 @@ class barBatchReconstructor(object):
                    The generated outline meshes are stored in C{self.{exportDir}}
                    directory.
     @type outline: set([str, ...])
-    
+
     @ivar _simpleQueue: the queue of simple reconstructions to perform; each queue
                         element is a pair of structure name and a set of export
                         formats
     @type _simpleQueue: [(str, set([str, ...])), ...]
-    
+
     @ivar _compositeQueue: the queue of composite reconstructions to perform;
                            each queue element is a three of reconstruction name,
                            a set of component structure names and a set
                            of formats.
     @type _compositeQueue: [(str, set([str]), set([str, ...]), ...]
     """
-    
+
     MAX_HIERARCHY_DEPTH = 999
-    
+
     def __init__(self, vtkapp, index, options):
         """
         @param vtkapp: C{self.L{vtkapp}} value
         @type vtkapp: L{barReconstructionModule} object
-        
+
         @param options: an object containing constructor options as its
                         attributes:
                           - C{cameraMovementAngles} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}}
@@ -168,12 +168,12 @@ class barBatchReconstructor(object):
                                                    and origin. This feature
                                                    increases memory usage and
                                                    reconstruction time.
-        
+
         @type options: optparse.Values object
-        
+
         @param index: the path to a CAF dataset index file
         @type index: str
-        
+
         @note: C{L{options}.attribute == None} means that the value of the
                constructor option was not given, so its default value is
                assumed. Word "attribute" mean any of the attributes of
@@ -182,22 +182,22 @@ class barBatchReconstructor(object):
         # load CAF dataset
         atlasDir, indexFilename = os.path.split(index)
         self.loadAtlas(atlasDir, indexFilename)
-        
+
         self._basicSetup(vtkapp, options)
-        
+
         if options.pipeline != None:
             self.vtkapp.pipeline = barPipeline.fromXML(options.pipeline)
-        
+
         if self.composite:
             self.formats.add('exportToVTKPolydata')
 
     def _basicSetup(self, vtkapp, options):
         """
         Constructor code common with derivative classes constructor.
-        
+
         @param vtkapp: C{self.L{vtkapp}} value
         @type vtkapp: L{barReconstructionModule} object
-        
+
         @param options: an object containing constructor options as its
                         attributes:
                           - C{cameraMovementAngles} - C{self.L{vtkapp}.L{cameraPosition<barReconstructionModule.cameraPosition>}}
@@ -226,11 +226,11 @@ class barBatchReconstructor(object):
                                                    and origin. This feature
                                                    increases memory usage and
                                                    reconstruction time.
-        
+
         @type options: optparse.Values object
         """
         self.vtkapp = vtkapp
-        
+
         # Process options
         self.vtkapp.background = intColourToFloat(options.background)
         self.cameraMovementAngles = options.cameraMovementAngles
@@ -238,13 +238,13 @@ class barBatchReconstructor(object):
 
         if options.voxelDimensions != None:
             self.xyres, self.zres = options.voxelDimensions
-        
+
         if options.exportDir != None:
             self.exportDir = options.exportDir
-       
+
         if options.outline:
             # check whether every group requested as an outline exists
-            self.outline = set(options.outline) 
+            self.outline = set(options.outline)
             invalidGroups = self.outline - set(self.sh.ih.groups)
 
             if len(invalidGroups) > 0:
@@ -261,27 +261,27 @@ class barBatchReconstructor(object):
             self.outline.add(self.sh.ih.hierarchyRootElementName)
 
         self.depth = options.generateSubstructures
-        
+
         self.formats = set()
         if options.format != None:
             self.formats = set(options.format)
-        
+
         self.show = options.show
         self.composite = options.composite
         self.ignoreBoundingBox = options.ignoreBoundingBox
-        
+
         #---------------------- done with options
-        
-        # Proceed with VTK setup 
+
+        # Proceed with VTK setup
         # Create the RenderWindow and RenderWindowInteractor
         self.renWin = vtk.vtkRenderWindow()
         self.renWin.SetSize(800,600)
         self.vtkapp.addRenderWindow(self.renWin)
-        
+
         self.iren = vtk.vtkRenderWindowInteractor()
         self.iren.SetRenderWindow(self.renWin)
         self.iren.Initialize()
-        
+
         self._simpleQueue = []
         self._compositeQueue = []
 
@@ -294,20 +294,20 @@ class barBatchReconstructor(object):
                              suitable export method)
         @type outputFormat: str
 
-        @return: a path to the reconstruction of the structure in the 
+        @return: a path to the reconstruction of the structure in the
                  requested format
         @rtype: str
         """
         return os.path.join(self.exportDir,
                             BAR_TEMPLATE[outputFormat]%name)
-    
+
     def _exportToFormats(self, name, formats=None):
         """
         Perform export of the reconstruction requested formats.
-        
+
         @param name: name of the structure
         @type name: str
-        
+
         @param formats: formats for which the export is performed; if not set,
                         the export is performed for formats requested
                         in C{self.L{formats<barBatchReconstructor.formats>}}.
@@ -318,7 +318,7 @@ class barBatchReconstructor(object):
 
         else:
             requestedFormats = set(formats)
-        
+
         for outputFormat in requestedFormats:
             print outputFormat, requestedFormats
 
@@ -356,7 +356,7 @@ class barBatchReconstructor(object):
         if updateRenderWindow:
             self.vtkapp.updateRenderWindow()
         self.iren.Start()
-        
+
         print '-d', self.xyres, self.zres
         print '--cameraMovementAngles %f %f %f' % self.cameraMovementAngles
 
@@ -372,11 +372,11 @@ class barBatchReconstructor(object):
         validNames = set(name for name in structureNames if name in self.sh.ih.groups)
         # if any of requested structures does not exist
         for name in set(structureNames) - validNames:
-            debugOutput("Structure %s not found." %name, error = True) 
+            debugOutput("Structure %s not found." %name, error = True)
 
         # get names of hierarchy subtrees nodes
         uniqueNames = self.sh.ih.unfoldSubtrees(validNames, self.depth, leavesOnly=False)
-        
+
         # and request performing of their simple reconstructions
 
         for name in uniqueNames:
@@ -393,46 +393,46 @@ class barBatchReconstructor(object):
 
             # and request the reconstruction
             self.prepareCompositeLoop(name, components)
-    
+
     def prepareSimpleLoop(self, structureName, formats=None):
         """
         Append a request of reconstruction to L{_simpleQueue}.
-        
+
         @param structureName: name of the structure to be reconstructed
         @type structureName: str
-        
+
         @param formats: formats the reconstruction has to be exported to;
                         if not given the reconstruction is exported for every
                         format in L{self.formats<barBatchReconstructor.formats>}
         @type formats: sequence([str, ...])
         """
-        
+
         if formats==None:
             requestedFormats = frozenset(self.formats)
 
         else:
             requestedFormats = frozenset(formats)
-        
+
         queueElement = (structureName, requestedFormats)
         self._simpleQueue.append(queueElement)
-    
+
     def prepareCompositeLoop(self, name, components, formats=None):
         """
         Append a composite reconstruction request to L{_compositeQueue}.
-        
+
         @param structureName: name of the reconstruction
         @type structureName: str
-        
+
         @param components: names of structures to be included into
                            the reconstruction
         @type components: sequence([str, ...])
-        
+
         @param formats: formats the reconstruction has to be exported to;
                         if not given the reconstruction is exported for every
                         format in L{self.formats<barBatchReconstructor.formats>}
         @type formats: sequence([str, ...])
         """
-        
+
         if formats==None:
             requestedFormats = frozenset(self.formats)
 
@@ -443,7 +443,7 @@ class barBatchReconstructor(object):
                         components,
                         requestedFormats & SCENE_EXPORT_FORMAT_MASK)
         self._compositeQueue.append(queueElement)
-    
+
     def runLoop(self):
         """
         Perform requested reconstructions.
@@ -455,53 +455,53 @@ class barBatchReconstructor(object):
             self.generateModel(name)
             self._appendOutlineActors()
             self._exportToFormats(name, formats)
-            
+
             if self.show:
                 self.exportToWindow()
-        
-        # flush the quque. 
+
+        # flush the quque.
         self._simpleQueue = []
-        
+
         # perform composite reconstructions
         for name, structures, formats in self._compositeQueue:
             self.vtkapp.clearScene()
             self.vtkapp.clearVolume()
-            
+
             self._compositeReconstruction(name, structures)
             self._appendOutlineActors()
             #-----------------
-            
+
             self._exportToFormats(name, formats)
-            
+
             if self.show:
                 self.exportToWindow()
-        
+
         # flush the queue
         self._compositeQueue = []
-    
+
     def _compositeReconstruction(self, name, structures):
         """
         Perform composite reconstruction.
-        
+
         @param structureName: name of the reconstruction
         @type structureName: str
-        
+
         @param components: names of structures to be included into
                            the reconstruction
         @type components: sequence([str, ...])
         """
-        
+
         # When composite reconstruction is enabled, every model has to be cached
         # after reconstruction and loaded with all other reconstructed models
         # note that when composite reconstuction is enabled, exportToVTKPolydata
         # is forced to be true so models are already cached.
-        
+
         # load all substructures and show them in renderwindow
         for structureName in structures:
             ct = self.getStructureColor(structureName)
             filename = self.__getFileName(structureName, 'exportToVTKPolydata')
             self.vtkapp.appendContextActor(structureName, filename, ct)
-        
+
         self.vtkapp.refreshRenderWindow()
 
     def _generateOutlineActors(self):
@@ -511,7 +511,7 @@ class barBatchReconstructor(object):
         for name in self.outline:
             self.generateModel(name)
             self._exportToFormats(name, ['exportToVTKPolydata'])
-            
+
     def _appendOutlineActors(self):
         """
         Load pregenerated models of structures from C{self.L{outline<barBatchReconstructor.outline>}}
@@ -535,48 +535,48 @@ class barBatchReconstructor(object):
         """
         @param structureName: the name of requested structure
         @type structureName: str
-        
+
         @return: a volumetric representation of requested structure
         """
         self.sh.handleAllModelGeneration(\
                 structureName, self.xyres, self.zres,\
-                ignoreBoundingBox=self.ignoreBoundingBox) 
+                ignoreBoundingBox=self.ignoreBoundingBox)
         return self.sh.StructVol
-    
+
     def generateModel(self, structureName):
         """
         Generate a volumetric representation of requested structure and
         pass it to C{self.L{vtkapp}} as a source volume for model generation.
-        
+
         @param structureName: the name of the structure to be reconstructed
         @type structureName: str
         """
         # Handling not defined structures
         if not type(self.sh.getSlidesSpan(structureName)) == type(("",)): return
-        
+
         volume = self._generateVolume(structureName)
         volume.prepareVolume(self.sh.ih)
-        
+
         # Get colour of the structure
         ct = self.getStructureColor(structureName)
-       
+
         # Pass generated volume for model generation
         self.vtkapp.setReconstructionSource(volume, ct)
-    
+
     def getStructureColor(self, structureName, rgb = False):
         """
         @param structureName: the name of the structure
         @type structureName: str
-        
+
         @param rgb: True if requested colour format is 24-bit RGB (8 bits per
                     chanel), False otherwise.
         @type rgb: bool
-        
+
         @return: the colour suitable for a model of requested structure
         @rtype: [int, int, int] | [float, float, float]
         """
         ct = HTMLColorToRGB(self.sh.ih.colorMapping[structureName])
-        
+
         #TODO: Get rid of this after implementing automatic, hierarchy based
         # colour assignment.
         # Dummy patch: when colour is not provided (=structure has gray colour
@@ -584,32 +584,32 @@ class barBatchReconstructor(object):
         if ct[0] == ct[1] == ct[2] == 119:
             random.seed(structureName)
             ct = map(lambda x: random.randint(0, 255), [0,0,0])
-        
+
         if not rgb:
             ct = list(intColourToFloat(ct))
 
         return ct
-    
+
     def loadAtlas(self, indexDirectory, indexFile = BAR_ATLAS_INDEX_FILENAME):
         """
         @type  indexDirectory: C{str}
         @param indexDirectory: directory containing caf index file and caf
         slides. In other words CAF dataset directory.
-        
+
         Loads CAF dataset defined by provided index directory.
         """
         indexFile = os.path.join(indexDirectory, indexFile)
         self.sh = structureHolder.structureHolder(\
                 indexFile, indexDirectory)
-        
+
         self.__atlasDirectory   = indexDirectory
-        
+
         # Try to create reconstruction directory, if directory cannot be created
         # leave default output directory undefined
         recDir =\
             os.path.abspath(os.path.join(self.__atlasDirectory,
                 BAR_DEFAULT_RECONSTRUCTION_DIR))
-        
+
         if not os.path.exists(recDir):
             try:
                 os.mkdir(recDir)
@@ -620,7 +620,7 @@ class barBatchReconstructor(object):
 
         else:
             self.exportDir = recDir
-        
+
         # Getting and updating default reconstruction parameters:
         self.xyres = abs(float(self.sh.ih.refCords[-1]))
         self.zres  = abs(float(self.sh.ih.getDefaultZres()))
@@ -663,16 +663,16 @@ class barBatchReconstructor(object):
         """
         camera = self.vtkapp.cameraPosition
         top = self.vtkapp.cameraViewUp
-        
+
         if camera[0] != 0 or camera[2] != 0:
             a = math.atan2(camera[0], camera[2])
             camera = rotateY(-a, camera)
             top = rotateY(-a, top)
-        
+
         b = math.atan2(camera[1], camera[2])
         camera = rotateX(-b, camera)
         top = rotateX(-b, top)
-        
+
         c = math.atan2(top[0], top[1])
         #camera = rotateZ(c, camera)
         top = rotateZ(c, top)
@@ -688,7 +688,7 @@ class barBatchReconstructor(object):
         C{self.L{parallel}} property setter.
         """
         self.vtkapp.parallelProjection = parallel
-    
+
     def __getProjectionParallel(self):
         """
         C{self.L{parallel}} property getter.
@@ -703,4 +703,4 @@ class barBatchReconstructor(object):
 
 if __name__ == '__main__':
     bi = batchInterface(barBatchReconstructor)
-    bi.main() 
+    bi.main()
