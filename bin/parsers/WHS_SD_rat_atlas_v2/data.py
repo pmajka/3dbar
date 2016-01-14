@@ -24,67 +24,31 @@
 
 import datetime
 
-CONF_PARSER_COMMENT = 'CAF dataset based on: \
-<a href="http://civmvoxport.duhs.duke.edu/voxbase/downloaddataset.php?stackID=18746" target="_blank">\
-Waxholm Space</a>: \
-An image-based reference for coordinating mouse brain research, \
-G.Johnson, et. al., NeuroImage 53 (2010) 365-372.'
-CONF_PARSER_NAME    = 'whs_0.5'
+CONF_PARSER_COMMENT = """CAF dataset based on: \
+<a href="http://software.incf.org/software/waxholm-space-atlas-of-the-sprague-dawley-rat-brain/waxholm-space-atlas-of-the-sprague-dawley-rat-brain-package/quick-pack/mbat-ready-sprague-dawley-atlas-v2-bundle/at_download/file" target="_blank">\
+Waxholm Space atlas of the Sprague Dawley rat brain</a>: \
+Papp, E.A., Leergaard, T.B., Calabrese, E., Johnson, G.A., & Bjaalie, J.G. (2014). <i>NeuroImage Waxholm Space atlas of the Sprague Dawley rat brain</i>. NeuroImage, 97, 374–386. http://doi.org/10.1016/j.neuroimage.2014.04.001"""
+
+CONF_PARSER_NAME    = 'WHS_SD_rat_atlas_v2'
 CONF_CONTACT_COMMENT= 'Piotr Majka, Nencki Institute of Experimental Biology'
 CONF_CONTACT_EMAIL  = 'pmajka@nencki.gov.pl'
 CONF_CAF_COMPIL_TIME= datetime.datetime.utcnow().strftime("%F %T")
-CONF_CAF_FULL_NAME = 'The Waxholm Space - mouse brain reference space'
+CONF_CAF_FULL_NAME = 'Waxholm Space atlas of the Sprague Dawley rat brain, version 2'
 
 REFERENCE_WIDTH = 512
 REFERENCE_HEIGHT = 512
 
-imageToStructure=\
-    {\
-    "#0a0a0a" : "ac",
-    "#212121" : "Acb",
-    "#1f1f1f" : "Amy",
-    "#141414" : "APT",
-    "#020202" : "Bs",
-    "#252525" : "cb",
-    "#1a1a1a" : "cc",
-    "#232323" : "Co",
-    "#0d0d0d" : "cp",
-    "#010101" : "Cx",
-    "#111111" : "DpMe",
-    "#191919" : "fi",
-    "#1c1c1c" : "Fnx",
-    "#0f0f0f" : "GP",
-    "#181818" : "Hc",
-    "#202020" : "Hyp",
-    "#101010" : "ic",
-    "#050505" : "IC",
-    "#0e0e0e" : "IP",
-    "#121212" : "LD",
-    "#060606" : "ll",
-    "#131313" : "MGen",
-    "#222222" : "Olf",
-    "#151515" : "ot",
-    "#070707" : "PAG",
-    "#1d1d1d" : "Aq",
-    "#0b0b0b" : "Pg",
-    "#1e1e1e" : "Pin",
-    "#1b1b1b" : "LGen",
-    "#040404" : "SC",
-    "#080808" : "Sn",
-    "#0c0c0c" : "SN",
-    "#242424" : "sp5",
-    "#171717" : "Str",
-    "#030303" : "Th",
-    "#161616" : "VS",
-    "#090909" : "VT",
-    "#ffffff" : "bcg"}
-
-voxelSize = 0.0215
-
-# ax+b, cy+d
-a, b, c, d = voxelSize, -5.3965, -voxelSize, 5.4825
-spatialTransformationMatrix= (a,b,c,d)
+# The values below are tweaked values which are automatically
+# extrated from the niftii file, but these are slightly modified
+# for better reconstruction accuracy
+# a * x + b, c * y + d
+voxelSize = 0.0390625
+a, b, c, d = voxelSize, -9.53240414, -voxelSize, 10.31178775
+spatialTransformationMatrix = (a,b,c,d)
 alignerCoordinateTuple = (b,d,a,c)
+
+C_HIERARCHY_ROOT_ELEMENT_ABBREV = 'Brain-region-hierarchy'
+C_HIERARCHY_ROOT_ELEMENT_FULLNAME = 'Brain region hierarchy'
 
 tracedSlideTemplate = """<?xml version="1.0" ?><svg baseProfile="full" height="%d" id="body"
 preserveAspectRatio="none" version="1.1" viewBox="0 0 %d %d"
@@ -109,7 +73,7 @@ filenameTempates = dict(traced='%d_traced_v%d.svg')
 renderingProperties = {}
 renderingProperties['ReferenceWidth']  = REFERENCE_WIDTH
 renderingProperties['ReferenceHeight'] = REFERENCE_HEIGHT
-renderingProperties['imageSize']       = (REFERENCE_WIDTH*5, REFERENCE_HEIGHT*5)
+renderingProperties['imageSize']       = (REFERENCE_WIDTH*16, REFERENCE_HEIGHT*16)
 
 potraceProperties    = {}
 potraceProperties['potrace_accuracy_parameter']   ='0.001'
@@ -132,29 +96,26 @@ tracerSettings['UnlabelledTreshold']       = 500
 tracerSettings['PoTraceConf'] = potraceProperties
 tracerSettings['NewPathIdTemplate'] = 'structure%d_%s_%s'
 
-atlasparserProperties=(
-('backgroundColor', (255,255,255)),
-('imageToStructure', imageToStructure),
+atlasparserProperties=[
+('backgroundColor', (0, 0, 0)),
 ('filenameTemplates', filenameTempates),
 ('renderingProperties', renderingProperties),
 ('tracingProperties', tracerSettings),
-('slideTemplate', tracedSlideTemplate))
+('slideTemplate', tracedSlideTemplate)]
 
 indexerProperties = dict([
-('Genus', 'Mus'),
-('Species', 'Mus musculus'),
-('Strain', 'C57BL/6'),
-('Age', '66-78 days'),
+('Genus', 'Rattus'),
+('Species', 'Rattus norvegicus'),
+('Strain', 'Sprague Dawley'),
+('Age', 'adult, postnatal day 80, mass: 397.6g'),
 ('Sex', 'male'),
-('Source', 'http://www.sciencedirect.com/science/article/pii/S1053811910009274'),
+('Source', 'http://software.incf.org/software/waxholm-space-atlas-of-the-sprague-dawley-rat-brain/waxholm-space-atlas-of-the-sprague-dawley-rat-brain-package/quick-pack/mbat-ready-sprague-dawley-atlas-v2-bundle/at_download/file'),
 ('Language', 'En'),
-('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="Licencja Creative Commons" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>'),
-('SourceLicencing', 'CC-BY (<a href="http://software.incf.org/software/waxholm-space/home" target="_blank">see details</a>)'),
-('SRSCode', 'INCF:0002'),
+('Licencing', '<a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.pl" target="_blank"><img alt="CC-BY-NC-SA" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" /></a>'),
+('SourceLicencing', ' CC-BY-NC-SA (<a href="http://software.incf.org/software/waxholm-space-atlas-of-the-sprague-dawley-rat-brain" target="_blank">see details</a>)'),
 ('ReferenceWidth', str(REFERENCE_WIDTH)),
 ('ReferenceHeight', str(REFERENCE_HEIGHT)),
 ('FilenameTemplate',filenameTempates['traced']),
-('RefCords', ",".join(map(str,alignerCoordinateTuple))),
 ('CAFSlideOrientation', 'coronal'),
 ('CAFSlideUnits', 'mm'),
 ('CAFName', CONF_PARSER_NAME),
