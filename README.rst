@@ -124,6 +124,15 @@ Installing required packages (Ubuntu)
 
        sudo easy_install -U Sphinx
 
+* Installation like desktop application
+
+  1. Copy 3dbar.desktop in the good system directory
+     
+     for ubuntu in /usr/share/applications (all user access) or $HOME/.local/share/applications (one user access).
+
+  2. Edit 3dbar.desktop
+     
+     Édit 3dbar.desktop and replace {3DBARPATH} by the correct value.
 
 
 Generating CAF datasets
