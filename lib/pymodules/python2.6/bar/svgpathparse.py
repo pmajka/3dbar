@@ -110,6 +110,24 @@ def parsePath(d):
     Parse SVG path and return an array of segments.
     Removes all shorthand notation.
     Converts coordinates to absolute.
+    >>> print parsePath('M0e-100,.1E+1C1,1 2,2 3,3 1 1 2 2e+0 .3e-1 3E-0c2 2 3 3 4 4 4 4 5 5 6 6S100,101. 300,301Z')
+    [['M', [0.0, 1.0]], ['C', [1.0, 1.0, 2.0, 2.0, 3.0, 3.0]], ['C', [1.0, 1.0, 2.0, 2.0, 0.03, 3.0]], ['C', [2.03, 5.0, 3.03, 6.0, 4.03, 7.0]], ['C', [8.030000000000001, 11.0, 9.030000000000001, 12.0, 10.030000000000001, 13.0]], ['C', [11.030000000000001, 14.0, 100.0, 101.0, 300.0, 301.0]], ['Z', []]]
+    >>> print parsePath('L1 2M3 4')
+    Traceback (most recent call last):
+    Exception: Invalid path, must begin with moveto.
+    >>> print parsePath('m 10,20 L1 2M3 ')
+    Traceback (most recent call last):
+    Exception: Unexpected end of path
+    >>> print parsePath('m 10,20 L1 2M3,4z1,2')
+    [['M', [10.0, 20.0]], ['L', [1.0, 2.0]], ['M', [3.0, 4.0]], ['Z', []], ['L', [4.0, 6.0]]]
+    >>> print parsePath('m 10,20 L1 2M3,4C1 2')
+    Traceback (most recent call last):
+    Exception: Unexpected end of path
+    >>> print parsePath('1,2hello world')
+    Traceback (most recent call last):
+    Exception: Invalid path, no initial command.
+    >>> print parsePath('M 1000 1000 s100 200 10 10')
+    [['M', [1000.0, 1000.0]], ['C', [1000.0, 1000.0, 1100.0, 1200.0, 1010.0, 1010.0]]]
     """
     retval = []
     lexer = lexPath(d)
@@ -132,11 +150,11 @@ def parsePath(d):
             else:
                 command = token
         else:
-            #command was omited
+            #command was omitted
             #use last command's implicit next command
             needParam = False
             if lastCommand:
-                if token.isupper():
+                if lastCommand.isupper():
                     command = pathdefs[lastCommand.upper()][0]
                 else:
                     command = pathdefs[lastCommand.upper()][0].lower()
@@ -200,11 +218,11 @@ def UnparsePath(PathParsePath):
     """
     Creates string from L{svgpathparse.parsePath<svgpathparse.parsePath>} function output.
     This step is performed in order to generate C{d} attribute value compatibile with existing syntax.
-    
+
     @type  PathParsePath: list
     @param PathParsePath: List of path segments parsed by L{svgpathparse.parsePath<svgpathparse.parsePath>}
                           which needs to be converted to string.
-    
+
     @return: C{d} attrubute value of given path element.
     """
     b=""
@@ -235,7 +253,7 @@ def extractBoundingBox(pathString):
     @param pathString: path definition according to SVG 1.1 specification
 
     @return: tuple of four integers: (x1,y1,x2,y2)
-    
+
     Where x1,y2 are coordinates of top-left corner of bounding box and x2,y2 are
     coordinates of bottom-right corner of bounding box.
 
@@ -245,7 +263,7 @@ def extractBoundingBox(pathString):
 
     Examples:
         >>> print extractBoundingBox("M100,100 L200,200 C300,300 300,100 100,100 Z")
-        (100, 100, 300, 300)
+        (99.0, 99.0, 301.0, 301.0)
     """
 
     pathList = parsePath(pathString)
@@ -254,7 +272,7 @@ def extractBoundingBox(pathString):
     for pointList in pathList:
         for point in chunks(pointList[1],2):
             pathArr.append(point)
-        
+
     # Here we have list of string containing pairs of coordinates separated by
     # comma: ['1,1', '3,3', ...]. We need to extract numbers from thode strings
     pathArr = np.array(pathArr)
@@ -273,13 +291,13 @@ def mergeBoundingBox(bbox1, bbox2):
     @note: mergeBoundingBox(bbx1, bbx2) = mergeBoundingBox(bbx2, bbx1)
     """
     # Proper implementation of merging bounding boxes
-    # 
-    # 
+    #
+    #
     # bba =  numpy.array(self.BoundingBoxes) # Bounding boxes array
     # (minx, miny, maxx, maxy) = \
     # min(bba[:,0]), min(bba[:,1]),  max(bba[:,2]), max(bba[:,3])
     # return (minx, miny, maxx, maxy)
-    
+
     # Create temporary array from given bounding boxes:
     tempar = np.concatenate( (bbox1, bbox2) ).reshape(2,4)
     minarr = np.min(tempar, axis=0)
@@ -292,8 +310,8 @@ def _mergeBoundingBox(bboxes):
     bba =  np.array(bboxes) # Bounding boxes array
     (minx, miny, maxx, maxy) = \
         min(bba[:,0]), min(bba[:,1]),  max(bba[:,2]), max(bba[:,3])
-    
-    return (minx, miny, maxx, maxy) 
+
+    return (minx, miny, maxx, maxy)
 
 def parseStyle(s):
     """Create a dictionary from the value of an inline style attribute
@@ -346,26 +364,26 @@ def modifyContour(pathElement, modifications):
     modifications['newStrokeWidth'] determines new stroke width while
     modifications['newStrokeColour'] determined new stroke colour. Width has to
     be provided as float whie colour usign colour string '#xxxxxx'.
-    
+
     @type  pathElement: DOM XML element
     @param pathElement: Path element that will be modified
-    
+
     @type  modifications: dictionary
     @param modifications: Dictionary holding new stroke width and new stroke
                           colour.
     """
-    # Extract style from the path element.    
+    # Extract style from the path element.
     style = parseStyle(pathElement.getAttribute('style'))
-     
+
     if pathElement.hasAttribute('fill'): pathElement.setAttribute('fill','none')
     if style.has_key('fill'): style['fill'] = 'none'
-    
+
     # Perform modifications
     if modifications.has_key('newStrokeWidth'):
         style['stroke-width'] = modifications['newStrokeWidth']
-    
+
     if modifications.has_key('newStrokeColour'):
         style['stroke'] = modifications['newStrokeColour']
-    
+
     # Create style element and put it into path element.
     pathElement.setAttribute('style', formatStyle(style))
