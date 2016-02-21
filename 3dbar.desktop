@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=3dbar
+Exec={3DBARPATH}/3dbar/3dbar.sh
+Icon={3DBARPATH}/3dbar/icon.svg

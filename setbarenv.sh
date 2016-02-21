@@ -12,6 +12,7 @@
 #
 #------------------------------------------------------------------------------
 
-BAR_PATH=`pwd`'/lib/pymodules/python2.6/'
+BAR_DIR=`dirname $(readlink -f $0)`
+BAR_PATH=${BAR_DIR}'/lib/pymodules/python2.6/'
 export PYTHONPATH=$PYTHONPATH:$BAR_PATH
-export BAR_WEB_SERVICE_ATLASES_PATH=`pwd`'/atlases/'
+export BAR_WEB_SERVICE_ATLASES_PATH=${BAR_DIR}'/atlases/'
