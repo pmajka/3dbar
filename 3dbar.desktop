@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
 Terminal=false
-Name=3dbar
-Exec={3DBARPATH}/3dbar/3dbar.sh
-Icon={3DBARPATH}/3dbar/icon.svg
+Name=3D Brain Atlas Reconstructor
+Exec=/home/pmajka/3dbar/3dbar.sh
+Icon=/home/pmajka/3dbar/icon.svg
