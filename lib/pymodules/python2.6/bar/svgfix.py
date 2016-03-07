@@ -48,7 +48,7 @@ Usage exapmle:
     >>> import svgfix
     >>> _dev_fix_img(dom_svg_object)
 
-@see: http://www.w3.org/TR/SVG/coords.html#NestedTransformations 
+@see: http://www.w3.org/TR/SVG/coords.html#NestedTransformations
 
 """
 import re
@@ -82,13 +82,13 @@ def getTransformMatrix(tr):
         array([[ 0.4,  0. ,  0.2],
                [ 0. ,  0.4,  3. ],
                [ 0. ,  0. ,  1. ]])
-    
+
     @note: Subsequent transformations should be separated by one or more whitespace chars.
     @see: Details of transforming SVG objects: http://www.w3.org/TR/SVG/coords.html
     """
     # TODO: Make this function more general (ie. empty string exceptions handling...)
     # TODO implement more general splitting (re.split??)
-    
+
     # Split transformation string by space
     # Except 'matrix' transformation: it should be handled separetely:
     tr = tr.replace(', ',',')
@@ -99,7 +99,7 @@ def getTransformMatrix(tr):
 
     # Define initial transform matrix which is identity matrix:
     ctm=np.eye(3) #ctm - current transformation matrix
-    
+
     # Iterate over transformations and define transformation matrix
     # for each elementaty transformation
     # TODO: It should be written in less time-consuming way.(string.beginswith??)
@@ -120,7 +120,7 @@ def getTransformMatrix(tr):
 
 def __defineTransformationMatrix(tr_type,v):
     """
-    @type  tr_type: string 
+    @type  tr_type: string
     @param tr_type: Type of transformation, one of the re_trd dictionary keys.
     @type        v: tuple
     @param       v: Tuple of values extracted from transformation string
@@ -128,7 +128,7 @@ def __defineTransformationMatrix(tr_type,v):
                     In other words results of appying regular expression to transformation string.
     @return       : Transformation matrix for given elementary transformation string.
 
-    """ 
+    """
     # v it's a shourtcut for values.
     # Handles all values extracted from transformation string
     v=map( float ,v.groups() )
@@ -177,7 +177,7 @@ def __fixElement(el,gm):
         2. Correct coordinates of element depending on its type.
         3. Perform element-dependent corredtion (scale font size, stroke, etc.)
     """
-    
+
     # Check if given element has "transform" element
     if el.hasAttribute('transform'):
         # Get transformation matrix for given element
@@ -248,11 +248,11 @@ def __fixText(el,cm):
     if el.hasAttribute('x') and el.hasAttribute('y'):
         # Renember current coordiantes of label
         # cc - current coordinates: coordinates before transformation
-        #      ( vector of three values: [x,y,1] ) 
+        #      ( vector of three values: [x,y,1] )
         # p - temporary variable
         p=map(  float , [ el.attributes['x'].value , el.attributes['y'].value ]  )
         cc=np.array([ [p[0]] , [p[1]] , [1] ])
-        
+
         # Remove currnet coordinates
         el.removeAttribute('x')
         el.removeAttribute('y')
@@ -260,14 +260,14 @@ def __fixText(el,cm):
         # If there are no x and y attributes, we assume that initial coordinates are (0,0)
         # thus vector of coordinates is (0,0,1)
         cc=np.array([[0],[0],[1]])
-    
+
     # nc - New coordinates: coordinates after applying transformations
     nc=np.dot(cm,cc)
-    
+
     # Update coordintes of labels
     el.setAttribute('x',str(nc[0][0]))
     el.setAttribute('y',str(nc[1][0]))
-    
+
     # If element has 'font-size' attribute, update font size also
     if el.hasAttribute('font-size'):
         result = re_fontsizepx.search(el.attributes['font-size'].value)
@@ -276,7 +276,7 @@ def __fixText(el,cm):
             # New font-size value is:
             # (current font size) * (scale factor: cm[0][0])
             # then we need to round int, convert to integer and then to string
-            
+
             # When font size is less or equal than zero, it causes many parsers to crash
             # In such case font size is forced to be at least one px
             NewFontSize=int(round(CurrentFontSize*cm[0][0]))
@@ -292,7 +292,7 @@ def __fixPolygon(el,cm):
     @type  cm: NumPy array
     @param cm: Transformation matrix to be applied.
     @return  : nothing - only element C{el} is modified.
-    
+
     @requires: Coordinates in 'points' attrubute has to be separated by whitespaces.
     @requires: Correctly defined coordinated eg. C{points='2.3,-5.0 34,5'}.
 
@@ -308,14 +308,14 @@ def __fixPolygon(el,cm):
 
         # Now we transform each point to new coordinates
         for pt in PointsTable:
-            # Extract pair of points from string and then 
+            # Extract pair of points from string and then
             # convert results to list
             PtPair=list(re_PointsPair.search(pt).groups() )
 
             # Transform given point using provided transformation matrix
             # and convert results tuple of strings and update buffer string
             buffer+="%s,%s " % tuple(map(str, __transformPoint(PtPair,cm)  ))
-        
+
         # Update 'points' attribute of polygon element
         el.attributes['points'].value=buffer
     except:
@@ -328,10 +328,10 @@ def __fixPolyline(el,cm):
     @type  cm: NumPy array
     @param cm: Transformation matrix to be applied.
     @return  : nothing - only element C{el} is modified.
-    
+
     @requires: Coordinates in 'points' attrubute has to be separated by whitespaces.
     @requires: Correctly defined coordinated eg. C{points='2.3,-5.0 34,5'}.
-    
+
     Funtion transforms all points in polygon one by one using provided transformation matrix.
 
     @todo    : In final version all polylines should be broken into lines.
@@ -346,17 +346,17 @@ def __fixPolyline(el,cm):
 
     # Split "points" attribute vallue it order to get list of points
     PointsTable=split(el.attributes['points'].value)
-    
+
     # Now we transform each point to new coordinates
     for pt in PointsTable:
-        # Extract pair of points from string and then 
+        # Extract pair of points from string and then
         # convert results to list
         PtPair=list(re_PointsPair.search(pt).groups() )
 
         # Transform given point using provided transformation matrix
         # and convert results tuple of strings and update buffer string
         buffer+="%s,%s " % tuple(map(str, __transformPoint(PtPair,cm)  ))
-    
+
     # Update 'points' attribute of polygon element
     el.attributes['points'].value=buffer
 
@@ -367,16 +367,16 @@ def __fixPath(el,cm):
     @type  cm: NumPy array
     @param cm: Transformation matrix to be applied.
     @return  : nothing - only element C{el} is modified.
-    
+
     @requires: Segments of paths has to be separated by whitespace so we split 'd' string by whitespace.
-    
+
     Funtion transforms all points in path one by one using provided transformation matrix.
     """
     # Create table of path elements by splitting 'd' string
     pathDefinition = el.attributes['d'].value
-    
+
     # Update path definition
-    el.attributes['d'].value = fixPathDefinition(pathDefinition, cm) 
+    el.attributes['d'].value = fixPathDefinition(pathDefinition, cm)
 
 def __fixPathDefinition(pathDefinition, cm):
     """
@@ -388,7 +388,7 @@ def __fixPathDefinition(pathDefinition, cm):
 
     @return: path difinition transformed using cm matrix
     """
-    
+
     pathPoints = parsePath(pathDefinition)
     for i in range(len(pathPoints)):
         for j in [j for j in range(0, len(pathPoints[i][1:][0]), 2)]:
@@ -404,7 +404,7 @@ def __transformPoint(point,matrix):
     @type  matrix: NumPy array 3x3
     @param matrix: Transformation matrix to be applied.
     @return      : List of transformated coordinates (floats): [x',y']
-    
+
     Function simply transforms fiven point from one coodrinates system into another defined by
     transformation matrix.
     """
@@ -414,10 +414,10 @@ def __transformPoint(point,matrix):
 
     # Create vector of three elements
     oc=np.array( [ [oc[0]],[oc[1]],[1] ] )
-    
+
     # Multiply vector by transformation matrix
     nc=np.dot(matrix,oc)
-    
+
     # Extract and return new point coordinates
     return [ nc[0][0], nc[1][0] ]
 
@@ -426,9 +426,9 @@ def __fixHeader(svgdom, pagenumber):
     @type  svgdom: DOM object
     @param svgdom: Whole SVG document
     @type  pagenumber: integer
-    @param pagenumber: Number of slide to parse 
+    @param pagenumber: Number of slide to parse
     @return      : nothing, C{svgdom} is modified in-place.
-    
+
     Function changes viewPort,viewBox and other defined parameters od SVG document
     in order to correct errors made by converters. Those properties are to be fixed
     before further operations.
@@ -443,11 +443,11 @@ def __fixHeader(svgdom, pagenumber):
     for attr in CONFIG_AttrToFixSVG.keys():
         if svg.hasAttribute(attr): svg.removeAttribute(attr)
         svg.setAttribute(attr,CONFIG_AttrToFixSVG[attr])
-    
+
     for g in svgdom.getElementsByTagName('g'):
         # Select custom heder
         # Custom header depends on slide number as different slides
-        # may be prepared in slightly different way and may require 
+        # may be prepared in slightly different way and may require
         # some custom change
         for rng in range(len(CONFIG_SPECIAL_SLIDE_RANGE)):
             if pagenumber in CONFIG_SPECIAL_SLIDE_RANGE[rng]:
@@ -455,7 +455,7 @@ def __fixHeader(svgdom, pagenumber):
                 #print pagenumber
                 #print customAttribFix
                 #print rng
-                
+
                 for attr in customAttribFix.keys():
                     if g.hasAttribute(attr): g.removeAttribute(attr)
                     g.setAttribute(attr,customAttribFix[attr])
@@ -471,7 +471,7 @@ def fixPathDefinition(pathDefinition, cm):
     @return: path difinition transformed using cm matrix.
     Alias for __fixPathDefinition for external usage
     """
-    
+
     return __fixPathDefinition(pathDefinition, cm)
 
 def transformPoint(point,matrix):
@@ -483,10 +483,10 @@ def transformPoint(point,matrix):
     @type  matrix: NumPy array 3x3
     @param matrix: Transformation matrix to be applied.
     @return      : List of transformated coordinates (floats): [x',y']
-    
+
     Function simply transforms fiven point from one coodrinates system into another defined by
     transformation matrix.
-    
+
     Alias for __transformPoint created for external usage.
     """
     return tuple(__transformPoint(point,matrix))
@@ -506,16 +506,16 @@ def fixSvgImage(svgdoc, pagenumber=None, fixHeader=True):
     """
     # Fix viewbox if needed
     if fixHeader: __fixHeader(svgdoc, pagenumber)
-    
+
     for g in svgdoc.getElementsByTagName('g'):
-    
+
         # Get group transformation matrix:
         if g.hasAttribute("transform"):
             gmatrix=getTransformMatrix(g.attributes['transform'].value)
             g.removeAttribute('transform')
         else:
             gmatrix=np.eye(3)
-        
+
         # Transform elements one by one
         for svgElement in g.childNodes:
             try:
