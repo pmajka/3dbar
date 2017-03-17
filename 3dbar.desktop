@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=3D Brain Atlas Reconstructor
+Exec=/home/pmajka/3dbar/3dbar.sh
+Icon=/home/pmajka/3dbar/icon.svg

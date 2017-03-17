@@ -124,6 +124,27 @@ Installing required packages (Ubuntu)
 
        sudo easy_install -U Sphinx
 
+* Installation like desktop application
+
+
+  1. Edit 3dbar.desktop
+     
+     Edit 3dbar.desktop and replace {3DBARPATH} by the correct value.
+     For inscance, you can use the following steps:
+
+        - Go to the 3dbar directory (the one containing the file you are reading at the moment),
+
+        - Issue the following command::
+
+            sed -i "s|{3DBARPATH}|`pwd`|" 3dbar.desktop
+
+          This will set a proper path of the 3dBAR installation dir.
+
+  2. Copy 3dbar.desktop in the good system directory
+     
+     for ubuntu in /usr/share/applications (all user access) or $HOME/.local/share/applications (one user access)::
+
+     cp 3dbar.desktop $HOME/.local/share/applications
 
 
 Generating CAF datasets

@@ -32,10 +32,10 @@ import re
 
 #{ Global regular expressions:
 re_number='([0-9.-]+)'
-""" 
+"""
 Relavitely easy regexp for number should work in most cases.
 
-More general regexp for anu kind of real number taken from 
+More general regexp for anu kind of real number taken from
 http://books.google.pl/books?id=YEoiYr4H2A0C&printsec=frontcover&dq=Python+Scripting+for+Computational+Science
 page 334. appears not to work correctly.
 

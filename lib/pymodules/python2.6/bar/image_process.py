@@ -48,9 +48,9 @@ def distance_transform(bitmap):
     """
     @type  bitmap: np array
     @param bitmap: image for which distance transform will be calculated
-    
+
     @return: np array holding distance transform of provided bitmap
-    
+
     Calculates distance transtofm of provided bitmap. This function is wrapper
     for actual distance transform.
     """
@@ -74,7 +74,7 @@ def getBestLabelLocation(ImageForTracing):
     """
     ImageForTracing = ImageOps.invert(ImageForTracing)
     Imbbox = ImageForTracing.getbbox()
-    
+
     # We need to provide frame with background color ensure proper results
     Imbbox = tuple(np.array(Imbbox) + np.array([-1, -1, 1, 1]))
 
@@ -173,34 +173,34 @@ def savitzky_golay(y, window_size, order, deriv=0):
 def performTracing(binaryImage, tracingProperties, dumpName = None):
     """
     Perform image tracing via potrace and pipes mechanism.
-    
+
     Assumes that image is a grayscale image with only two colours used: black
     and white. Black colour is considered as foreground while white colour is
     background colour. The foreground is assumed to be a non-separable area.
-    
+
     This function do not perform parsing the output.
-    
+
     Tracing Workflow:
         1. Save image in bmp format in dummy string
         2. Send bmp string to potrace via pipe mechanism
         3. Perform tracing
         4. Read tracing output via pile
         5. Return raw tracing output
-    
+
     @type  binaryImage: PIL.Image.Image
     @param binaryImage: flooded image for tracing
-    
+
     @return: raw tracing output string
     @rtype: str
     """
-    
+
     # Create file-like object which handles bmp string
     ImageString = cStringIO.StringIO()
-    
+
     # Save image to this file-like object
     binaryImage.save(ImageString, "BMP")
     if dumpName: binaryImage.save(dumpName, "BMP")
-    
+
     # Create process pipes
     # potrace parameters:
     # -s for settring SVG output
@@ -215,19 +215,19 @@ def performTracing(binaryImage, tracingProperties, dumpName = None):
             '-W', tracingProperties['potrace_width_string'],\
             '-H', tracingProperties['potrace_height_string'],\
             '-o','-','-']
-    
+
     # potrace_turdsize is an optional parameter
     if 'potrace_turdsize' in tracingProperties:
         commandLineParams.insert(2, str(tracingProperties['potrace_turdsize']))
         commandLineParams.insert(2, '-t')
-    
+
     process = subprocess.Popen(commandLineParams,\
               stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-    
+
     # Pass bmp string to pipe, close image string.
     process.stdin.write(ImageString.getvalue())
     ImageString.close()
-    
+
     # Read and return tracing output
     return  process.stdout.read()
 
@@ -238,56 +238,56 @@ def floodFillScanlineStack(image, xy, value):
     roboust. This algorithm requires reimplementing in C/Fortran and connecting
     to python somehow. Implementation is based on:
     http://www.academictutorials.com/graphics/graphics-flood-fill.asp
-    
+
     This is implementaion on scanline floodfill algorithm using stack. The
     algorithm is not described here. To get insight please consult google using
     'floodfill scanline'.
-    
+
     @note: Please note that this algorithm assume that floodfilled image is in
            indexed colour mode.
-    
+
     @type  image: PIL.Image.Image
     @param image: image on which floodfill will be performed
-    
+
     @type  xy: (int, int)
     @param xy: coordinates of floodfill seed
-    
+
     @type  value: int
     @param value: fill colour
-    
+
     @rtype: int
     @return: number of pixels with changed color (area of floodfill)
     """
-    
+
     pixel = image.load()
     x, y = xy
     w, h = image.size
-    
+
     npix=0
     background = pixel[x, y]
     stack=[]
     stack.append((x,y))
-    
+
     while stack:
         x,y=stack.pop()
         y1=y
         while y1>= 0 and pixel[x, y1] == background:
             y1-=1
         y1+=1
-        
+
         spanLeft = spanRight = 0
-        
+
         while y1 < h and pixel[x, y1] == background:
             pixel[x, y1] = value
             npix+=1
-            
+
             if (not spanLeft) and x > 0 and pixel[x-1,y1] == background:
                 stack.append((x-1,y1))
                 spanLeft=1
             else:
                 if spanLeft and x > 0 and pixel[x-1,y1] != background:
                     spanLeft=0
-            
+
             if (not spanRight) and x<w-1 and pixel[x+1,y1] == background:
                 stack.append((x+1, y1))
                 spanRight=1
@@ -295,60 +295,60 @@ def floodFillScanlineStack(image, xy, value):
                 if spanRight and x<w-1 and pixel[x+1,y1] != background:
                     spanRight=0
             y1+=1
-    
-    return npix                    
+
+    return npix
 
 def selectBestGapFillingLevel(area):
     """
     Select the best level of "gap filling" by analyzing number of flooded pixels
     for each "gap filling" level.
-    
+
     Agorithm used for selecting best level is totally heuristic and relies
     on assumption that filling each gap is equivalent to rapid lowering of number of
     flooded pixels (as we have smaller region after closing the gap than before).
-    
+
     Algorith tries to seach for such rapid changes and prefers smaller structures
     rather than larger.
-    
+
     If number of flooded pixels do not changes rapidly across different levels of
     gap filling it means that most probably structure do not have any gaps.
     In such case, algorithm selects region defined without using "gap filling".
-    
+
     There are several cases defined for detecting one, two and more gaps fills.
     You should note that algorithm do not exhaust every possible case and
     reconstructed structures should be reviewed manually.
-    
+
     @type  area: [int, ...]
     @param area: structure size defined by number of floodfilled pixels
                  (each value for consecutive "gap filling" level)
-    
+
     @rtype: int
     @return: gap filling level considered to be the most proper
     """
-    
+
     a=area
     # Case 1.
     # All areas are simmilar
     # Percentage difference between two consecutive areas is less than x%
     if _areNearlyTheSame(area,0.02):
         return 0
-    
+
     # Case 2.
     # First area is about 1.2 times larger than the second. (step)
     # Second and next are nearly the same as third and further
     # Take the second
     if a[0]>=1.2*a[1] and _areNearlyTheSame(a[1:],0.02):
         return 1
-    
+
     # Case 4.
     # handling rapid jump to near-zero value
     # If, after second filtering area falls to near-zero in comparison with
-    # previous fill, it means that filling was too large 
+    # previous fill, it means that filling was too large
     if a[1]>=20*a[2] and\
             _areNearlyTheSame(a[0:2],0.02) and\
             _areNearlyTheSame(a[2:],0.02):
         return 1
-    
+
     # Case 3.
     # First two are nearly the same and ~1.2 larger than other
     # 3rd and next are nearly the same
@@ -358,7 +358,7 @@ def selectBestGapFillingLevel(area):
             _areNearlyTheSame(a[0:2], 0.02) and\
             _areNearlyTheSame(a[2:] , 0.02):
         return 2
-    
+
     # None of above return 1 to be at the safe side
     return 1
 
@@ -367,19 +367,19 @@ def _areNearlyTheSame(TestList, Treshold):
     Check if elements "are nearly the same" - if they are quotient
     of consecutive items are less than given treshold:
     (a2/a1, a3/a2,...) > Treshold.
-    
+
     @type  TestList : [convertable to float, ...]
     @param TestList : sequence of elements to be checked
 
     @type  Treshold : float
     @param Treshold : threshold (has to be positive)
-    
+
     @rtype          : bool
     @return         : C{True} if numbers may be considered as nearly the same,
                       C{False} otherwise
     """
     # Create temporary list of quotient if consecutive elements: (a2/a1, a3/a2,...)
     temp = map(lambda x,y: float(x)/float(y)-1, TestList[:-1], TestList[1:])
-    
+
     # Check if all elements are withing given treshold
     return all( x <= Treshold and x >= -Treshold for x in temp)
