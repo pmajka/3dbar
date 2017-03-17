@@ -57,7 +57,7 @@ mcp	PN
 VTg	PN
 MlCb	Cer
 1PFl	Cer
-GCer	Cer
+GlCb	Cer
 WhCb	Cer
 MO-U	MO
 Cu	MO

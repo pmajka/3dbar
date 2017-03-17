@@ -57,7 +57,7 @@
 393939	VTg	009c2e	Ventral tegmental nucleus
 3a3a3a	MlCb	fcbeb6	Molecular layer of the cerebellum
 3b3b3b	1PFl	e74353	Molecular layer of the paraflocculi
-3c3c3c	GCer	3c65ff	Granule cell leyer of the cerebellum
+3c3c3c	GlCb	3c65ff	Granule cell leyer of the cerebellum
 3d3d3d	WhCb	2e8b57	Cerebellar white matter
 3e3e3e	MO-U	fff400	Medulla oblongata-Unsegmented
 3f3f3f	Cu	de00ca	Cuneate nucleus
