@@ -6,7 +6,7 @@
 060606	ol	001afd	Lateral olfactory tract
 070707	NCtx	ff00ff	Neocortex
 080808	Pir	74eaff	Piriform cortex
-090909	ECtx	008b8b	Entorhinal cortex
+090909	Ent	008b8b	Entorhinal cortex
 0a0a0a	dcw	dc143c	Deep cerebral white matter
 0b0b0b	Hip-U	27eed9	Hippocampus-Unsegmented
 0c0c0c	DG	228b22	Dentate gyrus
