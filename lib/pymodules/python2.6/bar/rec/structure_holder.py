@@ -44,7 +44,11 @@ from bar import barBoundingBox
 
 class VTKStructuredPoints():
     def __init__(self, (nx, ny, nz)):
-        self.vol=numpy.zeros( (nx, ny, nz), dtype=numpy.uint8 )
+        # The ugly convertion to int is for the purpose of compatibility with
+        # vtk. If casting is not performed, we end up with float64 instead
+        # of int.)
+        self.vol = \
+            numpy.zeros(tuple(map(int, (nx, ny, nz))), dtype=numpy.uint8)
         self.size=self.vol.shape
 
     def setOrigin(self, (x, y, z)):\
