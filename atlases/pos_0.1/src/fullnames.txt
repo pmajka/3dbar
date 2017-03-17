@@ -1,0 +1,113 @@
+010101	Gl	0009ff	Glomelural layer of the olfactory bulb
+020202	EPl	42ff00	External plexiform layer of the olfactory bulb
+030303	GrO	d2681c	Granular cell layer of the olfactory bulb
+040404	ON	f0fff0	Olfactory nerve layer
+050505	AOB	3b5eee	Accessory olfactory bulb
+060606	ol	001afd	Lateral olfactory tract
+070707	NCtx	ff00ff	Neocortex
+080808	PCtx	74eaff	Piriform cortex
+090909	ECtx	008b8b	Entorhinal cortex
+0a0a0a	dcw	dc143c	Deep cerebral white matter
+0b0b0b	Hip-U	27eed9	Hippocampus-Unsegmented
+0c0c0c	DG	228b22	Dentate gyrus
+0d0d0d	Or	0000ff	Oriens layer of the hippocampus
+0e0e0e	fi	07004b	Fimbria of the hippocampus
+0f0f0f	BG-U	ff0000	Basal ganglia-Unsegmented
+101010	S	ffffe0	Septum
+111111	Cd	4682b4	Caudate nucleus
+121212	Pu	9f2deb	Putamen
+131313	Acb	00d127	Nucleus accumbens
+141414	ST	87ceeb	Bed nucleus of stria terminalis
+151515	aca	ffa500	Anterior commissure, anterior limb
+161616	ac	ffc0cb	Anterior commissure
+171717	acp	ff8100	Anterior commissure, posterior limb
+181818	ic	e60086	Internal capsule
+191919	ec	ffda00	External capsule
+1a1a1a	A	0734c9	Amygdala
+1b1b1b	Th-U	f9a082	Thalamus-Unsegmented
+1c1c1c	Hb	d21626	Habenular nucleus
+1d1d1d	hbc	34a3ff	Habenular commissure
+1e1e1e	LGN	ff1493	Lateral geniculate nucleus
+1f1f1f	MG	fffafa	Medial geniculate nucleus
+202020	H-U	708090	Hypothalamus-Unsegmented
+212121	M	9370db	Mammillary body
+222222	MBr-U	b23115	Midbrain-Unsegmented
+232323	Zo-SuG	39ee8c	Zona and Superficial gray layer of superior colliculus
+242424	Op	ee2c24	Optic nerve layer of the superior colliculus
+252525	InWh	f5deb3	Intermediate white layer of the superior colliculus
+262626	InG-DpG	6a5acd	Intermediate and Deep gray  layer of the superior colliculus
+272727	DpWh	ffe000	Deep white matter superior colliculus
+282828	csc	ffb2fe	Commissure of the superior colliculus
+292929	IC-U	70f0c5	Inferior colliculus-Unsegmented
+2a2a2a	cic	fa8072	Commissure of the inferior colliculus
+2b2b2b	pc	9c009c	Posterior commissure
+2c2c2c	DLL	191970	Dorsal nucleus of lateral lemniscus
+2d2d2d	PAG	f8b84b	Periaqueductal gray
+2e2e2e	PN-U	da6300	Pons-Unsegmented
+2f2f2f	lfp	cd176e	Longitudial fasciulus of the pons
+303030	MR	de3399	Median raphe nuclei
+313131	Pn	da70d6	Pontine nucleus
+323232	LL	bc8f8f	Lateral lemniscus
+333333	O	ffe4c4	Olivar nuclei
+343434	m5	adff2f	Motor root of trigeminal nerve
+353535	IP	4169e1	Interpenduncular nucleus
+363636	ml	ffdab9	Medial lemniscus
+373737	SCP	008080	Superior cerebellar peduncle
+383838	mcp	0024ff	Middle cerebellar peduncle
+393939	VTg	009c2e	Ventral tegmental nucleus
+3a3a3a	MlCb	fcbeb6	Molecular layer of the cerebellum
+3b3b3b	1PFl	e74353	Molecular layer of the paraflocculi
+3c3c3c	GCer	3c65ff	Granule cell leyer of the cerebellum
+3d3d3d	WhCer	2e8b57	Cerebellar white matter
+3e3e3e	MO-U	fff400	Medulla oblongata-Unsegmented
+3f3f3f	Cu	de00ca	Cuneate nucleus
+404040	AP	da0006	Area postrema
+414141	Sol	5cfffc	Nuclei of the solitary tract
+424242	12N	2797ff	Hypoglossal nucleus and central cervical nucleus
+434343	CN	ff69b4	Cochlear nucleus
+444444	Ve	ffa07a	Vestibular nucleus
+454545	7n	90ee90	Facial nerve
+464646	IO	de5700	Inferior olive
+474747	py	de0049	Pyramidal tract
+484848	7N	0048ff	Facial nucleus
+494949	Gr	232a8e	Gracile nucleus
+4a4a4a	dsc	00008b	Dorsal spinocerebellar tract
+4b4b4b	vsc	24c6e0	Ventral spinocerebellar tract
+4c4c4c	Pa5	87cefa	Paratrigemninal nucleus
+4d4d4d	Sp5	ff575f	Spinal trigeminal nucleus
+4e4e4e	FT	6fd11a	Fiber tracts
+4f4f4f	ts	80317c	Tectospinal tract
+505050	fr	6495ed	Fasciculus retroflexus
+515151	mt	f0e68c	Mammillothalamic tract
+525252	mp	0a22fa	Mammillary peduncle
+535353	icp	f50002	Inferior cerebellar peduncle
+545454	me5	000221	Mesencephalic trigeminal tract
+555555	rmx	ff2aab	Retromamillary decussation
+565656	och	ffff00	Optic chiasm
+575757	opt	18eec3	Optic tract
+585858	s5	ffb6c1	Sensory root of trigeminal nerve
+595959	cp	682db6	Cerebral peduncle
+5a5a5a	st	3cb672	Stria terminalis
+5b5b5b	cg	1300ee	Cingulum
+5c5c5c	st	0c00b2	Stria medullaris of the thalamus
+5d5d5d	f	9f00e2	Fornix
+5e5e5e	LV	00540a	Lateral ventricle
+5f5f5f	3V	00b2d2	3rd ventricle
+606060	Aq	cf5934	Cerebral aqueduct
+616161	4V	2f4f4f	4th ventricle
+626262	IVF	6c5cd2	Interventricular foramen
+636363	MO	808000	Medulla oblongata
+646464	OB	ff47ac	Olfactory bulb
+656565	FBr	ff8a00	Forebrain
+666666	Di	ffe386	Diencephalon
+676767	SC	57d229	Superior colliculus
+686868	HBr	ffffe0	Hindbrain
+696969	Cer	8dff97	Cerebellum
+6a6a6a	V	ffe100	Ventricles
+6b6b6b	H	00f387	Hypothalamus
+6c6c6c	BG	57fff8	Basal Ganglia
+6d6d6d	Th	5686ff	Thalamus
+6e6e6e	Hip	ff004f	Hippocampus
+6f6f6f	PN	001eff	Pons
+707070	MBr	9c53ff	Midbrain
+717171	IC	ff91d3	Inferior colliculus
