@@ -56,7 +56,7 @@ SCP	PN
 mcp	PN
 VTg	PN
 MlCb	Cer
-1PFl	Cer
+MlPFl	Cer
 GlCb	Cer
 WhCb	Cer
 MO-U	MO
