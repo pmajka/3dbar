@@ -73,7 +73,7 @@
    58   252  190  182        1  1  1    "Molecular layer of the cerebellum|MlCb|Cer"
    59   231   67   83        1  1  1    "Molecular layer of the paraflocculi|1PFl|Cer"
    60    60  101  255        1  1  1    "Granule cell leyer of the cerebellum|GCer|Cer"
-   61    46  139   87        1  1  1    "Cerebellar white matter|WhCer|Cer"
+   61    46  139   87        1  1  1    "Cerebellar white matter|WhCb|Cer"
    62   255  244    0        1  1  1    "Medulla oblongata-Unsegmented|MO-U|MO"
    63   222    0  202        1  1  1    "Cuneate nucleus|Cu|MO"
    64   218    0    6        1  1  1    "Area postrema|AP|MO"
