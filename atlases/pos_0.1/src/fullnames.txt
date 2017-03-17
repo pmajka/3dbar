@@ -108,6 +108,6 @@
 6c6c6c	BG	57fff8	Basal Ganglia
 6d6d6d	Th	5686ff	Thalamus
 6e6e6e	Hip	ff004f	Hippocampus
-6f6f6f	PN	001eff	Pons
+6f6f6f	P	001eff	Pons
 707070	MBr	9c53ff	Midbrain
 717171	IC	ff91d3	Inferior colliculus
