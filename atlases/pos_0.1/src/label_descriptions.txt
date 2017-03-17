@@ -20,7 +20,7 @@
     5    59   94  238        1  1  1    "Accessory olfactory bulb|AOB|FBr"
     6     0   26  253        1  1  1    "Lateral olfactory tract|ol|FBr"
     7   255    0  255        1  1  1    "Neocortex|NCtx|FBr"
-    8   116  234  255        1  1  1    "Piriform cortex|PCtx|FBr"
+    8   116  234  255        1  1  1    "Piriform cortex|Pir|FBr"
     9     0  139  139        1  1  1    "Entorhinal cortex|ECtx|FBr"
    10   220   20   60        1  1  1    "Deep cerebral white matter|dcw|FBr"
    11    39  238  217        1  1  1    "Hippocampus-Unsegmented|Hip-U|Hip"

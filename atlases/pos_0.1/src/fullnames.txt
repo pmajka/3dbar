@@ -5,7 +5,7 @@
 050505	AOB	3b5eee	Accessory olfactory bulb
 060606	ol	001afd	Lateral olfactory tract
 070707	NCtx	ff00ff	Neocortex
-080808	PCtx	74eaff	Piriform cortex
+080808	Pir	74eaff	Piriform cortex
 090909	ECtx	008b8b	Entorhinal cortex
 0a0a0a	dcw	dc143c	Deep cerebral white matter
 0b0b0b	Hip-U	27eed9	Hippocampus-Unsegmented
