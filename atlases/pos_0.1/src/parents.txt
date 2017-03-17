@@ -43,7 +43,7 @@ cic	IC
 pc	MBr
 DLL	MBr
 PAG	MBr
-PN-U	PN
+P-U	PN
 lfp	PN
 MR	PN
 Pn	PN
@@ -55,10 +55,10 @@ ml	MO
 SCP	PN
 mcp	PN
 VTg	PN
-MlCb	Cer
-MlPFl	Cer
-GlCb	Cer
-WhCb	Cer
+MlCb	Cb
+MlPFl	Cb
+GlCb	Cb
+WhCb	Cb
 MO-U	MO
 Cu	MO
 AP	MO
@@ -102,7 +102,7 @@ FBr	Brain
 Di	Brain
 SC	MBr
 HBr	Brain
-Cer	HBr
+Cb	HBr
 V	Brain
 H	Di
 BG	FBr

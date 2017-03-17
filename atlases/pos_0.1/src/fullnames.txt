@@ -43,7 +43,7 @@
 2b2b2b	pc	9c009c	Posterior commissure
 2c2c2c	DLL	191970	Dorsal nucleus of lateral lemniscus
 2d2d2d	PAG	f8b84b	Periaqueductal gray
-2e2e2e	PN-U	da6300	Pons-Unsegmented
+2e2e2e	P-U	da6300	Pons-Unsegmented
 2f2f2f	lfp	cd176e	Longitudial fasciulus of the pons
 303030	MR	de3399	Median raphe nuclei
 313131	Pn	da70d6	Pontine nucleus
@@ -102,7 +102,7 @@
 666666	Di	ffe386	Diencephalon
 676767	SC	57d229	Superior colliculus
 686868	HBr	ffffe0	Hindbrain
-696969	Cer	8dff97	Cerebellum
+696969	Cb	8dff97	Cerebellum
 6a6a6a	V	ffe100	Ventricles
 6b6b6b	H	00f387	Hypothalamus
 6c6c6c	BG	57fff8	Basal Ganglia
