@@ -29,8 +29,8 @@ Hb	Th
 hbc	Th
 LGN	Th
 MG	Th
-H-U	H
-M	H
+HY-U	HY
+M	HY
 MBr-U	MBr
 Zo-SuG	SC
 Op	SC
@@ -104,7 +104,7 @@ SC	MBr
 HBr	Brain
 Cb	HBr
 V	Brain
-H	Di
+HY	Di
 BG	FBr
 Th	Di
 Hip	FBr

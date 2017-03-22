@@ -29,7 +29,7 @@
 1d1d1d	hbc	34a3ff	Habenular commissure
 1e1e1e	LGN	ff1493	Lateral geniculate nucleus
 1f1f1f	MG	fffafa	Medial geniculate nucleus
-202020	H-U	708090	Hypothalamus-Unsegmented
+202020	HY-U	708090	Hypothalamus-Unsegmented
 212121	M	9370db	Mammillary body
 222222	MBr-U	b23115	Midbrain-Unsegmented
 232323	Zo-SuG	39ee8c	Zona and Superficial gray layer of superior colliculus
@@ -104,7 +104,7 @@
 686868	HBr	ffffe0	Hindbrain
 696969	Cb	8dff97	Cerebellum
 6a6a6a	V	ffe100	Ventricles
-6b6b6b	H	00f387	Hypothalamus
+6b6b6b	HY	00f387	Hypothalamus
 6c6c6c	BG	57fff8	Basal Ganglia
 6d6d6d	Th	5686ff	Thalamus
 6e6e6e	Hip	ff004f	Hippocampus
