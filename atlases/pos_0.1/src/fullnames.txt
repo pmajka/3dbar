@@ -98,7 +98,7 @@
 626262	IVF	6c5cd2	Interventricular foramen
 636363	MO	808000	Medulla oblongata
 646464	OB	ff47ac	Olfactory bulb
-656565	FBr	ff8a00	Forebrain
+656565	FB	ff8a00	Forebrain
 666666	Di	ffe386	Diencephalon
 676767	SC	57d229	Superior colliculus
 686868	HBr	ffffe0	Hindbrain
