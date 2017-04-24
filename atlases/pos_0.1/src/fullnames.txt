@@ -101,7 +101,7 @@
 656565	FB	ff8a00	Forebrain
 666666	DI	ffe386	Diencephalon
 676767	SC	57d229	Superior colliculus
-686868	HBr	ffffe0	Hindbrain
+686868	HB	ffffe0	Hindbrain
 696969	Cb	8dff97	Cerebellum
 6a6a6a	V	ffe100	Ventricles
 6b6b6b	HY	00f387	Hypothalamus
