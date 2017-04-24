@@ -99,14 +99,14 @@ IVF	V
 MO	Brain
 OB	FB
 FB	Brain
-Di	Brain
+DI	Brain
 SC	MBr
 HBr	Brain
 Cb	HBr
 V	Brain
-HY	Di
+HY	DI
 BG	FB
-Th	Di
+Th	DI
 Hip	FB
 P	HBr
 MBr	Brain
