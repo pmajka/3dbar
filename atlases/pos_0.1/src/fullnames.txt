@@ -31,7 +31,7 @@
 1f1f1f	MGN	fffafa	Medial geniculate nucleus
 202020	HY-U	708090	Hypothalamus-Unsegmented
 212121	M	9370db	Mammillary body
-222222	MBr-U	b23115	Midbrain-Unsegmented
+222222	MB-U	b23115	Midbrain-Unsegmented
 232323	Zo-SuG	39ee8c	Zona and Superficial gray layer of superior colliculus
 242424	Op	ee2c24	Optic nerve layer of the superior colliculus
 252525	InWh	f5deb3	Intermediate white layer of the superior colliculus
@@ -59,7 +59,7 @@
 3b3b3b	MlPFl	e74353	Molecular layer of the paraflocculi
 3c3c3c	GlCb	3c65ff	Granule cell leyer of the cerebellum
 3d3d3d	WhCb	2e8b57	Cerebellar white matter
-3e3e3e	MO-U	fff400	Medulla oblongata-Unsegmented
+3e3e3e	MY-U	fff400	Medulla oblongata-Unsegmented
 3f3f3f	Cu	de00ca	Cuneate nucleus
 404040	AP	da0006	Area postrema
 414141	Sol	5cfffc	Nuclei of the solitary tract
@@ -96,7 +96,7 @@
 606060	Aq	cf5934	Cerebral aqueduct
 616161	4V	2f4f4f	4th ventricle
 626262	IVF	6c5cd2	Interventricular foramen
-636363	MO	808000	Medulla oblongata
+636363	MY	808000	Medulla oblongata
 646464	OB	ff47ac	Olfactory bulb
 656565	FB	ff8a00	Forebrain
 666666	DI	ffe386	Diencephalon
@@ -109,5 +109,5 @@
 6d6d6d	TH	5686ff	Thalamus
 6e6e6e	Hip	ff004f	Hippocampus
 6f6f6f	P	001eff	Pons
-707070	MBr	9c53ff	Midbrain
+707070	MB	9c53ff	Midbrain
 717171	IC	ff91d3	Inferior colliculus
