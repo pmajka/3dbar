@@ -24,11 +24,11 @@ acp	FB
 ic	FB
 ec	FB
 AMY	FB
-Th-U	Th
-Hb	Th
-hbc	Th
-LGN	Th
-MG	Th
+TH-U	TH
+Hb	TH
+hbc	TH
+LGN	TH
+MG	TH
 HY-U	HY
 M	HY
 MBr-U	MBr
@@ -106,7 +106,7 @@ Cb	HBr
 V	Brain
 HY	DI
 BG	FB
-Th	DI
+TH	DI
 Hip	FB
 P	HBr
 MBr	Brain

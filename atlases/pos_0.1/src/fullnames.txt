@@ -24,7 +24,7 @@
 181818	ic	e60086	Internal capsule
 191919	ec	ffda00	External capsule
 1a1a1a	AMY	0734c9	Amygdala
-1b1b1b	Th-U	f9a082	Thalamus-Unsegmented
+1b1b1b	TH-U	f9a082	Thalamus-Unsegmented
 1c1c1c	Hb	d21626	Habenular nucleus
 1d1d1d	hbc	34a3ff	Habenular commissure
 1e1e1e	LGN	ff1493	Lateral geniculate nucleus
@@ -106,7 +106,7 @@
 6a6a6a	V	ffe100	Ventricles
 6b6b6b	HY	00f387	Hypothalamus
 6c6c6c	BG	57fff8	Basal Ganglia
-6d6d6d	Th	5686ff	Thalamus
+6d6d6d	TH	5686ff	Thalamus
 6e6e6e	Hip	ff004f	Hippocampus
 6f6f6f	P	001eff	Pons
 707070	MBr	9c53ff	Midbrain
