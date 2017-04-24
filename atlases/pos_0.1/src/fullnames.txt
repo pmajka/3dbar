@@ -8,7 +8,7 @@
 080808	Pir	74eaff	Piriform cortex
 090909	Ent	008b8b	Entorhinal cortex
 0a0a0a	dcw	dc143c	Deep cerebral white matter
-0b0b0b	Hip-U	27eed9	Hippocampus-Unsegmented
+0b0b0b	HIP-U	27eed9	Hippocampus-Unsegmented
 0c0c0c	DG	228b22	Dentate gyrus
 0d0d0d	Or	0000ff	Oriens layer of the hippocampus
 0e0e0e	fi	07004b	Fimbria of the hippocampus
@@ -107,7 +107,7 @@
 6b6b6b	HY	00f387	Hypothalamus
 6c6c6c	BG	57fff8	Basal Ganglia
 6d6d6d	TH	5686ff	Thalamus
-6e6e6e	Hip	ff004f	Hippocampus
+6e6e6e	HIP	ff004f	Hippocampus
 6f6f6f	P	001eff	Pons
 707070	MB	9c53ff	Midbrain
 717171	IC	ff91d3	Inferior colliculus

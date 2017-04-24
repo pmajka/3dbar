@@ -8,10 +8,10 @@ NCtx	FB
 Pir	FB
 Ent	FB
 dcw	FB
-Hip-U	Hip
-DG	Hip
-Or	Hip
-fi	Hip
+HIP-U	HIP
+DG	HIP
+Or	HIP
+fi	HIP
 BG-U	FB
 S	BG
 Cd	BG
@@ -107,7 +107,7 @@ V	Brain
 HY	DI
 BG	FB
 TH	DI
-Hip	FB
+HIP	FB
 P	HBr
 MB	Brain
 IC	MB
