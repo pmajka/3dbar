@@ -43,7 +43,7 @@
    28   210   22   38        1  1  1    "Habenular nucleus|Hb|TH"
    29    52  163  255        1  1  1    "Habenular commissure|hbc|TH"
    30   255   20  147        1  1  1    "Lateral geniculate nucleus|LGN|TH"
-   31   255  250  250        1  1  1    "Medial geniculate nucleus|MG|TH"
+   31   255  250  250        1  1  1    "Medial geniculate nucleus|MGN|TH"
    32   112  128  144        1  1  1    "Hypothalamus-Unsegmented|HY-U|H"
    33   147  112  219        1  1  1    "Mammillary body|M|HY"
    34   178   49   21        1  1  1    "Midbrain-Unsegmented|MBr-U|MBr"

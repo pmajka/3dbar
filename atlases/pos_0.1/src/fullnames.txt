@@ -28,7 +28,7 @@
 1c1c1c	Hb	d21626	Habenular nucleus
 1d1d1d	hbc	34a3ff	Habenular commissure
 1e1e1e	LGN	ff1493	Lateral geniculate nucleus
-1f1f1f	MG	fffafa	Medial geniculate nucleus
+1f1f1f	MGN	fffafa	Medial geniculate nucleus
 202020	HY-U	708090	Hypothalamus-Unsegmented
 212121	M	9370db	Mammillary body
 222222	MBr-U	b23115	Midbrain-Unsegmented

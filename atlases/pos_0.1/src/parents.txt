@@ -28,7 +28,7 @@ TH-U	TH
 Hb	TH
 hbc	TH
 LGN	TH
-MG	TH
+MGN	TH
 HY-U	HY
 M	HY
 MBr-U	MBr
