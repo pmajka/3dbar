@@ -38,7 +38,7 @@
    23   255  129    0        1  1  1    "Anterior commissure, posterior limb|acp|FB"
    24   230    0  134        1  1  1    "Internal capsule|ic|FB"
    25   255  218    0        1  1  1    "External capsule|ec|FB"
-   26     7   52  201        1  1  1    "Amygdala|A|FB"
+   26     7   52  201        1  1  1    "Amygdala|AMY|FB"
    27   249  160  130        1  1  1    "Thalamus-Unsegmented|Th-U|Th"
    28   210   22   38        1  1  1    "Habenular nucleus|Hb|Th"
    29    52  163  255        1  1  1    "Habenular commissure|hbc|Th"

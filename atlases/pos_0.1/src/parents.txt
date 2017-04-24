@@ -23,7 +23,7 @@ ac	FB
 acp	FB
 ic	FB
 ec	FB
-A	FB
+AMY	FB
 Th-U	Th
 Hb	Th
 hbc	Th

@@ -23,7 +23,7 @@
 171717	acp	ff8100	Anterior commissure, posterior limb
 181818	ic	e60086	Internal capsule
 191919	ec	ffda00	External capsule
-1a1a1a	A	0734c9	Amygdala
+1a1a1a	AMY	0734c9	Amygdala
 1b1b1b	Th-U	f9a082	Thalamus-Unsegmented
 1c1c1c	Hb	d21626	Habenular nucleus
 1d1d1d	hbc	34a3ff	Habenular commissure
